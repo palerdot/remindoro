@@ -1,0 +1,37 @@
+@import "colors";
+
+#remindoros {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.remindoro {
+
+    border: thin solid $border_color;
+    margin-bottom: 15px;
+    padding: 7px 15px 0;
+
+    .remindoro-header {
+        // border-bottom: thin solid $border_color;
+        padding: 5px 3px;
+
+        i {
+            font-size: 1em !important;
+        }
+    }
+    .remindoro-content {
+        // border-bottom: thin solid $border_color;
+        padding: 10px 3px;
+        div[contenteditable]{
+            max-height: 200px;
+            overflow-y: auto;
+
+            &:focus {
+                border: thin solid $border_color;
+            }
+        }
+    }
+    .remindoro-footer {
+
+    }
+}
