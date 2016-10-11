@@ -1,37 +1,46 @@
 @import "colors";
 
 #remindoros {
-    max-height: 400px;
+    max-height: 420px;
     overflow-y: auto;
 }
 
 .remindoro {
 
-    border: thin solid $border_color;
-    margin-bottom: 15px;
-    padding: 7px 15px 0;
+    .remindoro-title {
 
-    .remindoro-header {
-        // border-bottom: thin solid $border_color;
-        padding: 5px 3px;
+        font-size: 1.5em;
 
-        i {
-            font-size: 1em !important;
-        }
-    }
-    .remindoro-content {
-        // border-bottom: thin solid $border_color;
-        padding: 10px 3px;
-        div[contenteditable]{
-            max-height: 200px;
-            overflow-y: auto;
+        div[contenteditable] {
+
+            padding: 3px;
+            line-height: 1.5em;
+            border-bottom: thin solid rgba(160,160,160,0.2);
 
             &:focus {
-                border: thin solid $border_color;
+                // border: thin solid rgba(160,160,160,0.2);
+                border: thin solid $input_highlight_color;
+            }
+        }
+    }
+    
+    .remindoro-content {
+
+        font-size: 1.3em;
+
+        div[contenteditable]{
+
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 4px;
+            line-height: 1.5em;
+
+            &:focus {
+                border: thin solid $input_highlight_color;
             }
         }
     }
     .remindoro-footer {
-
+        padding: 5px;
     }
 }

@@ -3,8 +3,11 @@
 // <Remindoro> => main remindoro view
 
 import React from "react";
+
+// import required components
 import Navigator from "./Navigator";
 import Remindoro from "./Remindoro";
+import BottomModal from "./BottomModal";
 
 // for connecting this componenet to the store
 import { connect } from "react-redux";
@@ -18,7 +21,8 @@ const menu = {
     "home": "home",
     // "notes": "content_paste",
     // "lists": "format_list_bulleted",
-    "notifications": "notifications_active"
+    // "notifications": "notifications_active"
+    "notifications": "event"
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -31,10 +35,9 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     // return the props for App component with required dispatch methods
     return {
-        
         // handles creating a new remindoro
         handleAddRemindoro: () => {
             console.log("[dispatch][add remindoro]");
@@ -50,8 +53,19 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         // handle title change
-        handleTitleChange: () => {
-            console.log("handling title change ", arguments);
+        handleTitleChange: (id, title) => {
+            console.log("handling title change ", id, title);
+        },
+
+        // handle Note Change
+        handleNoteChange: (id, note) => {
+            console.log("handling note change ", id, note);
+        },
+
+        // handling menu click for a remindoro
+        handleMenuClick: () => {
+            console.log("handling menu click ", ownProps, arguments);
+            $("#options-modal").openModal();
         }
 
     };
@@ -59,20 +73,24 @@ const mapDispatchToProps = (dispatch) => {
 
 // we will get all the properties from mapStateToProps, mapDispatchToProps
 // we can access the props, and dispatch methods with appropriate names
-let App = ({ current_tab, remindoros, onNavClick, handleAddRemindoro, handleTitleChange }) => {
+let App = (props) => {
+    // { current_tab, remindoros, onNavClick, handleAddRemindoro, handleTitleChange, handleNoteChange }
 
     return (
        <div className="col s12">
             <Navigator 
-                menu={menu} 
-                current_tab={current_tab} 
-                onClick={onNavClick}
-                onAddClick={handleAddRemindoro} 
+                menu={props.menu} 
+                current_tab={props.current_tab} 
+                onClick={props.onNavClick}
+                onAddClick={props.handleAddRemindoro} 
             />
             <Remindoro 
-                remindoros={remindoros}
-                onTitleChange={handleTitleChange} 
-            />     
+                remindoros={props.remindoros}
+                onTitleChange={props.handleTitleChange}
+                onNoteChange={props.handleNoteChange} 
+                onMenuClick={props.handleMenuClick}
+            />
+            <BottomModal />     
        </div>
        
     );

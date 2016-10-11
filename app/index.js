@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 
 import { Provider } from "react-redux";
 import { createStore } from "redux";
-import remindoroReducer from "./redux/reducers"
+import remindoroReducer from "./redux/reducers";
+
+import "./general-initializer.js";
 
 import App from "./Components/App";
 

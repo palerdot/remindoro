@@ -17,28 +17,44 @@ const Remindoro = (props) => {
            {
                 props.remindoros.map( (ro) => {
                     return (
-                        <div className="remindoro row">
-                            <div className="remindoro-header col s12">
-                                <div className="col s11 no-padding">
-                                    <Debounce time="750" handler="onChange">
-                                        <ContentEditable
-                                            html={ro.id}
-                                            onChange={ props.onTitleChange }
-                                        />
-                                    </Debounce>
+                        <div className="remindoro row no-margin-vert">
+                            <div className="col s12">
+                                <div className="card grey darken-3">
+                                    <div className="card-content white-text">
+                                        <span className="card-title remindoro-title">
+                                            <Debounce time="750" handler="onChange">
+                                                <ContentEditable
+                                                    html={ro.title}
+                                                    placeholder={"Title .."}
+                                                    onChange={ (evt) => props.onTitleChange( ro.id, evt.target.value ) }
+                                                />
+                                            </Debounce>
+                                        </span>
+                                        <div className="remindoro-content">
+                                            <Debounce time="750" handler="onChange">
+                                                <ContentEditable
+                                                    html={ro.title}
+                                                    placeholder={"Add a Note ..."}
+                                                    onChange={ (evt) => props.onNoteChange( ro.id, evt.target.value ) }
+                                                />
+                                            </Debounce>
+                                        </div>
+                                    </div>
+                                    <div className="card-action row remindoro-footer">
+                                        <div className="col s11">
+                                            
+                                        </div>
+                                        <div className="col s1 no-padding">
+                                            <a 
+                                                className="btn-floating waves-effect transparent"
+                                                onClick={ props.onMenuClick }
+                                            >
+                                                <i className="material-icons">more_vert</i>
+                                            </a>
+                                        </div>
+                                        
+                                    </div>
                                 </div>
-                                <div className="col s1 right-align">
-                                    <i className="material-icons">close</i>
-                                </div>
-                            </div>
-                            <div className="remindoro-content col s12">
-                                <div contentEditable className="note">
-                                    {ro.title}
-                                </div>
-                                <div>{ro.type}</div>
-                            </div>
-                            <div className="remindoro-footer col s12">
-
                             </div>
                         </div>
                     );

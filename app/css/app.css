@@ -6,10 +6,6 @@
   text-align: center;
 }
 
-.navigator .no-padding {
-  padding: 0 !important;
-}
-
 .navigator .btn {
   background: none;
   box-shadow: none;
@@ -33,35 +29,41 @@
 }
 
 #remindoros {
-  max-height: 400px;
+  max-height: 420px;
   overflow-y: auto;
 }
 
-.remindoro {
-  border: thin solid #4d4d4d;
-  margin-bottom: 15px;
-  padding: 7px 15px 0;
+.remindoro .remindoro-title {
+  font-size: 1.5em;
 }
 
-.remindoro .remindoro-header {
-  padding: 5px 3px;
+.remindoro .remindoro-title div[contenteditable] {
+  padding: 3px;
+  line-height: 1.5em;
+  border-bottom: thin solid rgba(160, 160, 160, 0.2);
 }
 
-.remindoro .remindoro-header i {
-  font-size: 1em !important;
+.remindoro .remindoro-title div[contenteditable]:focus {
+  border: thin solid #9e9e9e;
 }
 
 .remindoro .remindoro-content {
-  padding: 10px 3px;
+  font-size: 1.3em;
 }
 
 .remindoro .remindoro-content div[contenteditable] {
   max-height: 200px;
   overflow-y: auto;
+  padding: 4px;
+  line-height: 1.5em;
 }
 
 .remindoro .remindoro-content div[contenteditable]:focus {
-  border: thin solid #4d4d4d;
+  border: thin solid #9e9e9e;
+}
+
+.remindoro .remindoro-footer {
+  padding: 5px;
 }
 
 body {
@@ -90,4 +92,54 @@ body i {
 
 body .indicator {
   background-color: #f2f2f2 !important;
+}
+
+body .no-padding {
+  padding: 0 !important;
+}
+
+body .no-padding-vert {
+  padding: inherit;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+body .no-padding-hori {
+  padding: inherit;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+body .no-margin {
+  margin: 0 !important;
+}
+
+body .no-margin-vert {
+  margin: inherit;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+body .no-margin-hori {
+  margin: inherit;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+body .modal {
+  background: transparent !important;
+}
+
+body .modal .modal-content, body .modal .modal-footer {
+  background: #424242 !important;
+  color: white !important;
+}
+
+body [placeholder]:empty:before {
+  content: attr(placeholder);
+  color: #555;
+}
+
+body [placeholder]:empty:focus:before {
+  content: "";
 }
