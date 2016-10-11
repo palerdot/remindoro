@@ -1,0 +1,48 @@
+.modal {
+
+    background: transparent !important;
+
+    i.left {
+        margin-right: 5px;
+    }
+
+    label {
+        
+        i {
+            font-size: 1.5em !important;
+        }
+
+        span {
+            font-size: 1.3em !important;
+            margin-left: 5px;
+            vertical-align: text-bottom !important;
+        }
+    }
+
+    &.bottom-sheet {
+        height: auto;
+        max-height: none !important; 
+        overflow: none;
+
+        .modal-content {
+            height: auto;
+            max-height: 250px; // half the height   
+            overflow-y: auto;
+        }
+    }
+
+    .modal-content, .modal-footer {
+        background: $modal_bg !important;
+        color: $modal_text_color !important;
+    }
+
+    .modal-footer {
+        border-top: thin solid $border_color !important;
+    }
+
+    .form-group {
+        border: thin solid $border_color !important;
+        margin: 10px 0;
+        padding: 10px;
+    }
+}

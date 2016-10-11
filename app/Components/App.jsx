@@ -63,8 +63,19 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
 
         // handling menu click for a remindoro
-        handleMenuClick: () => {
-            console.log("handling menu click ", ownProps, arguments);
+        handleMenuClick: (id) => {
+            console.log("handling menu click ", id);
+            // scroll to the edited remindoro
+            let animate_time = 750,
+                marginTop = 50,
+                current_ro_offset = $("#remindoro-" + id).offset().top,
+                scrollTo = current_ro_offset - marginTop;
+            $("#remindoros").animate( {
+                scrollTop: scrollTo + "px"
+            }, animate_time );
+            // dispatch action to get the current edited remindoro
+            // update the current remindoro details which will reflect in the modal
+            // then updating the modal
             $("#options-modal").openModal();
         }
 

@@ -1,3 +1,35 @@
+.no-padding {
+  padding: 0 !important;
+}
+
+.no-padding-vert {
+  padding: inherit;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.no-padding-hori {
+  padding: inherit;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+.no-margin-vert {
+  margin: inherit;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.no-margin-hori {
+  margin: inherit;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
 .navigator {
   height: 50px;
   overflow: none;
@@ -34,7 +66,7 @@
 }
 
 .remindoro .remindoro-title {
-  font-size: 1.5em;
+  font-size: 1.75em;
 }
 
 .remindoro .remindoro-title div[contenteditable] {
@@ -66,6 +98,51 @@
   padding: 5px;
 }
 
+.modal {
+  background: transparent !important;
+}
+
+.modal i.left {
+  margin-right: 5px;
+}
+
+.modal label i {
+  font-size: 1.5em !important;
+}
+
+.modal label span {
+  font-size: 1.3em !important;
+  margin-left: 5px;
+  vertical-align: text-bottom !important;
+}
+
+.modal.bottom-sheet {
+  height: auto;
+  max-height: none !important;
+  overflow: none;
+}
+
+.modal.bottom-sheet .modal-content {
+  height: auto;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.modal .modal-content, .modal .modal-footer {
+  background: #424242 !important;
+  color: white !important;
+}
+
+.modal .modal-footer {
+  border-top: thin solid #555 !important;
+}
+
+.modal .form-group {
+  border: thin solid #555 !important;
+  margin: 10px 0;
+  padding: 10px;
+}
+
 body {
   width: 500px;
   height: 500px;
@@ -92,47 +169,6 @@ body i {
 
 body .indicator {
   background-color: #f2f2f2 !important;
-}
-
-body .no-padding {
-  padding: 0 !important;
-}
-
-body .no-padding-vert {
-  padding: inherit;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-body .no-padding-hori {
-  padding: inherit;
-  padding-right: 0 !important;
-  padding-left: 0 !important;
-}
-
-body .no-margin {
-  margin: 0 !important;
-}
-
-body .no-margin-vert {
-  margin: inherit;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-body .no-margin-hori {
-  margin: inherit;
-  margin-right: 0 !important;
-  margin-left: 0 !important;
-}
-
-body .modal {
-  background: transparent !important;
-}
-
-body .modal .modal-content, body .modal .modal-footer {
-  background: #424242 !important;
-  color: white !important;
 }
 
 body [placeholder]:empty:before {

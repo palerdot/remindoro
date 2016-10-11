@@ -1,6 +1,8 @@
 @import "_colors";
+@import "_general";
 @import "_navigator";
 @import "_remindoro";
+@import "_bottom-modal";
 
 body {
 
@@ -29,50 +31,6 @@ body {
 
     .indicator {
         background-color: $theme_color !important;
-    }
-
-    .no-padding {
-        padding: 0 !important;
-    }
-
-    // remove padding top bottom
-    .no-padding-vert {
-        padding: inherit;
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-    }
-
-    // remove padding on sides
-    .no-padding-hori {
-        padding: inherit;
-        padding-right: 0 !important;
-        padding-left: 0 !important;
-    }
-
-    .no-margin {
-        margin: 0 !important;
-    }
-
-    // remove margin top bottom
-    .no-margin-vert {
-        margin: inherit;
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-    }
-
-    // remove margin on sides
-    .no-margin-hori {
-        margin: inherit;
-        margin-right: 0 !important;
-        margin-left: 0 !important;
-    }
-
-    .modal {
-        background: transparent !important;
-        .modal-content, .modal-footer {
-            background: $modal_bg !important;
-            color: $modal_text_color !important;
-        }
     }
 
     // placeholder for contentEditable

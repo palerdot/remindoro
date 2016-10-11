@@ -23230,14 +23230,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var _arguments = arguments; // main app component
-	// <Navigation> => top menu
-	// <Remindoro> => main remindoro view
-	
-	// import required components
-	
-	
-	// for connecting this componenet to the store
 	
 	var _react = __webpack_require__(1);
 	
@@ -23264,6 +23256,13 @@
 	// menu options; for now we will define the menu options here
 	// later we can move into a seperate location which is appropriate
 	// for now we are mapping only the icon names
+	
+	
+	// for connecting this componenet to the store
+	// main app component
+	// <Navigation> => top menu
+	// <Remindoro> => main remindoro view
+	
 	var menu = {
 	    "add": "add_circle_outline",
 	    "home": "home",
@@ -23272,6 +23271,9 @@
 	    // "notifications": "notifications_active"
 	    "notifications": "event"
 	};
+	
+	// import required components
+	
 	
 	var mapStateToProps = function mapStateToProps(state, ownProps) {
 	    console.log("app state ", state);
@@ -23311,8 +23313,19 @@
 	        },
 	
 	        // handling menu click for a remindoro
-	        handleMenuClick: function handleMenuClick() {
-	            console.log("handling menu click ", ownProps, _arguments);
+	        handleMenuClick: function handleMenuClick(id) {
+	            console.log("handling menu click ", id);
+	            // scroll to the edited remindoro
+	            var animate_time = 750,
+	                marginTop = 50,
+	                current_ro_offset = $("#remindoro-" + id).offset().top,
+	                scrollTo = current_ro_offset - marginTop;
+	            $("#remindoros").animate({
+	                scrollTop: scrollTo + "px"
+	            }, animate_time);
+	            // dispatch action to get the current edited remindoro
+	            // update the current remindoro details which will reflect in the modal
+	            // then updating the modal
 	            $("#options-modal").openModal();
 	        }
 	
@@ -25133,7 +25146,7 @@
 	        props.remindoros.map(function (ro) {
 	            return _react2.default.createElement(
 	                "div",
-	                { className: "remindoro row no-margin-vert" },
+	                { id: 'remindoro-' + ro.id, className: "remindoro row no-margin-vert", key: ro.id },
 	                _react2.default.createElement(
 	                    "div",
 	                    { className: "col s12" },
@@ -25160,7 +25173,7 @@
 	                            ),
 	                            _react2.default.createElement(
 	                                "div",
-	                                { className: "remindoro-content" },
+	                                { className: "remindoro-content flow-text" },
 	                                _react2.default.createElement(
 	                                    _reactThrottle.Debounce,
 	                                    { time: "750", handler: "onChange" },
@@ -25185,7 +25198,10 @@
 	                                    "a",
 	                                    {
 	                                        className: "btn-floating waves-effect transparent",
-	                                        onClick: props.onMenuClick
+	                                        onClick: function onClick(evt) {
+	                                            // send the id of the remindoro for which menu is clicked
+	                                            props.onMenuClick(ro.id);
+	                                        }
 	                                    },
 	                                    _react2.default.createElement(
 	                                        "i",
@@ -42714,22 +42730,115 @@
 	            "div",
 	            { className: "modal-content" },
 	            _react2.default.createElement(
-	                "h4",
-	                null,
-	                "Modal Header"
+	                "div",
+	                { className: "row" },
+	                _react2.default.createElement(
+	                    "label",
+	                    null,
+	                    _react2.default.createElement(
+	                        "i",
+	                        { className: "material-icons" },
+	                        "notifications"
+	                    ),
+	                    _react2.default.createElement(
+	                        "span",
+	                        null,
+	                        "Reminder"
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "form-group" },
+	                    "something here?"
+	                )
 	            ),
 	            _react2.default.createElement(
-	                "p",
-	                null,
-	                "A bunch of text"
+	                "div",
+	                { className: "row" },
+	                _react2.default.createElement(
+	                    "label",
+	                    null,
+	                    _react2.default.createElement(
+	                        "i",
+	                        { className: "material-icons" },
+	                        "alarm"
+	                    ),
+	                    _react2.default.createElement(
+	                        "span",
+	                        null,
+	                        "Repeat"
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "form-group" },
+	                    "something here?"
+	                )
+	            ),
+	            _react2.default.createElement(
+	                "div",
+	                { className: "row" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "col s4 input-field" },
+	                    _react2.default.createElement(
+	                        "i",
+	                        { className: "material-icons prefix" },
+	                        "notifications_active"
+	                    ),
+	                    _react2.default.createElement(
+	                        "label",
+	                        null,
+	                        "Reminder"
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "col s8 input-field" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "switch" },
+	                        _react2.default.createElement(
+	                            "label",
+	                            null,
+	                            "Off",
+	                            _react2.default.createElement("input", { type: "checkbox" }),
+	                            _react2.default.createElement("span", { className: "lever" }),
+	                            "On"
+	                        )
+	                    )
+	                )
+	            ),
+	            _react2.default.createElement(
+	                "div",
+	                { className: "row" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "input-field col s4" },
+	                    _react2.default.createElement(
+	                        "label",
+	                        null,
+	                        "Reminder Time:"
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "input-field col s8" },
+	                    _react2.default.createElement("input", { id: "reminder_time", type: "text", className: "validate" }),
+	                    _react2.default.createElement(
+	                        "label",
+	                        { htmlFor: "reminder_time" },
+	                        "Reminder Time"
+	                    )
+	                )
 	            )
 	        ),
 	        _react2.default.createElement(
 	            "div",
-	            { className: "modal-footer row" },
+	            { className: "modal-footer" },
 	            _react2.default.createElement(
 	                "button",
-	                { className: "modal-action modal-close waves-light waves-effect btn transparent right" },
+	                { className: "modal-action modal-close waves-light waves-effect btn grey darken-2 right" },
 	                "Close"
 	            ),
 	            _react2.default.createElement(

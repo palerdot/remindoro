@@ -17,7 +17,7 @@ const Remindoro = (props) => {
            {
                 props.remindoros.map( (ro) => {
                     return (
-                        <div className="remindoro row no-margin-vert">
+                        <div id={'remindoro-' + ro.id} className="remindoro row no-margin-vert" key={ro.id}>
                             <div className="col s12">
                                 <div className="card grey darken-3">
                                     <div className="card-content white-text">
@@ -30,7 +30,7 @@ const Remindoro = (props) => {
                                                 />
                                             </Debounce>
                                         </span>
-                                        <div className="remindoro-content">
+                                        <div className="remindoro-content flow-text">
                                             <Debounce time="750" handler="onChange">
                                                 <ContentEditable
                                                     html={ro.title}
@@ -47,7 +47,10 @@ const Remindoro = (props) => {
                                         <div className="col s1 no-padding">
                                             <a 
                                                 className="btn-floating waves-effect transparent"
-                                                onClick={ props.onMenuClick }
+                                                onClick={ (evt) =>{
+                                                    // send the id of the remindoro for which menu is clicked
+                                                    props.onMenuClick(ro.id);   
+                                                } }
                                             >
                                                 <i className="material-icons">more_vert</i>
                                             </a>
