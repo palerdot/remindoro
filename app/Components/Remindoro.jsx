@@ -13,13 +13,13 @@ const Remindoro = (props) => {
     console.log("props for remindoro ? ", props);
 
     return (
-        <div id="remindoros" className="col s12">
+        <div id="remindoros" className="col s12 no-padding-hori">
            {
                 props.remindoros.map( (ro) => {
                     return (
                         <div id={'remindoro-' + ro.id} className="remindoro row no-margin-vert" key={ro.id}>
                             <div className="col s12">
-                                <div className="card grey darken-3">
+                                <div className="card blue-grey darken-3">
                                     <div className="card-content white-text">
                                         <span className="card-title remindoro-title">
                                             <Debounce time="750" handler="onChange">

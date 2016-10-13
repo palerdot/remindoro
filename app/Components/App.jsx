@@ -69,10 +69,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             let animate_time = 750,
                 marginTop = 50,
                 current_ro_offset = $("#remindoro-" + id).offset().top,
-                scrollTo = current_ro_offset - marginTop;
+                ros_offset = $("#remindoros").scrollTop(),
+                scrollTo = ros_offset + current_ro_offset - marginTop;
+
             $("#remindoros").animate( {
                 scrollTop: scrollTo + "px"
             }, animate_time );
+            
             // dispatch action to get the current edited remindoro
             // update the current remindoro details which will reflect in the modal
             // then updating the modal

@@ -15,6 +15,8 @@ module.exports = {
                 loader: 'babel-loader',
                 query: {
                     presets: ['es2015', 'react'],
+                    // ref: https://github.com/babel/babel-loader/issues/132
+                    // presets: ['react', 'es2015'],
                     compact: false
                 }
             }

@@ -23319,10 +23319,13 @@
 	            var animate_time = 750,
 	                marginTop = 50,
 	                current_ro_offset = $("#remindoro-" + id).offset().top,
-	                scrollTo = current_ro_offset - marginTop;
+	                ros_offset = $("#remindoros").scrollTop(),
+	                scrollTo = ros_offset + current_ro_offset - marginTop;
+	
 	            $("#remindoros").animate({
 	                scrollTop: scrollTo + "px"
 	            }, animate_time);
+	
 	            // dispatch action to get the current edited remindoro
 	            // update the current remindoro details which will reflect in the modal
 	            // then updating the modal
@@ -25142,7 +25145,7 @@
 	
 	    return _react2.default.createElement(
 	        "div",
-	        { id: "remindoros", className: "col s12" },
+	        { id: "remindoros", className: "col s12 no-padding-hori" },
 	        props.remindoros.map(function (ro) {
 	            return _react2.default.createElement(
 	                "div",
@@ -25152,7 +25155,7 @@
 	                    { className: "col s12" },
 	                    _react2.default.createElement(
 	                        "div",
-	                        { className: "card grey darken-3" },
+	                        { className: "card blue-grey darken-3" },
 	                        _react2.default.createElement(
 	                            "div",
 	                            { className: "card-content white-text" },
@@ -42721,139 +42724,181 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var BottomModal = function BottomModal() {
+	// this is not a statelss component
+	var BottomModal = _react2.default.createClass({
+	    displayName: "BottomModal",
 	
-	    return _react2.default.createElement(
-	        "div",
-	        { id: "options-modal", className: "modal bottom-sheet" },
-	        _react2.default.createElement(
+	
+	    componentDidMount: function componentDidMount() {
+	        console.log("Porumai! bottom modal mounted ", $("#options-modal"));
+	        var flatpicker_config = {
+	            enableTime: true,
+	            wrap: true,
+	            minDate: "today"
+	        };
+	
+	        flatpickr(".flatpickr", flatpicker_config);
+	    },
+	
+	    render: function render() {
+	        return _react2.default.createElement(
 	            "div",
-	            { className: "modal-content" },
+	            { id: "options-modal", className: "modal bottom-sheet" },
 	            _react2.default.createElement(
 	                "div",
-	                { className: "row" },
-	                _react2.default.createElement(
-	                    "label",
-	                    null,
-	                    _react2.default.createElement(
-	                        "i",
-	                        { className: "material-icons" },
-	                        "notifications"
-	                    ),
-	                    _react2.default.createElement(
-	                        "span",
-	                        null,
-	                        "Reminder"
-	                    )
-	                ),
+	                { className: "modal-content" },
 	                _react2.default.createElement(
 	                    "div",
-	                    { className: "form-group" },
-	                    "something here?"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "div",
-	                { className: "row" },
-	                _react2.default.createElement(
-	                    "label",
-	                    null,
-	                    _react2.default.createElement(
-	                        "i",
-	                        { className: "material-icons" },
-	                        "alarm"
-	                    ),
-	                    _react2.default.createElement(
-	                        "span",
-	                        null,
-	                        "Repeat"
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "form-group" },
-	                    "something here?"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "div",
-	                { className: "row" },
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "col s4 input-field" },
-	                    _react2.default.createElement(
-	                        "i",
-	                        { className: "material-icons prefix" },
-	                        "notifications_active"
-	                    ),
+	                    { className: "row" },
 	                    _react2.default.createElement(
 	                        "label",
 	                        null,
-	                        "Reminder"
+	                        _react2.default.createElement(
+	                            "i",
+	                            { className: "material-icons" },
+	                            "notifications"
+	                        ),
+	                        _react2.default.createElement(
+	                            "span",
+	                            null,
+	                            "Reminder"
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "form-group" },
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "row no-margin-vert" },
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "col s4 valign-wrapper" },
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "switch" },
+	                                    _react2.default.createElement(
+	                                        "label",
+	                                        null,
+	                                        "Off",
+	                                        _react2.default.createElement("input", { type: "checkbox" }),
+	                                        _react2.default.createElement("span", { className: "lever" }),
+	                                        "On"
+	                                    )
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "col s8" },
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "flatpickr", "data-wrap": "true" },
+	                                    _react2.default.createElement("input", { id: "reminder-time", className: "col s10", placeholder: "Pick a time for reminder ..", "data-input": true, "data-open": true }),
+	                                    _react2.default.createElement(
+	                                        "div",
+	                                        { className: "col s2" },
+	                                        _react2.default.createElement(
+	                                            "button",
+	                                            { className: "btn btn-floating waves-effect waves-light transparent input-button", "data-toggle": true },
+	                                            _react2.default.createElement(
+	                                                "i",
+	                                                { className: "material-icons" },
+	                                                "event"
+	                                            )
+	                                        )
+	                                    )
+	                                )
+	                            )
+	                        )
 	                    )
 	                ),
 	                _react2.default.createElement(
 	                    "div",
-	                    { className: "col s8 input-field" },
+	                    { className: "row no-margin-vert" },
+	                    _react2.default.createElement(
+	                        "label",
+	                        null,
+	                        _react2.default.createElement(
+	                            "i",
+	                            { className: "material-icons" },
+	                            "update"
+	                        ),
+	                        _react2.default.createElement(
+	                            "span",
+	                            null,
+	                            "Repeat"
+	                        )
+	                    ),
 	                    _react2.default.createElement(
 	                        "div",
-	                        { className: "switch" },
+	                        { className: "form-group" },
 	                        _react2.default.createElement(
-	                            "label",
-	                            null,
-	                            "Off",
-	                            _react2.default.createElement("input", { type: "checkbox" }),
-	                            _react2.default.createElement("span", { className: "lever" }),
-	                            "On"
+	                            "div",
+	                            { className: "row no-margin-vert" },
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "col s4 valign-wrapper" },
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "switch" },
+	                                    _react2.default.createElement(
+	                                        "label",
+	                                        null,
+	                                        "Off",
+	                                        _react2.default.createElement("input", { type: "checkbox" }),
+	                                        _react2.default.createElement("span", { className: "lever" }),
+	                                        "On"
+	                                    )
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "col s8" },
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "flatpickr", "data-wrap": "true" },
+	                                    _react2.default.createElement("input", { id: "repeat-time", className: "col s10", placeholder: "Pick a time for reminder ..", "data-input": true, "data-open": true }),
+	                                    _react2.default.createElement(
+	                                        "div",
+	                                        { className: "col s2" },
+	                                        _react2.default.createElement(
+	                                            "button",
+	                                            { className: "btn btn-floating waves-effect waves-light transparent input-button", "data-toggle": true },
+	                                            _react2.default.createElement(
+	                                                "i",
+	                                                { className: "material-icons" },
+	                                                "event"
+	                                            )
+	                                        )
+	                                    )
+	                                )
+	                            )
 	                        )
 	                    )
 	                )
 	            ),
 	            _react2.default.createElement(
 	                "div",
-	                { className: "row" },
+	                { className: "modal-footer" },
 	                _react2.default.createElement(
-	                    "div",
-	                    { className: "input-field col s4" },
-	                    _react2.default.createElement(
-	                        "label",
-	                        null,
-	                        "Reminder Time:"
-	                    )
+	                    "button",
+	                    { className: "modal-action modal-close waves-light waves-effect btn grey darken-2 right" },
+	                    "Close"
 	                ),
 	                _react2.default.createElement(
-	                    "div",
-	                    { className: "input-field col s8" },
-	                    _react2.default.createElement("input", { id: "reminder_time", type: "text", className: "validate" }),
+	                    "button",
+	                    { className: "waves-effect waves-light btn red left" },
 	                    _react2.default.createElement(
-	                        "label",
-	                        { htmlFor: "reminder_time" },
-	                        "Reminder Time"
-	                    )
+	                        "i",
+	                        { className: "material-icons left" },
+	                        "delete_forever"
+	                    ),
+	                    "Delete"
 	                )
 	            )
-	        ),
-	        _react2.default.createElement(
-	            "div",
-	            { className: "modal-footer" },
-	            _react2.default.createElement(
-	                "button",
-	                { className: "modal-action modal-close waves-light waves-effect btn grey darken-2 right" },
-	                "Close"
-	            ),
-	            _react2.default.createElement(
-	                "button",
-	                { className: "waves-effect waves-light btn red left" },
-	                _react2.default.createElement(
-	                    "i",
-	                    { className: "material-icons left" },
-	                    "delete_forever"
-	                ),
-	                "Delete"
-	            )
-	        )
-	    );
-	}; // simple bottom modal for showing scheduling options
+	        );
+	    }
+	
+	}); // simple bottom modal for showing scheduling options
 	exports.default = BottomModal;
 
 /***/ },

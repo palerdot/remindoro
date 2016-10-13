@@ -126,10 +126,12 @@
   height: auto;
   max-height: 250px;
   overflow-y: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .modal .modal-content, .modal .modal-footer {
-  background: #424242 !important;
+  background: #263238 !important;
   color: white !important;
 }
 
@@ -139,28 +141,40 @@
 
 .modal .form-group {
   border: thin solid #555 !important;
-  margin: 10px 0;
-  padding: 10px;
+  padding: 10px 5px;
+}
+
+.modal .form-group div.col {
+  height: 3rem;
+}
+
+.modal .form-group input {
+  margin-bottom: none !important;
+  color: white;
 }
 
 body {
-  width: 500px;
-  height: 500px;
+  width: 550px;
+  height: 550px;
   overflow: none;
-  background: #282828 !important;
+  background: #263238 !important;
   color: white !important;
 }
 
 body ::-webkit-scrollbar {
   height: 5px;
   width: 5px;
-  background: #222222;
+  background: #263238;
 }
 
 body ::-webkit-scrollbar-thumb {
-  background: #555555;
+  background: #37474f;
   -webkit-border-radius: 0;
   -webkit-box-shadow: 0px 1px 2px rgba(255, 255, 255, 0.75);
+}
+
+body .flatpickr-calendar {
+  background: rgba(55, 71, 79, 0.95) !important;
 }
 
 body i {
