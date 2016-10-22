@@ -52,8 +52,42 @@
 
             input {
                 margin-bottom: none !important;
-                color: white;
+                color: #9e9e9e;
             }
+    }
+
+    .disabled {
+        color: $theme_shade_3 !important;
+    }
+
+    // classes to disable inside range field
+    .range-field {
+        :disabled {
+            &::-webkit-slider-runnable-track {
+                background: $theme_shade_3 !important;
+            }
+
+            &::-webkit-slider-thumb {
+                display: none;
+            }
+        }
+    }
+
+    // classes to disable inside flatpickr
+    .flatpickr {
+        :disabled {
+            &::-webkit-input-placeholder {
+               color: $theme_shade_3 !important;
+            }    
+        }
+
+        // for the reminder state to be shown in disabled state
+        .disabled {
+            background: transparent !important;
+            i {
+                color: $theme_shade_3 !important;    
+            }
+        }
     }
     
 }

@@ -11,7 +11,7 @@ import BottomModal from "./BottomModal";
 
 // for connecting this componenet to the store
 import { connect } from "react-redux";
-import { changeTab, addRemindoro } from "../redux/actions/";
+import { changeTab, addRemindoro, selectRemindoro, updateReminderStatus, updateRepeatStatus, updateTitle, updateNote, deleteRemindoro } from "../redux/actions/";
 
 // menu options; for now we will define the menu options here
 // later we can move into a seperate location which is appropriate
@@ -26,22 +26,31 @@ const menu = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-    console.log("app state ", state);
+    console.log("app state ", state, ownProps);
     // return the props for App component with the required state
     return {
         menu: menu,
         current_tab: state.current_tab,
-        remindoros: state.remindoros
+        remindoros: state.remindoros,
+        current_selected_remindoro: state.current_selected_remindoro,
+        id_counter: ownProps.id_counter
     };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     // return the props for App component with required dispatch methods
     return {
+
+        // dispatch "changeTab" action as "home" at the start to sort remindoros in right order
+        initializeHomeScreen: () => {
+            console.log("initing home screen");
+            dispatch( changeTab("home") );
+        },
+
         // handles creating a new remindoro
-        handleAddRemindoro: () => {
+        handleAddRemindoro: (current_id) => {
             console.log("[dispatch][add remindoro]");
-            dispatch( addRemindoro() );
+            dispatch( addRemindoro(current_id) );
             // also change the tab to home
             dispatch( changeTab("home") );
         },
@@ -52,19 +61,26 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch( changeTab(tab) );
         },
 
-        // handle title change
+        // handle title change; for now we are updating the title
+        // TODO: later compare changes and update only if changed
         handleTitleChange: (id, title) => {
             console.log("handling title change ", id, title);
+            dispatch( updateTitle(id, title) );
         },
 
         // handle Note Change
         handleNoteChange: (id, note) => {
             console.log("handling note change ", id, note);
+            dispatch( updateNote(id, note) );
         },
 
         // handling menu click for a remindoro
         handleMenuClick: (id) => {
+            
             console.log("handling menu click ", id);
+            // dispatch an action to select the current remindoro
+            dispatch( selectRemindoro(id) );
+
             // scroll to the edited remindoro
             let animate_time = 750,
                 marginTop = 50,
@@ -80,6 +96,47 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             // update the current remindoro details which will reflect in the modal
             // then updating the modal
             $("#options-modal").openModal();
+        },
+
+        // updates reminder status when it is changed
+        // NOTE: this function will be triggered from two places; on from normal on/off switch
+        // other from the onChange event of flatpickr! validate if id is present before triggering the action
+        handleReminderStatus: (id, status, reminder_time) => {
+            console.log("reminder status change ", arguments);
+            // dispatch reminder status change
+            dispatch( updateReminderStatus(id, status, reminder_time) );
+        },
+
+        // triggered by flatpickr timechange
+        // IMPORTANT: This will be triggered by react whenever bottom modal is loaded
+        // we need to double check if an remindoro id is passed and it has reminder status switched on
+        handleReminderTimeChange: (id, status, reminder_time) => {
+            console.log("before flatpickr change ", id, status, reminder_time);
+            if ( !(id && status) ) {
+                // do not proceed; it will be triggered when there is no current selected remindoro
+                return;
+            }
+            console.log("AFTER flatpickr change ", id, status, reminder_time);
+            // update reminder time change
+            dispatch( updateReminderStatus(id, true, reminder_time) );
+        },
+
+        // updates repeat status when it is changed
+        handleRepeatStatus: (id, status) => {
+            console.log("updating repeat change ", id, status);
+            // dispatch repeat status change
+            dispatch( updateRepeatStatus(id, status) );
+        },
+
+        // delete the remindoro
+        deleteRemindoro: (id) => {
+            console.log("DELETING ", id);
+            // close the bottom modal
+            $("#options-modal").closeModal();
+            // dispatch the delete action
+            dispatch( deleteRemindoro(id) );
+            // show a toast message
+            Materialize.toast("Deleted !", 2000, 'center-align');
         }
 
     };
@@ -88,15 +145,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 // we will get all the properties from mapStateToProps, mapDispatchToProps
 // we can access the props, and dispatch methods with appropriate names
 let App = (props) => {
-    // { current_tab, remindoros, onNavClick, handleAddRemindoro, handleTitleChange, handleNoteChange }
 
     return (
        <div className="col s12">
             <Navigator 
                 menu={props.menu} 
                 current_tab={props.current_tab} 
+                id_counter={props.id_counter}
                 onClick={props.onNavClick}
-                onAddClick={props.handleAddRemindoro} 
+                onAddClick={props.handleAddRemindoro}
+                initializeHomeScreen={props.initializeHomeScreen} 
             />
             <Remindoro 
                 remindoros={props.remindoros}
@@ -104,9 +162,15 @@ let App = (props) => {
                 onNoteChange={props.handleNoteChange} 
                 onMenuClick={props.handleMenuClick}
             />
-            <BottomModal />     
+            <BottomModal
+                remindoros={props.remindoros}
+                current_selected_remindoro={props.current_selected_remindoro}
+                onReminderStatusChange={props.handleReminderStatus}
+                onReminderTimeChange={props.handleReminderTimeChange}
+                onRepeatChange={props.handleRepeatStatus}
+                onDelete={props.deleteRemindoro}
+            />     
        </div>
-       
     );
 
 };

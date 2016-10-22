@@ -2,10 +2,10 @@
 // with appropriate filters
 
 import React from "react";
+import TimeAgo from "react-timeago";
 import classNames from "classnames";
 import ContentEditable from "react-contenteditable";
 import { Throttle, Debounce } from "react-throttle";
-import _ from "underscore";
 
 // props is sent as an argument
 const Remindoro = (props) => {
@@ -16,6 +16,28 @@ const Remindoro = (props) => {
         <div id="remindoros" className="col s12 no-padding-hori">
            {
                 props.remindoros.map( (ro) => {
+
+                    // decide if we have show a timeago element
+                    // if the remindoro is less than 15 minutes in future; we will display the timeago element
+                    const timeago_interval = 15 * 60 * 1000; // 15 minutes in milliseconds
+                    let TimeAgo_Component = "";
+
+                    if (ro.reminder.time) {
+                        // let us decide if we want to display the human readable time alert
+                        const ro_timestamp = new Date( ro.reminder.time ).getTime(),
+                              current_timestamp = new Date().getTime(),
+                              time_difference = (ro_timestamp - current_timestamp);
+                        
+                        // for now checking if the remindoro is in future
+                        // const is_ro_active = (time_difference > 0) && (time_difference <= timeago_interval);
+                        const is_ro_active = (time_difference > 0);
+
+                        if (is_ro_active) {
+                            TimeAgo_Component = <TimeAgo date={ro.reminder.time} />;
+                        }
+                                                
+                    }
+
                     return (
                         <div id={'remindoro-' + ro.id} className="remindoro row no-margin-vert" key={ro.id}>
                             <div className="col s12">
@@ -33,7 +55,7 @@ const Remindoro = (props) => {
                                         <div className="remindoro-content flow-text">
                                             <Debounce time="750" handler="onChange">
                                                 <ContentEditable
-                                                    html={ro.title}
+                                                    html={ro.note}
                                                     placeholder={"Add a Note ..."}
                                                     onChange={ (evt) => props.onNoteChange( ro.id, evt.target.value ) }
                                                 />
@@ -42,7 +64,7 @@ const Remindoro = (props) => {
                                     </div>
                                     <div className="card-action row remindoro-footer">
                                         <div className="col s11">
-                                            
+                                            {TimeAgo_Component}
                                         </div>
                                         <div className="col s1 no-padding">
                                             <a 
