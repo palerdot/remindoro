@@ -33,7 +33,16 @@ const Remindoro = (props) => {
                         const is_ro_active = (time_difference > 0);
 
                         if (is_ro_active) {
-                            TimeAgo_Component = <TimeAgo date={ro.reminder.time} />;
+                            TimeAgo_Component = <div className="card green darken-1 row valign-wrapper no-margin-vert">
+                                                    <div className="col s2">
+                                                        <i className="material-icons">alarm</i>
+                                                    </div>
+                                                    <div className="col s10">
+                                                        <TimeAgo 
+                                                            date={ro.reminder.time} 
+                                                        />
+                                                    </div>
+                                                </div>;
                         }
                                                 
                     }
@@ -62,9 +71,11 @@ const Remindoro = (props) => {
                                             </Debounce>
                                         </div>
                                     </div>
-                                    <div className="card-action row remindoro-footer">
+                                    <div className="card-action row remindoro-footer valign-wrapper">
                                         <div className="col s11">
-                                            {TimeAgo_Component}
+                                            <div className="col s6 left">
+                                                {TimeAgo_Component}
+                                            </div>
                                         </div>
                                         <div className="col s1 no-padding">
                                             <a 

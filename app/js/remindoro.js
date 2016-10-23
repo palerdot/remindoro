@@ -40319,6 +40319,33 @@
 	            // update the current remindoro details which will reflect in the modal
 	            // then updating the modal
 	            $("#options-modal").openModal();
+	
+	            function show() {
+	                var time = /(..)(:..)/.exec(new Date()); // The prettyprinted time.
+	                var hour = time[1] % 12 || 12; // The prettyprinted hour.
+	                var period = time[1] < 12 ? 'a.m.' : 'p.m.'; // The period of the day.
+	                new Notification(hour + time[2] + ' ' + period, {
+	                    icon: '48.png',
+	                    body: 'Bottom Modal opened for ' + id
+	                });
+	            }
+	
+	            function show_crx_noty() {
+	                var crx_noty = chrome.notifications.create("", {
+	                    type: "basic",
+	                    iconUrl: "/images/icon-38.png",
+	                    title: "Time to Read",
+	                    message: "<a href='google.com'>Porumai !!</a>",
+	                    // indicates to force close our notification; not just to dismiss
+	                    requireInteraction: true
+	                }, function () {
+	                    console.log("chrome notification show callback ", arguments);
+	                });
+	                console.log("showing crx notification ", crx_noty);
+	            }
+	
+	            // show();
+	            show_crx_noty();
 	        },
 	
 	        // updates reminder status when it is changed
@@ -40640,13 +40667,32 @@
 	                var ro_timestamp = new Date(ro.reminder.time).getTime(),
 	                    current_timestamp = new Date().getTime(),
 	                    time_difference = ro_timestamp - current_timestamp;
+	
 	                // for now checking if the remindoro is in future
 	                // const is_ro_active = (time_difference > 0) && (time_difference <= timeago_interval);
 	                var is_ro_active = time_difference > 0;
 	
-	                // if 15 mins in near future let us show the timeago componenet
 	                if (is_ro_active) {
-	                    TimeAgo_Component = _react2.default.createElement(_reactTimeago2.default, { date: ro.reminder.time });
+	                    TimeAgo_Component = _react2.default.createElement(
+	                        "div",
+	                        { className: "card green darken-1 row valign-wrapper no-margin-vert" },
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "col s2" },
+	                            _react2.default.createElement(
+	                                "i",
+	                                { className: "material-icons" },
+	                                "alarm"
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "col s10" },
+	                            _react2.default.createElement(_reactTimeago2.default, {
+	                                date: ro.reminder.time
+	                            })
+	                        )
+	                    );
 	                }
 	            }
 	
@@ -40695,11 +40741,15 @@
 	                        ),
 	                        _react2.default.createElement(
 	                            "div",
-	                            { className: "card-action row remindoro-footer" },
+	                            { className: "card-action row remindoro-footer valign-wrapper" },
 	                            _react2.default.createElement(
 	                                "div",
 	                                { className: "col s11" },
-	                                TimeAgo_Component
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "col s6 left" },
+	                                    TimeAgo_Component
+	                                )
 	                            ),
 	                            _react2.default.createElement(
 	                                "div",
