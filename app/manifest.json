@@ -10,11 +10,17 @@
     "default_locale": "en",
     "background": {
         "scripts": [
+            // "js/jquery.min.js",
+            "js/lodash.min.js",
+            "js/moment.min.js",
             "scripts/chromereload.js",
-            "scripts/background.js"
-        ]
+            // "scripts/events.js"
+            "scripts/events-porumai.js"
+        ],
+        "persistent": false
     },
     "permissions": [
+        "alarms",
         "tabs",
         "http://*/*",
         "https://*/*",
@@ -23,6 +29,7 @@
         "clipboardRead",
         "clipboardWrite",
         "contentSettings",
+        "contextMenus",
         "cookies",
         "*://*.google.com/",
         "debugger",
@@ -34,7 +41,6 @@
         "topSites",
         "storage",
         "webNavigation",
-        "webRequest",
         "webRequestBlocking"
     ],
     "options_ui": {

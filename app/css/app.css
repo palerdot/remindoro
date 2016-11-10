@@ -30,6 +30,10 @@
   margin-left: 0 !important;
 }
 
+.child-no-margin-vert .input-field {
+  margin-top: 0 !important;
+}
+
 .navigator {
   height: 50px;
   overflow: none;
@@ -175,6 +179,14 @@
 
 .modal .flatpickr .disabled i {
   color: #37474f !important;
+}
+
+.modal .repeat-time-info {
+  font-size: 16px;
+  margin-left: 10px;
+  padding: 5px;
+  border-radius: 50px;
+  border: thin solid #455a64;
 }
 
 body {

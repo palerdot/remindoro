@@ -31,8 +31,13 @@
     "gulp-useref": "^3.0.8",
     "gulp-zip": "^3.2.0",
     "main-bower-files": "^2.11.1",
+    "mocha": "^3.1.2",
+    "mocha-browser": "^0.2.0",
     "run-sequence": "^1.1.5",
     "wiredep": "^4.0.0"
+  },
+  "scripts": {
+    "test": "mocha --compilers js:babel-register"
   },
   "eslintConfig": {
     "env": {
@@ -43,11 +48,10 @@
       "chrome": true
     },
     "rules": {
-      "eol-last": 0,
-      "quotes": [
-        2,
-        "single"
-      ]
+      "eol-last": 0
+    },
+    "parserOptions": {
+        "sourceType": "module"
     }
   },
   "dependencies": {
@@ -62,6 +66,7 @@
     "react": "^15.3.2",
     "react-contenteditable": "^2.0.1",
     "react-dom": "^15.3.2",
+    "react-materialize": "^0.17.0",
     "react-redux": "^4.4.5",
     "react-throttle": "^0.3.0",
     "react-timeago": "^3.1.3",

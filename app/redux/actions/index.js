@@ -43,11 +43,27 @@ export const changeTab = (tab) => {
     };
 };
 
+// sort remindoros based on updated time
+export const sortRemindoros = () => {
+    return {
+        type: "SORT_REMINDOROS"
+    };
+};
+
 // adding a new remindoro
 export const addRemindoro = (current_id) => {
     return {
         type: "ADD_REMINDORO",
         id: current_id
+    };
+};
+
+// adding new remindoro with details
+export const addRemindoroWithDetails = (id, details) => {
+    return {
+        type: "ADD_REMINDORO_WITH_DETAILS",
+        id: id,
+        details: details
     };
 };
 
@@ -89,10 +105,24 @@ export const updateReminderStatus = (id, status, reminder_time) => {
 
 // updating repeat status (on/off)
 export const updateRepeatStatus = (id, status) => {
+
+    let interval, time;
+
+    // if repeat is turned on, let us get the default values from the dom
+    if (status) {
+        interval = $("#options-modal").find("#repeat-interval").val();
+        time = $("#options-modal").find("#repeat-time").val();
+    } else {
+        interval = false;
+        time = false;
+    }
+
     return {
         type: "UPDATE_REPEAT_STATUS",
         id: id,
-        status: status
+        status: status,
+        interval: interval,
+        time: time
     };
 };
 
@@ -101,6 +131,14 @@ export const deleteRemindoro = (id) => {
     return {
         type: "DELETE_REMINDORO",
         id: id
+    };
+};
+
+// update remindoros which are sent by the event/bg page
+export const updateRemindoros = (remindoros) => {
+    return {
+        type: "UPDATE_REMINDOROS",
+        remindoros: remindoros
     };
 };
 

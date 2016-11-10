@@ -11,7 +11,7 @@ import BottomModal from "./BottomModal";
 
 // for connecting this componenet to the store
 import { connect } from "react-redux";
-import { changeTab, addRemindoro, selectRemindoro, updateReminderStatus, updateRepeatStatus, updateTitle, updateNote, deleteRemindoro } from "../redux/actions/";
+import { changeTab, sortRemindoros, addRemindoro, selectRemindoro, updateReminderStatus, updateRepeatStatus, updateTitle, updateNote, deleteRemindoro } from "../redux/actions/";
 
 // menu options; for now we will define the menu options here
 // later we can move into a seperate location which is appropriate
@@ -22,7 +22,31 @@ const menu = {
     // "notes": "content_paste",
     // "lists": "format_list_bulleted",
     // "notifications": "notifications_active"
-    "notifications": "event"
+    "events": "event"
+};
+
+const filterRemindoros = (remindoros, tab) => {
+    console.log("filtering remindoro based on tab");
+    let ros = remindoros;
+
+    const is_home_tab = (tab == "home"),
+            is_events_tab = (tab == "events");
+
+    if (is_events_tab) {
+        let filtered_ros = _.filter( ros, function (ro) {
+            return ro.reminder.time;
+        } );
+        // sort the filtered array by update time
+        ros = _.sortBy( filtered_ros, function (ro) {
+            const reminder_time = new Date(ro.reminder.time).getTime(),
+                    current_time = new Date().getTime(),
+                    isPast = (current_time - reminder_time) > 0;
+
+            return isPast ? Infinity : reminder_time;
+        } );
+    }
+
+    return ros;
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -31,7 +55,8 @@ const mapStateToProps = (state, ownProps) => {
     return {
         menu: menu,
         current_tab: state.current_tab,
-        remindoros: state.remindoros,
+        // remindoros: state.remindoros,
+        remindoros: filterRemindoros( state.remindoros, state.current_tab ),
         current_selected_remindoro: state.current_selected_remindoro,
         id_counter: ownProps.id_counter
     };
@@ -43,7 +68,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
         // dispatch "changeTab" action as "home" at the start to sort remindoros in right order
         initializeHomeScreen: () => {
-            console.log("initing home screen");
+            console.log("initing home screen ", dispatch, ownProps);
             dispatch( changeTab("home") );
         },
 
@@ -69,8 +94,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
 
         // handle Note Change
-        handleNoteChange: (id, note) => {
-            console.log("handling note change ", id, note);
+        handleNoteChange: (id, note, orig) => {
+            console.log("handling note change ", id, note, orig);
             dispatch( updateNote(id, note) );
         },
 
@@ -96,34 +121,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             // update the current remindoro details which will reflect in the modal
             // then updating the modal
             $("#options-modal").openModal();
-
-            function show() {
-                var time = /(..)(:..)/.exec(new Date()); // The prettyprinted time.
-                var hour = time[1] % 12 || 12; // The prettyprinted hour.
-                var period = time[1] < 12 ? 'a.m.' : 'p.m.'; // The period of the day.
-                new Notification(hour + time[2] + ' ' + period, {
-                    icon: '48.png',
-                    body: 'Bottom Modal opened for ' + id
-                });
-            }
-
-            function show_crx_noty () {
-                var crx_noty = chrome.notifications.create("", {
-                    type: "basic",
-                    iconUrl: "/images/icon-38.png",
-                    title: "Time to Read",
-                    message: "<a href='google.com'>Porumai !!</a>",
-                    // indicates to force close our notification; not just to dismiss
-                    requireInteraction: true
-                }, function () {
-                    console.log("chrome notification show callback ", arguments);
-                });
-                console.log("showing crx notification ", crx_noty);
-            }
-
-            // show();
-            show_crx_noty();
-
         },
 
         // updates reminder status when it is changed
@@ -184,7 +181,8 @@ let App = (props) => {
                 onAddClick={props.handleAddRemindoro}
                 initializeHomeScreen={props.initializeHomeScreen} 
             />
-            <Remindoro 
+            <Remindoro
+                current_tab={props.current_tab} 
                 remindoros={props.remindoros}
                 onTitleChange={props.handleTitleChange}
                 onNoteChange={props.handleNoteChange} 

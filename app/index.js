@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// note: important to import _, otherwise we will end up with lodash!!!
 import _ from "lodash";
 
 import { Provider } from "react-redux";
 import { createStore } from "redux";
+import { sortRemindoros, addRemindoroWithDetails, updateRemindoros } from "./redux/actions";
 
 import remindoroReducer from "./redux/reducers";
+import { calculate_remindoro_id } from "./js/utils";
 
 import "./general-initializer.js";
 
@@ -27,7 +28,7 @@ let subscription = false;
 let REMINDORO = {
 
     // count of total remindoros; used for generating unique ids by auto incrementing
-    total_remindoros: 0,
+    id_counter: 0,
 
     initialize: function (chrome_local_data) {
 
@@ -35,28 +36,15 @@ let REMINDORO = {
         
         let initial_data = chrome_local_data && chrome_local_data["REMINDORO"];
         let ros = (initial_data && initial_data.remindoros) ? initial_data.remindoros : [];
-        // calculating total remindoro count and updating the count
-        let max_id_remindoro = _.maxBy( ros, function (data) {
-            return data.id;
-        } );
-
-        let remindoro_count = 0;
-
-        if (max_id_remindoro) {
-            console.log("max id remindoro ", max_id_remindoro);
-            // if we have a remindoro with max id we will add that as remindoro_count
-            remindoro_count = max_id_remindoro.id;
-        }
 
         // update the  total remindoros
-        this.total_remindoros = remindoro_count;
+        this.id_counter = calculate_remindoro_id(ros);
 
         store = createStore( remindoroReducer, initial_data );
         // add subscription to store changes
         subscription = store.subscribe( REMINDORO.handleSubscription ); 
         // starting the app
         this.start();
-
     },
 
     start: function () {
@@ -71,7 +59,7 @@ let REMINDORO = {
 
     renderApp: function () {
 
-        let id_counter = this.total_remindoros;
+        let id_counter = this.id_counter;
 
         ReactDOM.render(
             <Provider store={store}>
@@ -91,6 +79,46 @@ let REMINDORO = {
         chrome.storage.sync.set({ "REMINDORO": store.getState() }, function () {
             console.log("STORE DATA saved to CHROME");
         });
+    },
+
+    handleContextMenuClick: function (menu_details, tab_details) {
+        console.log("context menu clicked !?!?", menu_details, tab_details);
+        var remindoro_details = {};
+        // we will be handling two types of context menus
+        // page/link action => adding the page url as note, title as title
+        // highlighted action => title - url as title, highlighted text as body
+        var context_id = menu_details.menuItemId,
+            page_action = (context_id == "remindoro-page-context-menu"),
+            highlight_action = (context_id == "remindoro-highlight-context-menu");
+
+        if (page_action) {
+            // page/link action
+            // title => page title
+            // note => url of the page
+            var title = tab_details.title,
+                note = tab_details.url;
+        } else if (highlight_action) {
+            // highlight action
+            // title => page title - url
+            // note => highlighted text
+            var title = tab_details.title + " - " + tab_details.url,
+                note = menu_details.selectionText || "";
+        }
+
+        // save the  remindoro details
+        remindoro_details = {
+            title: title,
+            note: note
+        };
+
+        // dispatching an action to add Remindoro with details
+        let current_state = store.getState(),
+            current_remindoros = current_state["remindoros"];
+
+        const add_id = calculate_remindoro_id( current_remindoros );
+        console.log("adding ", add_id, remindoro_details);
+        store.dispatch( addRemindoroWithDetails(add_id, remindoro_details) );
+        // add a chrome notification
     }
 
 };
@@ -104,10 +132,23 @@ function handleError (e) {
 try {
     if (is_chrome_extension) {
         // we are dealing with a chrome extension; init normally
-
+        chrome.contextMenus.onClicked.addListener( function (menu_details, tab_details) {
+            console.log("processed in background page");
+            REMINDORO.handleContextMenuClick( menu_details, tab_details );
+        } );
         // get current locally stored item from chrome
         // our data is within the key called "REMINDORO" // caps
-        chrome.storage.sync.get("REMINDORO",  REMINDORO.initialize.bind(REMINDORO) );    
+        chrome.storage.sync.get("REMINDORO",  REMINDORO.initialize.bind(REMINDORO) );
+
+        chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
+            if ( !_.isEmpty(request.updated_remindoros) ) {
+                // if there are any updated remindoros, changing only those remindoros
+                // dispatching an action to update changed remindoros
+                console.log("UPDATING REMINDOROS ", request.updated_remindoros);
+                store.dispatch( updateRemindoros( request.updated_remindoros ) );    
+            }
+        } );
+
     } else {
         // we are probably running in the browser, we will initialize differently
         REMINDORO.initialize({})

@@ -62,8 +62,8 @@ const Navigator = React.createClass({
                                         onClick={ 
                                             () => {
                                                 let current_id = this.state.id_counter;
-                                                // update current_id
-                                                current_id++;
+                                                // NOTE: not needed now since we are already adding when creating id
+                                                // current_id++;
                                                 // update the state
                                                 this.setState({
                                                     id_counter: current_id

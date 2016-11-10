@@ -33,3 +33,10 @@
     margin-right: 0 !important;
     margin-left: 0 !important;
 }
+
+// hack to remove margin top from "react-materialize"
+.child-no-margin-vert {
+    .input-field {
+        margin-top: 0 !important;
+    }
+}

@@ -99,7 +99,16 @@ gulp.task('babel', () => {
         .pipe($.babel({
             presets: ['es2015']
         }))
-        .pipe(gulp.dest('app/js'));
+        // .pipe(gulp.dest('app/js'));
+        .pipe(gulp.dest('app/scripts/'));
+});
+
+gulp.task('events-page', () => {
+    let config = require('./webpack.events.config.js');
+
+    return gulp.src('./app/scripts.babel/events-modular.js')
+                .pipe(webpack( config ))
+                .pipe(gulp.dest('./app/scripts/'));
 });
 
 // webpack tasks
@@ -115,7 +124,7 @@ gulp.task("webpack", (cb) => {
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('watch', ['lint', 'webpack', 'styles'], () => {
+gulp.task('watch', ['lint', 'events-page', 'webpack', 'styles'], () => {
     $.livereload.listen();
 
     gulp.watch([
@@ -127,7 +136,8 @@ gulp.task('watch', ['lint', 'webpack', 'styles'], () => {
     ]).on('change', $.livereload.reload);
 
     // Note: Ignoring the main resulting bundle file => remindoro.js
-    gulp.watch(['app/**/*.{js,jsx}', '!app/js/remindoro.js'], ['lint', 'webpack']);
+    gulp.watch(['app/**/*.{js,jsx}', '!app/js/remindoro.js'], ['lint', 'events-page', 'webpack']);
+    // gulp.watch(['app/**/*.{js,jsx}', '!app/js/remindoro.js'], ['lint'], ['babel'], ['webpack']);
     gulp.watch('app/styles.scss/**/*.scss', ['styles']);
     gulp.watch('bower.json', ['wiredep']);
 });

@@ -89,5 +89,14 @@
             }
         }
     }
+
+    // repeat time info showing time before slider
+    .repeat-time-info {
+        font-size: 16px;
+        margin-left: 10px;
+        padding: 5px;
+        border-radius: 50px;
+        border: thin solid $theme_shade_2;
+    }
     
 }
