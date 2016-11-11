@@ -188,7 +188,7 @@
 	
 	function handleError(e) {
 	    console.error('error: ' + e.message);
-	    Materialize.toast("Error " + e.message, 3000);
+	    Materialize.toast("Error " + e.message, 13000);
 	    Materialize.toast("Please notify the error through chrome web store or to - palerdot@gmail.com", 13000);
 	}
 	
@@ -55730,7 +55730,8 @@
 	
 	                // decide if we have show a timeago element
 	
-	                var TimeAgo_Component = "";
+	                var TimeAgo_Component = "",
+	                    Repeat_Component = "";
 	
 	                // if we have a reminder time scheduled
 	                if (ro.reminder.time) {
@@ -55780,6 +55781,22 @@
 	                                _react2.default.createElement(_reactTimeago2.default, {
 	                                    date: ro.reminder.time
 	                                })
+	                            )
+	                        );
+	                    }
+	
+	                    if (ro.reminder.is_repeat) {
+	                        Repeat_Component = _react2.default.createElement(
+	                            "div",
+	                            { className: "card transparent deep-orange darken-1 center white-text row valign-wrapper no-margin-vert" },
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "col s12" },
+	                                _react2.default.createElement(
+	                                    "i",
+	                                    { className: "material-icons" },
+	                                    "repeat"
+	                                )
 	                            )
 	                        );
 	                    }
@@ -55838,6 +55855,11 @@
 	                                        "div",
 	                                        { className: "col s6 left" },
 	                                        TimeAgo_Component
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        "div",
+	                                        { className: "col s2" },
+	                                        Repeat_Component
 	                                    )
 	                                ),
 	                                _react2.default.createElement(

@@ -163,7 +163,7 @@ gulp.task('package', function() {
 
 gulp.task('build', (cb) => {
     runSequence(
-        'lint', 'webpack', 'styles', 'chromeManifest', ['html', 'images', 'extras'],
+        'lint', 'webpack', 'events-page', 'styles', 'chromeManifest', ['html', 'images', 'extras'],
         'size', cb);
 });
 

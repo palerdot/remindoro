@@ -14,8 +14,7 @@
             "js/lodash.min.js",
             "js/moment.min.js",
             "scripts/chromereload.js",
-            // "scripts/events.js"
-            "scripts/events-porumai.js"
+            "scripts/events.js"
         ],
         "persistent": false
     },

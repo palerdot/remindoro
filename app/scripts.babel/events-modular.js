@@ -63,11 +63,24 @@ chrome.contextMenus.onClicked.addListener( function (menu_details, tab_details) 
         var remindoro_data = data["REMINDORO"],
             remindoros = remindoro_data["remindoros"];
 
-        var to_add = handleContextMenuClick( menu_details, tab_details, remindoros );
-        // push the remindoros to add
-        remindoros.push( to_add );
-        // update the remindoros
-        remindoro_data["remindoros"] = remindoros;
+        // before adding we need to check if the link we are trying to save is already there
+        var is_link_present = check_remindoro_link( menu_details, tab_details, remindoros );
+
+        if (is_link_present) {
+            // we have notified
+            // update the remindoros which we got
+            remindoro_data["remindoros"] = is_link_present;
+        } else {
+            // link is not already there
+            // we need to add it
+            var to_add = handleContextMenuClick( menu_details, tab_details, remindoros );
+
+            // push the remindoros to add
+            remindoros.push( to_add );    
+            // update the remindoros
+            remindoro_data["remindoros"] = remindoros;
+        }
+        
         // save the store data to local storage
         chrome.storage.sync.set({ "REMINDORO": remindoro_data }, function () {
             console.log("EVENT PAGE: NEW REMINDORO saved to CHROME");
@@ -161,4 +174,50 @@ function handleContextMenuClick (menu_details, tab_details, remindoros) {
     };
 
     return remindoro_to_add;
+}
+
+// check if remindoro link already present
+function check_remindoro_link (menu_details, tab_details, remindoros) {
+
+    // we will be handling two types of context menus
+    // page/link action => adding the page url as note, title as title
+    // highlighted action => title - url as title, highlighted text as body
+    var context_id = menu_details.menuItemId,
+        page_action = (context_id == "remindoro-page-context-menu"),
+        highlight_action = (context_id == "remindoro-highlight-context-menu");
+
+    // if not page action we will return false
+    if (!page_action) {
+        return false;
+    }
+
+    var title = tab_details.title,
+        note = tab_details.url;
+
+    // we are getting a page action only here
+    // note here we need to check if the url is already present in the existing remindoros
+    var already_saved_link = _.findIndex( remindoros, function (ro) {
+        var link = strip_html(ro.note);
+        return note == link;
+    } );
+
+    if (already_saved_link < 0) {
+        // it is not present
+        return false;
+    }
+
+    // it seems the link is already saved we need to update the 
+    // update the time with the index we have
+    remindoros[ already_saved_link ].updated = Date.now();
+    // update the title in case we get a updated title
+    remindoros[ already_saved_link ].title = title;
+
+    // notify
+    chrome_notify({
+        title: "Updated Successfully!",
+        message: note
+    })
+
+    // return the remindoros
+    return remindoros;
 }

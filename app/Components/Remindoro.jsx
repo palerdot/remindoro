@@ -33,7 +33,8 @@ const Remindoro = React.createClass({
 
                         // decide if we have show a timeago element
 
-                        let TimeAgo_Component = "";
+                        let TimeAgo_Component = "",
+                            Repeat_Component = "";
 
                         // if we have a reminder time scheduled
                         if (ro.reminder.time) {
@@ -75,6 +76,14 @@ const Remindoro = React.createClass({
                                                         </div>
                                                     </div>;
                             }
+
+                            if (ro.reminder.is_repeat) {
+                                Repeat_Component = <div className="card transparent deep-orange darken-1 center white-text row valign-wrapper no-margin-vert">
+                                                        <div className="col s12">
+                                                            <i className="material-icons">repeat</i>
+                                                        </div>
+                                                    </div>;
+                            }
                                                     
                         }
 
@@ -106,6 +115,9 @@ const Remindoro = React.createClass({
                                             <div className="col s11">
                                                 <div className="col s6 left">
                                                     {TimeAgo_Component}
+                                                </div>
+                                                <div className="col s2">
+                                                    {Repeat_Component}
                                                 </div>
                                             </div>
                                             <div className="col s1 no-padding">

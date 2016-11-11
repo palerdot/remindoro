@@ -125,7 +125,7 @@ let REMINDORO = {
 
 function handleError (e) {
     console.error('error: ' + e.message);
-    Materialize.toast("Error " + e.message, 3000);
+    Materialize.toast("Error " + e.message, 13000);
     Materialize.toast("Please notify the error through chrome web store or to - palerdot@gmail.com", 13000);
 }
 
