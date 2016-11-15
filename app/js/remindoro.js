@@ -78,7 +78,6 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	console.log("Porumai! building remindoro");
 	// sniff if we are running as a chrome extension
 	var is_chrome_extension = chrome && chrome.storage;
 	
@@ -100,7 +99,18 @@
 	        console.log("CHROME DATA ", chrome_local_data, this, chrome.runtime.lastError);
 	
 	        var initial_data = chrome_local_data && chrome_local_data["REMINDORO"];
+	
+	        // not added in version 0.1.0
+	        // let is_empty_remindoros = (initial_data && initial_data.remindoros.length == 0)
+	
+	        // if (is_empty_remindoros) {
+	        //     // if no data is found in chrome's local storage; let us populate with some initial remindoros
+	        //     initial_data.remindoros = get_initial_remindoros();
+	        // }
+	
 	        var ros = initial_data && initial_data.remindoros ? initial_data.remindoros : [];
+	
+	        console.log("ros ", ros);
 	
 	        // update the  total remindoros
 	        this.id_counter = (0, _utils.calculate_remindoro_id)(ros);
@@ -190,6 +200,28 @@
 	    console.error('error: ' + e.message);
 	    Materialize.toast("Error " + e.message, 13000);
 	    Materialize.toast("Please notify the error through chrome web store or to - palerdot@gmail.com", 13000);
+	}
+	
+	// if there are no remindoros saved, we will populate with a default set
+	function get_initial_remindoros() {
+	
+	    return [{
+	        id: (0, _utils.calculate_remindoro_id)([]),
+	        title: "Take a Walk",
+	        type: "note",
+	        note: "Taking a walk for every 45 minutes is good for your health. Avoid continous sitting for long hours.&nbsp;<div><br></div><div>NOTE: Welcome to Remindoro! - This is a default sample remindoro shown if no entries are saved. You can edit, save, delete and do whatever you want with this note. Enjoy!</div>",
+	        list: [],
+	        created: Date.now(),
+	        updated: Date.now(),
+	        reminder: {
+	            time: Date.now(),
+	            is_repeat: true, // status if the alarm is recurring
+	            repeat: {
+	                interval: "minutes",
+	                time: "45"
+	            }
+	        }
+	    }];
 	}
 	
 	try {
@@ -55273,11 +55305,11 @@
 	
 	var _Navigator2 = _interopRequireDefault(_Navigator);
 	
-	var _Remindoro = __webpack_require__(311);
+	var _Remindoro = __webpack_require__(312);
 	
 	var _Remindoro2 = _interopRequireDefault(_Remindoro);
 	
-	var _BottomModal = __webpack_require__(323);
+	var _BottomModal = __webpack_require__(324);
 	
 	var _BottomModal2 = _interopRequireDefault(_BottomModal);
 	
@@ -55500,6 +55532,10 @@
 	
 	var _lodash2 = _interopRequireDefault(_lodash);
 	
+	var _config = __webpack_require__(311);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// new es6 stateless functions which is an alternative for React.createClass
@@ -55507,6 +55543,9 @@
 	// ref: https://facebook.github.io/react/docs/reusable-components.html#stateless-functions
 	// not a stateless componenet; we will keep track of id counter
 	// const Navigator = (props) => {
+	// top navigation bar containing the menu and close button
+	// menu is given as props along with icon names to display
+	
 	var Navigator = _react2.default.createClass({
 	    displayName: "Navigator",
 	
@@ -55550,6 +55589,32 @@
 	                            "i",
 	                            { className: "material-icons" },
 	                            "close"
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        "button",
+	                        {
+	                            className: "btn btn-floating waves-light waves-effect",
+	                            onClick: function onClick() {
+	                                // open the help file
+	                                chrome.tabs.create({ url: _config2.default.help_url });
+	                            }
+	                        },
+	                        _react2.default.createElement(
+	                            "i",
+	                            { className: "material-icons" },
+	                            "help"
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        "button",
+	                        {
+	                            className: "btn btn-floating waves-light waves-effect"
+	                        },
+	                        _react2.default.createElement(
+	                            "i",
+	                            { className: "material-icons" },
+	                            "star"
 	                        )
 	                    )
 	                ),
@@ -55605,8 +55670,7 @@
 	        );
 	    }
 	
-	}); // top navigation bar containing the menu and close button
-	// menu is given as props along with icon names to display
+	});
 	
 	exports.default = Navigator;
 
@@ -55669,6 +55733,15 @@
 
 /***/ },
 /* 311 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"help_url": "http://remindoro.com#help",
+		"rate_url": "http://google.com"
+	};
+
+/***/ },
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -55681,7 +55754,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactTimeago = __webpack_require__(312);
+	var _reactTimeago = __webpack_require__(313);
 	
 	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
 	
@@ -55689,11 +55762,11 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _reactContenteditable = __webpack_require__(313);
+	var _reactContenteditable = __webpack_require__(314);
 	
 	var _reactContenteditable2 = _interopRequireDefault(_reactContenteditable);
 	
-	var _reactThrottle = __webpack_require__(314);
+	var _reactThrottle = __webpack_require__(315);
 	
 	var _moment = __webpack_require__(201);
 	
@@ -55722,6 +55795,26 @@
 	    render: function render() {
 	
 	        var props = this.props;
+	
+	        var empty_remindoro_component = "";
+	
+	        if (props.remindoros.length == 0) {
+	            console.log("empty remindoros ", props);
+	            var empty_msg = "",
+	                is_event_tab = props.current_tab == "events";
+	
+	            if (is_event_tab) {
+	                empty_msg = "No Scheduled Remindoros!";
+	            } else {
+	                empty_msg = "Empty!";
+	            }
+	
+	            empty_remindoro_component = _react2.default.createElement(
+	                "div",
+	                { className: "center" },
+	                empty_msg
+	            );
+	        }
 	
 	        return _react2.default.createElement(
 	            "div",
@@ -55885,7 +55978,8 @@
 	                        )
 	                    )
 	                );
-	            })
+	            }),
+	            empty_remindoro_component
 	        );
 	    }
 	
@@ -55895,7 +55989,7 @@
 	exports.default = Remindoro;
 
 /***/ },
-/* 312 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56112,7 +56206,7 @@
 	exports.default = TimeAgo;
 
 /***/ },
-/* 313 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56252,7 +56346,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 314 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56262,11 +56356,11 @@
 	});
 	exports.Throttle = exports.Debounce = undefined;
 	
-	var _Debounce = __webpack_require__(315);
+	var _Debounce = __webpack_require__(316);
 	
 	var _Debounce2 = _interopRequireDefault(_Debounce);
 	
-	var _Throttle = __webpack_require__(320);
+	var _Throttle = __webpack_require__(321);
 	
 	var _Throttle2 = _interopRequireDefault(_Throttle);
 	
@@ -56278,7 +56372,7 @@
 	exports.Throttle = _Throttle2.default;
 
 /***/ },
-/* 315 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56293,11 +56387,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Debouncer = __webpack_require__(316);
+	var _Debouncer = __webpack_require__(317);
 	
 	var _Debouncer2 = _interopRequireDefault(_Debouncer);
 	
-	var _Base2 = __webpack_require__(319);
+	var _Base2 = __webpack_require__(320);
 	
 	var _Base3 = _interopRequireDefault(_Base2);
 	
@@ -56346,7 +56440,7 @@
 	exports.default = Debounce;
 
 /***/ },
-/* 316 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56357,11 +56451,11 @@
 	  value: true
 	});
 	
-	var _Base2 = __webpack_require__(317);
+	var _Base2 = __webpack_require__(318);
 	
 	var _Base3 = _interopRequireDefault(_Base2);
 	
-	var _debounce = __webpack_require__(318);
+	var _debounce = __webpack_require__(319);
 	
 	var _debounce2 = _interopRequireDefault(_debounce);
 	
@@ -56412,7 +56506,7 @@
 	exports.default = Debouncer;
 
 /***/ },
-/* 317 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56534,7 +56628,7 @@
 	exports.default = Base;
 
 /***/ },
-/* 318 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56663,7 +56757,7 @@
 	}
 
 /***/ },
-/* 319 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56740,7 +56834,7 @@
 	exports.default = Base;
 
 /***/ },
-/* 320 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56755,11 +56849,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Throttler = __webpack_require__(321);
+	var _Throttler = __webpack_require__(322);
 	
 	var _Throttler2 = _interopRequireDefault(_Throttler);
 	
-	var _Base2 = __webpack_require__(319);
+	var _Base2 = __webpack_require__(320);
 	
 	var _Base3 = _interopRequireDefault(_Base2);
 	
@@ -56808,7 +56902,7 @@
 	exports.default = Throttle;
 
 /***/ },
-/* 321 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56819,11 +56913,11 @@
 	  value: true
 	});
 	
-	var _Base2 = __webpack_require__(317);
+	var _Base2 = __webpack_require__(318);
 	
 	var _Base3 = _interopRequireDefault(_Base2);
 	
-	var _throttle = __webpack_require__(322);
+	var _throttle = __webpack_require__(323);
 	
 	var _throttle2 = _interopRequireDefault(_throttle);
 	
@@ -56874,7 +56968,7 @@
 	exports.default = Throttler;
 
 /***/ },
-/* 322 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56886,7 +56980,7 @@
 	
 	var _lodash = __webpack_require__(172);
 	
-	var _debounce = __webpack_require__(318);
+	var _debounce = __webpack_require__(319);
 	
 	var _debounce2 = _interopRequireDefault(_debounce);
 	
@@ -56913,7 +57007,7 @@
 	}
 
 /***/ },
-/* 323 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -56934,9 +57028,9 @@
 	
 	var _moment2 = _interopRequireDefault(_moment);
 	
-	var _reactMaterialize = __webpack_require__(324);
+	var _reactMaterialize = __webpack_require__(325);
 	
-	var _reactThrottle = __webpack_require__(314);
+	var _reactThrottle = __webpack_require__(315);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -57307,7 +57401,7 @@
 	exports.default = BottomModal;
 
 /***/ },
-/* 324 */
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57317,151 +57411,151 @@
 	});
 	exports.Toast = exports.Tag = exports.Table = exports.Tabs = exports.Tab = exports.Slider = exports.Slide = exports.SideNav = exports.SearchForm = exports.Row = exports.ProgressBar = exports.Preloader = exports.PaginationButton = exports.Pagination = exports.OverlayTrigger = exports.Overlay = exports.NavItem = exports.Navbar = exports.Modal = exports.MenuItem = exports.MediaBox = exports.Input = exports.Icon = exports.Footer = exports.Dropdown = exports.CollectionItem = exports.Collection = exports.CollapsibleItem = exports.Collapsible = exports.Col = exports.Chip = exports.CardTitle = exports.CardPanel = exports.Card = exports.Button = exports.Breadcrumb = exports.Badge = undefined;
 	
-	var _Badge = __webpack_require__(325);
+	var _Badge = __webpack_require__(326);
 	
 	var _Badge2 = _interopRequireDefault(_Badge);
 	
-	var _Breadcrumb = __webpack_require__(326);
+	var _Breadcrumb = __webpack_require__(327);
 	
 	var _Breadcrumb2 = _interopRequireDefault(_Breadcrumb);
 	
-	var _Button = __webpack_require__(329);
+	var _Button = __webpack_require__(330);
 	
 	var _Button2 = _interopRequireDefault(_Button);
 	
-	var _Card = __webpack_require__(332);
+	var _Card = __webpack_require__(333);
 	
 	var _Card2 = _interopRequireDefault(_Card);
 	
-	var _CardPanel = __webpack_require__(333);
+	var _CardPanel = __webpack_require__(334);
 	
 	var _CardPanel2 = _interopRequireDefault(_CardPanel);
 	
-	var _CardTitle = __webpack_require__(334);
+	var _CardTitle = __webpack_require__(335);
 	
 	var _CardTitle2 = _interopRequireDefault(_CardTitle);
 	
-	var _Chip = __webpack_require__(335);
+	var _Chip = __webpack_require__(336);
 	
 	var _Chip2 = _interopRequireDefault(_Chip);
 	
-	var _Col = __webpack_require__(327);
+	var _Col = __webpack_require__(328);
 	
 	var _Col2 = _interopRequireDefault(_Col);
 	
-	var _Collapsible = __webpack_require__(336);
+	var _Collapsible = __webpack_require__(337);
 	
 	var _Collapsible2 = _interopRequireDefault(_Collapsible);
 	
-	var _CollapsibleItem = __webpack_require__(337);
+	var _CollapsibleItem = __webpack_require__(338);
 	
 	var _CollapsibleItem2 = _interopRequireDefault(_CollapsibleItem);
 	
-	var _Collection = __webpack_require__(338);
+	var _Collection = __webpack_require__(339);
 	
 	var _Collection2 = _interopRequireDefault(_Collection);
 	
-	var _CollectionItem = __webpack_require__(339);
+	var _CollectionItem = __webpack_require__(340);
 	
 	var _CollectionItem2 = _interopRequireDefault(_CollectionItem);
 	
-	var _Dropdown = __webpack_require__(340);
+	var _Dropdown = __webpack_require__(341);
 	
 	var _Dropdown2 = _interopRequireDefault(_Dropdown);
 	
-	var _Footer = __webpack_require__(341);
+	var _Footer = __webpack_require__(342);
 	
 	var _Footer2 = _interopRequireDefault(_Footer);
 	
-	var _Icon = __webpack_require__(330);
+	var _Icon = __webpack_require__(331);
 	
 	var _Icon2 = _interopRequireDefault(_Icon);
 	
-	var _Input = __webpack_require__(343);
+	var _Input = __webpack_require__(344);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _MediaBox = __webpack_require__(344);
+	var _MediaBox = __webpack_require__(345);
 	
 	var _MediaBox2 = _interopRequireDefault(_MediaBox);
 	
-	var _MenuItem = __webpack_require__(345);
+	var _MenuItem = __webpack_require__(346);
 	
 	var _MenuItem2 = _interopRequireDefault(_MenuItem);
 	
-	var _Modal = __webpack_require__(346);
+	var _Modal = __webpack_require__(347);
 	
 	var _Modal2 = _interopRequireDefault(_Modal);
 	
-	var _Navbar = __webpack_require__(349);
+	var _Navbar = __webpack_require__(350);
 	
 	var _Navbar2 = _interopRequireDefault(_Navbar);
 	
-	var _NavItem = __webpack_require__(350);
+	var _NavItem = __webpack_require__(351);
 	
 	var _NavItem2 = _interopRequireDefault(_NavItem);
 	
-	var _Overlay = __webpack_require__(348);
+	var _Overlay = __webpack_require__(349);
 	
 	var _Overlay2 = _interopRequireDefault(_Overlay);
 	
-	var _OverlayTrigger = __webpack_require__(347);
+	var _OverlayTrigger = __webpack_require__(348);
 	
 	var _OverlayTrigger2 = _interopRequireDefault(_OverlayTrigger);
 	
-	var _Pagination = __webpack_require__(351);
+	var _Pagination = __webpack_require__(352);
 	
 	var _Pagination2 = _interopRequireDefault(_Pagination);
 	
-	var _PaginationButton = __webpack_require__(352);
+	var _PaginationButton = __webpack_require__(353);
 	
 	var _PaginationButton2 = _interopRequireDefault(_PaginationButton);
 	
-	var _Preloader = __webpack_require__(353);
+	var _Preloader = __webpack_require__(354);
 	
 	var _Preloader2 = _interopRequireDefault(_Preloader);
 	
-	var _ProgressBar = __webpack_require__(355);
+	var _ProgressBar = __webpack_require__(356);
 	
 	var _ProgressBar2 = _interopRequireDefault(_ProgressBar);
 	
-	var _Row = __webpack_require__(342);
+	var _Row = __webpack_require__(343);
 	
 	var _Row2 = _interopRequireDefault(_Row);
 	
-	var _SearchForm = __webpack_require__(356);
+	var _SearchForm = __webpack_require__(357);
 	
 	var _SearchForm2 = _interopRequireDefault(_SearchForm);
 	
-	var _SideNav = __webpack_require__(357);
+	var _SideNav = __webpack_require__(358);
 	
 	var _SideNav2 = _interopRequireDefault(_SideNav);
 	
-	var _Slide = __webpack_require__(358);
+	var _Slide = __webpack_require__(359);
 	
 	var _Slide2 = _interopRequireDefault(_Slide);
 	
-	var _Slider = __webpack_require__(359);
+	var _Slider = __webpack_require__(360);
 	
 	var _Slider2 = _interopRequireDefault(_Slider);
 	
-	var _Tab = __webpack_require__(360);
+	var _Tab = __webpack_require__(361);
 	
 	var _Tab2 = _interopRequireDefault(_Tab);
 	
-	var _Tabs = __webpack_require__(361);
+	var _Tabs = __webpack_require__(362);
 	
 	var _Tabs2 = _interopRequireDefault(_Tabs);
 	
-	var _Table = __webpack_require__(362);
+	var _Table = __webpack_require__(363);
 	
 	var _Table2 = _interopRequireDefault(_Table);
 	
-	var _Tag = __webpack_require__(363);
+	var _Tag = __webpack_require__(364);
 	
 	var _Tag2 = _interopRequireDefault(_Tag);
 	
-	var _Toast = __webpack_require__(364);
+	var _Toast = __webpack_require__(365);
 	
 	var _Toast2 = _interopRequireDefault(_Toast);
 	
@@ -57508,7 +57602,7 @@
 	exports.Toast = _Toast2.default;
 
 /***/ },
-/* 325 */
+/* 326 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57571,7 +57665,7 @@
 	exports.default = Badge;
 
 /***/ },
-/* 326 */
+/* 327 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57584,7 +57678,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Col = __webpack_require__(327);
+	var _Col = __webpack_require__(328);
 	
 	var _Col2 = _interopRequireDefault(_Col);
 	
@@ -57611,7 +57705,7 @@
 	exports.default = Breadcrumb;
 
 /***/ },
-/* 327 */
+/* 328 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57638,7 +57732,7 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _constants = __webpack_require__(328);
+	var _constants = __webpack_require__(329);
 	
 	var _constants2 = _interopRequireDefault(_constants);
 	
@@ -57710,7 +57804,7 @@
 	exports.default = Col;
 
 /***/ },
-/* 328 */
+/* 329 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57728,7 +57822,7 @@
 	};
 
 /***/ },
-/* 329 */
+/* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57763,7 +57857,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _constants = __webpack_require__(328);
+	var _constants = __webpack_require__(329);
 	
 	var _constants2 = _interopRequireDefault(_constants);
 	
@@ -57771,11 +57865,11 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _Icon = __webpack_require__(330);
+	var _Icon = __webpack_require__(331);
 	
 	var _Icon2 = _interopRequireDefault(_Icon);
 	
-	var _idgen = __webpack_require__(331);
+	var _idgen = __webpack_require__(332);
 	
 	var _idgen2 = _interopRequireDefault(_idgen);
 	
@@ -57920,7 +58014,7 @@
 	exports.default = Button;
 
 /***/ },
-/* 330 */
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57945,7 +58039,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _constants = __webpack_require__(328);
+	var _constants = __webpack_require__(329);
 	
 	var _constants2 = _interopRequireDefault(_constants);
 	
@@ -58019,7 +58113,7 @@
 	exports.default = Icon;
 
 /***/ },
-/* 331 */
+/* 332 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -58042,7 +58136,7 @@
 	}
 
 /***/ },
-/* 332 */
+/* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58081,7 +58175,7 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _Icon = __webpack_require__(330);
+	var _Icon = __webpack_require__(331);
 	
 	var _Icon2 = _interopRequireDefault(_Icon);
 	
@@ -58187,7 +58281,7 @@
 	exports.default = Card;
 
 /***/ },
-/* 333 */
+/* 334 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58245,7 +58339,7 @@
 	exports.default = CardPanel;
 
 /***/ },
-/* 334 */
+/* 335 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58284,7 +58378,7 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _constants = __webpack_require__(328);
+	var _constants = __webpack_require__(329);
 	
 	var _constants2 = _interopRequireDefault(_constants);
 	
@@ -58368,7 +58462,7 @@
 	exports.default = CardTitle;
 
 /***/ },
-/* 335 */
+/* 336 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58404,7 +58498,7 @@
 	exports.default = Chip;
 
 /***/ },
-/* 336 */
+/* 337 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58563,7 +58657,7 @@
 	exports.default = Collapsible;
 
 /***/ },
-/* 337 */
+/* 338 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58592,7 +58686,7 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _Icon = __webpack_require__(330);
+	var _Icon = __webpack_require__(331);
 	
 	var _Icon2 = _interopRequireDefault(_Icon);
 	
@@ -58721,7 +58815,7 @@
 	exports.default = CollapsibleItem;
 
 /***/ },
-/* 338 */
+/* 339 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58829,7 +58923,7 @@
 	exports.default = Collection;
 
 /***/ },
-/* 339 */
+/* 340 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58939,7 +59033,7 @@
 	exports.default = CollectionItem;
 
 /***/ },
-/* 340 */
+/* 341 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58974,7 +59068,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _idgen = __webpack_require__(331);
+	var _idgen = __webpack_require__(332);
 	
 	var _idgen2 = _interopRequireDefault(_idgen);
 	
@@ -59088,7 +59182,7 @@
 	exports.default = Dropdown;
 
 /***/ },
-/* 341 */
+/* 342 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59127,11 +59221,11 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _Row = __webpack_require__(342);
+	var _Row = __webpack_require__(343);
 	
 	var _Row2 = _interopRequireDefault(_Row);
 	
-	var _Col = __webpack_require__(327);
+	var _Col = __webpack_require__(328);
 	
 	var _Col2 = _interopRequireDefault(_Col);
 	
@@ -59206,7 +59300,7 @@
 	exports.default = Footer;
 
 /***/ },
-/* 342 */
+/* 343 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59244,7 +59338,7 @@
 	exports.default = Row;
 
 /***/ },
-/* 343 */
+/* 344 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59283,11 +59377,11 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _idgen = __webpack_require__(331);
+	var _idgen = __webpack_require__(332);
 	
 	var _idgen2 = _interopRequireDefault(_idgen);
 	
-	var _constants = __webpack_require__(328);
+	var _constants = __webpack_require__(329);
 	
 	var _constants2 = _interopRequireDefault(_constants);
 	
@@ -59552,7 +59646,7 @@
 	exports.default = Input;
 
 /***/ },
-/* 344 */
+/* 345 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59614,7 +59708,7 @@
 	exports.default = MediaBox;
 
 /***/ },
-/* 345 */
+/* 346 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59726,7 +59820,7 @@
 	exports.default = MenuItem;
 
 /***/ },
-/* 346 */
+/* 347 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59761,7 +59855,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Button = __webpack_require__(329);
+	var _Button = __webpack_require__(330);
 	
 	var _Button2 = _interopRequireDefault(_Button);
 	
@@ -59769,7 +59863,7 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _OverlayTrigger = __webpack_require__(347);
+	var _OverlayTrigger = __webpack_require__(348);
 	
 	var _OverlayTrigger2 = _interopRequireDefault(_OverlayTrigger);
 	
@@ -59889,7 +59983,7 @@
 	exports.default = Modal;
 
 /***/ },
-/* 347 */
+/* 348 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59914,11 +60008,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Overlay2 = __webpack_require__(348);
+	var _Overlay2 = __webpack_require__(349);
 	
 	var _Overlay3 = _interopRequireDefault(_Overlay2);
 	
-	var _idgen = __webpack_require__(331);
+	var _idgen = __webpack_require__(332);
 	
 	var _idgen2 = _interopRequireDefault(_idgen);
 	
@@ -59992,7 +60086,7 @@
 	exports.default = OverlayTrigger;
 
 /***/ },
-/* 348 */
+/* 349 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60136,7 +60230,7 @@
 	exports.default = Overlay;
 
 /***/ },
-/* 349 */
+/* 350 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60175,11 +60269,11 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _Col = __webpack_require__(327);
+	var _Col = __webpack_require__(328);
 	
 	var _Col2 = _interopRequireDefault(_Col);
 	
-	var _Icon = __webpack_require__(330);
+	var _Icon = __webpack_require__(331);
 	
 	var _Icon2 = _interopRequireDefault(_Icon);
 	
@@ -60274,7 +60368,7 @@
 	exports.default = Navbar;
 
 /***/ },
-/* 350 */
+/* 351 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60366,7 +60460,7 @@
 	exports.default = NavItem;
 
 /***/ },
-/* 351 */
+/* 352 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60395,11 +60489,11 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _Icon = __webpack_require__(330);
+	var _Icon = __webpack_require__(331);
 	
 	var _Icon2 = _interopRequireDefault(_Icon);
 	
-	var _PaginationButton = __webpack_require__(352);
+	var _PaginationButton = __webpack_require__(353);
 	
 	var _PaginationButton2 = _interopRequireDefault(_PaginationButton);
 	
@@ -60534,7 +60628,7 @@
 	exports.default = Pagination;
 
 /***/ },
-/* 352 */
+/* 353 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60587,7 +60681,7 @@
 	exports.default = PaginationButton;
 
 /***/ },
-/* 353 */
+/* 354 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60616,7 +60710,7 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _Spinner = __webpack_require__(354);
+	var _Spinner = __webpack_require__(355);
 	
 	var _Spinner2 = _interopRequireDefault(_Spinner);
 	
@@ -60714,7 +60808,7 @@
 	exports.default = Preloader;
 
 /***/ },
-/* 354 */
+/* 355 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60762,7 +60856,7 @@
 	exports.default = Spinner;
 
 /***/ },
-/* 355 */
+/* 356 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60814,7 +60908,7 @@
 	exports.default = ProgressBar;
 
 /***/ },
-/* 356 */
+/* 357 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60827,7 +60921,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Icon = __webpack_require__(330);
+	var _Icon = __webpack_require__(331);
 	
 	var _Icon2 = _interopRequireDefault(_Icon);
 	
@@ -60842,7 +60936,7 @@
 	exports.default = SearchForm;
 
 /***/ },
-/* 357 */
+/* 358 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60855,11 +60949,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Icon = __webpack_require__(330);
+	var _Icon = __webpack_require__(331);
 	
 	var _Icon2 = _interopRequireDefault(_Icon);
 	
-	var _idgen = __webpack_require__(331);
+	var _idgen = __webpack_require__(332);
 	
 	var _idgen2 = _interopRequireDefault(_idgen);
 	
@@ -60884,7 +60978,7 @@
 	exports.default = SideNav;
 
 /***/ },
-/* 358 */
+/* 359 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60923,7 +61017,7 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _constants = __webpack_require__(328);
+	var _constants = __webpack_require__(329);
 	
 	var _constants2 = _interopRequireDefault(_constants);
 	
@@ -61031,7 +61125,7 @@
 	exports.default = Slide;
 
 /***/ },
-/* 359 */
+/* 360 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61157,7 +61251,7 @@
 	exports.default = Slider;
 
 /***/ },
-/* 360 */
+/* 361 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61254,7 +61348,7 @@
 	exports.default = Tab;
 
 /***/ },
-/* 361 */
+/* 362 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61293,11 +61387,11 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _Row = __webpack_require__(342);
+	var _Row = __webpack_require__(343);
 	
 	var _Row2 = _interopRequireDefault(_Row);
 	
-	var _Col = __webpack_require__(327);
+	var _Col = __webpack_require__(328);
 	
 	var _Col2 = _interopRequireDefault(_Col);
 	
@@ -61399,7 +61493,7 @@
 	exports.default = Tabs;
 
 /***/ },
-/* 362 */
+/* 363 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61537,7 +61631,7 @@
 	exports.default = Table;
 
 /***/ },
-/* 363 */
+/* 364 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61550,7 +61644,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Chip = __webpack_require__(335);
+	var _Chip = __webpack_require__(336);
 	
 	var _Chip2 = _interopRequireDefault(_Chip);
 	
@@ -61570,7 +61664,7 @@
 	exports.default = Tag;
 
 /***/ },
-/* 364 */
+/* 365 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61599,7 +61693,7 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _Button = __webpack_require__(329);
+	var _Button = __webpack_require__(330);
 	
 	var _Button2 = _interopRequireDefault(_Button);
 	

@@ -26,6 +26,26 @@ const Remindoro = React.createClass({
 
         let props = this.props;
 
+        let empty_remindoro_component = "";
+
+        if (props.remindoros.length == 0) {
+            console.log("empty remindoros ", props);
+            let empty_msg = "",
+                is_event_tab = (props.current_tab == "events");
+
+            if (is_event_tab) {
+                empty_msg = "No Scheduled Remindoros!"
+            } else {
+                empty_msg = "Empty!"
+            }
+
+            empty_remindoro_component = <div className="center">
+                                            {empty_msg}
+                                        </div>;    
+        }
+
+        
+
         return (
             <div id="remindoros" className="col s12 no-padding-hori">
                {
@@ -139,6 +159,7 @@ const Remindoro = React.createClass({
                         );
                     } )
                }
+               {empty_remindoro_component}
             </div>
         );
     }

@@ -13,7 +13,6 @@ import "./general-initializer.js";
 
 import App from "./Components/App";
 
-console.log("Porumai! building remindoro");
 // sniff if we are running as a chrome extension
 let is_chrome_extension = chrome && chrome.storage;
 
@@ -34,8 +33,20 @@ let REMINDORO = {
 
         console.log("CHROME DATA ", chrome_local_data, this, chrome.runtime.lastError);
         
+        
         let initial_data = chrome_local_data && chrome_local_data["REMINDORO"];
+
+        // not added in version 0.1.0
+        // let is_empty_remindoros = (initial_data && initial_data.remindoros.length == 0)
+
+        // if (is_empty_remindoros) {
+        //     // if no data is found in chrome's local storage; let us populate with some initial remindoros
+        //     initial_data.remindoros = get_initial_remindoros();
+        // }
+        
         let ros = (initial_data && initial_data.remindoros) ? initial_data.remindoros : [];
+
+        console.log("ros ", ros);
 
         // update the  total remindoros
         this.id_counter = calculate_remindoro_id(ros);
@@ -127,6 +138,31 @@ function handleError (e) {
     console.error('error: ' + e.message);
     Materialize.toast("Error " + e.message, 13000);
     Materialize.toast("Please notify the error through chrome web store or to - palerdot@gmail.com", 13000);
+}
+
+// if there are no remindoros saved, we will populate with a default set
+function get_initial_remindoros () {
+
+    return [
+        {
+            id: calculate_remindoro_id([]),
+            title: "Take a Walk",
+            type: "note",
+            note: "Taking a walk for every 45 minutes is good for your health. Avoid continous sitting for long hours.&nbsp;<div><br></div><div>NOTE: Welcome to Remindoro! - This is a default sample remindoro shown if no entries are saved. You can edit, save, delete and do whatever you want with this note. Enjoy!</div>", 
+            list: [], 
+            created: Date.now(),
+            updated: Date.now(),
+            reminder: {
+                time: Date.now(), 
+                is_repeat: true, // status if the alarm is recurring
+                repeat: {
+                    interval: "minutes",
+                    time: "45"
+                }
+            } 
+        }
+    ];
+
 }
 
 try {

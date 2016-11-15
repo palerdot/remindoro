@@ -30,6 +30,7 @@
     "gulp-uglify": "^1.5.3",
     "gulp-useref": "^3.0.8",
     "gulp-zip": "^3.2.0",
+    "json-loader": "^0.5.4",
     "main-bower-files": "^2.11.1",
     "mocha": "^3.1.2",
     "mocha-browser": "^0.2.0",
@@ -51,7 +52,7 @@
       "eol-last": 0
     },
     "parserOptions": {
-        "sourceType": "module"
+      "sourceType": "module"
     }
   },
   "dependencies": {

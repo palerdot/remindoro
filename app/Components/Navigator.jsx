@@ -5,6 +5,8 @@ import React from "react";
 import classNames from "classnames"
 import _ from "lodash";
 
+import config from "json!../config.json";
+
 // new es6 stateless functions which is an alternative for React.createClass
 // the props are directly passed to this function by react
 // ref: https://facebook.github.io/react/docs/reusable-components.html#stateless-functions
@@ -44,6 +46,22 @@ const Navigator = React.createClass({
                             }
                         >
                             <i className="material-icons">close</i>    
+                        </button>
+                        <button 
+                            className="btn btn-floating waves-light waves-effect"
+                            onClick={
+                                () => {
+                                    // open the help file
+                                    chrome.tabs.create({ url: config.help_url });
+                                }
+                            }
+                        >
+                            <i className="material-icons">help</i>
+                        </button>
+                        <button 
+                            className="btn btn-floating waves-light waves-effect"
+                        >
+                            <i className="material-icons">star</i>
                         </button>
                     </div>
                     {/* displaying the menu items returned as props */}
