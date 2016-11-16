@@ -10,10 +10,8 @@
     "default_locale": "en",
     "background": {
         "scripts": [
-            // "js/jquery.min.js",
             "js/lodash.min.js",
             "js/moment.min.js",
-            "scripts/chromereload.js",
             "scripts/events.js"
         ],
         "persistent": false

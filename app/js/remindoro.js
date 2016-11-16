@@ -101,12 +101,22 @@
 	        var initial_data = chrome_local_data && chrome_local_data["REMINDORO"];
 	
 	        // not added in version 0.1.0
-	        // let is_empty_remindoros = (initial_data && initial_data.remindoros.length == 0)
+	        var is_empty_remindoros = initial_data && initial_data.remindoros.length == 0;
 	
-	        // if (is_empty_remindoros) {
-	        //     // if no data is found in chrome's local storage; let us populate with some initial remindoros
-	        //     initial_data.remindoros = get_initial_remindoros();
-	        // }
+	        if (is_empty_remindoros) {
+	            // if no data is found in chrome's local storage; let us populate with some initial remindoros
+	            initial_data.remindoros = get_initial_remindoros();
+	        }
+	
+	        // JUST INSTALLED! if no initial data which means may be just installed
+	        // setting default state
+	        if (!initial_data) {
+	            initial_data = {
+	                "current_tab": "home",
+	                "current_selected_remindoro": false,
+	                "remindoros": get_initial_remindoros()
+	            };
+	        }
 	
 	        var ros = initial_data && initial_data.remindoros ? initial_data.remindoros : [];
 	
@@ -205,16 +215,18 @@
 	// if there are no remindoros saved, we will populate with a default set
 	function get_initial_remindoros() {
 	
+	    var from_time = 45 * 60 * 1000; // 45 minutes in milliseconds
+	
 	    return [{
 	        id: (0, _utils.calculate_remindoro_id)([]),
 	        title: "Take a Walk",
 	        type: "note",
-	        note: "Taking a walk for every 45 minutes is good for your health. Avoid continous sitting for long hours.&nbsp;<div><br></div><div>NOTE: Welcome to Remindoro! - This is a default sample remindoro shown if no entries are saved. You can edit, save, delete and do whatever you want with this note. Enjoy!</div>",
+	        note: "Taking a walk for every 45 minutes is good for your health. Avoid continous sitting for long hours.&nbsp;<div><br></div><div>NOTE: This is a default sample remindoro shown if no entries are saved. You can edit, save, delete and do whatever you want with this note. Enjoy!</div>",
 	        list: [],
 	        created: Date.now(),
 	        updated: Date.now(),
 	        reminder: {
-	            time: Date.now(),
+	            time: Date.now() + from_time,
 	            is_repeat: true, // status if the alarm is recurring
 	            repeat: {
 	                interval: "minutes",
