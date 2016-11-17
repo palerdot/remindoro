@@ -76,16 +76,51 @@ gulp.task('html', ['styles'], () => {
         .pipe(gulp.dest('dist'));
 });
 
+gulp.task("organize_files", () => {
+
+    // PRODUCTION BUILD
+    process.env.NODE_ENV = 'production';
+
+    // complete list of files needed for the "Remindoro" app
+    var REMINDORO_FILE_LIST = [
+        "app/manifest.json",
+        "app/config.json",
+        "app/_locales/**/*",
+        "app/fonts/**/*",
+        "app/images/**/*",
+        "app/*.html",
+        "app/css/**/*.css",
+
+        "!app/js/utils.js",
+        "!app/js/general-initializer.js",
+
+        "app/js/*.js",
+    ];
+
+    var uglify_options = { compress: { drop_console: true } };
+
+    return gulp.src( REMINDORO_FILE_LIST, {base:"./app/"} )
+                .pipe($.if('*.css', $.cleanCss({ compatibility: '*' })))
+                // .pipe($.if('*.js', $.sourcemaps.init()))
+                .pipe( 
+                    $.if('*.js', $.uglify( uglify_options ).on('error', function (e) {
+                        console.log(e);
+                    }) ) 
+                )
+                .pipe($.if('*.js', $.sourcemaps.write('.')))
+                .pipe(gulp.dest('dist'));        
+});
+
 gulp.task('chromeManifest', () => {
     return gulp.src('app/manifest.json')
         .pipe($.chromeManifest({
             buildnumber: true,
-            background: {
-                target: 'js/background.js',
-                exclude: [
-                    'js/chromereload.js'
-                ]
-            }
+            // background: {
+            //     target: 'js/background.js',
+            //     exclude: [
+            //         'js/chromereload.js'
+            //     ]
+            // }
         }))
         .pipe($.if('*.css', $.cleanCss({ compatibility: '*' })))
         .pipe($.if('*.js', $.sourcemaps.init()))
@@ -125,6 +160,10 @@ gulp.task("webpack", (cb) => {
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 gulp.task('watch', ['lint', 'events-page', 'webpack', 'styles'], () => {
+
+    // dev BUILD
+    process.env.NODE_ENV = 'development';
+
     $.livereload.listen();
 
     gulp.watch([
@@ -143,7 +182,8 @@ gulp.task('watch', ['lint', 'events-page', 'webpack', 'styles'], () => {
 });
 
 gulp.task('size', () => {
-    return gulp.src('dist/**/*').pipe($.size({ title: 'build', gzip: true }));
+    return gulp.src('dist/**/*')
+        .pipe($.size({ title: 'build', gzip: true }));
 });
 
 gulp.task('wiredep', () => {
@@ -163,7 +203,7 @@ gulp.task('package', function() {
 
 gulp.task('build', (cb) => {
     runSequence(
-        'lint', 'webpack', 'events-page', 'styles', 'chromeManifest', ['html', 'images', 'extras'],
+        'lint', 'webpack', 'events-page', 'styles', ['organize_files'], ['html', 'images', 'extras'],
         'size', cb);
 });
 
@@ -173,7 +213,11 @@ gulp.task('default', cb => {
 });
 
 // default distribution/build task
-gulp.task('default-old', ['clean'], cb => {
+gulp.task('build-remindoro', ['clean'], cb => {
+
+    // PRODUCTION BUILD
+    process.env.NODE_ENV = 'production';
+
     runSequence('build', cb);
 });
 
