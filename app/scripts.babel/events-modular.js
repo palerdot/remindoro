@@ -5,22 +5,13 @@
 import { calculate_remindoro_id, Notification, strip_html, isValidUrl, chrome_notify } from "../js/utils.js";
 
 // chrome bg/event related tasks
-chrome.runtime.onInstalled.addListener( initializeEvents );
+chrome.runtime.onInstalled.addListener( initializeInstallEvents );
 
-function initializeEvents () {
+function initializeInstallEvents () {
     console.log("event page inited ?");
 
-    init_chrome_events();
-
+    // init_chrome_events();
     create_context_menus();
-
-    // chrome handle alarm events
-    // create an alarm
-    chrome.alarms.create("remindoro-scan", {
-        "delayInMinutes": 0.1,
-        "periodInMinutes": 1, 
-    });
-
     // show the welcome message
     var welcome_msg = {
         title: "Hello from Remindoro!",
@@ -28,11 +19,20 @@ function initializeEvents () {
     };
 
     chrome_notify( welcome_msg );
-
 }
+
+init_chrome_events();
 
 function init_chrome_events() {
     // START: CHROME EVENTS
+
+    // chrome handle alarm events
+    // CREATE an alarm
+    chrome.alarms.create("remindoro-scan", {
+        "delayInMinutes": 0.1,
+        "periodInMinutes": 1, 
+    });
+
     // listen for the alarm
     // and dig the remindoros from local chrome extension storage and check if we need to show any notifications
     chrome.alarms.onAlarm.addListener( function () {
