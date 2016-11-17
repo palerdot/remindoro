@@ -9,7 +9,7 @@ import { sortRemindoros, addRemindoroWithDetails, updateRemindoros } from "./red
 import remindoroReducer from "./redux/reducers";
 import { calculate_remindoro_id } from "./js/utils";
 
-import "./general-initializer.js";
+import "./js/general-initializer.js";
 
 import App from "./Components/App";
 

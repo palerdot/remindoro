@@ -94,21 +94,21 @@ gulp.task('chromeManifest', () => {
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('babel', () => {
-    return gulp.src('app/scripts.babel/**/*.{js,jsx}')
-        .pipe($.babel({
-            presets: ['es2015']
-        }))
-        // .pipe(gulp.dest('app/js'));
-        .pipe(gulp.dest('app/scripts/'));
-});
+// gulp.task('babel', () => {
+//     return gulp.src('app/scripts.babel/**/*.{js,jsx}')
+//         .pipe($.babel({
+//             presets: ['es2015']
+//         }))
+//         // .pipe(gulp.dest('app/js'));
+//         .pipe(gulp.dest('app/js/'));
+// });
 
 gulp.task('events-page', () => {
     let config = require('./webpack.events.config.js');
 
     return gulp.src('./app/scripts.babel/events-modular.js')
                 .pipe(webpack( config ))
-                .pipe(gulp.dest('./app/scripts/'));
+                .pipe(gulp.dest('./app/js/'));
 });
 
 // webpack tasks

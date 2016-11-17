@@ -12,7 +12,7 @@
         "scripts": [
             "js/lodash.min.js",
             "js/moment.min.js",
-            "scripts/events.js"
+            "js/events.js"
         ],
         "persistent": false
     },
@@ -50,7 +50,7 @@
             "https://*/*"
         ],
         "js": [
-            "scripts/contentscript.js"
+            "js/contentscript.js"
         ],
         "run_at": "document_end",
         "all_frames": false
