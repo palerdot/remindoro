@@ -78,9 +78,6 @@ gulp.task('html', ['styles'], () => {
 
 gulp.task("organize_files", () => {
 
-    // PRODUCTION BUILD
-    process.env.NODE_ENV = 'production';
-
     // complete list of files needed for the "Remindoro" app
     var REMINDORO_FILE_LIST = [
         "app/manifest.json",
@@ -97,7 +94,10 @@ gulp.task("organize_files", () => {
         "app/js/*.js",
     ];
 
-    var uglify_options = { compress: { drop_console: true } };
+    var is_production = (process.env.NODE_ENV == 'production');
+    console.log("is_production", is_production);
+
+    var uglify_options = { compress: { drop_console: is_production ? true : false } };
 
     return gulp.src( REMINDORO_FILE_LIST, {base:"./app/"} )
                 .pipe($.if('*.css', $.cleanCss({ compatibility: '*' })))
@@ -209,18 +209,14 @@ gulp.task('build', (cb) => {
 
 // default task
 gulp.task('default', cb => {
-    runSequence('run', cb);
+    // dev build
+    process.env.NODE_ENV = 'development';
+    runSequence('build', cb);
 });
 
 // default distribution/build task
 gulp.task('build-remindoro', ['clean'], cb => {
-
     // PRODUCTION BUILD
     process.env.NODE_ENV = 'production';
-
     runSequence('build', cb);
-});
-
-gulp.task("run", function (cb) {
-    runSequence(['styles'], ['webpack'], cb);
 });
