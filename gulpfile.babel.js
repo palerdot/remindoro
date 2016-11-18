@@ -5,6 +5,8 @@ import del from 'del';
 import runSequence from 'run-sequence';
 import { stream as wiredep } from 'wiredep';
 
+import zip from "gulp-zip";
+
 // import webpack from 'webpack';
 // importing webpack stream for gulp
 import webpack from 'webpack-stream';
@@ -95,7 +97,7 @@ gulp.task("organize_files", () => {
     ];
 
     var is_production = (process.env.NODE_ENV == 'production');
-    console.log("is_production", is_production);
+    console.log("PRODUCTION ?", is_production);
 
     var uglify_options = { compress: { drop_console: is_production ? true : false } };
 
@@ -109,6 +111,18 @@ gulp.task("organize_files", () => {
                 )
                 .pipe($.if('*.js', $.sourcemaps.write('.')))
                 .pipe(gulp.dest('dist'));        
+});
+
+// creates a zip file for the dist folder
+gulp.task("zip", () => {
+
+    let man_config = require("./dist/manifest.json"),
+        VERSION = man_config.version,
+        zip_file_name = "Remindoro-" + VERSION + ".zip";
+
+    return gulp.src("./dist/**/")
+                .pipe( zip( zip_file_name ) )
+                .pipe( gulp.dest(".") );
 });
 
 gulp.task('chromeManifest', () => {
@@ -204,7 +218,7 @@ gulp.task('package', function() {
 gulp.task('build', (cb) => {
     runSequence(
         'lint', 'webpack', 'events-page', 'styles', ['organize_files'], ['html', 'images', 'extras'],
-        'size', cb);
+        'size', 'zip', cb);
 });
 
 // default task
