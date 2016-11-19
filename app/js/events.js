@@ -587,9 +587,12 @@
 	            // we have this remindoro scheduled at some time; we need to check if it is atmost 15 mins fresh
 	            var to_be_notified = time_delta <= buffer;
 	
-	            // CASE 4: remindoro is 15 mins (buffer time) past. not fresh
-	            // RESULT: WILL NOT NOTIFY; returning REMINDORO
+	            // CASE 4: remindoro is 15 mins (buffer time) past. not fresh; very past event STILL ALIVE
+	            // RESULT: WILL NOT NOTIFY; returning REMINDORO by CLEARING remindoro time
 	            if (!to_be_notified) {
+	                console.log("clearing past remindoro");
+	                ro.reminder.time = false;
+	
 	                return ro;
 	            }
 	
