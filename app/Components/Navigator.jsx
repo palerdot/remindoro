@@ -60,6 +60,12 @@ const Navigator = React.createClass({
                         </button>
                         <button 
                             className="btn btn-floating waves-light waves-effect"
+                            onClick={
+                                () => {
+                                    // open the help file
+                                    chrome.tabs.create({ url: config.rate_url });
+                                }
+                            }
                         >
                             <i className="material-icons">star</i>
                         </button>
