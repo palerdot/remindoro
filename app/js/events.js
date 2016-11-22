@@ -297,7 +297,6 @@
 	});
 	exports.Notification = undefined;
 	exports.calculate_remindoro_id = calculate_remindoro_id;
-	exports.check = check;
 	exports.strip_html = strip_html;
 	exports.isValidUrl = isValidUrl;
 	exports.chrome_notify = chrome_notify;
@@ -339,15 +338,14 @@
 	}
 	
 	// checks for reminder time; COPIED from plain events.js bg page
-	function check(ro) {
+	/*export function check (ro) {
 	
 	    // first let us take the current time
 	    var current_time = new Date().getTime(),
-	
-	    // buffer time 15 minutes. i.e we will notify if the remindoro is atmost 15 minutes old
-	    buffer = 15 * 60 * 1000,
+	        // buffer time 15 minutes. i.e we will notify if the remindoro is atmost 15 minutes old
+	        buffer = 15 * 60 * 1000,
 	        ro_time = ro.reminder.time ? new Date(ro.reminder.time).getTime() : false,
-	        time_delta = current_time - ro_time,
+	        time_delta = (current_time - ro_time),
 	        is_repeat = ro.reminder.is_repeat;
 	
 	    // CASE 1: no reminder scheduled
@@ -367,7 +365,7 @@
 	        }
 	
 	        // we have this remindoro scheduled at some time; we need to check if it is atmost 15 mins fresh
-	        var to_be_notified = time_delta <= buffer;
+	        var to_be_notified = ( time_delta <= buffer );
 	
 	        // CASE 4: remindoro is 15 mins (buffer time) past. not fresh
 	        // RESULT: WILL NOT NOTIFY; returning REMINDORO
@@ -382,29 +380,33 @@
 	
 	        // CASE 6: REPEATABLE remindoros
 	        // short repeat => minutes, hours; long repeat => days, months
-	        var is_short_repeat = _lodash2.default.indexOf(["minutes", "hours"], ro.reminder.repeat.interval) > -1,
-	            is_long_repeat = _lodash2.default.indexOf(["days", "months"], ro.reminder.repeat.interval) > -1;
+	        var is_short_repeat = _.indexOf(["minutes", "hours"], ro.reminder.repeat.interval) > -1,
+	            is_long_repeat = _.indexOf(["days", "months"], ro.reminder.repeat.interval) > -1;
 	
 	        // CASE 7: short repeat => minutes, hours
 	        if (is_short_repeat) {
 	            console.log("SHORT REPEAT");
 	            // determines if the reminder time is in the same day exactly to the scheduled "minute"
-	            var is_past = (0, _moment2.default)().isAfter(ro.reminder.time, "minute"),
-	                is_present = (0, _moment2.default)().isSame(ro.reminder.time, "minute");
+	            var is_past = moment().isAfter( ro.reminder.time, "minute" ),
+	                is_present = moment().isSame( ro.reminder.time, "minute" );
 	
 	            // CASE 7: exactly scheduled at current minute; short repeating remindoro
 	            // RESULT: WILL NOTIFY
 	            if (is_present) {
-	                ro.reminder.time = (0, _moment2.default)(new Date(ro.reminder.time)).add(ro.reminder.repeat.time, ro.reminder.repeat.interval).format();
+	                ro.reminder.time = moment( new Date(ro.reminder.time) )
+	                                        .add( ro.reminder.repeat.time, ro.reminder.repeat.interval )
+	                                        .format();
 	            } else if (is_past) {
 	                // CASE 8: reminder time is in past; short repeating remindoro
 	
 	                // if the reminder time is already past when our event page scans, we will schedule 
 	                // the next reminder from the current minute
 	
-	
-	                ro.reminder.time = (0, _moment2.default)().add(ro.reminder.repeat.time, ro.reminder.repeat.interval).format();
-	
+	                
+	                ro.reminder.time = moment()
+	                                    .add( ro.reminder.repeat.time, ro.reminder.repeat.interval )
+	                                    .format();
+	                
 	                // RESULT: WILL NOT NOTIFY
 	                return ro;
 	            } else {
@@ -414,21 +416,22 @@
 	                // do not notify
 	                return ro;
 	            }
+	            
 	        } else if (is_long_repeat) {
 	            // CASE 9: Long repeat remindoro
 	            // long repeat => days, months
-	
+	            
 	            // we will notify on the exact time scheduled; 
 	            // and will not update the reminder time till the day is done
 	            // determines if the reminder time is in the same day exactly to the scheduled "DAY"
 	            // is_past => checks if current moment is after the given moment
-	            var is_past = (0, _moment2.default)().isAfter(ro.reminder.time, "day"),
-	                is_today = (0, _moment2.default)().isSame(ro.reminder.time, "day");
+	            var is_past = moment().isAfter( ro.reminder.time, "day" ),
+	                is_today = moment().isSame( ro.reminder.time, "day" );
 	
 	            // CASE 10: scheduled today for long repeat
 	            if (is_today) {
 	                // CASE 11: we will exactly notify on the scheduled minute
-	                var is_current_minute = (0, _moment2.default)().isSame(ro.reminder.time, "minute");
+	                var is_current_minute = moment().isSame( ro.reminder.time, "minute" );
 	                if (!is_current_minute) {
 	                    //RESULT: WILL NOT notify
 	                    return ro;
@@ -440,7 +443,7 @@
 	
 	                // CASE 13: scheduled older than today
 	                // we need to update the next reminder which should be in future
-	
+	                
 	                var is_future_reminder_time = false,
 	                    future_reminder_time = false;
 	
@@ -448,9 +451,10 @@
 	                while (!is_future_reminder_time) {
 	                    // NOTE: we need to do this till we are in the future
 	                    // we will update the reminder time
-	                    future_reminder_time = (0, _moment2.default)(new Date(ro.reminder.time)).add(ro.reminder.repeat.time, ro.reminder.repeat.interval);
+	                    future_reminder_time = moment( new Date(ro.reminder.time) )
+	                                                .add( ro.reminder.repeat.time, ro.reminder.repeat.interval );
 	
-	                    is_future_reminder_time = (0, _moment2.default)(future_reminder_time).isAfter();
+	                    is_future_reminder_time = moment( future_reminder_time ).isAfter();
 	                }
 	                // updating reminder time with future reminder time
 	                ro.reminder.time = future_reminder_time.format();
@@ -472,11 +476,11 @@
 	    }
 	
 	    // first pushing the remindoro in our list to notify later
-	    this.to_notify.push(ro);
+	    this.to_notify.push( ro );
 	
 	    // returning the remindoro
 	    return ro;
-	}
+	}*/
 	
 	// modular event.js components
 	// START: Notification Module
@@ -608,7 +612,7 @@
 	
 	            // CASE 7: short repeat => minutes, hours
 	            if (is_short_repeat) {
-	                console.log("SHORT REPEAT");
+	                // console.log("SHORT REPEAT");
 	                // determines if the reminder time is in the same day exactly to the scheduled "minute"
 	                var is_past = (0, _moment2.default)().isAfter(ro.reminder.time, "minute"),
 	                    is_present = (0, _moment2.default)().isSame(ro.reminder.time, "minute");
@@ -631,12 +635,11 @@
 	                } else {
 	                    // CASE 9: remindoro is in future; short repeat remindoro
 	                    // RESULT: WILL NOT NOTIFY
-	                    console.log("NOT PAST OR PRESENT FOR SHORT REPEAT. probably future");
+	                    // console.log("NOT PAST OR PRESENT FOR SHORT REPEAT. probably future");
 	                    // do not notify
 	                    return ro;
 	                }
 	            } else if (is_long_repeat) {
-	                // CASE 9: Long repeat remindoro
 	                // long repeat => days, months
 	
 	                // we will notify on the exact time scheduled; 
@@ -663,13 +666,13 @@
 	                    // we need to update the next reminder which should be in future
 	
 	                    var is_future_reminder_time = false,
-	                        future_reminder_time = false;
+	                        future_reminder_time = new Date(ro.reminder.time);
 	
 	                    // looping till we get a future reminder time
 	                    while (!is_future_reminder_time) {
 	                        // NOTE: we need to do this till we are in the future
 	                        // we will update the reminder time
-	                        future_reminder_time = (0, _moment2.default)(new Date(ro.reminder.time)).add(ro.reminder.repeat.time, ro.reminder.repeat.interval);
+	                        future_reminder_time = (0, _moment2.default)(future_reminder_time).add(ro.reminder.repeat.time, ro.reminder.repeat.interval);
 	
 	                        is_future_reminder_time = (0, _moment2.default)(future_reminder_time).isAfter();
 	                    }

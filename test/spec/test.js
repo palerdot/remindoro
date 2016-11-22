@@ -447,7 +447,7 @@ import _ from "lodash";
 
         });
 
-        it("CASE 13: PAST OF TODAY => next iteration 2 days from now", function () {
+        it("CASE 13: PAST OF TODAY => next iteration 1 days from now", function () {
 
             var yesterday = moment().subtract("3", "days");
 
@@ -472,8 +472,8 @@ import _ from "lodash";
 
             var checked_ro = Notification.check(ro);
 
-            var next_reminder = moment( moment( yesterday ).startOf( "day" ) )
-                                    .add( "4", "days" );
+            var next_reminder = moment( moment().startOf( "day" ) )
+                                    .add( "1", "days" );
 
             assert.equal( ro, checked_ro );
             // will not notify

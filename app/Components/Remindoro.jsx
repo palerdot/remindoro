@@ -78,9 +78,11 @@ const Remindoro = React.createClass({
 
                             if (is_long_repeat) {
                                 // actively we need to show if it is today
-                                is_today = moment().isSame( ro.reminder.time, "day" );
+                                const is_today = moment().isSame( ro.reminder.time, "day" ),
+                                        // check if current time is in past of "reminder time" => reminder time is in future
+                                        is_future = moment().isBefore( ro.reminder.time, "day" );
                                 // if today we will show the alert
-                                is_ro_active = is_today ? true : false;
+                                is_ro_active = (is_today || is_future) ? true : false;
                             }
 
                             if (is_ro_active) {
