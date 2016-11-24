@@ -78,6 +78,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch( addRemindoro(current_id) );
             // also change the tab to home
             dispatch( changeTab("home") );
+            // scroll to the top of the screen in case we are at the bottom
+            $("#remindoros").animate( { scrollTop: "0px" }, 0 );
         },
 
         // handles the navigation clicks of home, notifications etc

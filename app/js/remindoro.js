@@ -55335,6 +55335,8 @@
 	            dispatch((0, _actions.addRemindoro)(current_id));
 	            // also change the tab to home
 	            dispatch((0, _actions.changeTab)("home"));
+	            // scroll to the top of the screen in case we are at the bottom
+	            $("#remindoros").animate({ scrollTop: "0px" }, 0);
 	        },
 	
 	        // handles the navigation clicks of home, notifications etc
@@ -55811,8 +55813,6 @@
 	                        is_future = (0, _moment2.default)().isBefore(ro.reminder.time, "day");
 	                        // if today we will show the alert
 	                        is_ro_active = is_today || is_future ? true : false;
-	
-	                        console.log("is today ?", is_today);
 	                    }
 	
 	                    if (is_ro_active) {
