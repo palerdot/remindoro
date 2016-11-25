@@ -4,17 +4,21 @@
 // import modular components from utils
 import { calculate_remindoro_id, Notification, strip_html, isValidUrl, chrome_notify } from "../js/utils.js";
 
+import manifest from "json!../manifest.json";
+
 // chrome bg/event related tasks
 chrome.runtime.onInstalled.addListener( initializeInstallEvents );
 
 function initializeInstallEvents () {
     console.log("event page inited ?");
 
+    var REMINDORO_VERSION = manifest.version;
+
     // init_chrome_events();
     create_context_menus();
     // show the welcome message
     var welcome_msg = {
-        title: "Hello from Remindoro!",
+        title: "Hello from Remindoro - " + REMINDORO_VERSION + " !",
         message: "You can now set reminders for stuffs that matter to you like links to read/activities/notes .... Enjoy!"
     };
 
