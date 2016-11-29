@@ -48,21 +48,29 @@
 	
 	var _utils = __webpack_require__(1);
 	
+	var _manifest = __webpack_require__(111);
+	
+	var _manifest2 = _interopRequireDefault(_manifest);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	// chrome bg/event related tasks
-	chrome.runtime.onInstalled.addListener(initializeInstallEvents); // import _ from "lodash";
+	// import _ from "lodash";
 	// import moment from "moment";
 	
 	// import modular components from utils
-	
+	chrome.runtime.onInstalled.addListener(initializeInstallEvents);
 	
 	function initializeInstallEvents() {
 	    console.log("event page inited ?");
+	
+	    var REMINDORO_VERSION = _manifest2.default.version;
 	
 	    // init_chrome_events();
 	    create_context_menus();
 	    // show the welcome message
 	    var welcome_msg = {
-	        title: "Hello from Remindoro!",
+	        title: "Hello from Remindoro - " + REMINDORO_VERSION + " !",
 	        message: "You can now set reminders for stuffs that matter to you like links to read/activities/notes .... Enjoy!"
 	    };
 	
@@ -31794,6 +31802,83 @@
 	
 	    return zh_tw;
 	});
+
+/***/ },
+/* 111 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"name": "__MSG_appName__",
+		"version": "0.1.4",
+		"manifest_version": 2,
+		"description": "__MSG_appDescription__",
+		"icons": {
+			"16": "images/icon-16.png",
+			"128": "images/icon-128.png"
+		},
+		"default_locale": "en",
+		"background": {
+			"scripts": [
+				"js/lodash.min.js",
+				"js/moment.min.js",
+				"js/events.js"
+			],
+			"persistent": false
+		},
+		"permissions": [
+			"alarms",
+			"tabs",
+			"http://*/*",
+			"https://*/*",
+			"background",
+			"clipboardRead",
+			"clipboardWrite",
+			"contextMenus",
+			"notifications",
+			"storage"
+		],
+		"content_scripts": [
+			{
+				"matches": [
+					"http://*/*",
+					"https://*/*"
+				],
+				"js": [
+					"js/contentscript.js"
+				],
+				"run_at": "document_end",
+				"all_frames": false
+			}
+		],
+		"omnibox": {
+			"keyword": "OMNIBOX-KEYWORD"
+		},
+		"browser_action": {
+			"default_icon": {
+				"19": "images/icon-19.png",
+				"38": "images/icon-38.png"
+			},
+			"default_title": "Remindoro",
+			"default_popup": "popup.html"
+		},
+		"web_accessible_resources": [
+			"images/icon-48.png"
+		],
+		"tts_engine": {
+			"voices": [
+				{
+					"voice_name": "Alice",
+					"lang": "en-US",
+					"gender": "female",
+					"event_types": [
+						"start",
+						"marker",
+						"end"
+					]
+				}
+			]
+		}
+	};
 
 /***/ }
 /******/ ]);

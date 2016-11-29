@@ -221,7 +221,7 @@
 	        id: (0, _utils.calculate_remindoro_id)([]),
 	        title: "Take a Walk",
 	        type: "note",
-	        note: "Taking a walk for every 45 minutes is good for your health. Avoid continous sitting for long hours.&nbsp;<div><br></div><div>NOTE: This is a default sample remindoro shown if no entries are saved. You can edit, save, delete and do whatever you want with this note. Enjoy!</div>",
+	        note: "Taking a walk for every 45 minutes is good for your health. Avoid continous sitting for long hours. Remember, 'Sitting is the new Smoking'. &nbsp;<div><br></div><div>NOTE: This is a default sample remindoro shown if no entries are saved. You can edit, save, delete and do whatever you want with this note. Enjoy!</div>",
 	        list: [],
 	        created: Date.now(),
 	        updated: Date.now(),
