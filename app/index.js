@@ -7,7 +7,7 @@ import { createStore } from "redux";
 import { sortRemindoros, addRemindoroWithDetails, updateRemindoros } from "./redux/actions";
 
 import remindoroReducer from "./redux/reducers";
-import { calculate_remindoro_id } from "./js/utils";
+import { calculate_remindoro_id, is_chrome_error } from "./js/utils";
 
 import "./js/general-initializer.js";
 
@@ -37,7 +37,7 @@ let REMINDORO = {
         let initial_data = chrome_local_data && chrome_local_data["REMINDORO"];
 
         // not added in version 0.1.0
-        let is_empty_remindoros = (initial_data && initial_data.remindoros.length == 0)
+        let is_empty_remindoros = (initial_data && initial_data.remindoros && initial_data.remindoros.length == 0)
 
         if (is_empty_remindoros) {
             // if no data is found in chrome's local storage; let us populate with some initial remindoros
@@ -97,8 +97,15 @@ let REMINDORO = {
             return;
         }
         // save the store data to local storage
-        chrome.storage.sync.set({ "REMINDORO": store.getState() }, function () {
+        chrome.storage.local.set({ "REMINDORO": store.getState() }, function () {
             console.log("STORE DATA saved to CHROME");
+            var chrome_error = is_chrome_error();
+
+            if (chrome_error) {
+                // notifications ALREADY shown in is_chrome_error module
+                // do not proceed
+                return;
+            }
         });
     },
 
@@ -186,7 +193,7 @@ try {
         } );
         // get current locally stored item from chrome
         // our data is within the key called "REMINDORO" // caps
-        chrome.storage.sync.get("REMINDORO",  REMINDORO.initialize.bind(REMINDORO) );
+        chrome.storage.local.get("REMINDORO",  REMINDORO.initialize.bind(REMINDORO) );
 
         chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
             if ( !_.isEmpty(request.updated_remindoros) ) {

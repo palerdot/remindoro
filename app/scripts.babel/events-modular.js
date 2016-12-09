@@ -2,7 +2,7 @@
 // import moment from "moment";
 
 // import modular components from utils
-import { calculate_remindoro_id, Notification, strip_html, isValidUrl, chrome_notify } from "../js/utils.js";
+import { calculate_remindoro_id, Notification, strip_html, isValidUrl, chrome_notify, is_chrome_error, handle_sync_local_storage } from "../js/utils.js";
 
 import manifest from "json!../manifest.json";
 
@@ -10,7 +10,11 @@ import manifest from "json!../manifest.json";
 chrome.runtime.onInstalled.addListener( initializeInstallEvents );
 
 function initializeInstallEvents () {
-    console.log("event page inited ?");
+    console.log("event page install event ? ", manifest, manifest.version);
+    // BUGFIX: converting storage.sync to local due to storage space constraints
+    // if we detect there are some data in chrome.storage.sync, we will transfer it to chrome.storage.local
+    // defined in utils storage
+    handle_sync_local_storage();
 
     var REMINDORO_VERSION = manifest.version;
 
@@ -40,7 +44,7 @@ function init_chrome_events() {
     // listen for the alarm
     // and dig the remindoros from local chrome extension storage and check if we need to show any notifications
     chrome.alarms.onAlarm.addListener( function () {
-        chrome.storage.sync.get("REMINDORO",  function (data) {
+        chrome.storage.local.get("REMINDORO",  function (data) {
             // get the  remindoro data
             var remindoro_data = data["REMINDORO"],
                 remindoros = remindoro_data && remindoro_data["remindoros"];
@@ -48,16 +52,23 @@ function init_chrome_events() {
             // scan the remindoro and check if we need to update the time and notify it
             Notification.scan( remindoros );
             // save the store data to local storage
-            chrome.storage.sync.set({ "REMINDORO": remindoro_data }, function () {
+            chrome.storage.local.set({ "REMINDORO": remindoro_data }, function () {
                 console.log("EVENT PAGE: STORE DATA saved to CHROME");
                 // TODO: notification to be shown !!??
+                var chrome_error = is_chrome_error();
+
+                if (chrome_error) {
+                    // notifications ALREADY shown in is_chrome_error module
+                    // do not proceed
+                    return;
+                }
             });
         } );
     } );
 
     // handle browser context menu clicks
     chrome.contextMenus.onClicked.addListener( function (menu_details, tab_details) {
-        chrome.storage.sync.get("REMINDORO",  function (data) {
+        chrome.storage.local.get("REMINDORO",  function (data) {
             // get the  remindoro data
             var remindoro_data = data["REMINDORO"],
                 remindoros = remindoro_data["remindoros"];
@@ -81,8 +92,17 @@ function init_chrome_events() {
             }
             
             // save the store data to local storage
-            chrome.storage.sync.set({ "REMINDORO": remindoro_data }, function () {
+            chrome.storage.local.set({ "REMINDORO": remindoro_data }, function () {
                 console.log("EVENT PAGE: NEW REMINDORO saved to CHROME");
+
+                var chrome_error = is_chrome_error();
+
+                if (chrome_error) {
+                    // notifications ALREADY shown in is_chrome_error module
+                    // do not proceed
+                    return;
+                }
+
                 chrome_notify({
                     title: "Added Successfully",
                     message: to_add.title
@@ -101,7 +121,7 @@ function init_chrome_events() {
         } );
         console.log("ro id ", ro_id);
         // getting remindoros from the storage
-        chrome.storage.sync.get("REMINDORO",  function (data) {
+        chrome.storage.local.get("REMINDORO",  function (data) {
             // get the  remindoro data
             var remindoro_data = data["REMINDORO"],
                 remindoros = remindoro_data["remindoros"];

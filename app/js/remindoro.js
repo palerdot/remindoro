@@ -101,7 +101,7 @@
 	        var initial_data = chrome_local_data && chrome_local_data["REMINDORO"];
 	
 	        // not added in version 0.1.0
-	        var is_empty_remindoros = initial_data && initial_data.remindoros.length == 0;
+	        var is_empty_remindoros = initial_data && initial_data.remindoros && initial_data.remindoros.length == 0;
 	
 	        if (is_empty_remindoros) {
 	            // if no data is found in chrome's local storage; let us populate with some initial remindoros
@@ -159,8 +159,15 @@
 	            return;
 	        }
 	        // save the store data to local storage
-	        chrome.storage.sync.set({ "REMINDORO": store.getState() }, function () {
+	        chrome.storage.local.set({ "REMINDORO": store.getState() }, function () {
 	            console.log("STORE DATA saved to CHROME");
+	            var chrome_error = (0, _utils.is_chrome_error)();
+	
+	            if (chrome_error) {
+	                // notifications ALREADY shown in is_chrome_error module
+	                // do not proceed
+	                return;
+	            }
 	        });
 	    },
 	
@@ -245,7 +252,7 @@
 	        });
 	        // get current locally stored item from chrome
 	        // our data is within the key called "REMINDORO" // caps
-	        chrome.storage.sync.get("REMINDORO", REMINDORO.initialize.bind(REMINDORO));
+	        chrome.storage.local.get("REMINDORO", REMINDORO.initialize.bind(REMINDORO));
 	
 	        chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 	            if (!_lodash2.default.isEmpty(request.updated_remindoros)) {
@@ -40425,6 +40432,8 @@
 	exports.strip_html = strip_html;
 	exports.isValidUrl = isValidUrl;
 	exports.chrome_notify = chrome_notify;
+	exports.is_chrome_error = is_chrome_error;
+	exports.handle_sync_local_storage = handle_sync_local_storage;
 	
 	var _lodash = __webpack_require__(172);
 	
@@ -40858,6 +40867,96 @@
 	        console.log("chrome notification show callback ", arguments);
 	    });
 	}
+	
+	// check if chrome quota exceeded or similar runtime message
+	function is_chrome_error() {
+	    // returns false if there is no chrome runtime error
+	    if (!chrome.runtime.lastError) {
+	        return false;
+	    }
+	
+	    // there is an runtime error
+	    var chrome_error = (chrome.runtime.lastError && chrome.runtime.lastError.message).indexOf("QUOTA_BYTES") >= 0;
+	
+	    if (chrome_error) {
+	        chrome_error = chrome_error ? "storage" : "general";
+	    }
+	
+	    console.log("CHROME ERROR ", chrome_error);
+	
+	    // show chrome notification
+	    var error = {
+	        title: "",
+	        message: ""
+	    };
+	
+	    if (chrome_error == "storage") {
+	        // storage error
+	        error.title = "Chrome Storage Limit Exceeded";
+	        error.message = "Please delete few reminders and try again.";
+	    } else {
+	        // some error not related to storage
+	        error.title = "Chrome Error";
+	        error.message = "Please try deleting few reminders and try again. If issue persists, please leave a feedback in Chrome Web Store";
+	    }
+	
+	    chrome_notify({
+	        title: error.title,
+	        message: error.message
+	    });
+	
+	    // return a string to indicate what is the error
+	    return chrome_error;
+	}
+	
+	// for v0.1.6 
+	// BUGFIX: converting storage.sync to local due to storage space constraints
+	// if we detect there are some data in chrome.storage.sync, we will transfer it to chrome.storage.local
+	function handle_sync_local_storage() {
+	    // first get data from chrome.storage.sync
+	    chrome.storage.sync.get("REMINDORO", function (sync_data) {
+	
+	        console.log("SYNC DATA! ", sync_data);
+	
+	        if (_lodash2.default.isEmpty(sync_data)) {
+	            // if no sync data do not proceed 
+	            return;
+	        }
+	        console.log("MIGRATING SYNC TO LOCAL ", sync_data);
+	        // if sync data is present, let us try to merge those things with existing local data
+	        chrome.storage.local.get("REMINDORO", function (local_data) {
+	            // if local data is present will merge just the remindoros
+	            if (!_lodash2.default.isEmpty(local_data)) {
+	
+	                var local_remindoros = local_data["REMINDORO"] && local_data["REMINDORO"]["remindoros"],
+	                    sync_remindoros = sync_data["REMINDORO"] && sync_data["REMINDORO"]["remindoros"];
+	
+	                // merging local remindoros with sync remindoros
+	                // using lodash unionBy to merge with id property
+	                local_data["remindoros"] = _lodash2.default.unionBy(local_remindoros, sync_remindoros, "id");
+	                // update the local storage
+	                chrome.storage.local.set({ "REMINDORO": local_data }, function () {
+	                    console.log("CHROME LOCAL DATA updated ", local_data);
+	                });
+	                // nullify the sync storage
+	                chrome.storage.sync.remove("REMINDORO", function () {
+	                    console.log("CHROME SYNC DATA nullified");
+	                });
+	            } else {
+	                // if no local data, just make sync data as local data
+	                // update the local storage
+	                chrome.storage.local.set({ "REMINDORO": sync_data["REMINDORO"] }, function () {
+	                    console.log("CHROME LOCAL DATA updated with sync data ", sync_data["REMINDORO"]);
+	                });
+	                // nullify the sync storage
+	                chrome.storage.sync.remove("REMINDORO", function () {
+	                    console.log("CHROME SYNC DATA nullified");
+	                });
+	            }
+	        });
+	    });
+	}
+	
 	// END: Helper Functions
 
 /***/ },
