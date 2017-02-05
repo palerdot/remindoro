@@ -30,9 +30,6 @@ let REMINDORO = {
     id_counter: 0,
 
     initialize: function (chrome_local_data) {
-
-        console.log("CHROME DATA ", chrome_local_data, this, chrome.runtime.lastError);
-        
         
         let initial_data = chrome_local_data && chrome_local_data["REMINDORO"];
 
@@ -55,8 +52,6 @@ let REMINDORO = {
         }
         
         let ros = (initial_data && initial_data.remindoros) ? initial_data.remindoros : [];
-
-        console.log("ros ", ros);
 
         // update the  total remindoros
         this.id_counter = calculate_remindoro_id(ros);
@@ -110,7 +105,6 @@ let REMINDORO = {
     },
 
     handleContextMenuClick: function (menu_details, tab_details) {
-        console.log("context menu clicked !?!?", menu_details, tab_details);
         var remindoro_details = {};
         // we will be handling two types of context menus
         // page/link action => adding the page url as note, title as title
@@ -144,7 +138,7 @@ let REMINDORO = {
             current_remindoros = current_state["remindoros"];
 
         const add_id = calculate_remindoro_id( current_remindoros );
-        console.log("adding ", add_id, remindoro_details);
+
         store.dispatch( addRemindoroWithDetails(add_id, remindoro_details) );
         // add a chrome notification
     }
@@ -152,7 +146,6 @@ let REMINDORO = {
 };
 
 function handleError (e) {
-    console.error('error: ' + e.message);
     Materialize.toast("Error " + e.message, 13000);
     Materialize.toast("Please notify the error through chrome web store or to - palerdot@gmail.com", 13000);
 }

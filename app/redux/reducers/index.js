@@ -137,7 +137,7 @@ const remindoros = (state = [], action) => {
 
                 // if the id matches; change the reminder status and return the ro
                 // for now make a boolean status; later it should be a default reminder time
-                console.log("updating reminder status ", action.reminder_time, typeof(action.reminder_time));
+                // console.log("updating reminder status ", action.reminder_time, typeof(action.reminder_time));
                 ro.reminder.time = action.reminder_time;
                 // also turn off repeat status if reminder is turned off
                 if (!action.reminder_time) {
@@ -190,7 +190,6 @@ const remindoros = (state = [], action) => {
 
             const home_screen = (action.tab == "home"),
                   events_screen = (action.tab == "events");
-            console.log("SORTING REMINDOROS !!??? ");
 
             if (home_screen) {
                 // sorting remindoros based on updated time when initializing home screen

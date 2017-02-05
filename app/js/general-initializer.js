@@ -17,7 +17,6 @@ $(document).ready( function () {
     $(document).on('paste','[contenteditable]', function (e) {
         e.preventDefault();
         var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-        console.log("PORUMAI PASTE event ", text);
         window.document.execCommand('insertText', false, text);
     });
 

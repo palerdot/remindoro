@@ -48,7 +48,7 @@
 	
 	var _utils = __webpack_require__(1);
 	
-	var _manifest = __webpack_require__(111);
+	var _manifest = __webpack_require__(115);
 	
 	var _manifest2 = _interopRequireDefault(_manifest);
 	
@@ -62,7 +62,7 @@
 	chrome.runtime.onInstalled.addListener(initializeInstallEvents);
 	
 	function initializeInstallEvents() {
-	    console.log("event page install event ? ", _manifest2.default, _manifest2.default.version);
+	    console.log("event page install event !", _manifest2.default, _manifest2.default.version);
 	    // BUGFIX: converting storage.sync to local due to storage space constraints
 	    // if we detect there are some data in chrome.storage.sync, we will transfer it to chrome.storage.local
 	    // defined in utils storage
@@ -165,13 +165,10 @@
 	
 	    // handle when a "Read Now" button is clicked on notification
 	    chrome.notifications.onButtonClicked.addListener(function (notification_id, button_index) {
-	        console.log("button clicked ", notification_id, button_index);
-	        console.log(_utils.Notification.notification_ids);
 	        // getting the remindoro id from the notificatin id
 	        var ro_id = _.findKey(_utils.Notification.notification_ids, function (n_id, key) {
 	            return n_id == notification_id;
 	        });
-	        console.log("ro id ", ro_id);
 	        // getting remindoros from the storage
 	        chrome.storage.local.get("REMINDORO", function (data) {
 	            // get the  remindoro data
@@ -182,7 +179,7 @@
 	            var ro = _.find(remindoros, function (ro) {
 	                return ro.id == ro_id;
 	            });
-	            console.log("note value ", ro, ro.note);
+	
 	            if ((0, _utils.isValidUrl)(ro.note)) {
 	                // if valid url; opening the link in new tab
 	                chrome.tabs.create({ url: ro.note });
@@ -216,7 +213,6 @@
 	}
 	
 	function handleContextMenuClick(menu_details, tab_details, remindoros) {
-	    console.log("context menu clicked !?!?", menu_details, tab_details);
 	    var remindoro_details = {};
 	    // we will be handling two types of context menus
 	    // page/link action => adding the page url as note, title as title
@@ -530,7 +526,7 @@
 	
 	        // before showing a message; send a message to extension about the updated remindoros
 	        chrome.runtime.sendMessage({ updated_remindoros: Notification.to_notify }, function (response) {
-	            console.log(response);
+	            // console.log(response);
 	        });
 	
 	        _lodash2.default.each(this.to_notify, function (ro) {
@@ -865,8 +861,8 @@
 	
 	/**
 	 * @license
-	 * lodash <https://lodash.com/>
-	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+	 * Lodash <https://lodash.com/>
+	 * Copyright JS Foundation and other contributors <https://js.foundation/>
 	 * Released under MIT license <https://lodash.com/license>
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
 	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -877,13 +873,13 @@
 	  var undefined;
 	
 	  /** Used as the semantic version number. */
-	  var VERSION = '4.16.4';
+	  var VERSION = '4.17.4';
 	
 	  /** Used as the size to enable large array optimizations. */
 	  var LARGE_ARRAY_SIZE = 200;
 	
 	  /** Error message constants. */
-	  var CORE_ERROR_TEXT = 'Unsupported core-js use. Try https://github.com/es-shims.',
+	  var CORE_ERROR_TEXT = 'Unsupported core-js use. Try https://npms.io/search?q=ponyfill.',
 	      FUNC_ERROR_TEXT = 'Expected a function';
 	
 	  /** Used to stand-in for `undefined` hash values. */
@@ -895,28 +891,33 @@
 	  /** Used as the internal argument placeholder. */
 	  var PLACEHOLDER = '__lodash_placeholder__';
 	
-	  /** Used to compose bitmasks for function metadata. */
-	  var BIND_FLAG = 1,
-	      BIND_KEY_FLAG = 2,
-	      CURRY_BOUND_FLAG = 4,
-	      CURRY_FLAG = 8,
-	      CURRY_RIGHT_FLAG = 16,
-	      PARTIAL_FLAG = 32,
-	      PARTIAL_RIGHT_FLAG = 64,
-	      ARY_FLAG = 128,
-	      REARG_FLAG = 256,
-	      FLIP_FLAG = 512;
+	  /** Used to compose bitmasks for cloning. */
+	  var CLONE_DEEP_FLAG = 1,
+	      CLONE_FLAT_FLAG = 2,
+	      CLONE_SYMBOLS_FLAG = 4;
 	
-	  /** Used to compose bitmasks for comparison styles. */
-	  var UNORDERED_COMPARE_FLAG = 1,
-	      PARTIAL_COMPARE_FLAG = 2;
+	  /** Used to compose bitmasks for value comparisons. */
+	  var COMPARE_PARTIAL_FLAG = 1,
+	      COMPARE_UNORDERED_FLAG = 2;
+	
+	  /** Used to compose bitmasks for function metadata. */
+	  var WRAP_BIND_FLAG = 1,
+	      WRAP_BIND_KEY_FLAG = 2,
+	      WRAP_CURRY_BOUND_FLAG = 4,
+	      WRAP_CURRY_FLAG = 8,
+	      WRAP_CURRY_RIGHT_FLAG = 16,
+	      WRAP_PARTIAL_FLAG = 32,
+	      WRAP_PARTIAL_RIGHT_FLAG = 64,
+	      WRAP_ARY_FLAG = 128,
+	      WRAP_REARG_FLAG = 256,
+	      WRAP_FLIP_FLAG = 512;
 	
 	  /** Used as default options for `_.truncate`. */
 	  var DEFAULT_TRUNC_LENGTH = 30,
 	      DEFAULT_TRUNC_OMISSION = '...';
 	
 	  /** Used to detect hot functions by number of calls within a span of milliseconds. */
-	  var HOT_COUNT = 500,
+	  var HOT_COUNT = 800,
 	      HOT_SPAN = 16;
 	
 	  /** Used to indicate the type of lazy iteratees. */
@@ -936,18 +937,21 @@
 	      HALF_MAX_ARRAY_LENGTH = MAX_ARRAY_LENGTH >>> 1;
 	
 	  /** Used to associate wrap methods with their bit flags. */
-	  var wrapFlags = [['ary', ARY_FLAG], ['bind', BIND_FLAG], ['bindKey', BIND_KEY_FLAG], ['curry', CURRY_FLAG], ['curryRight', CURRY_RIGHT_FLAG], ['flip', FLIP_FLAG], ['partial', PARTIAL_FLAG], ['partialRight', PARTIAL_RIGHT_FLAG], ['rearg', REARG_FLAG]];
+	  var wrapFlags = [['ary', WRAP_ARY_FLAG], ['bind', WRAP_BIND_FLAG], ['bindKey', WRAP_BIND_KEY_FLAG], ['curry', WRAP_CURRY_FLAG], ['curryRight', WRAP_CURRY_RIGHT_FLAG], ['flip', WRAP_FLIP_FLAG], ['partial', WRAP_PARTIAL_FLAG], ['partialRight', WRAP_PARTIAL_RIGHT_FLAG], ['rearg', WRAP_REARG_FLAG]];
 	
 	  /** `Object#toString` result references. */
 	  var argsTag = '[object Arguments]',
 	      arrayTag = '[object Array]',
+	      asyncTag = '[object AsyncFunction]',
 	      boolTag = '[object Boolean]',
 	      dateTag = '[object Date]',
+	      domExcTag = '[object DOMException]',
 	      errorTag = '[object Error]',
 	      funcTag = '[object Function]',
 	      genTag = '[object GeneratorFunction]',
 	      mapTag = '[object Map]',
 	      numberTag = '[object Number]',
+	      nullTag = '[object Null]',
 	      objectTag = '[object Object]',
 	      promiseTag = '[object Promise]',
 	      proxyTag = '[object Proxy]',
@@ -955,6 +959,7 @@
 	      setTag = '[object Set]',
 	      stringTag = '[object String]',
 	      symbolTag = '[object Symbol]',
+	      undefinedTag = '[object Undefined]',
 	      weakMapTag = '[object WeakMap]',
 	      weakSetTag = '[object WeakSet]';
 	
@@ -1050,8 +1055,10 @@
 	
 	  /** Used to compose unicode character classes. */
 	  var rsAstralRange = '\\ud800-\\udfff',
-	      rsComboMarksRange = '\\u0300-\\u036f\\ufe20-\\ufe23',
-	      rsComboSymbolsRange = '\\u20d0-\\u20f0',
+	      rsComboMarksRange = '\\u0300-\\u036f',
+	      reComboHalfMarksRange = '\\ufe20-\\ufe2f',
+	      rsComboSymbolsRange = '\\u20d0-\\u20ff',
+	      rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange,
 	      rsDingbatRange = '\\u2700-\\u27bf',
 	      rsLowerRange = 'a-z\\xdf-\\xf6\\xf8-\\xff',
 	      rsMathOpRange = '\\xac\\xb1\\xd7\\xf7',
@@ -1066,7 +1073,7 @@
 	  var rsApos = '[\'\u2019]',
 	      rsAstral = '[' + rsAstralRange + ']',
 	      rsBreak = '[' + rsBreakRange + ']',
-	      rsCombo = '[' + rsComboMarksRange + rsComboSymbolsRange + ']',
+	      rsCombo = '[' + rsComboRange + ']',
 	      rsDigits = '\\d+',
 	      rsDingbat = '[' + rsDingbatRange + ']',
 	      rsLower = '[' + rsLowerRange + ']',
@@ -1080,13 +1087,15 @@
 	      rsZWJ = '\\u200d';
 	
 	  /** Used to compose unicode regexes. */
-	  var rsLowerMisc = '(?:' + rsLower + '|' + rsMisc + ')',
-	      rsUpperMisc = '(?:' + rsUpper + '|' + rsMisc + ')',
-	      rsOptLowerContr = '(?:' + rsApos + '(?:d|ll|m|re|s|t|ve))?',
-	      rsOptUpperContr = '(?:' + rsApos + '(?:D|LL|M|RE|S|T|VE))?',
+	  var rsMiscLower = '(?:' + rsLower + '|' + rsMisc + ')',
+	      rsMiscUpper = '(?:' + rsUpper + '|' + rsMisc + ')',
+	      rsOptContrLower = '(?:' + rsApos + '(?:d|ll|m|re|s|t|ve))?',
+	      rsOptContrUpper = '(?:' + rsApos + '(?:D|LL|M|RE|S|T|VE))?',
 	      reOptMod = rsModifier + '?',
 	      rsOptVar = '[' + rsVarRange + ']?',
 	      rsOptJoin = '(?:' + rsZWJ + '(?:' + [rsNonAstral, rsRegional, rsSurrPair].join('|') + ')' + rsOptVar + reOptMod + ')*',
+	      rsOrdLower = '\\d*(?:(?:1st|2nd|3rd|(?![123])\\dth)\\b)',
+	      rsOrdUpper = '\\d*(?:(?:1ST|2ND|3RD|(?![123])\\dTH)\\b)',
 	      rsSeq = rsOptVar + reOptMod + rsOptJoin,
 	      rsEmoji = '(?:' + [rsDingbat, rsRegional, rsSurrPair].join('|') + ')' + rsSeq,
 	      rsSymbol = '(?:' + [rsNonAstral + rsCombo + '?', rsCombo, rsRegional, rsSurrPair, rsAstral].join('|') + ')';
@@ -1104,10 +1113,10 @@
 	  var reUnicode = RegExp(rsFitz + '(?=' + rsFitz + ')|' + rsSymbol + rsSeq, 'g');
 	
 	  /** Used to match complex or compound words. */
-	  var reUnicodeWord = RegExp([rsUpper + '?' + rsLower + '+' + rsOptLowerContr + '(?=' + [rsBreak, rsUpper, '$'].join('|') + ')', rsUpperMisc + '+' + rsOptUpperContr + '(?=' + [rsBreak, rsUpper + rsLowerMisc, '$'].join('|') + ')', rsUpper + '?' + rsLowerMisc + '+' + rsOptLowerContr, rsUpper + '+' + rsOptUpperContr, rsDigits, rsEmoji].join('|'), 'g');
+	  var reUnicodeWord = RegExp([rsUpper + '?' + rsLower + '+' + rsOptContrLower + '(?=' + [rsBreak, rsUpper, '$'].join('|') + ')', rsMiscUpper + '+' + rsOptContrUpper + '(?=' + [rsBreak, rsUpper + rsMiscLower, '$'].join('|') + ')', rsUpper + '?' + rsMiscLower + '+' + rsOptContrLower, rsUpper + '+' + rsOptContrUpper, rsOrdUpper, rsOrdLower, rsDigits, rsEmoji].join('|'), 'g');
 	
 	  /** Used to detect strings with [zero-width joiners or code points from the astral planes](http://eev.ee/blog/2015/09/12/dark-corners-of-unicode/). */
-	  var reHasUnicode = RegExp('[' + rsZWJ + rsAstralRange + rsComboMarksRange + rsComboSymbolsRange + rsVarRange + ']');
+	  var reHasUnicode = RegExp('[' + rsZWJ + rsAstralRange + rsComboRange + rsVarRange + ']');
 	
 	  /** Used to detect strings that need a more robust regexp to match words. */
 	  var reHasUnicodeWord = /[a-z][A-Z]|[A-Z]{2,}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]/;
@@ -1242,7 +1251,7 @@
 	  /** Used to access faster Node.js helpers. */
 	  var nodeUtil = function () {
 	    try {
-	      return freeProcess && freeProcess.binding('util');
+	      return freeProcess && freeProcess.binding && freeProcess.binding('util');
 	    } catch (e) {}
 	  }();
 	
@@ -1320,7 +1329,7 @@
 	   */
 	  function arrayAggregator(array, setter, iteratee, accumulator) {
 	    var index = -1,
-	        length = array ? array.length : 0;
+	        length = array == null ? 0 : array.length;
 	
 	    while (++index < length) {
 	      var value = array[index];
@@ -1340,7 +1349,7 @@
 	   */
 	  function arrayEach(array, iteratee) {
 	    var index = -1,
-	        length = array ? array.length : 0;
+	        length = array == null ? 0 : array.length;
 	
 	    while (++index < length) {
 	      if (iteratee(array[index], index, array) === false) {
@@ -1360,7 +1369,7 @@
 	   * @returns {Array} Returns `array`.
 	   */
 	  function arrayEachRight(array, iteratee) {
-	    var length = array ? array.length : 0;
+	    var length = array == null ? 0 : array.length;
 	
 	    while (length--) {
 	      if (iteratee(array[length], length, array) === false) {
@@ -1382,7 +1391,7 @@
 	   */
 	  function arrayEvery(array, predicate) {
 	    var index = -1,
-	        length = array ? array.length : 0;
+	        length = array == null ? 0 : array.length;
 	
 	    while (++index < length) {
 	      if (!predicate(array[index], index, array)) {
@@ -1403,7 +1412,7 @@
 	   */
 	  function arrayFilter(array, predicate) {
 	    var index = -1,
-	        length = array ? array.length : 0,
+	        length = array == null ? 0 : array.length,
 	        resIndex = 0,
 	        result = [];
 	
@@ -1426,7 +1435,7 @@
 	   * @returns {boolean} Returns `true` if `target` is found, else `false`.
 	   */
 	  function arrayIncludes(array, value) {
-	    var length = array ? array.length : 0;
+	    var length = array == null ? 0 : array.length;
 	    return !!length && baseIndexOf(array, value, 0) > -1;
 	  }
 	
@@ -1441,7 +1450,7 @@
 	   */
 	  function arrayIncludesWith(array, value, comparator) {
 	    var index = -1,
-	        length = array ? array.length : 0;
+	        length = array == null ? 0 : array.length;
 	
 	    while (++index < length) {
 	      if (comparator(value, array[index])) {
@@ -1462,7 +1471,7 @@
 	   */
 	  function arrayMap(array, iteratee) {
 	    var index = -1,
-	        length = array ? array.length : 0,
+	        length = array == null ? 0 : array.length,
 	        result = Array(length);
 	
 	    while (++index < length) {
@@ -1504,7 +1513,7 @@
 	   */
 	  function arrayReduce(array, iteratee, accumulator, initAccum) {
 	    var index = -1,
-	        length = array ? array.length : 0;
+	        length = array == null ? 0 : array.length;
 	
 	    if (initAccum && length) {
 	      accumulator = array[++index];
@@ -1528,7 +1537,7 @@
 	   * @returns {*} Returns the accumulated value.
 	   */
 	  function arrayReduceRight(array, iteratee, accumulator, initAccum) {
-	    var length = array ? array.length : 0;
+	    var length = array == null ? 0 : array.length;
 	    if (initAccum && length) {
 	      accumulator = array[--length];
 	    }
@@ -1550,7 +1559,7 @@
 	   */
 	  function arraySome(array, predicate) {
 	    var index = -1,
-	        length = array ? array.length : 0;
+	        length = array == null ? 0 : array.length;
 	
 	    while (++index < length) {
 	      if (predicate(array[index], index, array)) {
@@ -1692,7 +1701,7 @@
 	   * @returns {number} Returns the mean.
 	   */
 	  function baseMean(array, iteratee) {
-	    var length = array ? array.length : 0;
+	    var length = array == null ? 0 : array.length;
 	    return length ? baseSum(array, iteratee) / length : NAN;
 	  }
 	
@@ -2226,7 +2235,7 @@
 	   * var defer = _.runInContext({ 'setTimeout': setImmediate }).defer;
 	   */
 	  var runInContext = function runInContext(context) {
-	    context = context ? _.defaults(root.Object(), context, _.pick(root, contextProps)) : root;
+	    context = context == null ? root : _.defaults(root.Object(), context, _.pick(root, contextProps));
 	
 	    /** Built-in constructor references. */
 	    var Array = context.Array,
@@ -2247,12 +2256,6 @@
 	    /** Used to detect overreaching core-js shims. */
 	    var coreJsData = context['__core-js_shared__'];
 	
-	    /** Used to detect methods masquerading as native. */
-	    var maskSrcKey = function () {
-	      var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
-	      return uid ? 'Symbol(src)_1.' + uid : '';
-	    }();
-	
 	    /** Used to resolve the decompiled source of functions. */
 	    var funcToString = funcProto.toString;
 	
@@ -2262,15 +2265,21 @@
 	    /** Used to generate unique IDs. */
 	    var idCounter = 0;
 	
-	    /** Used to infer the `Object` constructor. */
-	    var objectCtorString = funcToString.call(Object);
+	    /** Used to detect methods masquerading as native. */
+	    var maskSrcKey = function () {
+	      var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
+	      return uid ? 'Symbol(src)_1.' + uid : '';
+	    }();
 	
 	    /**
 	     * Used to resolve the
 	     * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
 	     * of values.
 	     */
-	    var objectToString = objectProto.toString;
+	    var nativeObjectToString = objectProto.toString;
+	
+	    /** Used to infer the `Object` constructor. */
+	    var objectCtorString = funcToString.call(Object);
 	
 	    /** Used to restore the original `_` reference in `_.noConflict`. */
 	    var oldDash = root._;
@@ -2284,11 +2293,12 @@
 	        Uint8Array = context.Uint8Array,
 	        allocUnsafe = Buffer ? Buffer.allocUnsafe : undefined,
 	        getPrototype = overArg(Object.getPrototypeOf, Object),
-	        iteratorSymbol = _Symbol ? _Symbol.iterator : undefined,
 	        objectCreate = Object.create,
 	        propertyIsEnumerable = objectProto.propertyIsEnumerable,
 	        splice = arrayProto.splice,
-	        spreadableSymbol = _Symbol ? _Symbol.isConcatSpreadable : undefined;
+	        spreadableSymbol = _Symbol ? _Symbol.isConcatSpreadable : undefined,
+	        symIterator = _Symbol ? _Symbol.iterator : undefined,
+	        symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
 	
 	    var defineProperty = function () {
 	      try {
@@ -2364,9 +2374,9 @@
 	     * Shortcut fusion is an optimization to merge iteratee calls; this avoids
 	     * the creation of intermediate arrays and can greatly reduce the number of
 	     * iteratee executions. Sections of a chain sequence qualify for shortcut
-	     * fusion if the section is applied to an array of at least `200` elements
-	     * and any iteratees accept only one argument. The heuristic for whether a
-	     * section qualifies for shortcut fusion is subject to change.
+	     * fusion if the section is applied to an array and iteratees accept only
+	     * one argument. The heuristic for whether a section qualifies for shortcut
+	     * fusion is subject to change.
 	     *
 	     * Chaining is supported in custom builds as long as the `_#value` method is
 	     * directly or indirectly included in the build.
@@ -2525,8 +2535,8 @@
 	
 	    /**
 	     * By default, the template delimiters used by lodash are like those in
-	     * embedded Ruby (ERB). Change the following template settings to use
-	     * alternative delimiters.
+	     * embedded Ruby (ERB) as well as ES2015 template strings. Change the
+	     * following template settings to use alternative delimiters.
 	     *
 	     * @static
 	     * @memberOf _
@@ -2673,7 +2683,7 @@
 	          resIndex = 0,
 	          takeCount = nativeMin(length, this.__takeCount__);
 	
-	      if (!isArr || arrLength < LARGE_ARRAY_SIZE || arrLength == length && takeCount == length) {
+	      if (!isArr || !isRight && arrLength == length && takeCount == length) {
 	        return baseWrapperValue(array, this.__actions__);
 	      }
 	      var result = [];
@@ -2720,7 +2730,7 @@
 	     */
 	    function Hash(entries) {
 	      var index = -1,
-	          length = entries ? entries.length : 0;
+	          length = entries == null ? 0 : entries.length;
 	
 	      this.clear();
 	      while (++index < length) {
@@ -2824,7 +2834,7 @@
 	     */
 	    function ListCache(entries) {
 	      var index = -1,
-	          length = entries ? entries.length : 0;
+	          length = entries == null ? 0 : entries.length;
 	
 	      this.clear();
 	      while (++index < length) {
@@ -2941,7 +2951,7 @@
 	     */
 	    function MapCache(entries) {
 	      var index = -1,
-	          length = entries ? entries.length : 0;
+	          length = entries == null ? 0 : entries.length;
 	
 	      this.clear();
 	      while (++index < length) {
@@ -3045,7 +3055,7 @@
 	     */
 	    function SetCache(values) {
 	      var index = -1,
-	          length = values ? values.length : 0;
+	          length = values == null ? 0 : values.length;
 	
 	      this.__data__ = new MapCache();
 	      while (++index < length) {
@@ -3258,23 +3268,6 @@
 	    }
 	
 	    /**
-	     * Used by `_.defaults` to customize its `_.assignIn` use.
-	     *
-	     * @private
-	     * @param {*} objValue The destination value.
-	     * @param {*} srcValue The source value.
-	     * @param {string} key The key of the property to assign.
-	     * @param {Object} object The parent object of `objValue`.
-	     * @returns {*} Returns the value to assign.
-	     */
-	    function assignInDefaults(objValue, srcValue, key, object) {
-	      if (objValue === undefined || eq(objValue, objectProto[key]) && !hasOwnProperty.call(object, key)) {
-	        return srcValue;
-	      }
-	      return objValue;
-	    }
-	
-	    /**
 	     * This function is like `assignValue` except that it doesn't assign
 	     * `undefined` values.
 	     *
@@ -3356,6 +3349,19 @@
 	    }
 	
 	    /**
+	     * The base implementation of `_.assignIn` without support for multiple sources
+	     * or `customizer` functions.
+	     *
+	     * @private
+	     * @param {Object} object The destination object.
+	     * @param {Object} source The source object.
+	     * @returns {Object} Returns `object`.
+	     */
+	    function baseAssignIn(object, source) {
+	      return object && copyObject(source, keysIn(source), object);
+	    }
+	
+	    /**
 	     * The base implementation of `assignValue` and `assignMergeValue` without
 	     * value checks.
 	     *
@@ -3382,17 +3388,17 @@
 	     *
 	     * @private
 	     * @param {Object} object The object to iterate over.
-	     * @param {string[]} paths The property paths of elements to pick.
+	     * @param {string[]} paths The property paths to pick.
 	     * @returns {Array} Returns the picked elements.
 	     */
 	    function baseAt(object, paths) {
 	      var index = -1,
-	          isNil = object == null,
 	          length = paths.length,
-	          result = Array(length);
+	          result = Array(length),
+	          skip = object == null;
 	
 	      while (++index < length) {
-	        result[index] = isNil ? undefined : get(object, paths[index]);
+	        result[index] = skip ? undefined : get(object, paths[index]);
 	      }
 	      return result;
 	    }
@@ -3424,16 +3430,22 @@
 	     *
 	     * @private
 	     * @param {*} value The value to clone.
-	     * @param {boolean} [isDeep] Specify a deep clone.
-	     * @param {boolean} [isFull] Specify a clone including symbols.
+	     * @param {boolean} bitmask The bitmask flags.
+	     *  1 - Deep clone
+	     *  2 - Flatten inherited properties
+	     *  4 - Clone symbols
 	     * @param {Function} [customizer] The function to customize cloning.
 	     * @param {string} [key] The key of `value`.
 	     * @param {Object} [object] The parent object of `value`.
 	     * @param {Object} [stack] Tracks traversed objects and their clone counterparts.
 	     * @returns {*} Returns the cloned value.
 	     */
-	    function baseClone(value, isDeep, isFull, customizer, key, object, stack) {
-	      var result;
+	    function baseClone(value, bitmask, customizer, key, object, stack) {
+	      var result,
+	          isDeep = bitmask & CLONE_DEEP_FLAG,
+	          isFlat = bitmask & CLONE_FLAT_FLAG,
+	          isFull = bitmask & CLONE_SYMBOLS_FLAG;
+	
 	      if (customizer) {
 	        result = object ? customizer(value, key, object, stack) : customizer(value);
 	      }
@@ -3457,9 +3469,9 @@
 	          return cloneBuffer(value, isDeep);
 	        }
 	        if (tag == objectTag || tag == argsTag || isFunc && !object) {
-	          result = initCloneObject(isFunc ? {} : value);
+	          result = isFlat || isFunc ? {} : initCloneObject(value);
 	          if (!isDeep) {
-	            return copySymbols(value, baseAssign(result, value));
+	            return isFlat ? copySymbolsIn(value, baseAssignIn(result, value)) : copySymbols(value, baseAssign(result, value));
 	          }
 	        } else {
 	          if (!cloneableTags[tag]) {
@@ -3476,14 +3488,16 @@
 	      }
 	      stack.set(value, result);
 	
-	      var props = isArr ? undefined : (isFull ? getAllKeys : keys)(value);
+	      var keysFunc = isFull ? isFlat ? getAllKeysIn : getAllKeys : isFlat ? keysIn : keys;
+	
+	      var props = isArr ? undefined : keysFunc(value);
 	      arrayEach(props || value, function (subValue, key) {
 	        if (props) {
 	          key = subValue;
 	          subValue = value[key];
 	        }
 	        // Recursively populate clone (susceptible to call stack limits).
-	        assignValue(result, key, baseClone(subValue, isDeep, isFull, customizer, key, value, stack));
+	        assignValue(result, key, baseClone(subValue, bitmask, customizer, key, value, stack));
 	      });
 	      return result;
 	    }
@@ -3582,7 +3596,7 @@
 	      }
 	      outer: while (++index < length) {
 	        var value = array[index],
-	            computed = iteratee ? iteratee(value) : value;
+	            computed = iteratee == null ? value : iteratee(value);
 	
 	        value = comparator || value !== 0 ? value : 0;
 	        if (isCommon && computed === computed) {
@@ -3817,7 +3831,7 @@
 	     * @returns {*} Returns the resolved value.
 	     */
 	    function baseGet(object, path) {
-	      path = isKey(path, object) ? [path] : castPath(path);
+	      path = castPath(path, object);
 	
 	      var index = 0,
 	          length = path.length;
@@ -3845,14 +3859,17 @@
 	    }
 	
 	    /**
-	     * The base implementation of `getTag`.
+	     * The base implementation of `getTag` without fallbacks for buggy environments.
 	     *
 	     * @private
 	     * @param {*} value The value to query.
 	     * @returns {string} Returns the `toStringTag`.
 	     */
 	    function baseGetTag(value) {
-	      return objectToString.call(value);
+	      if (value == null) {
+	        return value === undefined ? undefinedTag : nullTag;
+	      }
+	      return symToStringTag && symToStringTag in Object(value) ? getRawTag(value) : objectToString(value);
 	    }
 	
 	    /**
@@ -3988,12 +4005,9 @@
 	     * @returns {*} Returns the result of the invoked method.
 	     */
 	    function baseInvoke(object, path, args) {
-	      if (!isKey(path, object)) {
-	        path = castPath(path);
-	        object = parent(object, path);
-	        path = last(path);
-	      }
-	      var func = object == null ? object : object[toKey(path)];
+	      path = castPath(path, object);
+	      object = parent(object, path);
+	      var func = object == null ? object : object[toKey(last(path))];
 	      return func == null ? undefined : apply(func, object, args);
 	    }
 	
@@ -4005,7 +4019,7 @@
 	     * @returns {boolean} Returns `true` if `value` is an `arguments` object,
 	     */
 	    function baseIsArguments(value) {
-	      return isObjectLike(value) && objectToString.call(value) == argsTag;
+	      return isObjectLike(value) && baseGetTag(value) == argsTag;
 	    }
 	
 	    /**
@@ -4016,7 +4030,7 @@
 	     * @returns {boolean} Returns `true` if `value` is an array buffer, else `false`.
 	     */
 	    function baseIsArrayBuffer(value) {
-	      return isObjectLike(value) && objectToString.call(value) == arrayBufferTag;
+	      return isObjectLike(value) && baseGetTag(value) == arrayBufferTag;
 	    }
 	
 	    /**
@@ -4027,7 +4041,7 @@
 	     * @returns {boolean} Returns `true` if `value` is a date object, else `false`.
 	     */
 	    function baseIsDate(value) {
-	      return isObjectLike(value) && objectToString.call(value) == dateTag;
+	      return isObjectLike(value) && baseGetTag(value) == dateTag;
 	    }
 	
 	    /**
@@ -4037,22 +4051,21 @@
 	     * @private
 	     * @param {*} value The value to compare.
 	     * @param {*} other The other value to compare.
+	     * @param {boolean} bitmask The bitmask flags.
+	     *  1 - Unordered comparison
+	     *  2 - Partial comparison
 	     * @param {Function} [customizer] The function to customize comparisons.
-	     * @param {boolean} [bitmask] The bitmask of comparison flags.
-	     *  The bitmask may be composed of the following flags:
-	     *     1 - Unordered comparison
-	     *     2 - Partial comparison
 	     * @param {Object} [stack] Tracks traversed `value` and `other` objects.
 	     * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
 	     */
-	    function baseIsEqual(value, other, customizer, bitmask, stack) {
+	    function baseIsEqual(value, other, bitmask, customizer, stack) {
 	      if (value === other) {
 	        return true;
 	      }
-	      if (value == null || other == null || !isObject(value) && !isObjectLike(other)) {
+	      if (value == null || other == null || !isObjectLike(value) && !isObjectLike(other)) {
 	        return value !== value && other !== other;
 	      }
-	      return baseIsEqualDeep(value, other, baseIsEqual, customizer, bitmask, stack);
+	      return baseIsEqualDeep(value, other, bitmask, customizer, baseIsEqual, stack);
 	    }
 	
 	    /**
@@ -4063,27 +4076,21 @@
 	     * @private
 	     * @param {Object} object The object to compare.
 	     * @param {Object} other The other object to compare.
+	     * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
+	     * @param {Function} customizer The function to customize comparisons.
 	     * @param {Function} equalFunc The function to determine equivalents of values.
-	     * @param {Function} [customizer] The function to customize comparisons.
-	     * @param {number} [bitmask] The bitmask of comparison flags. See `baseIsEqual`
-	     *  for more details.
 	     * @param {Object} [stack] Tracks traversed `object` and `other` objects.
 	     * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
 	     */
-	    function baseIsEqualDeep(object, other, equalFunc, customizer, bitmask, stack) {
+	    function baseIsEqualDeep(object, other, bitmask, customizer, equalFunc, stack) {
 	      var objIsArr = isArray(object),
 	          othIsArr = isArray(other),
-	          objTag = arrayTag,
-	          othTag = arrayTag;
+	          objTag = objIsArr ? arrayTag : getTag(object),
+	          othTag = othIsArr ? arrayTag : getTag(other);
 	
-	      if (!objIsArr) {
-	        objTag = getTag(object);
-	        objTag = objTag == argsTag ? objectTag : objTag;
-	      }
-	      if (!othIsArr) {
-	        othTag = getTag(other);
-	        othTag = othTag == argsTag ? objectTag : othTag;
-	      }
+	      objTag = objTag == argsTag ? objectTag : objTag;
+	      othTag = othTag == argsTag ? objectTag : othTag;
+	
 	      var objIsObj = objTag == objectTag,
 	          othIsObj = othTag == objectTag,
 	          isSameTag = objTag == othTag;
@@ -4097,9 +4104,9 @@
 	      }
 	      if (isSameTag && !objIsObj) {
 	        stack || (stack = new Stack());
-	        return objIsArr || isTypedArray(object) ? equalArrays(object, other, equalFunc, customizer, bitmask, stack) : equalByTag(object, other, objTag, equalFunc, customizer, bitmask, stack);
+	        return objIsArr || isTypedArray(object) ? equalArrays(object, other, bitmask, customizer, equalFunc, stack) : equalByTag(object, other, objTag, bitmask, customizer, equalFunc, stack);
 	      }
-	      if (!(bitmask & PARTIAL_COMPARE_FLAG)) {
+	      if (!(bitmask & COMPARE_PARTIAL_FLAG)) {
 	        var objIsWrapped = objIsObj && hasOwnProperty.call(object, '__wrapped__'),
 	            othIsWrapped = othIsObj && hasOwnProperty.call(other, '__wrapped__');
 	
@@ -4108,14 +4115,14 @@
 	              othUnwrapped = othIsWrapped ? other.value() : other;
 	
 	          stack || (stack = new Stack());
-	          return equalFunc(objUnwrapped, othUnwrapped, customizer, bitmask, stack);
+	          return equalFunc(objUnwrapped, othUnwrapped, bitmask, customizer, stack);
 	        }
 	      }
 	      if (!isSameTag) {
 	        return false;
 	      }
 	      stack || (stack = new Stack());
-	      return equalObjects(object, other, equalFunc, customizer, bitmask, stack);
+	      return equalObjects(object, other, bitmask, customizer, equalFunc, stack);
 	    }
 	
 	    /**
@@ -4169,7 +4176,7 @@
 	          if (customizer) {
 	            var result = customizer(objValue, srcValue, key, object, source, stack);
 	          }
-	          if (!(result === undefined ? baseIsEqual(srcValue, objValue, customizer, UNORDERED_COMPARE_FLAG | PARTIAL_COMPARE_FLAG, stack) : result)) {
+	          if (!(result === undefined ? baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG, customizer, stack) : result)) {
 	            return false;
 	          }
 	        }
@@ -4201,7 +4208,7 @@
 	     * @returns {boolean} Returns `true` if `value` is a regexp, else `false`.
 	     */
 	    function baseIsRegExp(value) {
-	      return isObject(value) && objectToString.call(value) == regexpTag;
+	      return isObjectLike(value) && baseGetTag(value) == regexpTag;
 	    }
 	
 	    /**
@@ -4223,7 +4230,7 @@
 	     * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.
 	     */
 	    function baseIsTypedArray(value) {
-	      return isObjectLike(value) && isLength(value.length) && !!typedArrayTags[objectToString.call(value)];
+	      return isObjectLike(value) && isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
 	    }
 	
 	    /**
@@ -4352,7 +4359,7 @@
 	      }
 	      return function (object) {
 	        var objValue = get(object, path);
-	        return objValue === undefined && objValue === srcValue ? hasIn(object, path) : baseIsEqual(srcValue, objValue, undefined, UNORDERED_COMPARE_FLAG | PARTIAL_COMPARE_FLAG);
+	        return objValue === undefined && objValue === srcValue ? hasIn(object, path) : baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG);
 	      };
 	    }
 	
@@ -4502,13 +4509,12 @@
 	     *
 	     * @private
 	     * @param {Object} object The source object.
-	     * @param {string[]} props The property identifiers to pick.
+	     * @param {string[]} paths The property paths to pick.
 	     * @returns {Object} Returns the new object.
 	     */
-	    function basePick(object, props) {
-	      object = Object(object);
-	      return basePickBy(object, props, function (value, key) {
-	        return key in object;
+	    function basePick(object, paths) {
+	      return basePickBy(object, paths, function (value, path) {
+	        return hasIn(object, path);
 	      });
 	    }
 	
@@ -4517,21 +4523,21 @@
 	     *
 	     * @private
 	     * @param {Object} object The source object.
-	     * @param {string[]} props The property identifiers to pick from.
+	     * @param {string[]} paths The property paths to pick.
 	     * @param {Function} predicate The function invoked per property.
 	     * @returns {Object} Returns the new object.
 	     */
-	    function basePickBy(object, props, predicate) {
+	    function basePickBy(object, paths, predicate) {
 	      var index = -1,
-	          length = props.length,
+	          length = paths.length,
 	          result = {};
 	
 	      while (++index < length) {
-	        var key = props[index],
-	            value = object[key];
+	        var path = paths[index],
+	            value = baseGet(object, path);
 	
-	        if (predicate(value, key)) {
-	          baseAssignValue(result, key, value);
+	        if (predicate(value, path)) {
+	          baseSet(result, castPath(path, object), value);
 	        }
 	      }
 	      return result;
@@ -4607,15 +4613,8 @@
 	          var previous = index;
 	          if (isIndex(index)) {
 	            splice.call(array, index, 1);
-	          } else if (!isKey(index, array)) {
-	            var path = castPath(index),
-	                object = parent(array, path);
-	
-	            if (object != null) {
-	              delete object[toKey(last(path))];
-	            }
 	          } else {
-	            delete array[toKey(index)];
+	            baseUnset(array, index);
 	          }
 	        }
 	      }
@@ -4736,7 +4735,7 @@
 	      if (!isObject(object)) {
 	        return object;
 	      }
-	      path = isKey(path, object) ? [path] : castPath(path);
+	      path = castPath(path, object);
 	
 	      var index = -1,
 	          length = path.length,
@@ -4864,7 +4863,7 @@
 	     */
 	    function baseSortedIndex(array, value, retHighest) {
 	      var low = 0,
-	          high = array ? array.length : low;
+	          high = array == null ? low : array.length;
 	
 	      if (typeof value == 'number' && value === value && high <= HALF_MAX_ARRAY_LENGTH) {
 	        while (low < high) {
@@ -4899,7 +4898,7 @@
 	      value = iteratee(value);
 	
 	      var low = 0,
-	          high = array ? array.length : 0,
+	          high = array == null ? 0 : array.length,
 	          valIsNaN = value !== value,
 	          valIsNull = value === null,
 	          valIsSymbol = isSymbol(value),
@@ -5066,15 +5065,13 @@
 	     *
 	     * @private
 	     * @param {Object} object The object to modify.
-	     * @param {Array|string} path The path of the property to unset.
+	     * @param {Array|string} path The property path to unset.
 	     * @returns {boolean} Returns `true` if the property is deleted, else `false`.
 	     */
 	    function baseUnset(object, path) {
-	      path = isKey(path, object) ? [path] : castPath(path);
+	      path = castPath(path, object);
 	      object = parent(object, path);
-	
-	      var key = toKey(last(path));
-	      return !(object != null && hasOwnProperty.call(object, key)) || delete object[key];
+	      return object == null || delete object[toKey(last(path))];
 	    }
 	
 	    /**
@@ -5142,13 +5139,24 @@
 	     * @returns {Array} Returns the new array of values.
 	     */
 	    function baseXor(arrays, iteratee, comparator) {
+	      var length = arrays.length;
+	      if (length < 2) {
+	        return length ? baseUniq(arrays[0]) : [];
+	      }
 	      var index = -1,
-	          length = arrays.length;
+	          result = Array(length);
 	
 	      while (++index < length) {
-	        var result = result ? arrayPush(baseDifference(result, arrays[index], iteratee, comparator), baseDifference(arrays[index], result, iteratee, comparator)) : arrays[index];
+	        var array = arrays[index],
+	            othIndex = -1;
+	
+	        while (++othIndex < length) {
+	          if (othIndex != index) {
+	            result[index] = baseDifference(result[index] || array, arrays[othIndex], iteratee, comparator);
+	          }
+	        }
 	      }
-	      return result && result.length ? baseUniq(result, iteratee, comparator) : [];
+	      return baseUniq(baseFlatten(result, 1), iteratee, comparator);
 	    }
 	
 	    /**
@@ -5200,10 +5208,14 @@
 	     *
 	     * @private
 	     * @param {*} value The value to inspect.
+	     * @param {Object} [object] The object to query keys on.
 	     * @returns {Array} Returns the cast property path array.
 	     */
-	    function castPath(value) {
-	      return isArray(value) ? value : stringToPath(value);
+	    function castPath(value, object) {
+	      if (isArray(value)) {
+	        return value;
+	      }
+	      return isKey(value, object) ? [value] : stringToPath(toString(value));
 	    }
 	
 	    /**
@@ -5297,7 +5309,7 @@
 	     * @returns {Object} Returns the cloned map.
 	     */
 	    function cloneMap(map, isDeep, cloneFunc) {
-	      var array = isDeep ? cloneFunc(mapToArray(map), true) : mapToArray(map);
+	      var array = isDeep ? cloneFunc(mapToArray(map), CLONE_DEEP_FLAG) : mapToArray(map);
 	      return arrayReduce(array, addMapEntry, new map.constructor());
 	    }
 	
@@ -5324,7 +5336,7 @@
 	     * @returns {Object} Returns the cloned set.
 	     */
 	    function cloneSet(set, isDeep, cloneFunc) {
-	      var array = isDeep ? cloneFunc(setToArray(set), true) : setToArray(set);
+	      var array = isDeep ? cloneFunc(setToArray(set), CLONE_DEEP_FLAG) : setToArray(set);
 	      return arrayReduce(array, addSetEntry, new set.constructor());
 	    }
 	
@@ -5549,7 +5561,7 @@
 	    }
 	
 	    /**
-	     * Copies own symbol properties of `source` to `object`.
+	     * Copies own symbols of `source` to `object`.
 	     *
 	     * @private
 	     * @param {Object} source The object to copy symbols from.
@@ -5558,6 +5570,18 @@
 	     */
 	    function copySymbols(source, object) {
 	      return copyObject(source, getSymbols(source), object);
+	    }
+	
+	    /**
+	     * Copies own and inherited symbols of `source` to `object`.
+	     *
+	     * @private
+	     * @param {Object} source The object to copy symbols from.
+	     * @param {Object} [object={}] The object to copy symbols to.
+	     * @returns {Object} Returns `object`.
+	     */
+	    function copySymbolsIn(source, object) {
+	      return copyObject(source, getSymbolsIn(source), object);
 	    }
 	
 	    /**
@@ -5672,7 +5696,7 @@
 	     * @returns {Function} Returns the new wrapped function.
 	     */
 	    function createBind(func, bitmask, thisArg) {
-	      var isBind = bitmask & BIND_FLAG,
+	      var isBind = bitmask & WRAP_BIND_FLAG,
 	          Ctor = createCtor(func);
 	
 	      function wrapper() {
@@ -5844,7 +5868,7 @@
 	          var funcName = getFuncName(func),
 	              data = funcName == 'wrapper' ? getData(func) : undefined;
 	
-	          if (data && isLaziable(data[0]) && data[1] == (ARY_FLAG | CURRY_FLAG | PARTIAL_FLAG | REARG_FLAG) && !data[4].length && data[9] == 1) {
+	          if (data && isLaziable(data[0]) && data[1] == (WRAP_ARY_FLAG | WRAP_CURRY_FLAG | WRAP_PARTIAL_FLAG | WRAP_REARG_FLAG) && !data[4].length && data[9] == 1) {
 	            wrapper = wrapper[getFuncName(data[0])].apply(wrapper, data[3]);
 	          } else {
 	            wrapper = func.length == 1 && isLaziable(func) ? wrapper[funcName]() : wrapper.thru(func);
@@ -5854,7 +5878,7 @@
 	          var args = arguments,
 	              value = args[0];
 	
-	          if (wrapper && args.length == 1 && isArray(value) && value.length >= LARGE_ARRAY_SIZE) {
+	          if (wrapper && args.length == 1 && isArray(value)) {
 	            return wrapper.plant(value).value();
 	          }
 	          var index = 0,
@@ -5888,11 +5912,11 @@
 	     * @returns {Function} Returns the new wrapped function.
 	     */
 	    function createHybrid(func, bitmask, thisArg, partials, holders, partialsRight, holdersRight, argPos, ary, arity) {
-	      var isAry = bitmask & ARY_FLAG,
-	          isBind = bitmask & BIND_FLAG,
-	          isBindKey = bitmask & BIND_KEY_FLAG,
-	          isCurried = bitmask & (CURRY_FLAG | CURRY_RIGHT_FLAG),
-	          isFlip = bitmask & FLIP_FLAG,
+	      var isAry = bitmask & WRAP_ARY_FLAG,
+	          isBind = bitmask & WRAP_BIND_FLAG,
+	          isBindKey = bitmask & WRAP_BIND_KEY_FLAG,
+	          isCurried = bitmask & (WRAP_CURRY_FLAG | WRAP_CURRY_RIGHT_FLAG),
+	          isFlip = bitmask & WRAP_FLIP_FLAG,
 	          Ctor = isBindKey ? undefined : createCtor(func);
 	
 	      function wrapper() {
@@ -6038,7 +6062,7 @@
 	     * @returns {Function} Returns the new wrapped function.
 	     */
 	    function createPartial(func, bitmask, thisArg, partials) {
-	      var isBind = bitmask & BIND_FLAG,
+	      var isBind = bitmask & WRAP_BIND_FLAG,
 	          Ctor = createCtor(func);
 	
 	      function wrapper() {
@@ -6120,17 +6144,17 @@
 	     * @returns {Function} Returns the new wrapped function.
 	     */
 	    function createRecurry(func, bitmask, wrapFunc, placeholder, thisArg, partials, holders, argPos, ary, arity) {
-	      var isCurry = bitmask & CURRY_FLAG,
+	      var isCurry = bitmask & WRAP_CURRY_FLAG,
 	          newHolders = isCurry ? holders : undefined,
 	          newHoldersRight = isCurry ? undefined : holders,
 	          newPartials = isCurry ? partials : undefined,
 	          newPartialsRight = isCurry ? undefined : partials;
 	
-	      bitmask |= isCurry ? PARTIAL_FLAG : PARTIAL_RIGHT_FLAG;
-	      bitmask &= ~(isCurry ? PARTIAL_RIGHT_FLAG : PARTIAL_FLAG);
+	      bitmask |= isCurry ? WRAP_PARTIAL_FLAG : WRAP_PARTIAL_RIGHT_FLAG;
+	      bitmask &= ~(isCurry ? WRAP_PARTIAL_RIGHT_FLAG : WRAP_PARTIAL_FLAG);
 	
-	      if (!(bitmask & CURRY_BOUND_FLAG)) {
-	        bitmask &= ~(BIND_FLAG | BIND_KEY_FLAG);
+	      if (!(bitmask & WRAP_CURRY_BOUND_FLAG)) {
+	        bitmask &= ~(WRAP_BIND_FLAG | WRAP_BIND_KEY_FLAG);
 	      }
 	      var newData = [func, bitmask, thisArg, newPartials, newHolders, newPartialsRight, newHoldersRight, argPos, ary, arity];
 	
@@ -6153,7 +6177,7 @@
 	      var func = Math[methodName];
 	      return function (number, precision) {
 	        number = toNumber(number);
-	        precision = nativeMin(toInteger(precision), 292);
+	        precision = precision == null ? 0 : nativeMin(toInteger(precision), 292);
 	        if (precision) {
 	          // Shift with exponential notation to avoid floating-point issues.
 	          // See [MDN](https://mdn.io/round#Examples) for more details.
@@ -6205,17 +6229,16 @@
 	     * @private
 	     * @param {Function|string} func The function or method name to wrap.
 	     * @param {number} bitmask The bitmask flags.
-	     *  The bitmask may be composed of the following flags:
-	     *     1 - `_.bind`
-	     *     2 - `_.bindKey`
-	     *     4 - `_.curry` or `_.curryRight` of a bound function
-	     *     8 - `_.curry`
-	     *    16 - `_.curryRight`
-	     *    32 - `_.partial`
-	     *    64 - `_.partialRight`
-	     *   128 - `_.rearg`
-	     *   256 - `_.ary`
-	     *   512 - `_.flip`
+	     *    1 - `_.bind`
+	     *    2 - `_.bindKey`
+	     *    4 - `_.curry` or `_.curryRight` of a bound function
+	     *    8 - `_.curry`
+	     *   16 - `_.curryRight`
+	     *   32 - `_.partial`
+	     *   64 - `_.partialRight`
+	     *  128 - `_.rearg`
+	     *  256 - `_.ary`
+	     *  512 - `_.flip`
 	     * @param {*} [thisArg] The `this` binding of `func`.
 	     * @param {Array} [partials] The arguments to be partially applied.
 	     * @param {Array} [holders] The `partials` placeholder indexes.
@@ -6225,20 +6248,20 @@
 	     * @returns {Function} Returns the new wrapped function.
 	     */
 	    function createWrap(func, bitmask, thisArg, partials, holders, argPos, ary, arity) {
-	      var isBindKey = bitmask & BIND_KEY_FLAG;
+	      var isBindKey = bitmask & WRAP_BIND_KEY_FLAG;
 	      if (!isBindKey && typeof func != 'function') {
 	        throw new TypeError(FUNC_ERROR_TEXT);
 	      }
 	      var length = partials ? partials.length : 0;
 	      if (!length) {
-	        bitmask &= ~(PARTIAL_FLAG | PARTIAL_RIGHT_FLAG);
+	        bitmask &= ~(WRAP_PARTIAL_FLAG | WRAP_PARTIAL_RIGHT_FLAG);
 	        partials = holders = undefined;
 	      }
 	      ary = ary === undefined ? ary : nativeMax(toInteger(ary), 0);
 	      arity = arity === undefined ? arity : toInteger(arity);
 	      length -= holders ? holders.length : 0;
 	
-	      if (bitmask & PARTIAL_RIGHT_FLAG) {
+	      if (bitmask & WRAP_PARTIAL_RIGHT_FLAG) {
 	        var partialsRight = partials,
 	            holdersRight = holders;
 	
@@ -6256,16 +6279,16 @@
 	      thisArg = newData[2];
 	      partials = newData[3];
 	      holders = newData[4];
-	      arity = newData[9] = newData[9] == null ? isBindKey ? 0 : func.length : nativeMax(newData[9] - length, 0);
+	      arity = newData[9] = newData[9] === undefined ? isBindKey ? 0 : func.length : nativeMax(newData[9] - length, 0);
 	
-	      if (!arity && bitmask & (CURRY_FLAG | CURRY_RIGHT_FLAG)) {
-	        bitmask &= ~(CURRY_FLAG | CURRY_RIGHT_FLAG);
+	      if (!arity && bitmask & (WRAP_CURRY_FLAG | WRAP_CURRY_RIGHT_FLAG)) {
+	        bitmask &= ~(WRAP_CURRY_FLAG | WRAP_CURRY_RIGHT_FLAG);
 	      }
-	      if (!bitmask || bitmask == BIND_FLAG) {
+	      if (!bitmask || bitmask == WRAP_BIND_FLAG) {
 	        var result = createBind(func, bitmask, thisArg);
-	      } else if (bitmask == CURRY_FLAG || bitmask == CURRY_RIGHT_FLAG) {
+	      } else if (bitmask == WRAP_CURRY_FLAG || bitmask == WRAP_CURRY_RIGHT_FLAG) {
 	        result = createCurry(func, bitmask, arity);
-	      } else if ((bitmask == PARTIAL_FLAG || bitmask == (BIND_FLAG | PARTIAL_FLAG)) && !holders.length) {
+	      } else if ((bitmask == WRAP_PARTIAL_FLAG || bitmask == (WRAP_BIND_FLAG | WRAP_PARTIAL_FLAG)) && !holders.length) {
 	        result = createPartial(func, bitmask, thisArg, partials);
 	      } else {
 	        result = createHybrid.apply(undefined, newData);
@@ -6275,21 +6298,76 @@
 	    }
 	
 	    /**
+	     * Used by `_.defaults` to customize its `_.assignIn` use to assign properties
+	     * of source objects to the destination object for all destination properties
+	     * that resolve to `undefined`.
+	     *
+	     * @private
+	     * @param {*} objValue The destination value.
+	     * @param {*} srcValue The source value.
+	     * @param {string} key The key of the property to assign.
+	     * @param {Object} object The parent object of `objValue`.
+	     * @returns {*} Returns the value to assign.
+	     */
+	    function customDefaultsAssignIn(objValue, srcValue, key, object) {
+	      if (objValue === undefined || eq(objValue, objectProto[key]) && !hasOwnProperty.call(object, key)) {
+	        return srcValue;
+	      }
+	      return objValue;
+	    }
+	
+	    /**
+	     * Used by `_.defaultsDeep` to customize its `_.merge` use to merge source
+	     * objects into destination objects that are passed thru.
+	     *
+	     * @private
+	     * @param {*} objValue The destination value.
+	     * @param {*} srcValue The source value.
+	     * @param {string} key The key of the property to merge.
+	     * @param {Object} object The parent object of `objValue`.
+	     * @param {Object} source The parent object of `srcValue`.
+	     * @param {Object} [stack] Tracks traversed source values and their merged
+	     *  counterparts.
+	     * @returns {*} Returns the value to assign.
+	     */
+	    function customDefaultsMerge(objValue, srcValue, key, object, source, stack) {
+	      if (isObject(objValue) && isObject(srcValue)) {
+	        // Recursively merge objects and arrays (susceptible to call stack limits).
+	        stack.set(srcValue, objValue);
+	        baseMerge(objValue, srcValue, undefined, customDefaultsMerge, stack);
+	        stack['delete'](srcValue);
+	      }
+	      return objValue;
+	    }
+	
+	    /**
+	     * Used by `_.omit` to customize its `_.cloneDeep` use to only clone plain
+	     * objects.
+	     *
+	     * @private
+	     * @param {*} value The value to inspect.
+	     * @param {string} key The key of the property to inspect.
+	     * @returns {*} Returns the uncloned value or `undefined` to defer cloning to `_.cloneDeep`.
+	     */
+	    function customOmitClone(value) {
+	      return isPlainObject(value) ? undefined : value;
+	    }
+	
+	    /**
 	     * A specialized version of `baseIsEqualDeep` for arrays with support for
 	     * partial deep comparisons.
 	     *
 	     * @private
 	     * @param {Array} array The array to compare.
 	     * @param {Array} other The other array to compare.
-	     * @param {Function} equalFunc The function to determine equivalents of values.
+	     * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
 	     * @param {Function} customizer The function to customize comparisons.
-	     * @param {number} bitmask The bitmask of comparison flags. See `baseIsEqual`
-	     *  for more details.
+	     * @param {Function} equalFunc The function to determine equivalents of values.
 	     * @param {Object} stack Tracks traversed `array` and `other` objects.
 	     * @returns {boolean} Returns `true` if the arrays are equivalent, else `false`.
 	     */
-	    function equalArrays(array, other, equalFunc, customizer, bitmask, stack) {
-	      var isPartial = bitmask & PARTIAL_COMPARE_FLAG,
+	    function equalArrays(array, other, bitmask, customizer, equalFunc, stack) {
+	      var isPartial = bitmask & COMPARE_PARTIAL_FLAG,
 	          arrLength = array.length,
 	          othLength = other.length;
 	
@@ -6303,7 +6381,7 @@
 	      }
 	      var index = -1,
 	          result = true,
-	          seen = bitmask & UNORDERED_COMPARE_FLAG ? new SetCache() : undefined;
+	          seen = bitmask & COMPARE_UNORDERED_FLAG ? new SetCache() : undefined;
 	
 	      stack.set(array, other);
 	      stack.set(other, array);
@@ -6326,14 +6404,14 @@
 	        // Recursively compare arrays (susceptible to call stack limits).
 	        if (seen) {
 	          if (!arraySome(other, function (othValue, othIndex) {
-	            if (!cacheHas(seen, othIndex) && (arrValue === othValue || equalFunc(arrValue, othValue, customizer, bitmask, stack))) {
+	            if (!cacheHas(seen, othIndex) && (arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
 	              return seen.push(othIndex);
 	            }
 	          })) {
 	            result = false;
 	            break;
 	          }
-	        } else if (!(arrValue === othValue || equalFunc(arrValue, othValue, customizer, bitmask, stack))) {
+	        } else if (!(arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
 	          result = false;
 	          break;
 	        }
@@ -6354,14 +6432,13 @@
 	     * @param {Object} object The object to compare.
 	     * @param {Object} other The other object to compare.
 	     * @param {string} tag The `toStringTag` of the objects to compare.
-	     * @param {Function} equalFunc The function to determine equivalents of values.
+	     * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
 	     * @param {Function} customizer The function to customize comparisons.
-	     * @param {number} bitmask The bitmask of comparison flags. See `baseIsEqual`
-	     *  for more details.
+	     * @param {Function} equalFunc The function to determine equivalents of values.
 	     * @param {Object} stack Tracks traversed `object` and `other` objects.
 	     * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
 	     */
-	    function equalByTag(object, other, tag, equalFunc, customizer, bitmask, stack) {
+	    function equalByTag(object, other, tag, bitmask, customizer, equalFunc, stack) {
 	      switch (tag) {
 	        case dataViewTag:
 	          if (object.byteLength != other.byteLength || object.byteOffset != other.byteOffset) {
@@ -6397,7 +6474,7 @@
 	          var convert = mapToArray;
 	
 	        case setTag:
-	          var isPartial = bitmask & PARTIAL_COMPARE_FLAG;
+	          var isPartial = bitmask & COMPARE_PARTIAL_FLAG;
 	          convert || (convert = setToArray);
 	
 	          if (object.size != other.size && !isPartial) {
@@ -6408,11 +6485,11 @@
 	          if (stacked) {
 	            return stacked == other;
 	          }
-	          bitmask |= UNORDERED_COMPARE_FLAG;
+	          bitmask |= COMPARE_UNORDERED_FLAG;
 	
 	          // Recursively compare objects (susceptible to call stack limits).
 	          stack.set(object, other);
-	          var result = equalArrays(convert(object), convert(other), equalFunc, customizer, bitmask, stack);
+	          var result = equalArrays(convert(object), convert(other), bitmask, customizer, equalFunc, stack);
 	          stack['delete'](object);
 	          return result;
 	
@@ -6431,18 +6508,17 @@
 	     * @private
 	     * @param {Object} object The object to compare.
 	     * @param {Object} other The other object to compare.
-	     * @param {Function} equalFunc The function to determine equivalents of values.
+	     * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
 	     * @param {Function} customizer The function to customize comparisons.
-	     * @param {number} bitmask The bitmask of comparison flags. See `baseIsEqual`
-	     *  for more details.
+	     * @param {Function} equalFunc The function to determine equivalents of values.
 	     * @param {Object} stack Tracks traversed `object` and `other` objects.
 	     * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
 	     */
-	    function equalObjects(object, other, equalFunc, customizer, bitmask, stack) {
-	      var isPartial = bitmask & PARTIAL_COMPARE_FLAG,
-	          objProps = keys(object),
+	    function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
+	      var isPartial = bitmask & COMPARE_PARTIAL_FLAG,
+	          objProps = getAllKeys(object),
 	          objLength = objProps.length,
-	          othProps = keys(other),
+	          othProps = getAllKeys(other),
 	          othLength = othProps.length;
 	
 	      if (objLength != othLength && !isPartial) {
@@ -6474,7 +6550,7 @@
 	          var compared = isPartial ? customizer(othValue, objValue, key, other, object, stack) : customizer(objValue, othValue, key, object, other, stack);
 	        }
 	        // Recursively compare objects (susceptible to call stack limits).
-	        if (!(compared === undefined ? objValue === othValue || equalFunc(objValue, othValue, customizer, bitmask, stack) : compared)) {
+	        if (!(compared === undefined ? objValue === othValue || equalFunc(objValue, othValue, bitmask, customizer, stack) : compared)) {
 	          result = false;
 	          break;
 	        }
@@ -6637,17 +6713,51 @@
 	    }
 	
 	    /**
-	     * Creates an array of the own enumerable symbol properties of `object`.
+	     * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+	     *
+	     * @private
+	     * @param {*} value The value to query.
+	     * @returns {string} Returns the raw `toStringTag`.
+	     */
+	    function getRawTag(value) {
+	      var isOwn = hasOwnProperty.call(value, symToStringTag),
+	          tag = value[symToStringTag];
+	
+	      try {
+	        value[symToStringTag] = undefined;
+	        var unmasked = true;
+	      } catch (e) {}
+	
+	      var result = nativeObjectToString.call(value);
+	      if (unmasked) {
+	        if (isOwn) {
+	          value[symToStringTag] = tag;
+	        } else {
+	          delete value[symToStringTag];
+	        }
+	      }
+	      return result;
+	    }
+	
+	    /**
+	     * Creates an array of the own enumerable symbols of `object`.
 	     *
 	     * @private
 	     * @param {Object} object The object to query.
 	     * @returns {Array} Returns the array of symbols.
 	     */
-	    var getSymbols = nativeGetSymbols ? overArg(nativeGetSymbols, Object) : stubArray;
+	    var getSymbols = !nativeGetSymbols ? stubArray : function (object) {
+	      if (object == null) {
+	        return [];
+	      }
+	      object = Object(object);
+	      return arrayFilter(nativeGetSymbols(object), function (symbol) {
+	        return propertyIsEnumerable.call(object, symbol);
+	      });
+	    };
 	
 	    /**
-	     * Creates an array of the own and inherited enumerable symbol properties
-	     * of `object`.
+	     * Creates an array of the own and inherited enumerable symbols of `object`.
 	     *
 	     * @private
 	     * @param {Object} object The object to query.
@@ -6674,9 +6784,9 @@
 	    // Fallback for data views, maps, sets, and weak maps in IE 11 and promises in Node.js < 6.
 	    if (DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag || Map && getTag(new Map()) != mapTag || Promise && getTag(Promise.resolve()) != promiseTag || Set && getTag(new Set()) != setTag || WeakMap && getTag(new WeakMap()) != weakMapTag) {
 	      getTag = function getTag(value) {
-	        var result = objectToString.call(value),
+	        var result = baseGetTag(value),
 	            Ctor = result == objectTag ? value.constructor : undefined,
-	            ctorString = Ctor ? toSource(Ctor) : undefined;
+	            ctorString = Ctor ? toSource(Ctor) : '';
 	
 	        if (ctorString) {
 	          switch (ctorString) {
@@ -6750,7 +6860,7 @@
 	     * @returns {boolean} Returns `true` if `path` exists, else `false`.
 	     */
 	    function hasPath(object, path, hasFunc) {
-	      path = isKey(path, object) ? [path] : castPath(path);
+	      path = castPath(path, object);
 	
 	      var index = -1,
 	          length = path.length,
@@ -6766,7 +6876,7 @@
 	      if (result || ++index != length) {
 	        return result;
 	      }
-	      length = object ? object.length : 0;
+	      length = object == null ? 0 : object.length;
 	      return !!length && isLength(length) && isIndex(key, length) && (isArray(object) || isArguments(object));
 	    }
 	
@@ -7070,19 +7180,19 @@
 	      var bitmask = data[1],
 	          srcBitmask = source[1],
 	          newBitmask = bitmask | srcBitmask,
-	          isCommon = newBitmask < (BIND_FLAG | BIND_KEY_FLAG | ARY_FLAG);
+	          isCommon = newBitmask < (WRAP_BIND_FLAG | WRAP_BIND_KEY_FLAG | WRAP_ARY_FLAG);
 	
-	      var isCombo = srcBitmask == ARY_FLAG && bitmask == CURRY_FLAG || srcBitmask == ARY_FLAG && bitmask == REARG_FLAG && data[7].length <= source[8] || srcBitmask == (ARY_FLAG | REARG_FLAG) && source[7].length <= source[8] && bitmask == CURRY_FLAG;
+	      var isCombo = srcBitmask == WRAP_ARY_FLAG && bitmask == WRAP_CURRY_FLAG || srcBitmask == WRAP_ARY_FLAG && bitmask == WRAP_REARG_FLAG && data[7].length <= source[8] || srcBitmask == (WRAP_ARY_FLAG | WRAP_REARG_FLAG) && source[7].length <= source[8] && bitmask == WRAP_CURRY_FLAG;
 	
 	      // Exit early if metadata can't be merged.
 	      if (!(isCommon || isCombo)) {
 	        return data;
 	      }
 	      // Use source `thisArg` if available.
-	      if (srcBitmask & BIND_FLAG) {
+	      if (srcBitmask & WRAP_BIND_FLAG) {
 	        data[2] = source[2];
 	        // Set when currying a bound function.
-	        newBitmask |= bitmask & BIND_FLAG ? 0 : CURRY_BOUND_FLAG;
+	        newBitmask |= bitmask & WRAP_BIND_FLAG ? 0 : WRAP_CURRY_BOUND_FLAG;
 	      }
 	      // Compose partial arguments.
 	      var value = source[3];
@@ -7104,7 +7214,7 @@
 	        data[7] = value;
 	      }
 	      // Use source `ary` if it's smaller.
-	      if (srcBitmask & ARY_FLAG) {
+	      if (srcBitmask & WRAP_ARY_FLAG) {
 	        data[8] = data[8] == null ? source[8] : nativeMin(data[8], source[8]);
 	      }
 	      // Use source `arity` if one is not provided.
@@ -7116,29 +7226,6 @@
 	      data[1] = newBitmask;
 	
 	      return data;
-	    }
-	
-	    /**
-	     * Used by `_.defaultsDeep` to customize its `_.merge` use.
-	     *
-	     * @private
-	     * @param {*} objValue The destination value.
-	     * @param {*} srcValue The source value.
-	     * @param {string} key The key of the property to merge.
-	     * @param {Object} object The parent object of `objValue`.
-	     * @param {Object} source The parent object of `srcValue`.
-	     * @param {Object} [stack] Tracks traversed source values and their merged
-	     *  counterparts.
-	     * @returns {*} Returns the value to assign.
-	     */
-	    function mergeDefaults(objValue, srcValue, key, object, source, stack) {
-	      if (isObject(objValue) && isObject(srcValue)) {
-	        // Recursively merge objects and arrays (susceptible to call stack limits).
-	        stack.set(srcValue, objValue);
-	        baseMerge(objValue, srcValue, undefined, mergeDefaults, stack);
-	        stack['delete'](srcValue);
-	      }
-	      return objValue;
 	    }
 	
 	    /**
@@ -7158,6 +7245,17 @@
 	        }
 	      }
 	      return result;
+	    }
+	
+	    /**
+	     * Converts `value` to a string using `Object.prototype.toString`.
+	     *
+	     * @private
+	     * @param {*} value The value to convert.
+	     * @returns {string} Returns the converted string.
+	     */
+	    function objectToString(value) {
+	      return nativeObjectToString.call(value);
 	    }
 	
 	    /**
@@ -7199,7 +7297,7 @@
 	     * @returns {*} Returns the parent value.
 	     */
 	    function parent(object, path) {
-	      return path.length == 1 ? object : baseGet(object, baseSlice(path, 0, -1));
+	      return path.length < 2 ? object : baseGet(object, baseSlice(path, 0, -1));
 	    }
 	
 	    /**
@@ -7339,8 +7437,6 @@
 	     * @returns {Array} Returns the property path array.
 	     */
 	    var stringToPath = memoizeCapped(function (string) {
-	      string = toString(string);
-	
 	      var result = [];
 	      if (reLeadingDot.test(string)) {
 	        result.push('');
@@ -7370,7 +7466,7 @@
 	     * Converts `func` to its source code.
 	     *
 	     * @private
-	     * @param {Function} func The function to process.
+	     * @param {Function} func The function to convert.
 	     * @returns {string} Returns the source code.
 	     */
 	    function toSource(func) {
@@ -7450,7 +7546,7 @@
 	      } else {
 	        size = nativeMax(toInteger(size), 0);
 	      }
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      if (!length || size < 1) {
 	        return [];
 	      }
@@ -7481,7 +7577,7 @@
 	     */
 	    function compact(array) {
 	      var index = -1,
-	          length = array ? array.length : 0,
+	          length = array == null ? 0 : array.length,
 	          resIndex = 0,
 	          result = [];
 	
@@ -7647,7 +7743,7 @@
 	     * // => [1, 2, 3]
 	     */
 	    function drop(array, n, guard) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      if (!length) {
 	        return [];
 	      }
@@ -7681,7 +7777,7 @@
 	     * // => [1, 2, 3]
 	     */
 	    function dropRight(array, n, guard) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      if (!length) {
 	        return [];
 	      }
@@ -7739,8 +7835,7 @@
 	     * @since 3.0.0
 	     * @category Array
 	     * @param {Array} array The array to query.
-	     * @param {Function} [predicate=_.identity]
-	     *  The function invoked per iteration.
+	     * @param {Function} [predicate=_.identity] The function invoked per iteration.
 	     * @returns {Array} Returns the slice of `array`.
 	     * @example
 	     *
@@ -7799,7 +7894,7 @@
 	     * // => [4, '*', '*', 10]
 	     */
 	    function fill(array, value, start, end) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      if (!length) {
 	        return [];
 	      }
@@ -7819,8 +7914,7 @@
 	     * @since 1.1.0
 	     * @category Array
 	     * @param {Array} array The array to inspect.
-	     * @param {Function} [predicate=_.identity]
-	     *  The function invoked per iteration.
+	     * @param {Function} [predicate=_.identity] The function invoked per iteration.
 	     * @param {number} [fromIndex=0] The index to search from.
 	     * @returns {number} Returns the index of the found element, else `-1`.
 	     * @example
@@ -7847,7 +7941,7 @@
 	     * // => 2
 	     */
 	    function findIndex(array, predicate, fromIndex) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      if (!length) {
 	        return -1;
 	      }
@@ -7867,8 +7961,7 @@
 	     * @since 2.0.0
 	     * @category Array
 	     * @param {Array} array The array to inspect.
-	     * @param {Function} [predicate=_.identity]
-	     *  The function invoked per iteration.
+	     * @param {Function} [predicate=_.identity] The function invoked per iteration.
 	     * @param {number} [fromIndex=array.length-1] The index to search from.
 	     * @returns {number} Returns the index of the found element, else `-1`.
 	     * @example
@@ -7895,7 +7988,7 @@
 	     * // => 0
 	     */
 	    function findLastIndex(array, predicate, fromIndex) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      if (!length) {
 	        return -1;
 	      }
@@ -7922,7 +8015,7 @@
 	     * // => [1, 2, [3, [4]], 5]
 	     */
 	    function flatten(array) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      return length ? baseFlatten(array, 1) : [];
 	    }
 	
@@ -7941,7 +8034,7 @@
 	     * // => [1, 2, 3, 4, 5]
 	     */
 	    function flattenDeep(array) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      return length ? baseFlatten(array, INFINITY) : [];
 	    }
 	
@@ -7966,7 +8059,7 @@
 	     * // => [1, 2, 3, [4], 5]
 	     */
 	    function flattenDepth(array, depth) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      if (!length) {
 	        return [];
 	      }
@@ -7991,7 +8084,7 @@
 	     */
 	    function fromPairs(pairs) {
 	      var index = -1,
-	          length = pairs ? pairs.length : 0,
+	          length = pairs == null ? 0 : pairs.length,
 	          result = {};
 	
 	      while (++index < length) {
@@ -8047,7 +8140,7 @@
 	     * // => 3
 	     */
 	    function indexOf(array, value, fromIndex) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      if (!length) {
 	        return -1;
 	      }
@@ -8073,7 +8166,7 @@
 	     * // => [1, 2]
 	     */
 	    function initial(array) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      return length ? baseSlice(array, 0, -1) : [];
 	    }
 	
@@ -8159,9 +8252,8 @@
 	      var comparator = last(arrays),
 	          mapped = arrayMap(arrays, castArrayLikeObject);
 	
-	      if (comparator === last(mapped)) {
-	        comparator = undefined;
-	      } else {
+	      comparator = typeof comparator == 'function' ? comparator : undefined;
+	      if (comparator) {
 	        mapped.pop();
 	      }
 	      return mapped.length && mapped[0] === arrays[0] ? baseIntersection(mapped, undefined, comparator) : [];
@@ -8183,7 +8275,7 @@
 	     * // => 'a~b~c'
 	     */
 	    function join(array, separator) {
-	      return array ? nativeJoin.call(array, separator) : '';
+	      return array == null ? '' : nativeJoin.call(array, separator);
 	    }
 	
 	    /**
@@ -8201,7 +8293,7 @@
 	     * // => 3
 	     */
 	    function last(array) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      return length ? array[length - 1] : undefined;
 	    }
 	
@@ -8227,7 +8319,7 @@
 	     * // => 1
 	     */
 	    function lastIndexOf(array, value, fromIndex) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      if (!length) {
 	        return -1;
 	      }
@@ -8326,8 +8418,7 @@
 	     * @category Array
 	     * @param {Array} array The array to modify.
 	     * @param {Array} values The values to remove.
-	     * @param {Function} [iteratee=_.identity]
-	     *  The iteratee invoked per element.
+	     * @param {Function} [iteratee=_.identity] The iteratee invoked per element.
 	     * @returns {Array} Returns `array`.
 	     * @example
 	     *
@@ -8393,7 +8484,7 @@
 	     * // => ['b', 'd']
 	     */
 	    var pullAt = flatRest(function (array, indexes) {
-	      var length = array ? array.length : 0,
+	      var length = array == null ? 0 : array.length,
 	          result = baseAt(array, indexes);
 	
 	      basePullAt(array, arrayMap(indexes, function (index) {
@@ -8416,8 +8507,7 @@
 	     * @since 2.0.0
 	     * @category Array
 	     * @param {Array} array The array to modify.
-	     * @param {Function} [predicate=_.identity]
-	     *  The function invoked per iteration.
+	     * @param {Function} [predicate=_.identity] The function invoked per iteration.
 	     * @returns {Array} Returns the new array of removed elements.
 	     * @example
 	     *
@@ -8477,7 +8567,7 @@
 	     * // => [3, 2, 1]
 	     */
 	    function reverse(array) {
-	      return array ? nativeReverse.call(array) : array;
+	      return array == null ? array : nativeReverse.call(array);
 	    }
 	
 	    /**
@@ -8497,7 +8587,7 @@
 	     * @returns {Array} Returns the slice of `array`.
 	     */
 	    function slice(array, start, end) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      if (!length) {
 	        return [];
 	      }
@@ -8543,8 +8633,7 @@
 	     * @category Array
 	     * @param {Array} array The sorted array to inspect.
 	     * @param {*} value The value to evaluate.
-	     * @param {Function} [iteratee=_.identity]
-	     *  The iteratee invoked per element.
+	     * @param {Function} [iteratee=_.identity] The iteratee invoked per element.
 	     * @returns {number} Returns the index at which `value` should be inserted
 	     *  into `array`.
 	     * @example
@@ -8579,7 +8668,7 @@
 	     * // => 1
 	     */
 	    function sortedIndexOf(array, value) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      if (length) {
 	        var index = baseSortedIndex(array, value);
 	        if (index < length && eq(array[index], value)) {
@@ -8622,8 +8711,7 @@
 	     * @category Array
 	     * @param {Array} array The sorted array to inspect.
 	     * @param {*} value The value to evaluate.
-	     * @param {Function} [iteratee=_.identity]
-	     *  The iteratee invoked per element.
+	     * @param {Function} [iteratee=_.identity] The iteratee invoked per element.
 	     * @returns {number} Returns the index at which `value` should be inserted
 	     *  into `array`.
 	     * @example
@@ -8658,7 +8746,7 @@
 	     * // => 3
 	     */
 	    function sortedLastIndexOf(array, value) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      if (length) {
 	        var index = baseSortedIndex(array, value, true) - 1;
 	        if (eq(array[index], value)) {
@@ -8722,7 +8810,7 @@
 	     * // => [2, 3]
 	     */
 	    function tail(array) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      return length ? baseSlice(array, 1, length) : [];
 	    }
 	
@@ -8785,7 +8873,7 @@
 	     * // => []
 	     */
 	    function takeRight(array, n, guard) {
-	      var length = array ? array.length : 0;
+	      var length = array == null ? 0 : array.length;
 	      if (!length) {
 	        return [];
 	      }
@@ -8804,8 +8892,7 @@
 	     * @since 3.0.0
 	     * @category Array
 	     * @param {Array} array The array to query.
-	     * @param {Function} [predicate=_.identity]
-	     *  The function invoked per iteration.
+	     * @param {Function} [predicate=_.identity] The function invoked per iteration.
 	     * @returns {Array} Returns the slice of `array`.
 	     * @example
 	     *
@@ -8844,14 +8931,13 @@
 	     * @since 3.0.0
 	     * @category Array
 	     * @param {Array} array The array to query.
-	     * @param {Function} [predicate=_.identity]
-	     *  The function invoked per iteration.
+	     * @param {Function} [predicate=_.identity] The function invoked per iteration.
 	     * @returns {Array} Returns the slice of `array`.
 	     * @example
 	     *
 	     * var users = [
 	     *   { 'user': 'barney',  'active': false },
-	     *   { 'user': 'fred',    'active': false},
+	     *   { 'user': 'fred',    'active': false },
 	     *   { 'user': 'pebbles', 'active': true }
 	     * ];
 	     *
@@ -8906,8 +8992,7 @@
 	     * @since 4.0.0
 	     * @category Array
 	     * @param {...Array} [arrays] The arrays to inspect.
-	     * @param {Function} [iteratee=_.identity]
-	     *  The iteratee invoked per element.
+	     * @param {Function} [iteratee=_.identity] The iteratee invoked per element.
 	     * @returns {Array} Returns the new array of combined values.
 	     * @example
 	     *
@@ -8949,9 +9034,7 @@
 	     */
 	    var unionWith = baseRest(function (arrays) {
 	      var comparator = last(arrays);
-	      if (isArrayLikeObject(comparator)) {
-	        comparator = undefined;
-	      }
+	      comparator = typeof comparator == 'function' ? comparator : undefined;
 	      return baseUniq(baseFlatten(arrays, 1, isArrayLikeObject, true), undefined, comparator);
 	    });
 	
@@ -8989,8 +9072,7 @@
 	     * @since 4.0.0
 	     * @category Array
 	     * @param {Array} array The array to inspect.
-	     * @param {Function} [iteratee=_.identity]
-	     *  The iteratee invoked per element.
+	     * @param {Function} [iteratee=_.identity] The iteratee invoked per element.
 	     * @returns {Array} Returns the new duplicate free array.
 	     * @example
 	     *
@@ -9026,6 +9108,7 @@
 	     * // => [{ 'x': 1, 'y': 2 }, { 'x': 2, 'y': 1 }]
 	     */
 	    function uniqWith(array, comparator) {
+	      comparator = typeof comparator == 'function' ? comparator : undefined;
 	      return array && array.length ? baseUniq(array, undefined, comparator) : [];
 	    }
 	
@@ -9156,8 +9239,7 @@
 	     * @since 4.0.0
 	     * @category Array
 	     * @param {...Array} [arrays] The arrays to inspect.
-	     * @param {Function} [iteratee=_.identity]
-	     *  The iteratee invoked per element.
+	     * @param {Function} [iteratee=_.identity] The iteratee invoked per element.
 	     * @returns {Array} Returns the new array of filtered values.
 	     * @example
 	     *
@@ -9199,9 +9281,7 @@
 	     */
 	    var xorWith = baseRest(function (arrays) {
 	      var comparator = last(arrays);
-	      if (isArrayLikeObject(comparator)) {
-	        comparator = undefined;
-	      }
+	      comparator = typeof comparator == 'function' ? comparator : undefined;
 	      return baseXor(arrayFilter(arrays, isArrayLikeObject), undefined, comparator);
 	    });
 	
@@ -9272,7 +9352,8 @@
 	     * @since 3.8.0
 	     * @category Array
 	     * @param {...Array} [arrays] The arrays to process.
-	     * @param {Function} [iteratee=_.identity] The function to combine grouped values.
+	     * @param {Function} [iteratee=_.identity] The function to combine
+	     *  grouped values.
 	     * @returns {Array} Returns the new array of grouped elements.
 	     * @example
 	     *
@@ -9388,7 +9469,7 @@
 	     * @memberOf _
 	     * @since 1.0.0
 	     * @category Seq
-	     * @param {...(string|string[])} [paths] The property paths of elements to pick.
+	     * @param {...(string|string[])} [paths] The property paths to pick.
 	     * @returns {Object} Returns the new `lodash` wrapper instance.
 	     * @example
 	     *
@@ -9650,8 +9731,7 @@
 	     * @since 0.5.0
 	     * @category Collection
 	     * @param {Array|Object} collection The collection to iterate over.
-	     * @param {Function} [iteratee=_.identity]
-	     *  The iteratee to transform keys.
+	     * @param {Function} [iteratee=_.identity] The iteratee to transform keys.
 	     * @returns {Object} Returns the composed aggregate object.
 	     * @example
 	     *
@@ -9685,8 +9765,7 @@
 	     * @since 0.1.0
 	     * @category Collection
 	     * @param {Array|Object} collection The collection to iterate over.
-	     * @param {Function} [predicate=_.identity]
-	     *  The function invoked per iteration.
+	     * @param {Function} [predicate=_.identity] The function invoked per iteration.
 	     * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
 	     * @returns {boolean} Returns `true` if all elements pass the predicate check,
 	     *  else `false`.
@@ -9732,8 +9811,7 @@
 	     * @since 0.1.0
 	     * @category Collection
 	     * @param {Array|Object} collection The collection to iterate over.
-	     * @param {Function} [predicate=_.identity]
-	     *  The function invoked per iteration.
+	     * @param {Function} [predicate=_.identity] The function invoked per iteration.
 	     * @returns {Array} Returns the new filtered array.
 	     * @see _.reject
 	     * @example
@@ -9773,8 +9851,7 @@
 	     * @since 0.1.0
 	     * @category Collection
 	     * @param {Array|Object} collection The collection to inspect.
-	     * @param {Function} [predicate=_.identity]
-	     *  The function invoked per iteration.
+	     * @param {Function} [predicate=_.identity] The function invoked per iteration.
 	     * @param {number} [fromIndex=0] The index to search from.
 	     * @returns {*} Returns the matched element, else `undefined`.
 	     * @example
@@ -9811,8 +9888,7 @@
 	     * @since 2.0.0
 	     * @category Collection
 	     * @param {Array|Object} collection The collection to inspect.
-	     * @param {Function} [predicate=_.identity]
-	     *  The function invoked per iteration.
+	     * @param {Function} [predicate=_.identity] The function invoked per iteration.
 	     * @param {number} [fromIndex=collection.length-1] The index to search from.
 	     * @returns {*} Returns the matched element, else `undefined`.
 	     * @example
@@ -9834,8 +9910,7 @@
 	     * @since 4.0.0
 	     * @category Collection
 	     * @param {Array|Object} collection The collection to iterate over.
-	     * @param {Function} [iteratee=_.identity]
-	     *  The function invoked per iteration.
+	     * @param {Function} [iteratee=_.identity] The function invoked per iteration.
 	     * @returns {Array} Returns the new flattened array.
 	     * @example
 	     *
@@ -9859,8 +9934,7 @@
 	     * @since 4.7.0
 	     * @category Collection
 	     * @param {Array|Object} collection The collection to iterate over.
-	     * @param {Function} [iteratee=_.identity]
-	     *  The function invoked per iteration.
+	     * @param {Function} [iteratee=_.identity] The function invoked per iteration.
 	     * @returns {Array} Returns the new flattened array.
 	     * @example
 	     *
@@ -9884,8 +9958,7 @@
 	     * @since 4.7.0
 	     * @category Collection
 	     * @param {Array|Object} collection The collection to iterate over.
-	     * @param {Function} [iteratee=_.identity]
-	     *  The function invoked per iteration.
+	     * @param {Function} [iteratee=_.identity] The function invoked per iteration.
 	     * @param {number} [depth=1] The maximum recursion depth.
 	     * @returns {Array} Returns the new flattened array.
 	     * @example
@@ -9974,8 +10047,7 @@
 	     * @since 0.1.0
 	     * @category Collection
 	     * @param {Array|Object} collection The collection to iterate over.
-	     * @param {Function} [iteratee=_.identity]
-	     *  The iteratee to transform keys.
+	     * @param {Function} [iteratee=_.identity] The iteratee to transform keys.
 	     * @returns {Object} Returns the composed aggregate object.
 	     * @example
 	     *
@@ -10061,12 +10133,10 @@
 	    var invokeMap = baseRest(function (collection, path, args) {
 	      var index = -1,
 	          isFunc = typeof path == 'function',
-	          isProp = isKey(path),
 	          result = isArrayLike(collection) ? Array(collection.length) : [];
 	
 	      baseEach(collection, function (value) {
-	        var func = isFunc ? path : isProp && value != null ? value[path] : undefined;
-	        result[++index] = func ? apply(func, value, args) : baseInvoke(value, path, args);
+	        result[++index] = isFunc ? apply(path, value, args) : baseInvoke(value, path, args);
 	      });
 	      return result;
 	    });
@@ -10082,8 +10152,7 @@
 	     * @since 4.0.0
 	     * @category Collection
 	     * @param {Array|Object} collection The collection to iterate over.
-	     * @param {Function} [iteratee=_.identity]
-	     *  The iteratee to transform keys.
+	     * @param {Function} [iteratee=_.identity] The iteratee to transform keys.
 	     * @returns {Object} Returns the composed aggregate object.
 	     * @example
 	     *
@@ -10618,7 +10687,7 @@
 	    function ary(func, n, guard) {
 	      n = guard ? undefined : n;
 	      n = func && n == null ? func.length : n;
-	      return createWrap(func, ARY_FLAG, undefined, undefined, undefined, undefined, n);
+	      return createWrap(func, WRAP_ARY_FLAG, undefined, undefined, undefined, undefined, n);
 	    }
 	
 	    /**
@@ -10691,10 +10760,10 @@
 	     * // => 'hi fred!'
 	     */
 	    var bind = baseRest(function (func, thisArg, partials) {
-	      var bitmask = BIND_FLAG;
+	      var bitmask = WRAP_BIND_FLAG;
 	      if (partials.length) {
 	        var holders = replaceHolders(partials, getHolder(bind));
-	        bitmask |= PARTIAL_FLAG;
+	        bitmask |= WRAP_PARTIAL_FLAG;
 	      }
 	      return createWrap(func, bitmask, thisArg, partials, holders);
 	    });
@@ -10745,10 +10814,10 @@
 	     * // => 'hiya fred!'
 	     */
 	    var bindKey = baseRest(function (object, key, partials) {
-	      var bitmask = BIND_FLAG | BIND_KEY_FLAG;
+	      var bitmask = WRAP_BIND_FLAG | WRAP_BIND_KEY_FLAG;
 	      if (partials.length) {
 	        var holders = replaceHolders(partials, getHolder(bindKey));
-	        bitmask |= PARTIAL_FLAG;
+	        bitmask |= WRAP_PARTIAL_FLAG;
 	      }
 	      return createWrap(key, bitmask, object, partials, holders);
 	    });
@@ -10796,7 +10865,7 @@
 	     */
 	    function curry(func, arity, guard) {
 	      arity = guard ? undefined : arity;
-	      var result = createWrap(func, CURRY_FLAG, undefined, undefined, undefined, undefined, undefined, arity);
+	      var result = createWrap(func, WRAP_CURRY_FLAG, undefined, undefined, undefined, undefined, undefined, arity);
 	      result.placeholder = curry.placeholder;
 	      return result;
 	    }
@@ -10841,7 +10910,7 @@
 	     */
 	    function curryRight(func, arity, guard) {
 	      arity = guard ? undefined : arity;
-	      var result = createWrap(func, CURRY_RIGHT_FLAG, undefined, undefined, undefined, undefined, undefined, arity);
+	      var result = createWrap(func, WRAP_CURRY_RIGHT_FLAG, undefined, undefined, undefined, undefined, undefined, arity);
 	      result.placeholder = curryRight.placeholder;
 	      return result;
 	    }
@@ -11085,7 +11154,7 @@
 	     * // => ['d', 'c', 'b', 'a']
 	     */
 	    function flip(func) {
-	      return createWrap(func, FLIP_FLAG);
+	      return createWrap(func, WRAP_FLIP_FLAG);
 	    }
 	
 	    /**
@@ -11099,7 +11168,7 @@
 	     * function. Its creation may be customized by replacing the `_.memoize.Cache`
 	     * constructor with one whose instances implement the
 	     * [`Map`](http://ecma-international.org/ecma-262/7.0/#sec-properties-of-the-map-prototype-object)
-	     * method interface of `delete`, `get`, `has`, and `set`.
+	     * method interface of `clear`, `delete`, `get`, `has`, and `set`.
 	     *
 	     * @static
 	     * @memberOf _
@@ -11133,7 +11202,7 @@
 	     * _.memoize.Cache = WeakMap;
 	     */
 	    function memoize(func, resolver) {
-	      if (typeof func != 'function' || resolver && typeof resolver != 'function') {
+	      if (typeof func != 'function' || resolver != null && typeof resolver != 'function') {
 	        throw new TypeError(FUNC_ERROR_TEXT);
 	      }
 	      var memoized = function memoized() {
@@ -11298,7 +11367,7 @@
 	     */
 	    var partial = baseRest(function (func, partials) {
 	      var holders = replaceHolders(partials, getHolder(partial));
-	      return createWrap(func, PARTIAL_FLAG, undefined, partials, holders);
+	      return createWrap(func, WRAP_PARTIAL_FLAG, undefined, partials, holders);
 	    });
 	
 	    /**
@@ -11335,7 +11404,7 @@
 	     */
 	    var partialRight = baseRest(function (func, partials) {
 	      var holders = replaceHolders(partials, getHolder(partialRight));
-	      return createWrap(func, PARTIAL_RIGHT_FLAG, undefined, partials, holders);
+	      return createWrap(func, WRAP_PARTIAL_RIGHT_FLAG, undefined, partials, holders);
 	    });
 	
 	    /**
@@ -11361,7 +11430,7 @@
 	     * // => ['a', 'b', 'c']
 	     */
 	    var rearg = flatRest(function (func, indexes) {
-	      return createWrap(func, REARG_FLAG, undefined, undefined, undefined, indexes);
+	      return createWrap(func, WRAP_REARG_FLAG, undefined, undefined, undefined, indexes);
 	    });
 	
 	    /**
@@ -11435,7 +11504,7 @@
 	      if (typeof func != 'function') {
 	        throw new TypeError(FUNC_ERROR_TEXT);
 	      }
-	      start = start === undefined ? 0 : nativeMax(toInteger(start), 0);
+	      start = start == null ? 0 : nativeMax(toInteger(start), 0);
 	      return baseRest(function (args) {
 	        var array = args[start],
 	            otherArgs = castSlice(args, 0, start);
@@ -11551,8 +11620,7 @@
 	     * // => '<p>fred, barney, &amp; pebbles</p>'
 	     */
 	    function wrap(value, wrapper) {
-	      wrapper = wrapper == null ? identity : wrapper;
-	      return partial(wrapper, value);
+	      return partial(castFunction(wrapper), value);
 	    }
 	
 	    /*------------------------------------------------------------------------*/
@@ -11625,7 +11693,7 @@
 	     * // => true
 	     */
 	    function clone(value) {
-	      return baseClone(value, false, true);
+	      return baseClone(value, CLONE_SYMBOLS_FLAG);
 	    }
 	
 	    /**
@@ -11660,7 +11728,8 @@
 	     * // => 0
 	     */
 	    function cloneWith(value, customizer) {
-	      return baseClone(value, false, true, customizer);
+	      customizer = typeof customizer == 'function' ? customizer : undefined;
+	      return baseClone(value, CLONE_SYMBOLS_FLAG, customizer);
 	    }
 	
 	    /**
@@ -11682,7 +11751,7 @@
 	     * // => false
 	     */
 	    function cloneDeep(value) {
-	      return baseClone(value, true, true);
+	      return baseClone(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG);
 	    }
 	
 	    /**
@@ -11714,7 +11783,8 @@
 	     * // => 20
 	     */
 	    function cloneDeepWith(value, customizer) {
-	      return baseClone(value, true, true, customizer);
+	      customizer = typeof customizer == 'function' ? customizer : undefined;
+	      return baseClone(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG, customizer);
 	    }
 	
 	    /**
@@ -11977,7 +12047,7 @@
 	     * // => false
 	     */
 	    function isBoolean(value) {
-	      return value === true || value === false || isObjectLike(value) && objectToString.call(value) == boolTag;
+	      return value === true || value === false || isObjectLike(value) && baseGetTag(value) == boolTag;
 	    }
 	
 	    /**
@@ -12036,7 +12106,7 @@
 	     * // => false
 	     */
 	    function isElement(value) {
-	      return value != null && value.nodeType === 1 && isObjectLike(value) && !isPlainObject(value);
+	      return isObjectLike(value) && value.nodeType === 1 && !isPlainObject(value);
 	    }
 	
 	    /**
@@ -12073,6 +12143,9 @@
 	     * // => false
 	     */
 	    function isEmpty(value) {
+	      if (value == null) {
+	        return true;
+	      }
 	      if (isArrayLike(value) && (isArray(value) || typeof value == 'string' || typeof value.splice == 'function' || isBuffer(value) || isTypedArray(value) || isArguments(value))) {
 	        return !value.length;
 	      }
@@ -12099,7 +12172,7 @@
 	     * date objects, error objects, maps, numbers, `Object` objects, regexes,
 	     * sets, strings, symbols, and typed arrays. `Object` objects are compared
 	     * by their own, not inherited, enumerable properties. Functions and DOM
-	     * nodes are **not** supported.
+	     * nodes are compared by strict equality, i.e. `===`.
 	     *
 	     * @static
 	     * @memberOf _
@@ -12158,7 +12231,7 @@
 	    function isEqualWith(value, other, customizer) {
 	      customizer = typeof customizer == 'function' ? customizer : undefined;
 	      var result = customizer ? customizer(value, other) : undefined;
-	      return result === undefined ? baseIsEqual(value, other, customizer) : !!result;
+	      return result === undefined ? baseIsEqual(value, other, undefined, customizer) : !!result;
 	    }
 	
 	    /**
@@ -12183,7 +12256,8 @@
 	      if (!isObjectLike(value)) {
 	        return false;
 	      }
-	      return objectToString.call(value) == errorTag || typeof value.message == 'string' && typeof value.name == 'string';
+	      var tag = baseGetTag(value);
+	      return tag == errorTag || tag == domExcTag || typeof value.message == 'string' && typeof value.name == 'string' && !isPlainObject(value);
 	    }
 	
 	    /**
@@ -12234,10 +12308,13 @@
 	     * // => false
 	     */
 	    function isFunction(value) {
+	      if (!isObject(value)) {
+	        return false;
+	      }
 	      // The use of `Object#toString` avoids issues with the `typeof` operator
-	      // in Safari 9 which returns 'object' for typed array and other constructors.
-	      var tag = isObject(value) ? objectToString.call(value) : '';
-	      return tag == funcTag || tag == genTag || tag == proxyTag;
+	      // in Safari 9 which returns 'object' for typed arrays and other constructors.
+	      var tag = baseGetTag(value);
+	      return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
 	    }
 	
 	    /**
@@ -12586,7 +12663,7 @@
 	     * // => false
 	     */
 	    function isNumber(value) {
-	      return typeof value == 'number' || isObjectLike(value) && objectToString.call(value) == numberTag;
+	      return typeof value == 'number' || isObjectLike(value) && baseGetTag(value) == numberTag;
 	    }
 	
 	    /**
@@ -12618,7 +12695,7 @@
 	     * // => true
 	     */
 	    function isPlainObject(value) {
-	      if (!isObjectLike(value) || objectToString.call(value) != objectTag) {
+	      if (!isObjectLike(value) || baseGetTag(value) != objectTag) {
 	        return false;
 	      }
 	      var proto = getPrototype(value);
@@ -12716,7 +12793,7 @@
 	     * // => false
 	     */
 	    function isString(value) {
-	      return typeof value == 'string' || !isArray(value) && isObjectLike(value) && objectToString.call(value) == stringTag;
+	      return typeof value == 'string' || !isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag;
 	    }
 	
 	    /**
@@ -12737,7 +12814,7 @@
 	     * // => false
 	     */
 	    function isSymbol(value) {
-	      return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'symbol' || isObjectLike(value) && objectToString.call(value) == symbolTag;
+	      return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'symbol' || isObjectLike(value) && baseGetTag(value) == symbolTag;
 	    }
 	
 	    /**
@@ -12819,7 +12896,7 @@
 	     * // => false
 	     */
 	    function isWeakSet(value) {
-	      return isObjectLike(value) && objectToString.call(value) == weakSetTag;
+	      return isObjectLike(value) && baseGetTag(value) == weakSetTag;
 	    }
 	
 	    /**
@@ -12904,8 +12981,8 @@
 	      if (isArrayLike(value)) {
 	        return isString(value) ? stringToArray(value) : copyArray(value);
 	      }
-	      if (iteratorSymbol && value[iteratorSymbol]) {
-	        return iteratorToArray(value[iteratorSymbol]());
+	      if (symIterator && value[symIterator]) {
+	        return iteratorToArray(value[symIterator]());
 	      }
 	      var tag = getTag(value),
 	          func = tag == mapTag ? mapToArray : tag == setTag ? setToArray : values;
@@ -13107,7 +13184,7 @@
 	     * // => 3
 	     */
 	    function toSafeInteger(value) {
-	      return baseClamp(toInteger(value), -MAX_SAFE_INTEGER, MAX_SAFE_INTEGER);
+	      return value ? baseClamp(toInteger(value), -MAX_SAFE_INTEGER, MAX_SAFE_INTEGER) : value === 0 ? value : 0;
 	    }
 	
 	    /**
@@ -13289,7 +13366,7 @@
 	     * @since 1.0.0
 	     * @category Object
 	     * @param {Object} object The object to iterate over.
-	     * @param {...(string|string[])} [paths] The property paths of elements to pick.
+	     * @param {...(string|string[])} [paths] The property paths to pick.
 	     * @returns {Array} Returns the picked values.
 	     * @example
 	     *
@@ -13336,7 +13413,7 @@
 	     */
 	    function create(prototype, properties) {
 	      var result = baseCreate(prototype);
-	      return properties ? baseAssign(result, properties) : result;
+	      return properties == null ? result : baseAssign(result, properties);
 	    }
 	
 	    /**
@@ -13361,7 +13438,7 @@
 	     * // => { 'a': 1, 'b': 2 }
 	     */
 	    var defaults = baseRest(function (args) {
-	      args.push(undefined, assignInDefaults);
+	      args.push(undefined, customDefaultsAssignIn);
 	      return apply(assignInWith, undefined, args);
 	    });
 	
@@ -13385,7 +13462,7 @@
 	     * // => { 'a': { 'b': 2, 'c': 3 } }
 	     */
 	    var defaultsDeep = baseRest(function (args) {
-	      args.push(undefined, mergeDefaults);
+	      args.push(undefined, customDefaultsMerge);
 	      return apply(mergeWith, undefined, args);
 	    });
 	
@@ -14012,15 +14089,16 @@
 	
 	    /**
 	     * The opposite of `_.pick`; this method creates an object composed of the
-	     * own and inherited enumerable string keyed properties of `object` that are
-	     * not omitted.
+	     * own and inherited enumerable property paths of `object` that are not omitted.
+	     *
+	     * **Note:** This method is considerably slower than `_.pick`.
 	     *
 	     * @static
 	     * @since 0.1.0
 	     * @memberOf _
 	     * @category Object
 	     * @param {Object} object The source object.
-	     * @param {...(string|string[])} [props] The property identifiers to omit.
+	     * @param {...(string|string[])} [paths] The property paths to omit.
 	     * @returns {Object} Returns the new object.
 	     * @example
 	     *
@@ -14029,12 +14107,26 @@
 	     * _.omit(object, ['a', 'c']);
 	     * // => { 'b': '2' }
 	     */
-	    var omit = flatRest(function (object, props) {
+	    var omit = flatRest(function (object, paths) {
+	      var result = {};
 	      if (object == null) {
-	        return {};
+	        return result;
 	      }
-	      props = arrayMap(props, toKey);
-	      return basePick(object, baseDifference(getAllKeysIn(object), props));
+	      var isDeep = false;
+	      paths = arrayMap(paths, function (path) {
+	        path = castPath(path, object);
+	        isDeep || (isDeep = path.length > 1);
+	        return path;
+	      });
+	      copyObject(object, getAllKeysIn(object), result);
+	      if (isDeep) {
+	        result = baseClone(result, CLONE_DEEP_FLAG | CLONE_FLAT_FLAG | CLONE_SYMBOLS_FLAG, customOmitClone);
+	      }
+	      var length = paths.length;
+	      while (length--) {
+	        baseUnset(result, paths[length]);
+	      }
+	      return result;
 	    });
 	
 	    /**
@@ -14069,7 +14161,7 @@
 	     * @memberOf _
 	     * @category Object
 	     * @param {Object} object The source object.
-	     * @param {...(string|string[])} [props] The property identifiers to pick.
+	     * @param {...(string|string[])} [paths] The property paths to pick.
 	     * @returns {Object} Returns the new object.
 	     * @example
 	     *
@@ -14078,8 +14170,8 @@
 	     * _.pick(object, ['a', 'c']);
 	     * // => { 'a': 1, 'c': 3 }
 	     */
-	    var pick = flatRest(function (object, props) {
-	      return object == null ? {} : basePick(object, arrayMap(props, toKey));
+	    var pick = flatRest(function (object, paths) {
+	      return object == null ? {} : basePick(object, paths);
 	    });
 	
 	    /**
@@ -14101,7 +14193,16 @@
 	     * // => { 'a': 1, 'c': 3 }
 	     */
 	    function pickBy(object, predicate) {
-	      return object == null ? {} : basePickBy(object, getAllKeysIn(object), getIteratee(predicate));
+	      if (object == null) {
+	        return {};
+	      }
+	      var props = arrayMap(getAllKeysIn(object), function (prop) {
+	        return [prop];
+	      });
+	      predicate = getIteratee(predicate);
+	      return basePickBy(object, props, function (value, path) {
+	        return predicate(value, path[0]);
+	      });
 	    }
 	
 	    /**
@@ -14134,15 +14235,15 @@
 	     * // => 'default'
 	     */
 	    function result(object, path, defaultValue) {
-	      path = isKey(path, object) ? [path] : castPath(path);
+	      path = castPath(path, object);
 	
 	      var index = -1,
 	          length = path.length;
 	
 	      // Ensure the loop is entered when path is empty.
 	      if (!length) {
-	        object = undefined;
 	        length = 1;
+	        object = undefined;
 	      }
 	      while (++index < length) {
 	        var value = object == null ? undefined : object[toKey(path[index])];
@@ -14437,7 +14538,7 @@
 	     * // => ['h', 'i']
 	     */
 	    function values(object) {
-	      return object ? baseValues(object, keys(object)) : [];
+	      return object == null ? [] : baseValues(object, keys(object));
 	    }
 	
 	    /**
@@ -15147,7 +15248,8 @@
 	     */
 	    function startsWith(string, target, position) {
 	      string = toString(string);
-	      position = baseClamp(toInteger(position), 0, string.length);
+	      position = position == null ? 0 : baseClamp(toInteger(position), 0, string.length);
+	
 	      target = baseToString(target);
 	      return string.slice(position, position + target.length) == target;
 	    }
@@ -15266,9 +15368,9 @@
 	        options = undefined;
 	      }
 	      string = toString(string);
-	      options = assignInWith({}, options, settings, assignInDefaults);
+	      options = assignInWith({}, options, settings, customDefaultsAssignIn);
 	
-	      var imports = assignInWith({}, options.imports, settings.imports, assignInDefaults),
+	      var imports = assignInWith({}, options.imports, settings.imports, customDefaultsAssignIn),
 	          importsKeys = keys(imports),
 	          importsValues = baseValues(imports, importsKeys);
 	
@@ -15773,7 +15875,7 @@
 	     * // => 'no match'
 	     */
 	    function cond(pairs) {
-	      var length = pairs ? pairs.length : 0,
+	      var length = pairs == null ? 0 : pairs.length,
 	          toIteratee = getIteratee();
 	
 	      pairs = !length ? [] : arrayMap(pairs, function (pair) {
@@ -15819,7 +15921,7 @@
 	     * // => [{ 'a': 1, 'b': 2 }]
 	     */
 	    function conforms(source) {
-	      return baseConforms(baseClone(source, true));
+	      return baseConforms(baseClone(source, CLONE_DEEP_FLAG));
 	    }
 	
 	    /**
@@ -15981,7 +16083,7 @@
 	     * // => ['def']
 	     */
 	    function iteratee(func) {
-	      return baseIteratee(typeof func == 'function' ? func : baseClone(func, true));
+	      return baseIteratee(typeof func == 'function' ? func : baseClone(func, CLONE_DEEP_FLAG));
 	    }
 	
 	    /**
@@ -16013,7 +16115,7 @@
 	     * // => [{ 'a': 4, 'b': 5, 'c': 6 }]
 	     */
 	    function matches(source) {
-	      return baseMatches(baseClone(source, true));
+	      return baseMatches(baseClone(source, CLONE_DEEP_FLAG));
 	    }
 	
 	    /**
@@ -16043,7 +16145,7 @@
 	     * // => { 'a': 4, 'b': 5, 'c': 6 }
 	     */
 	    function matchesProperty(path, srcValue) {
-	      return baseMatchesProperty(path, baseClone(srcValue, true));
+	      return baseMatchesProperty(path, baseClone(srcValue, CLONE_DEEP_FLAG));
 	    }
 	
 	    /**
@@ -16598,7 +16700,7 @@
 	      if (isArray(value)) {
 	        return arrayMap(value, toKey);
 	      }
-	      return isSymbol(value) ? [value] : copyArray(stringToPath(value));
+	      return isSymbol(value) ? [value] : copyArray(stringToPath(toString(value)));
 	    }
 	
 	    /**
@@ -17307,14 +17409,11 @@
 	    // Add `LazyWrapper` methods for `_.drop` and `_.take` variants.
 	    arrayEach(['drop', 'take'], function (methodName, index) {
 	      LazyWrapper.prototype[methodName] = function (n) {
-	        var filtered = this.__filtered__;
-	        if (filtered && !index) {
-	          return new LazyWrapper(this);
-	        }
 	        n = n === undefined ? 1 : nativeMax(toInteger(n), 0);
 	
-	        var result = this.clone();
-	        if (filtered) {
+	        var result = this.__filtered__ && !index ? new LazyWrapper(this) : this.clone();
+	
+	        if (result.__filtered__) {
 	          result.__takeCount__ = nativeMin(n, result.__takeCount__);
 	        } else {
 	          result.__views__.push({
@@ -17490,7 +17589,7 @@
 	      }
 	    });
 	
-	    realNames[createHybrid(undefined, BIND_KEY_FLAG).name] = [{
+	    realNames[createHybrid(undefined, WRAP_BIND_KEY_FLAG).name] = [{
 	      'name': 'wrapper',
 	      'func': undefined
 	    }];
@@ -17512,8 +17611,8 @@
 	    // Add lazy aliases.
 	    lodash.prototype.first = lodash.prototype.head;
 	
-	    if (iteratorSymbol) {
-	      lodash.prototype[iteratorSymbol] = wrapperToIterator;
+	    if (symIterator) {
+	      lodash.prototype[symIterator] = wrapperToIterator;
 	    }
 	    return lodash;
 	  };
@@ -17584,7 +17683,7 @@
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
 	//! moment.js
-	//! version : 2.15.1
+	//! version : 2.17.1
 	//! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 	//! license : MIT
 	//! momentjs.com
@@ -17596,7 +17695,7 @@
 	
 	    var hookCallback;
 	
-	    function utils_hooks__hooks() {
+	    function hooks() {
 	        return hookCallback.apply(null, arguments);
 	    }
 	
@@ -17623,6 +17722,10 @@
 	            return false;
 	        }
 	        return true;
+	    }
+	
+	    function isNumber(input) {
+	        return typeof input === 'number' || Object.prototype.toString.call(input) === '[object Number]';
 	    }
 	
 	    function isDate(input) {
@@ -17660,7 +17763,7 @@
 	        return a;
 	    }
 	
-	    function create_utc__createUTC(input, format, locale, strict) {
+	    function createUTC(input, format, locale, strict) {
 	        return createLocalOrUTC(input, format, locale, strict, true).utc();
 	    }
 	
@@ -17707,10 +17810,12 @@
 	        };
 	    }
 	
-	    function valid__isValid(m) {
+	    var some$1 = some;
+	
+	    function isValid(m) {
 	        if (m._isValid == null) {
 	            var flags = getParsingFlags(m);
-	            var parsedParts = some.call(flags.parsedDateParts, function (i) {
+	            var parsedParts = some$1.call(flags.parsedDateParts, function (i) {
 	                return i != null;
 	            });
 	            var isNowValid = !isNaN(m._d.getTime()) && flags.overflow < 0 && !flags.empty && !flags.invalidMonth && !flags.invalidWeekday && !flags.nullInput && !flags.invalidFormat && !flags.userInvalidated && (!flags.meridiem || flags.meridiem && parsedParts);
@@ -17728,8 +17833,8 @@
 	        return m._isValid;
 	    }
 	
-	    function valid__createInvalid(flags) {
-	        var m = create_utc__createUTC(NaN);
+	    function createInvalid(flags) {
+	        var m = createUTC(NaN);
 	        if (flags != null) {
 	            extend(getParsingFlags(m), flags);
 	        } else {
@@ -17745,7 +17850,7 @@
 	
 	    // Plugins that add properties should also add the key here (null value),
 	    // so we can properly clone ourselves.
-	    var momentProperties = utils_hooks__hooks.momentProperties = [];
+	    var momentProperties = hooks.momentProperties = [];
 	
 	    function copyConfig(to, from) {
 	        var i, prop, val;
@@ -17800,11 +17905,14 @@
 	    function Moment(config) {
 	        copyConfig(this, config);
 	        this._d = new Date(config._d != null ? config._d.getTime() : NaN);
+	        if (!this.isValid()) {
+	            this._d = new Date(NaN);
+	        }
 	        // Prevent infinite loop in case updateOffset creates new moment
 	        // objects.
 	        if (updateInProgress === false) {
 	            updateInProgress = true;
-	            utils_hooks__hooks.updateOffset(this);
+	            hooks.updateOffset(this);
 	            updateInProgress = false;
 	        }
 	    }
@@ -17848,7 +17956,7 @@
 	    }
 	
 	    function warn(msg) {
-	        if (utils_hooks__hooks.suppressDeprecationWarnings === false && typeof console !== 'undefined' && console.warn) {
+	        if (hooks.suppressDeprecationWarnings === false && typeof console !== 'undefined' && console.warn) {
 	            console.warn('Deprecation warning: ' + msg);
 	        }
 	    }
@@ -17857,8 +17965,8 @@
 	        var firstTime = true;
 	
 	        return extend(function () {
-	            if (utils_hooks__hooks.deprecationHandler != null) {
-	                utils_hooks__hooks.deprecationHandler(null, msg);
+	            if (hooks.deprecationHandler != null) {
+	                hooks.deprecationHandler(null, msg);
 	            }
 	            if (firstTime) {
 	                var args = [];
@@ -17886,8 +17994,8 @@
 	    var deprecations = {};
 	
 	    function deprecateSimple(name, msg) {
-	        if (utils_hooks__hooks.deprecationHandler != null) {
-	            utils_hooks__hooks.deprecationHandler(name, msg);
+	        if (hooks.deprecationHandler != null) {
+	            hooks.deprecationHandler(name, msg);
 	        }
 	        if (!deprecations[name]) {
 	            warn(msg);
@@ -17895,14 +18003,14 @@
 	        }
 	    }
 	
-	    utils_hooks__hooks.suppressDeprecationWarnings = false;
-	    utils_hooks__hooks.deprecationHandler = null;
+	    hooks.suppressDeprecationWarnings = false;
+	    hooks.deprecationHandler = null;
 	
 	    function isFunction(input) {
 	        return input instanceof Function || Object.prototype.toString.call(input) === '[object Function]';
 	    }
 	
-	    function locale_set__set(config) {
+	    function set(config) {
 	        var prop, i;
 	        for (i in config) {
 	            prop = config[i];
@@ -17966,6 +18074,8 @@
 	        };
 	    }
 	
+	    var keys$1 = keys;
+	
 	    var defaultCalendar = {
 	        sameDay: '[Today at] LT',
 	        nextDay: '[Tomorrow at] LT',
@@ -17975,7 +18085,7 @@
 	        sameElse: 'L'
 	    };
 	
-	    function locale_calendar__calendar(key, mom, now) {
+	    function calendar(key, mom, now) {
 	        var output = this._calendar[key] || this._calendar['sameElse'];
 	        return isFunction(output) ? output.call(mom, now) : output;
 	    }
@@ -18033,7 +18143,7 @@
 	        yy: '%d years'
 	    };
 	
-	    function relative__relativeTime(number, withoutSuffix, string, isFuture) {
+	    function relativeTime(number, withoutSuffix, string, isFuture) {
 	        var output = this._relativeTime[string];
 	        return isFunction(output) ? output(number, withoutSuffix, string, isFuture) : output.replace(/%d/i, number);
 	    }
@@ -18091,20 +18201,20 @@
 	    function makeGetSet(unit, keepTime) {
 	        return function (value) {
 	            if (value != null) {
-	                get_set__set(this, unit, value);
-	                utils_hooks__hooks.updateOffset(this, keepTime);
+	                set$1(this, unit, value);
+	                hooks.updateOffset(this, keepTime);
 	                return this;
 	            } else {
-	                return get_set__get(this, unit);
+	                return get(this, unit);
 	            }
 	        };
 	    }
 	
-	    function get_set__get(mom, unit) {
+	    function get(mom, unit) {
 	        return mom.isValid() ? mom._d['get' + (mom._isUTC ? 'UTC' : '') + unit]() : NaN;
 	    }
 	
-	    function get_set__set(mom, unit, value) {
+	    function set$1(mom, unit, value) {
 	        if (mom.isValid()) {
 	            mom._d['set' + (mom._isUTC ? 'UTC' : '') + unit](value);
 	        }
@@ -18295,7 +18405,7 @@
 	        if (typeof token === 'string') {
 	            token = [token];
 	        }
-	        if (typeof callback === 'number') {
+	        if (isNumber(callback)) {
 	            func = function func(input, array) {
 	                array[callback] = toInt(input);
 	            };
@@ -18344,6 +18454,8 @@
 	            return -1;
 	        };
 	    }
+	
+	    var indexOf$1 = indexOf;
 	
 	    function daysInMonth(year, month) {
 	        return new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
@@ -18398,7 +18510,7 @@
 	
 	    // LOCALES
 	
-	    var MONTHS_IN_FORMAT = /D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/;
+	    var MONTHS_IN_FORMAT = /D[oD]?(\[[^\[\]]*\]|\s)+MMMM?/;
 	    var defaultLocaleMonths = 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_');
 	    function localeMonths(m, format) {
 	        if (!m) {
@@ -18415,7 +18527,7 @@
 	        return isArray(this._monthsShort) ? this._monthsShort[m.month()] : this._monthsShort[MONTHS_IN_FORMAT.test(format) ? 'format' : 'standalone'][m.month()];
 	    }
 	
-	    function units_month__handleStrictParse(monthName, format, strict) {
+	    function handleStrictParse(monthName, format, strict) {
 	        var i,
 	            ii,
 	            mom,
@@ -18426,7 +18538,7 @@
 	            this._longMonthsParse = [];
 	            this._shortMonthsParse = [];
 	            for (i = 0; i < 12; ++i) {
-	                mom = create_utc__createUTC([2000, i]);
+	                mom = createUTC([2000, i]);
 	                this._shortMonthsParse[i] = this.monthsShort(mom, '').toLocaleLowerCase();
 	                this._longMonthsParse[i] = this.months(mom, '').toLocaleLowerCase();
 	            }
@@ -18434,26 +18546,26 @@
 	
 	        if (strict) {
 	            if (format === 'MMM') {
-	                ii = indexOf.call(this._shortMonthsParse, llc);
+	                ii = indexOf$1.call(this._shortMonthsParse, llc);
 	                return ii !== -1 ? ii : null;
 	            } else {
-	                ii = indexOf.call(this._longMonthsParse, llc);
+	                ii = indexOf$1.call(this._longMonthsParse, llc);
 	                return ii !== -1 ? ii : null;
 	            }
 	        } else {
 	            if (format === 'MMM') {
-	                ii = indexOf.call(this._shortMonthsParse, llc);
+	                ii = indexOf$1.call(this._shortMonthsParse, llc);
 	                if (ii !== -1) {
 	                    return ii;
 	                }
-	                ii = indexOf.call(this._longMonthsParse, llc);
+	                ii = indexOf$1.call(this._longMonthsParse, llc);
 	                return ii !== -1 ? ii : null;
 	            } else {
-	                ii = indexOf.call(this._longMonthsParse, llc);
+	                ii = indexOf$1.call(this._longMonthsParse, llc);
 	                if (ii !== -1) {
 	                    return ii;
 	                }
-	                ii = indexOf.call(this._shortMonthsParse, llc);
+	                ii = indexOf$1.call(this._shortMonthsParse, llc);
 	                return ii !== -1 ? ii : null;
 	            }
 	        }
@@ -18463,7 +18575,7 @@
 	        var i, mom, regex;
 	
 	        if (this._monthsParseExact) {
-	            return units_month__handleStrictParse.call(this, monthName, format, strict);
+	            return handleStrictParse.call(this, monthName, format, strict);
 	        }
 	
 	        if (!this._monthsParse) {
@@ -18477,7 +18589,7 @@
 	        // see sorting in computeMonthsParse
 	        for (i = 0; i < 12; i++) {
 	            // make the regex if we don't have it already
-	            mom = create_utc__createUTC([2000, i]);
+	            mom = createUTC([2000, i]);
 	            if (strict && !this._longMonthsParse[i]) {
 	                this._longMonthsParse[i] = new RegExp('^' + this.months(mom, '').replace('.', '') + '$', 'i');
 	                this._shortMonthsParse[i] = new RegExp('^' + this.monthsShort(mom, '').replace('.', '') + '$', 'i');
@@ -18513,7 +18625,7 @@
 	            } else {
 	                value = mom.localeData().monthsParse(value);
 	                // TODO: Another silent failure?
-	                if (typeof value !== 'number') {
+	                if (!isNumber(value)) {
 	                    return mom;
 	                }
 	            }
@@ -18527,10 +18639,10 @@
 	    function getSetMonth(value) {
 	        if (value != null) {
 	            setMonth(this, value);
-	            utils_hooks__hooks.updateOffset(this, true);
+	            hooks.updateOffset(this, true);
 	            return this;
 	        } else {
-	            return get_set__get(this, 'Month');
+	            return get(this, 'Month');
 	        }
 	    }
 	
@@ -18588,7 +18700,7 @@
 	            mom;
 	        for (i = 0; i < 12; i++) {
 	            // make the regex if we don't have it already
-	            mom = create_utc__createUTC([2000, i]);
+	            mom = createUTC([2000, i]);
 	            shortPieces.push(this.monthsShort(mom, ''));
 	            longPieces.push(this.months(mom, ''));
 	            mixedPieces.push(this.months(mom, ''));
@@ -18646,10 +18758,10 @@
 	
 	    addParseToken(['YYYYY', 'YYYYYY'], YEAR);
 	    addParseToken('YYYY', function (input, array) {
-	        array[YEAR] = input.length === 2 ? utils_hooks__hooks.parseTwoDigitYear(input) : toInt(input);
+	        array[YEAR] = input.length === 2 ? hooks.parseTwoDigitYear(input) : toInt(input);
 	    });
 	    addParseToken('YY', function (input, array) {
-	        array[YEAR] = utils_hooks__hooks.parseTwoDigitYear(input);
+	        array[YEAR] = hooks.parseTwoDigitYear(input);
 	    });
 	    addParseToken('Y', function (input, array) {
 	        array[YEAR] = parseInt(input, 10);
@@ -18667,7 +18779,7 @@
 	
 	    // HOOKS
 	
-	    utils_hooks__hooks.parseTwoDigitYear = function (input) {
+	    hooks.parseTwoDigitYear = function (input) {
 	        return toInt(input) + (toInt(input) > 68 ? 1900 : 2000);
 	    };
 	
@@ -18930,7 +19042,7 @@
 	        return m ? this._weekdaysMin[m.day()] : this._weekdaysMin;
 	    }
 	
-	    function day_of_week__handleStrictParse(weekdayName, format, strict) {
+	    function handleStrictParse$1(weekdayName, format, strict) {
 	        var i,
 	            ii,
 	            mom,
@@ -18941,7 +19053,7 @@
 	            this._minWeekdaysParse = [];
 	
 	            for (i = 0; i < 7; ++i) {
-	                mom = create_utc__createUTC([2000, 1]).day(i);
+	                mom = createUTC([2000, 1]).day(i);
 	                this._minWeekdaysParse[i] = this.weekdaysMin(mom, '').toLocaleLowerCase();
 	                this._shortWeekdaysParse[i] = this.weekdaysShort(mom, '').toLocaleLowerCase();
 	                this._weekdaysParse[i] = this.weekdays(mom, '').toLocaleLowerCase();
@@ -18950,48 +19062,48 @@
 	
 	        if (strict) {
 	            if (format === 'dddd') {
-	                ii = indexOf.call(this._weekdaysParse, llc);
+	                ii = indexOf$1.call(this._weekdaysParse, llc);
 	                return ii !== -1 ? ii : null;
 	            } else if (format === 'ddd') {
-	                ii = indexOf.call(this._shortWeekdaysParse, llc);
+	                ii = indexOf$1.call(this._shortWeekdaysParse, llc);
 	                return ii !== -1 ? ii : null;
 	            } else {
-	                ii = indexOf.call(this._minWeekdaysParse, llc);
+	                ii = indexOf$1.call(this._minWeekdaysParse, llc);
 	                return ii !== -1 ? ii : null;
 	            }
 	        } else {
 	            if (format === 'dddd') {
-	                ii = indexOf.call(this._weekdaysParse, llc);
+	                ii = indexOf$1.call(this._weekdaysParse, llc);
 	                if (ii !== -1) {
 	                    return ii;
 	                }
-	                ii = indexOf.call(this._shortWeekdaysParse, llc);
+	                ii = indexOf$1.call(this._shortWeekdaysParse, llc);
 	                if (ii !== -1) {
 	                    return ii;
 	                }
-	                ii = indexOf.call(this._minWeekdaysParse, llc);
+	                ii = indexOf$1.call(this._minWeekdaysParse, llc);
 	                return ii !== -1 ? ii : null;
 	            } else if (format === 'ddd') {
-	                ii = indexOf.call(this._shortWeekdaysParse, llc);
+	                ii = indexOf$1.call(this._shortWeekdaysParse, llc);
 	                if (ii !== -1) {
 	                    return ii;
 	                }
-	                ii = indexOf.call(this._weekdaysParse, llc);
+	                ii = indexOf$1.call(this._weekdaysParse, llc);
 	                if (ii !== -1) {
 	                    return ii;
 	                }
-	                ii = indexOf.call(this._minWeekdaysParse, llc);
+	                ii = indexOf$1.call(this._minWeekdaysParse, llc);
 	                return ii !== -1 ? ii : null;
 	            } else {
-	                ii = indexOf.call(this._minWeekdaysParse, llc);
+	                ii = indexOf$1.call(this._minWeekdaysParse, llc);
 	                if (ii !== -1) {
 	                    return ii;
 	                }
-	                ii = indexOf.call(this._weekdaysParse, llc);
+	                ii = indexOf$1.call(this._weekdaysParse, llc);
 	                if (ii !== -1) {
 	                    return ii;
 	                }
-	                ii = indexOf.call(this._shortWeekdaysParse, llc);
+	                ii = indexOf$1.call(this._shortWeekdaysParse, llc);
 	                return ii !== -1 ? ii : null;
 	            }
 	        }
@@ -19001,7 +19113,7 @@
 	        var i, mom, regex;
 	
 	        if (this._weekdaysParseExact) {
-	            return day_of_week__handleStrictParse.call(this, weekdayName, format, strict);
+	            return handleStrictParse$1.call(this, weekdayName, format, strict);
 	        }
 	
 	        if (!this._weekdaysParse) {
@@ -19014,7 +19126,7 @@
 	        for (i = 0; i < 7; i++) {
 	            // make the regex if we don't have it already
 	
-	            mom = create_utc__createUTC([2000, 1]).day(i);
+	            mom = createUTC([2000, 1]).day(i);
 	            if (strict && !this._fullWeekdaysParse[i]) {
 	                this._fullWeekdaysParse[i] = new RegExp('^' + this.weekdays(mom, '').replace('.', '\.?') + '$', 'i');
 	                this._shortWeekdaysParse[i] = new RegExp('^' + this.weekdaysShort(mom, '').replace('.', '\.?') + '$', 'i');
@@ -19150,7 +19262,7 @@
 	            longp;
 	        for (i = 0; i < 7; i++) {
 	            // make the regex if we don't have it already
-	            mom = create_utc__createUTC([2000, 1]).day(i);
+	            mom = createUTC([2000, 1]).day(i);
 	            minp = this.weekdaysMin(mom, '');
 	            shortp = this.weekdaysShort(mom, '');
 	            longp = this.weekdays(mom, '');
@@ -19307,6 +19419,10 @@
 	    // this rule.
 	    var getSetHour = makeGetSet('Hours', true);
 	
+	    // months
+	    // week
+	    // weekdays
+	    // meridiem
 	    var baseConfig = {
 	        calendar: defaultCalendar,
 	        longDateFormat: defaultLongDateFormat,
@@ -19329,6 +19445,7 @@
 	
 	    // internal storage for locale config files
 	    var locales = {};
+	    var localeFamilies = {};
 	    var globalLocale;
 	
 	    function normalizeLocale(key) {
@@ -19375,7 +19492,7 @@
 	                __webpack_require__(6)("./" + name);
 	                // because defineLocale currently also sets the global locale, we
 	                // want to undo that for lazy loaded locales
-	                locale_locales__getSetGlobalLocale(oldLocale);
+	                getSetGlobalLocale(oldLocale);
 	            } catch (e) {}
 	        }
 	        return locales[name];
@@ -19384,11 +19501,11 @@
 	    // This function will load locale and then set the global locale.  If
 	    // no arguments are passed in, it will simply return the current global
 	    // locale key.
-	    function locale_locales__getSetGlobalLocale(key, values) {
+	    function getSetGlobalLocale(key, values) {
 	        var data;
 	        if (key) {
 	            if (isUndefined(values)) {
-	                data = locale_locales__getLocale(key);
+	                data = getLocale(key);
 	            } else {
 	                data = defineLocale(key, values);
 	            }
@@ -19413,14 +19530,28 @@
 	                if (locales[config.parentLocale] != null) {
 	                    parentConfig = locales[config.parentLocale]._config;
 	                } else {
-	                    // treat as if there is no base config
-	                    deprecateSimple('parentLocaleUndefined', 'specified parentLocale is not defined yet. See http://momentjs.com/guides/#/warnings/parent-locale/');
+	                    if (!localeFamilies[config.parentLocale]) {
+	                        localeFamilies[config.parentLocale] = [];
+	                    }
+	                    localeFamilies[config.parentLocale].push({
+	                        name: name,
+	                        config: config
+	                    });
+	                    return null;
 	                }
 	            }
 	            locales[name] = new Locale(mergeConfigs(parentConfig, config));
 	
+	            if (localeFamilies[name]) {
+	                localeFamilies[name].forEach(function (x) {
+	                    defineLocale(x.name, x.config);
+	                });
+	            }
+	
 	            // backwards compat for now: also set the locale
-	            locale_locales__getSetGlobalLocale(name);
+	            // make sure we set the locale AFTER all child locales have been
+	            // created, so we won't end up with the child locale set.
+	            getSetGlobalLocale(name);
 	
 	            return locales[name];
 	        } else {
@@ -19444,7 +19575,7 @@
 	            locales[name] = locale;
 	
 	            // backwards compat for now: also set the locale
-	            locale_locales__getSetGlobalLocale(name);
+	            getSetGlobalLocale(name);
 	        } else {
 	            // pass null for config to unupdate, useful for tests
 	            if (locales[name] != null) {
@@ -19459,7 +19590,7 @@
 	    }
 	
 	    // returns locale data
-	    function locale_locales__getLocale(key) {
+	    function getLocale(key) {
 	        var locale;
 	
 	        if (key && key._locale && key._locale._abbr) {
@@ -19482,8 +19613,8 @@
 	        return chooseLocale(key);
 	    }
 	
-	    function locale_locales__listLocales() {
-	        return keys(locales);
+	    function listLocales() {
+	        return keys$1(locales);
 	    }
 	
 	    function checkOverflow(m) {
@@ -19511,8 +19642,8 @@
 	
 	    // iso 8601 regex
 	    // 0000-00-00 0000-W00 or 0000-W00-0 + T + 00 or 00:00 or 00:00:00 or 00:00:00.000 + +00:00 or +0000 or +00)
-	    var extendedIsoRegex = /^\s*((?:[+-]\d{6}|\d{4})-(?:\d\d-\d\d|W\d\d-\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?::\d\d(?::\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?/;
-	    var basicIsoRegex = /^\s*((?:[+-]\d{6}|\d{4})(?:\d\d\d\d|W\d\d\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?:\d\d(?:\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?/;
+	    var extendedIsoRegex = /^\s*((?:[+-]\d{6}|\d{4})-(?:\d\d-\d\d|W\d\d-\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?::\d\d(?::\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?$/;
+	    var basicIsoRegex = /^\s*((?:[+-]\d{6}|\d{4})(?:\d\d\d\d|W\d\d\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?:\d\d(?:\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?$/;
 	
 	    var tzRegex = /Z|[+-]\d\d(?::?\d\d)?/;
 	
@@ -19594,11 +19725,11 @@
 	        configFromISO(config);
 	        if (config._isValid === false) {
 	            delete config._isValid;
-	            utils_hooks__hooks.createFromInputFallback(config);
+	            hooks.createFromInputFallback(config);
 	        }
 	    }
 	
-	    utils_hooks__hooks.createFromInputFallback = deprecate('value provided is not in a recognized ISO format. moment construction falls back to js Date(), ' + 'which is not reliable across all browsers and versions. Non ISO date formats are ' + 'discouraged and will be removed in an upcoming major release. Please refer to ' + 'http://momentjs.com/guides/#/warnings/js-date/ for more info.', function (config) {
+	    hooks.createFromInputFallback = deprecate('value provided is not in a recognized ISO format. moment construction falls back to js Date(), ' + 'which is not reliable across all browsers and versions. Non ISO date formats are ' + 'discouraged and will be removed in an upcoming major release. Please refer to ' + 'http://momentjs.com/guides/#/warnings/js-date/ for more info.', function (config) {
 	        config._d = new Date(config._i + (config._useUTC ? ' UTC' : ''));
 	    });
 	
@@ -19615,7 +19746,7 @@
 	
 	    function currentDateArray(config) {
 	        // hooks is actually the exported moment object
-	        var nowValue = new Date(utils_hooks__hooks.now());
+	        var nowValue = new Date(hooks.now());
 	        if (config._useUTC) {
 	            return [nowValue.getUTCFullYear(), nowValue.getUTCMonth(), nowValue.getUTCDate()];
 	        }
@@ -19701,7 +19832,7 @@
 	            // how we interpret now (local, utc, fixed offset). So create
 	            // a now version of current config (take local/utc/offset flags, and
 	            // create now).
-	            weekYear = defaults(w.GG, config._a[YEAR], weekOfYear(local__createLocal(), 1, 4).year);
+	            weekYear = defaults(w.GG, config._a[YEAR], weekOfYear(createLocal(), 1, 4).year);
 	            week = defaults(w.W, 1);
 	            weekday = defaults(w.E, 1);
 	            if (weekday < 1 || weekday > 7) {
@@ -19711,8 +19842,12 @@
 	            dow = config._locale._week.dow;
 	            doy = config._locale._week.doy;
 	
-	            weekYear = defaults(w.gg, config._a[YEAR], weekOfYear(local__createLocal(), dow, doy).year);
-	            week = defaults(w.w, 1);
+	            var curWeek = weekOfYear(createLocal(), dow, doy);
+	
+	            weekYear = defaults(w.gg, config._a[YEAR], curWeek.year);
+	
+	            // Default to current week.
+	            week = defaults(w.w, curWeek.week);
 	
 	            if (w.d != null) {
 	                // weekday -- low day numbers are considered next week
@@ -19743,12 +19878,12 @@
 	    }
 	
 	    // constant that refers to the ISO standard
-	    utils_hooks__hooks.ISO_8601 = function () {};
+	    hooks.ISO_8601 = function () {};
 	
 	    // date from string and format string
 	    function configFromStringAndFormat(config) {
 	        // TODO: Move this to another part of the creation flow to prevent circular deps
-	        if (config._f === utils_hooks__hooks.ISO_8601) {
+	        if (config._f === hooks.ISO_8601) {
 	            configFromISO(config);
 	            return;
 	        }
@@ -19858,7 +19993,7 @@
 	            tempConfig._f = config._f[i];
 	            configFromStringAndFormat(tempConfig);
 	
-	            if (!valid__isValid(tempConfig)) {
+	            if (!isValid(tempConfig)) {
 	                continue;
 	            }
 	
@@ -19907,10 +20042,10 @@
 	        var input = config._i,
 	            format = config._f;
 	
-	        config._locale = config._locale || locale_locales__getLocale(config._l);
+	        config._locale = config._locale || getLocale(config._l);
 	
 	        if (input === null || format === undefined && input === '') {
-	            return valid__createInvalid({ nullInput: true });
+	            return createInvalid({ nullInput: true });
 	        }
 	
 	        if (typeof input === 'string') {
@@ -19919,17 +20054,17 @@
 	
 	        if (isMoment(input)) {
 	            return new Moment(checkOverflow(input));
-	        } else if (isArray(format)) {
-	            configFromStringAndArray(config);
 	        } else if (isDate(input)) {
 	            config._d = input;
+	        } else if (isArray(format)) {
+	            configFromStringAndArray(config);
 	        } else if (format) {
 	            configFromStringAndFormat(config);
 	        } else {
 	            configFromInput(config);
 	        }
 	
-	        if (!valid__isValid(config)) {
+	        if (!isValid(config)) {
 	            config._d = null;
 	        }
 	
@@ -19939,7 +20074,7 @@
 	    function configFromInput(config) {
 	        var input = config._i;
 	        if (input === undefined) {
-	            config._d = new Date(utils_hooks__hooks.now());
+	            config._d = new Date(hooks.now());
 	        } else if (isDate(input)) {
 	            config._d = new Date(input.valueOf());
 	        } else if (typeof input === 'string') {
@@ -19951,18 +20086,18 @@
 	            configFromArray(config);
 	        } else if ((typeof input === 'undefined' ? 'undefined' : _typeof(input)) === 'object') {
 	            configFromObject(config);
-	        } else if (typeof input === 'number') {
+	        } else if (isNumber(input)) {
 	            // from milliseconds
 	            config._d = new Date(input);
 	        } else {
-	            utils_hooks__hooks.createFromInputFallback(config);
+	            hooks.createFromInputFallback(config);
 	        }
 	    }
 	
 	    function createLocalOrUTC(input, format, locale, strict, isUTC) {
 	        var c = {};
 	
-	        if (typeof locale === 'boolean') {
+	        if (locale === true || locale === false) {
 	            strict = locale;
 	            locale = undefined;
 	        }
@@ -19982,25 +20117,25 @@
 	        return createFromConfig(c);
 	    }
 	
-	    function local__createLocal(input, format, locale, strict) {
+	    function createLocal(input, format, locale, strict) {
 	        return createLocalOrUTC(input, format, locale, strict, false);
 	    }
 	
 	    var prototypeMin = deprecate('moment().min is deprecated, use moment.max instead. http://momentjs.com/guides/#/warnings/min-max/', function () {
-	        var other = local__createLocal.apply(null, arguments);
+	        var other = createLocal.apply(null, arguments);
 	        if (this.isValid() && other.isValid()) {
 	            return other < this ? this : other;
 	        } else {
-	            return valid__createInvalid();
+	            return createInvalid();
 	        }
 	    });
 	
 	    var prototypeMax = deprecate('moment().max is deprecated, use moment.min instead. http://momentjs.com/guides/#/warnings/min-max/', function () {
-	        var other = local__createLocal.apply(null, arguments);
+	        var other = createLocal.apply(null, arguments);
 	        if (this.isValid() && other.isValid()) {
 	            return other > this ? this : other;
 	        } else {
-	            return valid__createInvalid();
+	            return createInvalid();
 	        }
 	    });
 	
@@ -20015,7 +20150,7 @@
 	            moments = moments[0];
 	        }
 	        if (!moments.length) {
-	            return local__createLocal();
+	            return createLocal();
 	        }
 	        res = moments[0];
 	        for (i = 1; i < moments.length; ++i) {
@@ -20069,7 +20204,7 @@
 	
 	        this._data = {};
 	
-	        this._locale = locale_locales__getLocale();
+	        this._locale = getLocale();
 	
 	        this._bubble();
 	    }
@@ -20120,12 +20255,17 @@
 	    var chunkOffset = /([\+\-]|\d\d)/gi;
 	
 	    function offsetFromString(matcher, string) {
-	        var matches = (string || '').match(matcher) || [];
+	        var matches = (string || '').match(matcher);
+	
+	        if (matches === null) {
+	            return null;
+	        }
+	
 	        var chunk = matches[matches.length - 1] || [];
 	        var parts = (chunk + '').match(chunkOffset) || ['-', 0, 0];
 	        var minutes = +(parts[1] * 60) + toInt(parts[2]);
 	
-	        return parts[0] === '+' ? minutes : -minutes;
+	        return minutes === 0 ? 0 : parts[0] === '+' ? minutes : -minutes;
 	    }
 	
 	    // Return a moment from input, that is local/utc/zone equivalent to model.
@@ -20133,13 +20273,13 @@
 	        var res, diff;
 	        if (model._isUTC) {
 	            res = model.clone();
-	            diff = (isMoment(input) || isDate(input) ? input.valueOf() : local__createLocal(input).valueOf()) - res.valueOf();
+	            diff = (isMoment(input) || isDate(input) ? input.valueOf() : createLocal(input).valueOf()) - res.valueOf();
 	            // Use low-level api, because this fn is low-level api.
 	            res._d.setTime(res._d.valueOf() + diff);
-	            utils_hooks__hooks.updateOffset(res, false);
+	            hooks.updateOffset(res, false);
 	            return res;
 	        } else {
-	            return local__createLocal(input).local();
+	            return createLocal(input).local();
 	        }
 	    }
 	
@@ -20153,7 +20293,7 @@
 	
 	    // This function will be called whenever a moment is mutated.
 	    // It is intended to keep the offset in sync with the timezone.
-	    utils_hooks__hooks.updateOffset = function () {};
+	    hooks.updateOffset = function () {};
 	
 	    // MOMENTS
 	
@@ -20176,6 +20316,9 @@
 	        if (input != null) {
 	            if (typeof input === 'string') {
 	                input = offsetFromString(matchShortOffset, input);
+	                if (input === null) {
+	                    return this;
+	                }
 	            } else if (Math.abs(input) < 16) {
 	                input = input * 60;
 	            }
@@ -20189,10 +20332,10 @@
 	            }
 	            if (offset !== input) {
 	                if (!keepLocalTime || this._changeInProgress) {
-	                    add_subtract__addSubtract(this, create__createDuration(input - offset, 'm'), 1, false);
+	                    addSubtract(this, createDuration(input - offset, 'm'), 1, false);
 	                } else if (!this._changeInProgress) {
 	                    this._changeInProgress = true;
-	                    utils_hooks__hooks.updateOffset(this, true);
+	                    hooks.updateOffset(this, true);
 	                    this._changeInProgress = null;
 	                }
 	            }
@@ -20233,15 +20376,14 @@
 	    }
 	
 	    function setOffsetToParsedOffset() {
-	        if (this._tzm) {
+	        if (this._tzm != null) {
 	            this.utcOffset(this._tzm);
 	        } else if (typeof this._i === 'string') {
 	            var tZone = offsetFromString(matchOffset, this._i);
-	
-	            if (tZone === 0) {
-	                this.utcOffset(0, true);
+	            if (tZone != null) {
+	                this.utcOffset(tZone);
 	            } else {
-	                this.utcOffset(offsetFromString(matchOffset, this._i));
+	                this.utcOffset(0, true);
 	            }
 	        }
 	        return this;
@@ -20251,7 +20393,7 @@
 	        if (!this.isValid()) {
 	            return false;
 	        }
-	        input = input ? local__createLocal(input).utcOffset() : 0;
+	        input = input ? createLocal(input).utcOffset() : 0;
 	
 	        return (this.utcOffset() - input) % 60 === 0;
 	    }
@@ -20271,7 +20413,7 @@
 	        c = prepareConfig(c);
 	
 	        if (c._a) {
-	            var other = c._isUTC ? create_utc__createUTC(c._a) : local__createLocal(c._a);
+	            var other = c._isUTC ? createUTC(c._a) : createLocal(c._a);
 	            this._isDSTShifted = this.isValid() && compareArrays(c._a, other.toArray()) > 0;
 	        } else {
 	            this._isDSTShifted = false;
@@ -20300,7 +20442,7 @@
 	    // and further modified to allow for strings containing both week and day
 	    var isoRegex = /^(-)?P(?:(-?[0-9,.]*)Y)?(?:(-?[0-9,.]*)M)?(?:(-?[0-9,.]*)W)?(?:(-?[0-9,.]*)D)?(?:T(?:(-?[0-9,.]*)H)?(?:(-?[0-9,.]*)M)?(?:(-?[0-9,.]*)S)?)?$/;
 	
-	    function create__createDuration(input, key) {
+	    function createDuration(input, key) {
 	        var duration = input,
 	
 	        // matching against regexp is expensive, do it on demand
@@ -20315,7 +20457,7 @@
 	                d: input._days,
 	                M: input._months
 	            };
-	        } else if (typeof input === 'number') {
+	        } else if (isNumber(input)) {
 	            duration = {};
 	            if (key) {
 	                duration[key] = input;
@@ -20347,7 +20489,7 @@
 	            // checks for null or undefined
 	            duration = {};
 	        } else if ((typeof duration === 'undefined' ? 'undefined' : _typeof(duration)) === 'object' && ('from' in duration || 'to' in duration)) {
-	            diffRes = momentsDifference(local__createLocal(duration.from), local__createLocal(duration.to));
+	            diffRes = momentsDifference(createLocal(duration.from), createLocal(duration.to));
 	
 	            duration = {};
 	            duration.ms = diffRes.milliseconds;
@@ -20363,7 +20505,7 @@
 	        return ret;
 	    }
 	
-	    create__createDuration.fn = Duration.prototype;
+	    createDuration.fn = Duration.prototype;
 	
 	    function parseIso(inp, sign) {
 	        // We'd normally use ~~inp for this, but unfortunately it also
@@ -20416,13 +20558,13 @@
 	            }
 	
 	            val = typeof val === 'string' ? +val : val;
-	            dur = create__createDuration(val, period);
-	            add_subtract__addSubtract(this, dur, direction);
+	            dur = createDuration(val, period);
+	            addSubtract(this, dur, direction);
 	            return this;
 	        };
 	    }
 	
-	    function add_subtract__addSubtract(mom, duration, isAdding, updateOffset) {
+	    function addSubtract(mom, duration, isAdding, updateOffset) {
 	        var milliseconds = duration._milliseconds,
 	            days = absRound(duration._days),
 	            months = absRound(duration._months);
@@ -20438,34 +20580,34 @@
 	            mom._d.setTime(mom._d.valueOf() + milliseconds * isAdding);
 	        }
 	        if (days) {
-	            get_set__set(mom, 'Date', get_set__get(mom, 'Date') + days * isAdding);
+	            set$1(mom, 'Date', get(mom, 'Date') + days * isAdding);
 	        }
 	        if (months) {
-	            setMonth(mom, get_set__get(mom, 'Month') + months * isAdding);
+	            setMonth(mom, get(mom, 'Month') + months * isAdding);
 	        }
 	        if (updateOffset) {
-	            utils_hooks__hooks.updateOffset(mom, days || months);
+	            hooks.updateOffset(mom, days || months);
 	        }
 	    }
 	
-	    var add_subtract__add = createAdder(1, 'add');
-	    var add_subtract__subtract = createAdder(-1, 'subtract');
+	    var add = createAdder(1, 'add');
+	    var subtract = createAdder(-1, 'subtract');
 	
 	    function getCalendarFormat(myMoment, now) {
 	        var diff = myMoment.diff(now, 'days', true);
 	        return diff < -6 ? 'sameElse' : diff < -1 ? 'lastWeek' : diff < 0 ? 'lastDay' : diff < 1 ? 'sameDay' : diff < 2 ? 'nextDay' : diff < 7 ? 'nextWeek' : 'sameElse';
 	    }
 	
-	    function moment_calendar__calendar(time, formats) {
+	    function calendar$1(time, formats) {
 	        // We want to compare the start of today, vs this.
 	        // Getting start-of-today depends on whether we're local/utc/offset or not.
-	        var now = time || local__createLocal(),
+	        var now = time || createLocal(),
 	            sod = cloneWithOffset(now, this).startOf('day'),
-	            format = utils_hooks__hooks.calendarFormat(this, sod) || 'sameElse';
+	            format = hooks.calendarFormat(this, sod) || 'sameElse';
 	
 	        var output = formats && (isFunction(formats[format]) ? formats[format].call(this, now) : formats[format]);
 	
-	        return this.format(output || this.localeData().calendar(format, this, local__createLocal(now)));
+	        return this.format(output || this.localeData().calendar(format, this, createLocal(now)));
 	    }
 	
 	    function clone() {
@@ -20473,7 +20615,7 @@
 	    }
 	
 	    function isAfter(input, units) {
-	        var localInput = isMoment(input) ? input : local__createLocal(input);
+	        var localInput = isMoment(input) ? input : createLocal(input);
 	        if (!(this.isValid() && localInput.isValid())) {
 	            return false;
 	        }
@@ -20486,7 +20628,7 @@
 	    }
 	
 	    function isBefore(input, units) {
-	        var localInput = isMoment(input) ? input : local__createLocal(input);
+	        var localInput = isMoment(input) ? input : createLocal(input);
 	        if (!(this.isValid() && localInput.isValid())) {
 	            return false;
 	        }
@@ -20504,7 +20646,7 @@
 	    }
 	
 	    function isSame(input, units) {
-	        var localInput = isMoment(input) ? input : local__createLocal(input),
+	        var localInput = isMoment(input) ? input : createLocal(input),
 	            inputMs;
 	        if (!(this.isValid() && localInput.isValid())) {
 	            return false;
@@ -20585,14 +20727,14 @@
 	        return -(wholeMonthDiff + adjust) || 0;
 	    }
 	
-	    utils_hooks__hooks.defaultFormat = 'YYYY-MM-DDTHH:mm:ssZ';
-	    utils_hooks__hooks.defaultFormatUtc = 'YYYY-MM-DDTHH:mm:ss[Z]';
+	    hooks.defaultFormat = 'YYYY-MM-DDTHH:mm:ssZ';
+	    hooks.defaultFormatUtc = 'YYYY-MM-DDTHH:mm:ss[Z]';
 	
 	    function toString() {
 	        return this.clone().locale('en').format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
 	    }
 	
-	    function moment_format__toISOString() {
+	    function toISOString() {
 	        var m = this.clone().utc();
 	        if (0 < m.year() && m.year() <= 9999) {
 	            if (isFunction(Date.prototype.toISOString)) {
@@ -20606,36 +20748,60 @@
 	        }
 	    }
 	
+	    /**
+	     * Return a human readable representation of a moment that can
+	     * also be evaluated to get a new moment which is the same
+	     *
+	     * @link https://nodejs.org/dist/latest/docs/api/util.html#util_custom_inspect_function_on_objects
+	     */
+	    function inspect() {
+	        if (!this.isValid()) {
+	            return 'moment.invalid(/* ' + this._i + ' */)';
+	        }
+	        var func = 'moment';
+	        var zone = '';
+	        if (!this.isLocal()) {
+	            func = this.utcOffset() === 0 ? 'moment.utc' : 'moment.parseZone';
+	            zone = 'Z';
+	        }
+	        var prefix = '[' + func + '("]';
+	        var year = 0 < this.year() && this.year() <= 9999 ? 'YYYY' : 'YYYYYY';
+	        var datetime = '-MM-DD[T]HH:mm:ss.SSS';
+	        var suffix = zone + '[")]';
+	
+	        return this.format(prefix + year + datetime + suffix);
+	    }
+	
 	    function format(inputString) {
 	        if (!inputString) {
-	            inputString = this.isUtc() ? utils_hooks__hooks.defaultFormatUtc : utils_hooks__hooks.defaultFormat;
+	            inputString = this.isUtc() ? hooks.defaultFormatUtc : hooks.defaultFormat;
 	        }
 	        var output = formatMoment(this, inputString);
 	        return this.localeData().postformat(output);
 	    }
 	
 	    function from(time, withoutSuffix) {
-	        if (this.isValid() && (isMoment(time) && time.isValid() || local__createLocal(time).isValid())) {
-	            return create__createDuration({ to: this, from: time }).locale(this.locale()).humanize(!withoutSuffix);
+	        if (this.isValid() && (isMoment(time) && time.isValid() || createLocal(time).isValid())) {
+	            return createDuration({ to: this, from: time }).locale(this.locale()).humanize(!withoutSuffix);
 	        } else {
 	            return this.localeData().invalidDate();
 	        }
 	    }
 	
 	    function fromNow(withoutSuffix) {
-	        return this.from(local__createLocal(), withoutSuffix);
+	        return this.from(createLocal(), withoutSuffix);
 	    }
 	
 	    function to(time, withoutSuffix) {
-	        if (this.isValid() && (isMoment(time) && time.isValid() || local__createLocal(time).isValid())) {
-	            return create__createDuration({ from: this, to: time }).locale(this.locale()).humanize(!withoutSuffix);
+	        if (this.isValid() && (isMoment(time) && time.isValid() || createLocal(time).isValid())) {
+	            return createDuration({ from: this, to: time }).locale(this.locale()).humanize(!withoutSuffix);
 	        } else {
 	            return this.localeData().invalidDate();
 	        }
 	    }
 	
 	    function toNow(withoutSuffix) {
-	        return this.to(local__createLocal(), withoutSuffix);
+	        return this.to(createLocal(), withoutSuffix);
 	    }
 	
 	    // If passed a locale key, it will set the locale for this
@@ -20647,7 +20813,7 @@
 	        if (key === undefined) {
 	            return this._locale._abbr;
 	        } else {
-	            newLocaleData = locale_locales__getLocale(key);
+	            newLocaleData = getLocale(key);
 	            if (newLocaleData != null) {
 	                this._locale = newLocaleData;
 	            }
@@ -20725,7 +20891,7 @@
 	        return this.startOf(units).add(1, units === 'isoWeek' ? 'week' : units).subtract(1, 'ms');
 	    }
 	
-	    function to_type__valueOf() {
+	    function valueOf() {
 	        return this._d.valueOf() - (this._offset || 0) * 60000;
 	    }
 	
@@ -20760,8 +20926,8 @@
 	        return this.isValid() ? this.toISOString() : null;
 	    }
 	
-	    function moment_valid__isValid() {
-	        return valid__isValid(this);
+	    function isValid$1() {
+	        return isValid(this);
 	    }
 	
 	    function parsingFlags() {
@@ -20827,7 +20993,7 @@
 	    });
 	
 	    addWeekParseToken(['gg', 'GG'], function (input, week, config, token) {
-	        week[token] = utils_hooks__hooks.parseTwoDigitYear(input);
+	        week[token] = hooks.parseTwoDigitYear(input);
 	    });
 	
 	    // MOMENTS
@@ -21072,169 +21238,168 @@
 	        return this._isUTC ? 'Coordinated Universal Time' : '';
 	    }
 	
-	    var momentPrototype__proto = Moment.prototype;
+	    var proto = Moment.prototype;
 	
-	    momentPrototype__proto.add = add_subtract__add;
-	    momentPrototype__proto.calendar = moment_calendar__calendar;
-	    momentPrototype__proto.clone = clone;
-	    momentPrototype__proto.diff = diff;
-	    momentPrototype__proto.endOf = endOf;
-	    momentPrototype__proto.format = format;
-	    momentPrototype__proto.from = from;
-	    momentPrototype__proto.fromNow = fromNow;
-	    momentPrototype__proto.to = to;
-	    momentPrototype__proto.toNow = toNow;
-	    momentPrototype__proto.get = stringGet;
-	    momentPrototype__proto.invalidAt = invalidAt;
-	    momentPrototype__proto.isAfter = isAfter;
-	    momentPrototype__proto.isBefore = isBefore;
-	    momentPrototype__proto.isBetween = isBetween;
-	    momentPrototype__proto.isSame = isSame;
-	    momentPrototype__proto.isSameOrAfter = isSameOrAfter;
-	    momentPrototype__proto.isSameOrBefore = isSameOrBefore;
-	    momentPrototype__proto.isValid = moment_valid__isValid;
-	    momentPrototype__proto.lang = lang;
-	    momentPrototype__proto.locale = locale;
-	    momentPrototype__proto.localeData = localeData;
-	    momentPrototype__proto.max = prototypeMax;
-	    momentPrototype__proto.min = prototypeMin;
-	    momentPrototype__proto.parsingFlags = parsingFlags;
-	    momentPrototype__proto.set = stringSet;
-	    momentPrototype__proto.startOf = startOf;
-	    momentPrototype__proto.subtract = add_subtract__subtract;
-	    momentPrototype__proto.toArray = toArray;
-	    momentPrototype__proto.toObject = toObject;
-	    momentPrototype__proto.toDate = toDate;
-	    momentPrototype__proto.toISOString = moment_format__toISOString;
-	    momentPrototype__proto.toJSON = toJSON;
-	    momentPrototype__proto.toString = toString;
-	    momentPrototype__proto.unix = unix;
-	    momentPrototype__proto.valueOf = to_type__valueOf;
-	    momentPrototype__proto.creationData = creationData;
+	    proto.add = add;
+	    proto.calendar = calendar$1;
+	    proto.clone = clone;
+	    proto.diff = diff;
+	    proto.endOf = endOf;
+	    proto.format = format;
+	    proto.from = from;
+	    proto.fromNow = fromNow;
+	    proto.to = to;
+	    proto.toNow = toNow;
+	    proto.get = stringGet;
+	    proto.invalidAt = invalidAt;
+	    proto.isAfter = isAfter;
+	    proto.isBefore = isBefore;
+	    proto.isBetween = isBetween;
+	    proto.isSame = isSame;
+	    proto.isSameOrAfter = isSameOrAfter;
+	    proto.isSameOrBefore = isSameOrBefore;
+	    proto.isValid = isValid$1;
+	    proto.lang = lang;
+	    proto.locale = locale;
+	    proto.localeData = localeData;
+	    proto.max = prototypeMax;
+	    proto.min = prototypeMin;
+	    proto.parsingFlags = parsingFlags;
+	    proto.set = stringSet;
+	    proto.startOf = startOf;
+	    proto.subtract = subtract;
+	    proto.toArray = toArray;
+	    proto.toObject = toObject;
+	    proto.toDate = toDate;
+	    proto.toISOString = toISOString;
+	    proto.inspect = inspect;
+	    proto.toJSON = toJSON;
+	    proto.toString = toString;
+	    proto.unix = unix;
+	    proto.valueOf = valueOf;
+	    proto.creationData = creationData;
 	
 	    // Year
-	    momentPrototype__proto.year = getSetYear;
-	    momentPrototype__proto.isLeapYear = getIsLeapYear;
+	    proto.year = getSetYear;
+	    proto.isLeapYear = getIsLeapYear;
 	
 	    // Week Year
-	    momentPrototype__proto.weekYear = getSetWeekYear;
-	    momentPrototype__proto.isoWeekYear = getSetISOWeekYear;
+	    proto.weekYear = getSetWeekYear;
+	    proto.isoWeekYear = getSetISOWeekYear;
 	
 	    // Quarter
-	    momentPrototype__proto.quarter = momentPrototype__proto.quarters = getSetQuarter;
+	    proto.quarter = proto.quarters = getSetQuarter;
 	
 	    // Month
-	    momentPrototype__proto.month = getSetMonth;
-	    momentPrototype__proto.daysInMonth = getDaysInMonth;
+	    proto.month = getSetMonth;
+	    proto.daysInMonth = getDaysInMonth;
 	
 	    // Week
-	    momentPrototype__proto.week = momentPrototype__proto.weeks = getSetWeek;
-	    momentPrototype__proto.isoWeek = momentPrototype__proto.isoWeeks = getSetISOWeek;
-	    momentPrototype__proto.weeksInYear = getWeeksInYear;
-	    momentPrototype__proto.isoWeeksInYear = getISOWeeksInYear;
+	    proto.week = proto.weeks = getSetWeek;
+	    proto.isoWeek = proto.isoWeeks = getSetISOWeek;
+	    proto.weeksInYear = getWeeksInYear;
+	    proto.isoWeeksInYear = getISOWeeksInYear;
 	
 	    // Day
-	    momentPrototype__proto.date = getSetDayOfMonth;
-	    momentPrototype__proto.day = momentPrototype__proto.days = getSetDayOfWeek;
-	    momentPrototype__proto.weekday = getSetLocaleDayOfWeek;
-	    momentPrototype__proto.isoWeekday = getSetISODayOfWeek;
-	    momentPrototype__proto.dayOfYear = getSetDayOfYear;
+	    proto.date = getSetDayOfMonth;
+	    proto.day = proto.days = getSetDayOfWeek;
+	    proto.weekday = getSetLocaleDayOfWeek;
+	    proto.isoWeekday = getSetISODayOfWeek;
+	    proto.dayOfYear = getSetDayOfYear;
 	
 	    // Hour
-	    momentPrototype__proto.hour = momentPrototype__proto.hours = getSetHour;
+	    proto.hour = proto.hours = getSetHour;
 	
 	    // Minute
-	    momentPrototype__proto.minute = momentPrototype__proto.minutes = getSetMinute;
+	    proto.minute = proto.minutes = getSetMinute;
 	
 	    // Second
-	    momentPrototype__proto.second = momentPrototype__proto.seconds = getSetSecond;
+	    proto.second = proto.seconds = getSetSecond;
 	
 	    // Millisecond
-	    momentPrototype__proto.millisecond = momentPrototype__proto.milliseconds = getSetMillisecond;
+	    proto.millisecond = proto.milliseconds = getSetMillisecond;
 	
 	    // Offset
-	    momentPrototype__proto.utcOffset = getSetOffset;
-	    momentPrototype__proto.utc = setOffsetToUTC;
-	    momentPrototype__proto.local = setOffsetToLocal;
-	    momentPrototype__proto.parseZone = setOffsetToParsedOffset;
-	    momentPrototype__proto.hasAlignedHourOffset = hasAlignedHourOffset;
-	    momentPrototype__proto.isDST = isDaylightSavingTime;
-	    momentPrototype__proto.isLocal = isLocal;
-	    momentPrototype__proto.isUtcOffset = isUtcOffset;
-	    momentPrototype__proto.isUtc = isUtc;
-	    momentPrototype__proto.isUTC = isUtc;
+	    proto.utcOffset = getSetOffset;
+	    proto.utc = setOffsetToUTC;
+	    proto.local = setOffsetToLocal;
+	    proto.parseZone = setOffsetToParsedOffset;
+	    proto.hasAlignedHourOffset = hasAlignedHourOffset;
+	    proto.isDST = isDaylightSavingTime;
+	    proto.isLocal = isLocal;
+	    proto.isUtcOffset = isUtcOffset;
+	    proto.isUtc = isUtc;
+	    proto.isUTC = isUtc;
 	
 	    // Timezone
-	    momentPrototype__proto.zoneAbbr = getZoneAbbr;
-	    momentPrototype__proto.zoneName = getZoneName;
+	    proto.zoneAbbr = getZoneAbbr;
+	    proto.zoneName = getZoneName;
 	
 	    // Deprecations
-	    momentPrototype__proto.dates = deprecate('dates accessor is deprecated. Use date instead.', getSetDayOfMonth);
-	    momentPrototype__proto.months = deprecate('months accessor is deprecated. Use month instead', getSetMonth);
-	    momentPrototype__proto.years = deprecate('years accessor is deprecated. Use year instead', getSetYear);
-	    momentPrototype__proto.zone = deprecate('moment().zone is deprecated, use moment().utcOffset instead. http://momentjs.com/guides/#/warnings/zone/', getSetZone);
-	    momentPrototype__proto.isDSTShifted = deprecate('isDSTShifted is deprecated. See http://momentjs.com/guides/#/warnings/dst-shifted/ for more information', isDaylightSavingTimeShifted);
+	    proto.dates = deprecate('dates accessor is deprecated. Use date instead.', getSetDayOfMonth);
+	    proto.months = deprecate('months accessor is deprecated. Use month instead', getSetMonth);
+	    proto.years = deprecate('years accessor is deprecated. Use year instead', getSetYear);
+	    proto.zone = deprecate('moment().zone is deprecated, use moment().utcOffset instead. http://momentjs.com/guides/#/warnings/zone/', getSetZone);
+	    proto.isDSTShifted = deprecate('isDSTShifted is deprecated. See http://momentjs.com/guides/#/warnings/dst-shifted/ for more information', isDaylightSavingTimeShifted);
 	
-	    var momentPrototype = momentPrototype__proto;
-	
-	    function moment__createUnix(input) {
-	        return local__createLocal(input * 1000);
+	    function createUnix(input) {
+	        return createLocal(input * 1000);
 	    }
 	
-	    function moment__createInZone() {
-	        return local__createLocal.apply(null, arguments).parseZone();
+	    function createInZone() {
+	        return createLocal.apply(null, arguments).parseZone();
 	    }
 	
 	    function preParsePostFormat(string) {
 	        return string;
 	    }
 	
-	    var prototype__proto = Locale.prototype;
+	    var proto$1 = Locale.prototype;
 	
-	    prototype__proto.calendar = locale_calendar__calendar;
-	    prototype__proto.longDateFormat = longDateFormat;
-	    prototype__proto.invalidDate = invalidDate;
-	    prototype__proto.ordinal = ordinal;
-	    prototype__proto.preparse = preParsePostFormat;
-	    prototype__proto.postformat = preParsePostFormat;
-	    prototype__proto.relativeTime = relative__relativeTime;
-	    prototype__proto.pastFuture = pastFuture;
-	    prototype__proto.set = locale_set__set;
+	    proto$1.calendar = calendar;
+	    proto$1.longDateFormat = longDateFormat;
+	    proto$1.invalidDate = invalidDate;
+	    proto$1.ordinal = ordinal;
+	    proto$1.preparse = preParsePostFormat;
+	    proto$1.postformat = preParsePostFormat;
+	    proto$1.relativeTime = relativeTime;
+	    proto$1.pastFuture = pastFuture;
+	    proto$1.set = set;
 	
 	    // Month
-	    prototype__proto.months = localeMonths;
-	    prototype__proto.monthsShort = localeMonthsShort;
-	    prototype__proto.monthsParse = localeMonthsParse;
-	    prototype__proto.monthsRegex = monthsRegex;
-	    prototype__proto.monthsShortRegex = monthsShortRegex;
+	    proto$1.months = localeMonths;
+	    proto$1.monthsShort = localeMonthsShort;
+	    proto$1.monthsParse = localeMonthsParse;
+	    proto$1.monthsRegex = monthsRegex;
+	    proto$1.monthsShortRegex = monthsShortRegex;
 	
 	    // Week
-	    prototype__proto.week = localeWeek;
-	    prototype__proto.firstDayOfYear = localeFirstDayOfYear;
-	    prototype__proto.firstDayOfWeek = localeFirstDayOfWeek;
+	    proto$1.week = localeWeek;
+	    proto$1.firstDayOfYear = localeFirstDayOfYear;
+	    proto$1.firstDayOfWeek = localeFirstDayOfWeek;
 	
 	    // Day of Week
-	    prototype__proto.weekdays = localeWeekdays;
-	    prototype__proto.weekdaysMin = localeWeekdaysMin;
-	    prototype__proto.weekdaysShort = localeWeekdaysShort;
-	    prototype__proto.weekdaysParse = localeWeekdaysParse;
+	    proto$1.weekdays = localeWeekdays;
+	    proto$1.weekdaysMin = localeWeekdaysMin;
+	    proto$1.weekdaysShort = localeWeekdaysShort;
+	    proto$1.weekdaysParse = localeWeekdaysParse;
 	
-	    prototype__proto.weekdaysRegex = weekdaysRegex;
-	    prototype__proto.weekdaysShortRegex = weekdaysShortRegex;
-	    prototype__proto.weekdaysMinRegex = weekdaysMinRegex;
+	    proto$1.weekdaysRegex = weekdaysRegex;
+	    proto$1.weekdaysShortRegex = weekdaysShortRegex;
+	    proto$1.weekdaysMinRegex = weekdaysMinRegex;
 	
 	    // Hours
-	    prototype__proto.isPM = localeIsPM;
-	    prototype__proto.meridiem = localeMeridiem;
+	    proto$1.isPM = localeIsPM;
+	    proto$1.meridiem = localeMeridiem;
 	
-	    function lists__get(format, index, field, setter) {
-	        var locale = locale_locales__getLocale();
-	        var utc = create_utc__createUTC().set(setter, index);
+	    function get$1(format, index, field, setter) {
+	        var locale = getLocale();
+	        var utc = createUTC().set(setter, index);
 	        return locale[field](utc, format);
 	    }
 	
 	    function listMonthsImpl(format, index, field) {
-	        if (typeof format === 'number') {
+	        if (isNumber(format)) {
 	            index = format;
 	            format = undefined;
 	        }
@@ -21242,13 +21407,13 @@
 	        format = format || '';
 	
 	        if (index != null) {
-	            return lists__get(format, index, field, 'month');
+	            return get$1(format, index, field, 'month');
 	        }
 	
 	        var i;
 	        var out = [];
 	        for (i = 0; i < 12; i++) {
-	            out[i] = lists__get(format, i, field, 'month');
+	            out[i] = get$1(format, i, field, 'month');
 	        }
 	        return out;
 	    }
@@ -21263,7 +21428,7 @@
 	    // (true, fmt)
 	    function listWeekdaysImpl(localeSorted, format, index, field) {
 	        if (typeof localeSorted === 'boolean') {
-	            if (typeof format === 'number') {
+	            if (isNumber(format)) {
 	                index = format;
 	                format = undefined;
 	            }
@@ -21274,7 +21439,7 @@
 	            index = format;
 	            localeSorted = false;
 	
-	            if (typeof format === 'number') {
+	            if (isNumber(format)) {
 	                index = format;
 	                format = undefined;
 	            }
@@ -21282,42 +21447,42 @@
 	            format = format || '';
 	        }
 	
-	        var locale = locale_locales__getLocale(),
+	        var locale = getLocale(),
 	            shift = localeSorted ? locale._week.dow : 0;
 	
 	        if (index != null) {
-	            return lists__get(format, (index + shift) % 7, field, 'day');
+	            return get$1(format, (index + shift) % 7, field, 'day');
 	        }
 	
 	        var i;
 	        var out = [];
 	        for (i = 0; i < 7; i++) {
-	            out[i] = lists__get(format, (i + shift) % 7, field, 'day');
+	            out[i] = get$1(format, (i + shift) % 7, field, 'day');
 	        }
 	        return out;
 	    }
 	
-	    function lists__listMonths(format, index) {
+	    function listMonths(format, index) {
 	        return listMonthsImpl(format, index, 'months');
 	    }
 	
-	    function lists__listMonthsShort(format, index) {
+	    function listMonthsShort(format, index) {
 	        return listMonthsImpl(format, index, 'monthsShort');
 	    }
 	
-	    function lists__listWeekdays(localeSorted, format, index) {
+	    function listWeekdays(localeSorted, format, index) {
 	        return listWeekdaysImpl(localeSorted, format, index, 'weekdays');
 	    }
 	
-	    function lists__listWeekdaysShort(localeSorted, format, index) {
+	    function listWeekdaysShort(localeSorted, format, index) {
 	        return listWeekdaysImpl(localeSorted, format, index, 'weekdaysShort');
 	    }
 	
-	    function lists__listWeekdaysMin(localeSorted, format, index) {
+	    function listWeekdaysMin(localeSorted, format, index) {
 	        return listWeekdaysImpl(localeSorted, format, index, 'weekdaysMin');
 	    }
 	
-	    locale_locales__getSetGlobalLocale('en', {
+	    getSetGlobalLocale('en', {
 	        ordinalParse: /\d{1,2}(th|st|nd|rd)/,
 	        ordinal: function ordinal(number) {
 	            var b = number % 10,
@@ -21327,12 +21492,12 @@
 	    });
 	
 	    // Side effect imports
-	    utils_hooks__hooks.lang = deprecate('moment.lang is deprecated. Use moment.locale instead.', locale_locales__getSetGlobalLocale);
-	    utils_hooks__hooks.langData = deprecate('moment.langData is deprecated. Use moment.localeData instead.', locale_locales__getLocale);
+	    hooks.lang = deprecate('moment.lang is deprecated. Use moment.locale instead.', getSetGlobalLocale);
+	    hooks.langData = deprecate('moment.langData is deprecated. Use moment.localeData instead.', getLocale);
 	
 	    var mathAbs = Math.abs;
 	
-	    function duration_abs__abs() {
+	    function abs() {
 	        var data = this._data;
 	
 	        this._milliseconds = mathAbs(this._milliseconds);
@@ -21349,8 +21514,8 @@
 	        return this;
 	    }
 	
-	    function duration_add_subtract__addSubtract(duration, input, value, direction) {
-	        var other = create__createDuration(input, value);
+	    function addSubtract$1(duration, input, value, direction) {
+	        var other = createDuration(input, value);
 	
 	        duration._milliseconds += direction * other._milliseconds;
 	        duration._days += direction * other._days;
@@ -21360,13 +21525,13 @@
 	    }
 	
 	    // supports only 2.0-style add(1, 's') or add(duration)
-	    function duration_add_subtract__add(input, value) {
-	        return duration_add_subtract__addSubtract(this, input, value, 1);
+	    function add$1(input, value) {
+	        return addSubtract$1(this, input, value, 1);
 	    }
 	
 	    // supports only 2.0-style subtract(1, 's') or subtract(duration)
-	    function duration_add_subtract__subtract(input, value) {
-	        return duration_add_subtract__addSubtract(this, input, value, -1);
+	    function subtract$1(input, value) {
+	        return addSubtract$1(this, input, value, -1);
 	    }
 	
 	    function absCeil(number) {
@@ -21469,7 +21634,7 @@
 	    }
 	
 	    // TODO: Use this.as('ms')?
-	    function duration_as__valueOf() {
+	    function valueOf$1() {
 	        return this._milliseconds + this._days * 864e5 + this._months % 12 * 2592e6 + toInt(this._months / 12) * 31536e6;
 	    }
 	
@@ -21488,7 +21653,7 @@
 	    var asMonths = makeAs('M');
 	    var asYears = makeAs('y');
 	
-	    function duration_get__get(units) {
+	    function get$2(units) {
 	        units = normalizeUnits(units);
 	        return this[units + 's']();
 	    }
@@ -21525,8 +21690,8 @@
 	        return locale.relativeTime(number || 1, !!withoutSuffix, string, isFuture);
 	    }
 	
-	    function duration_humanize__relativeTime(posNegDuration, withoutSuffix, locale) {
-	        var duration = create__createDuration(posNegDuration).abs();
+	    function relativeTime$1(posNegDuration, withoutSuffix, locale) {
+	        var duration = createDuration(posNegDuration).abs();
 	        var seconds = round(duration.as('s'));
 	        var minutes = round(duration.as('m'));
 	        var hours = round(duration.as('h'));
@@ -21543,7 +21708,7 @@
 	    }
 	
 	    // This function allows you to set the rounding function for relative time strings
-	    function duration_humanize__getSetRelativeTimeRounding(roundingFunction) {
+	    function getSetRelativeTimeRounding(roundingFunction) {
 	        if (roundingFunction === undefined) {
 	            return round;
 	        }
@@ -21555,7 +21720,7 @@
 	    }
 	
 	    // This function allows you to set a threshold for relative time strings
-	    function duration_humanize__getSetRelativeTimeThreshold(threshold, limit) {
+	    function getSetRelativeTimeThreshold(threshold, limit) {
 	        if (thresholds[threshold] === undefined) {
 	            return false;
 	        }
@@ -21568,7 +21733,7 @@
 	
 	    function humanize(withSuffix) {
 	        var locale = this.localeData();
-	        var output = duration_humanize__relativeTime(this, !withSuffix, locale);
+	        var output = relativeTime$1(this, !withSuffix, locale);
 	
 	        if (withSuffix) {
 	            output = locale.pastFuture(+this, output);
@@ -21577,9 +21742,9 @@
 	        return locale.postformat(output);
 	    }
 	
-	    var iso_string__abs = Math.abs;
+	    var abs$1 = Math.abs;
 	
-	    function iso_string__toISOString() {
+	    function toISOString$1() {
 	        // for ISO strings we do not use the normal bubbling rules:
 	        //  * milliseconds bubble up until they become hours
 	        //  * days do not bubble at all
@@ -21587,9 +21752,9 @@
 	        // This is because there is no context-free conversion between hours and days
 	        // (think of clock changes)
 	        // and also not between days and months (28-31 days per month)
-	        var seconds = iso_string__abs(this._milliseconds) / 1000;
-	        var days = iso_string__abs(this._days);
-	        var months = iso_string__abs(this._months);
+	        var seconds = abs$1(this._milliseconds) / 1000;
+	        var days = abs$1(this._days);
+	        var months = abs$1(this._months);
 	        var minutes, hours, years;
 	
 	        // 3600 seconds -> 60 minutes -> 1 hour
@@ -21620,41 +21785,41 @@
 	        return (total < 0 ? '-' : '') + 'P' + (Y ? Y + 'Y' : '') + (M ? M + 'M' : '') + (D ? D + 'D' : '') + (h || m || s ? 'T' : '') + (h ? h + 'H' : '') + (m ? m + 'M' : '') + (s ? s + 'S' : '');
 	    }
 	
-	    var duration_prototype__proto = Duration.prototype;
+	    var proto$2 = Duration.prototype;
 	
-	    duration_prototype__proto.abs = duration_abs__abs;
-	    duration_prototype__proto.add = duration_add_subtract__add;
-	    duration_prototype__proto.subtract = duration_add_subtract__subtract;
-	    duration_prototype__proto.as = as;
-	    duration_prototype__proto.asMilliseconds = asMilliseconds;
-	    duration_prototype__proto.asSeconds = asSeconds;
-	    duration_prototype__proto.asMinutes = asMinutes;
-	    duration_prototype__proto.asHours = asHours;
-	    duration_prototype__proto.asDays = asDays;
-	    duration_prototype__proto.asWeeks = asWeeks;
-	    duration_prototype__proto.asMonths = asMonths;
-	    duration_prototype__proto.asYears = asYears;
-	    duration_prototype__proto.valueOf = duration_as__valueOf;
-	    duration_prototype__proto._bubble = bubble;
-	    duration_prototype__proto.get = duration_get__get;
-	    duration_prototype__proto.milliseconds = milliseconds;
-	    duration_prototype__proto.seconds = seconds;
-	    duration_prototype__proto.minutes = minutes;
-	    duration_prototype__proto.hours = hours;
-	    duration_prototype__proto.days = days;
-	    duration_prototype__proto.weeks = weeks;
-	    duration_prototype__proto.months = months;
-	    duration_prototype__proto.years = years;
-	    duration_prototype__proto.humanize = humanize;
-	    duration_prototype__proto.toISOString = iso_string__toISOString;
-	    duration_prototype__proto.toString = iso_string__toISOString;
-	    duration_prototype__proto.toJSON = iso_string__toISOString;
-	    duration_prototype__proto.locale = locale;
-	    duration_prototype__proto.localeData = localeData;
+	    proto$2.abs = abs;
+	    proto$2.add = add$1;
+	    proto$2.subtract = subtract$1;
+	    proto$2.as = as;
+	    proto$2.asMilliseconds = asMilliseconds;
+	    proto$2.asSeconds = asSeconds;
+	    proto$2.asMinutes = asMinutes;
+	    proto$2.asHours = asHours;
+	    proto$2.asDays = asDays;
+	    proto$2.asWeeks = asWeeks;
+	    proto$2.asMonths = asMonths;
+	    proto$2.asYears = asYears;
+	    proto$2.valueOf = valueOf$1;
+	    proto$2._bubble = bubble;
+	    proto$2.get = get$2;
+	    proto$2.milliseconds = milliseconds;
+	    proto$2.seconds = seconds;
+	    proto$2.minutes = minutes;
+	    proto$2.hours = hours;
+	    proto$2.days = days;
+	    proto$2.weeks = weeks;
+	    proto$2.months = months;
+	    proto$2.years = years;
+	    proto$2.humanize = humanize;
+	    proto$2.toISOString = toISOString$1;
+	    proto$2.toString = toISOString$1;
+	    proto$2.toJSON = toISOString$1;
+	    proto$2.locale = locale;
+	    proto$2.localeData = localeData;
 	
 	    // Deprecations
-	    duration_prototype__proto.toIsoString = deprecate('toIsoString() is deprecated. Please use toISOString() instead (notice the capitals)', iso_string__toISOString);
-	    duration_prototype__proto.lang = lang;
+	    proto$2.toIsoString = deprecate('toIsoString() is deprecated. Please use toISOString() instead (notice the capitals)', toISOString$1);
+	    proto$2.lang = lang;
 	
 	    // Side effect imports
 	
@@ -21677,41 +21842,39 @@
 	    // Side effect imports
 	
 	
-	    utils_hooks__hooks.version = '2.15.1';
+	    hooks.version = '2.17.1';
 	
-	    setHookCallback(local__createLocal);
+	    setHookCallback(createLocal);
 	
-	    utils_hooks__hooks.fn = momentPrototype;
-	    utils_hooks__hooks.min = min;
-	    utils_hooks__hooks.max = max;
-	    utils_hooks__hooks.now = now;
-	    utils_hooks__hooks.utc = create_utc__createUTC;
-	    utils_hooks__hooks.unix = moment__createUnix;
-	    utils_hooks__hooks.months = lists__listMonths;
-	    utils_hooks__hooks.isDate = isDate;
-	    utils_hooks__hooks.locale = locale_locales__getSetGlobalLocale;
-	    utils_hooks__hooks.invalid = valid__createInvalid;
-	    utils_hooks__hooks.duration = create__createDuration;
-	    utils_hooks__hooks.isMoment = isMoment;
-	    utils_hooks__hooks.weekdays = lists__listWeekdays;
-	    utils_hooks__hooks.parseZone = moment__createInZone;
-	    utils_hooks__hooks.localeData = locale_locales__getLocale;
-	    utils_hooks__hooks.isDuration = isDuration;
-	    utils_hooks__hooks.monthsShort = lists__listMonthsShort;
-	    utils_hooks__hooks.weekdaysMin = lists__listWeekdaysMin;
-	    utils_hooks__hooks.defineLocale = defineLocale;
-	    utils_hooks__hooks.updateLocale = updateLocale;
-	    utils_hooks__hooks.locales = locale_locales__listLocales;
-	    utils_hooks__hooks.weekdaysShort = lists__listWeekdaysShort;
-	    utils_hooks__hooks.normalizeUnits = normalizeUnits;
-	    utils_hooks__hooks.relativeTimeRounding = duration_humanize__getSetRelativeTimeRounding;
-	    utils_hooks__hooks.relativeTimeThreshold = duration_humanize__getSetRelativeTimeThreshold;
-	    utils_hooks__hooks.calendarFormat = getCalendarFormat;
-	    utils_hooks__hooks.prototype = momentPrototype;
+	    hooks.fn = proto;
+	    hooks.min = min;
+	    hooks.max = max;
+	    hooks.now = now;
+	    hooks.utc = createUTC;
+	    hooks.unix = createUnix;
+	    hooks.months = listMonths;
+	    hooks.isDate = isDate;
+	    hooks.locale = getSetGlobalLocale;
+	    hooks.invalid = createInvalid;
+	    hooks.duration = createDuration;
+	    hooks.isMoment = isMoment;
+	    hooks.weekdays = listWeekdays;
+	    hooks.parseZone = createInZone;
+	    hooks.localeData = getLocale;
+	    hooks.isDuration = isDuration;
+	    hooks.monthsShort = listMonthsShort;
+	    hooks.weekdaysMin = listWeekdaysMin;
+	    hooks.defineLocale = defineLocale;
+	    hooks.updateLocale = updateLocale;
+	    hooks.locales = listLocales;
+	    hooks.weekdaysShort = listWeekdaysShort;
+	    hooks.normalizeUnits = normalizeUnits;
+	    hooks.relativeTimeRounding = getSetRelativeTimeRounding;
+	    hooks.relativeTimeThreshold = getSetRelativeTimeThreshold;
+	    hooks.calendarFormat = getCalendarFormat;
+	    hooks.prototype = proto;
 	
-	    var _moment = utils_hooks__hooks;
-	
-	    return _moment;
+	    return hooks;
 	});
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)(module)))
 
@@ -21723,211 +21886,219 @@
 		"./af": 7,
 		"./af.js": 7,
 		"./ar": 8,
-		"./ar-ly": 9,
-		"./ar-ly.js": 9,
-		"./ar-ma": 10,
-		"./ar-ma.js": 10,
-		"./ar-sa": 11,
-		"./ar-sa.js": 11,
-		"./ar-tn": 12,
-		"./ar-tn.js": 12,
+		"./ar-dz": 9,
+		"./ar-dz.js": 9,
+		"./ar-ly": 10,
+		"./ar-ly.js": 10,
+		"./ar-ma": 11,
+		"./ar-ma.js": 11,
+		"./ar-sa": 12,
+		"./ar-sa.js": 12,
+		"./ar-tn": 13,
+		"./ar-tn.js": 13,
 		"./ar.js": 8,
-		"./az": 13,
-		"./az.js": 13,
-		"./be": 14,
-		"./be.js": 14,
-		"./bg": 15,
-		"./bg.js": 15,
-		"./bn": 16,
-		"./bn.js": 16,
-		"./bo": 17,
-		"./bo.js": 17,
-		"./br": 18,
-		"./br.js": 18,
-		"./bs": 19,
-		"./bs.js": 19,
-		"./ca": 20,
-		"./ca.js": 20,
-		"./cs": 21,
-		"./cs.js": 21,
-		"./cv": 22,
-		"./cv.js": 22,
-		"./cy": 23,
-		"./cy.js": 23,
-		"./da": 24,
-		"./da.js": 24,
-		"./de": 25,
-		"./de-at": 26,
-		"./de-at.js": 26,
-		"./de.js": 25,
-		"./dv": 27,
-		"./dv.js": 27,
-		"./el": 28,
-		"./el.js": 28,
-		"./en-au": 29,
-		"./en-au.js": 29,
-		"./en-ca": 30,
-		"./en-ca.js": 30,
-		"./en-gb": 31,
-		"./en-gb.js": 31,
-		"./en-ie": 32,
-		"./en-ie.js": 32,
-		"./en-nz": 33,
-		"./en-nz.js": 33,
-		"./eo": 34,
-		"./eo.js": 34,
-		"./es": 35,
-		"./es-do": 36,
-		"./es-do.js": 36,
-		"./es.js": 35,
-		"./et": 37,
-		"./et.js": 37,
-		"./eu": 38,
-		"./eu.js": 38,
-		"./fa": 39,
-		"./fa.js": 39,
-		"./fi": 40,
-		"./fi.js": 40,
-		"./fo": 41,
-		"./fo.js": 41,
-		"./fr": 42,
-		"./fr-ca": 43,
-		"./fr-ca.js": 43,
-		"./fr-ch": 44,
-		"./fr-ch.js": 44,
-		"./fr.js": 42,
-		"./fy": 45,
-		"./fy.js": 45,
-		"./gd": 46,
-		"./gd.js": 46,
-		"./gl": 47,
-		"./gl.js": 47,
-		"./he": 48,
-		"./he.js": 48,
-		"./hi": 49,
-		"./hi.js": 49,
-		"./hr": 50,
-		"./hr.js": 50,
-		"./hu": 51,
-		"./hu.js": 51,
-		"./hy-am": 52,
-		"./hy-am.js": 52,
-		"./id": 53,
-		"./id.js": 53,
-		"./is": 54,
-		"./is.js": 54,
-		"./it": 55,
-		"./it.js": 55,
-		"./ja": 56,
-		"./ja.js": 56,
-		"./jv": 57,
-		"./jv.js": 57,
-		"./ka": 58,
-		"./ka.js": 58,
-		"./kk": 59,
-		"./kk.js": 59,
-		"./km": 60,
-		"./km.js": 60,
-		"./ko": 61,
-		"./ko.js": 61,
-		"./ky": 62,
-		"./ky.js": 62,
-		"./lb": 63,
-		"./lb.js": 63,
-		"./lo": 64,
-		"./lo.js": 64,
-		"./lt": 65,
-		"./lt.js": 65,
-		"./lv": 66,
-		"./lv.js": 66,
-		"./me": 67,
-		"./me.js": 67,
-		"./mi": 68,
-		"./mi.js": 68,
-		"./mk": 69,
-		"./mk.js": 69,
-		"./ml": 70,
-		"./ml.js": 70,
-		"./mr": 71,
-		"./mr.js": 71,
-		"./ms": 72,
-		"./ms-my": 73,
-		"./ms-my.js": 73,
-		"./ms.js": 72,
-		"./my": 74,
-		"./my.js": 74,
-		"./nb": 75,
-		"./nb.js": 75,
-		"./ne": 76,
-		"./ne.js": 76,
-		"./nl": 77,
-		"./nl.js": 77,
-		"./nn": 78,
-		"./nn.js": 78,
-		"./pa-in": 79,
-		"./pa-in.js": 79,
-		"./pl": 80,
-		"./pl.js": 80,
-		"./pt": 81,
-		"./pt-br": 82,
-		"./pt-br.js": 82,
-		"./pt.js": 81,
-		"./ro": 83,
-		"./ro.js": 83,
-		"./ru": 84,
-		"./ru.js": 84,
-		"./se": 85,
-		"./se.js": 85,
-		"./si": 86,
-		"./si.js": 86,
-		"./sk": 87,
-		"./sk.js": 87,
-		"./sl": 88,
-		"./sl.js": 88,
-		"./sq": 89,
-		"./sq.js": 89,
-		"./sr": 90,
-		"./sr-cyrl": 91,
-		"./sr-cyrl.js": 91,
-		"./sr.js": 90,
-		"./ss": 92,
-		"./ss.js": 92,
-		"./sv": 93,
-		"./sv.js": 93,
-		"./sw": 94,
-		"./sw.js": 94,
-		"./ta": 95,
-		"./ta.js": 95,
-		"./te": 96,
-		"./te.js": 96,
-		"./th": 97,
-		"./th.js": 97,
-		"./tl-ph": 98,
-		"./tl-ph.js": 98,
-		"./tlh": 99,
-		"./tlh.js": 99,
-		"./tr": 100,
-		"./tr.js": 100,
-		"./tzl": 101,
-		"./tzl.js": 101,
-		"./tzm": 102,
-		"./tzm-latn": 103,
-		"./tzm-latn.js": 103,
-		"./tzm.js": 102,
-		"./uk": 104,
-		"./uk.js": 104,
-		"./uz": 105,
-		"./uz.js": 105,
-		"./vi": 106,
-		"./vi.js": 106,
-		"./x-pseudo": 107,
-		"./x-pseudo.js": 107,
-		"./zh-cn": 108,
-		"./zh-cn.js": 108,
-		"./zh-hk": 109,
-		"./zh-hk.js": 109,
-		"./zh-tw": 110,
-		"./zh-tw.js": 110
+		"./az": 14,
+		"./az.js": 14,
+		"./be": 15,
+		"./be.js": 15,
+		"./bg": 16,
+		"./bg.js": 16,
+		"./bn": 17,
+		"./bn.js": 17,
+		"./bo": 18,
+		"./bo.js": 18,
+		"./br": 19,
+		"./br.js": 19,
+		"./bs": 20,
+		"./bs.js": 20,
+		"./ca": 21,
+		"./ca.js": 21,
+		"./cs": 22,
+		"./cs.js": 22,
+		"./cv": 23,
+		"./cv.js": 23,
+		"./cy": 24,
+		"./cy.js": 24,
+		"./da": 25,
+		"./da.js": 25,
+		"./de": 26,
+		"./de-at": 27,
+		"./de-at.js": 27,
+		"./de.js": 26,
+		"./dv": 28,
+		"./dv.js": 28,
+		"./el": 29,
+		"./el.js": 29,
+		"./en-au": 30,
+		"./en-au.js": 30,
+		"./en-ca": 31,
+		"./en-ca.js": 31,
+		"./en-gb": 32,
+		"./en-gb.js": 32,
+		"./en-ie": 33,
+		"./en-ie.js": 33,
+		"./en-nz": 34,
+		"./en-nz.js": 34,
+		"./eo": 35,
+		"./eo.js": 35,
+		"./es": 36,
+		"./es-do": 37,
+		"./es-do.js": 37,
+		"./es.js": 36,
+		"./et": 38,
+		"./et.js": 38,
+		"./eu": 39,
+		"./eu.js": 39,
+		"./fa": 40,
+		"./fa.js": 40,
+		"./fi": 41,
+		"./fi.js": 41,
+		"./fo": 42,
+		"./fo.js": 42,
+		"./fr": 43,
+		"./fr-ca": 44,
+		"./fr-ca.js": 44,
+		"./fr-ch": 45,
+		"./fr-ch.js": 45,
+		"./fr.js": 43,
+		"./fy": 46,
+		"./fy.js": 46,
+		"./gd": 47,
+		"./gd.js": 47,
+		"./gl": 48,
+		"./gl.js": 48,
+		"./he": 49,
+		"./he.js": 49,
+		"./hi": 50,
+		"./hi.js": 50,
+		"./hr": 51,
+		"./hr.js": 51,
+		"./hu": 52,
+		"./hu.js": 52,
+		"./hy-am": 53,
+		"./hy-am.js": 53,
+		"./id": 54,
+		"./id.js": 54,
+		"./is": 55,
+		"./is.js": 55,
+		"./it": 56,
+		"./it.js": 56,
+		"./ja": 57,
+		"./ja.js": 57,
+		"./jv": 58,
+		"./jv.js": 58,
+		"./ka": 59,
+		"./ka.js": 59,
+		"./kk": 60,
+		"./kk.js": 60,
+		"./km": 61,
+		"./km.js": 61,
+		"./ko": 62,
+		"./ko.js": 62,
+		"./ky": 63,
+		"./ky.js": 63,
+		"./lb": 64,
+		"./lb.js": 64,
+		"./lo": 65,
+		"./lo.js": 65,
+		"./lt": 66,
+		"./lt.js": 66,
+		"./lv": 67,
+		"./lv.js": 67,
+		"./me": 68,
+		"./me.js": 68,
+		"./mi": 69,
+		"./mi.js": 69,
+		"./mk": 70,
+		"./mk.js": 70,
+		"./ml": 71,
+		"./ml.js": 71,
+		"./mr": 72,
+		"./mr.js": 72,
+		"./ms": 73,
+		"./ms-my": 74,
+		"./ms-my.js": 74,
+		"./ms.js": 73,
+		"./my": 75,
+		"./my.js": 75,
+		"./nb": 76,
+		"./nb.js": 76,
+		"./ne": 77,
+		"./ne.js": 77,
+		"./nl": 78,
+		"./nl-be": 79,
+		"./nl-be.js": 79,
+		"./nl.js": 78,
+		"./nn": 80,
+		"./nn.js": 80,
+		"./pa-in": 81,
+		"./pa-in.js": 81,
+		"./pl": 82,
+		"./pl.js": 82,
+		"./pt": 83,
+		"./pt-br": 84,
+		"./pt-br.js": 84,
+		"./pt.js": 83,
+		"./ro": 85,
+		"./ro.js": 85,
+		"./ru": 86,
+		"./ru.js": 86,
+		"./se": 87,
+		"./se.js": 87,
+		"./si": 88,
+		"./si.js": 88,
+		"./sk": 89,
+		"./sk.js": 89,
+		"./sl": 90,
+		"./sl.js": 90,
+		"./sq": 91,
+		"./sq.js": 91,
+		"./sr": 92,
+		"./sr-cyrl": 93,
+		"./sr-cyrl.js": 93,
+		"./sr.js": 92,
+		"./ss": 94,
+		"./ss.js": 94,
+		"./sv": 95,
+		"./sv.js": 95,
+		"./sw": 96,
+		"./sw.js": 96,
+		"./ta": 97,
+		"./ta.js": 97,
+		"./te": 98,
+		"./te.js": 98,
+		"./tet": 99,
+		"./tet.js": 99,
+		"./th": 100,
+		"./th.js": 100,
+		"./tl-ph": 101,
+		"./tl-ph.js": 101,
+		"./tlh": 102,
+		"./tlh.js": 102,
+		"./tr": 103,
+		"./tr.js": 103,
+		"./tzl": 104,
+		"./tzl.js": 104,
+		"./tzm": 105,
+		"./tzm-latn": 106,
+		"./tzm-latn.js": 106,
+		"./tzm.js": 105,
+		"./uk": 107,
+		"./uk.js": 107,
+		"./uz": 108,
+		"./uz.js": 108,
+		"./vi": 109,
+		"./vi.js": 109,
+		"./x-pseudo": 110,
+		"./x-pseudo.js": 110,
+		"./yo": 111,
+		"./yo.js": 111,
+		"./zh-cn": 112,
+		"./zh-cn.js": 112,
+		"./zh-hk": 113,
+		"./zh-hk.js": 113,
+		"./zh-tw": 114,
+		"./zh-tw.js": 114
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -22052,8 +22223,8 @@
 	        '8': '٨',
 	        '9': '٩',
 	        '0': '٠'
-	    },
-	        numberMap = {
+	    };
+	    var numberMap = {
 	        '١': '1',
 	        '٢': '2',
 	        '٣': '3',
@@ -22064,19 +22235,19 @@
 	        '٨': '8',
 	        '٩': '9',
 	        '٠': '0'
-	    },
-	        pluralForm = function pluralForm(n) {
+	    };
+	    var pluralForm = function pluralForm(n) {
 	        return n === 0 ? 0 : n === 1 ? 1 : n === 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 ? 4 : 5;
-	    },
-	        plurals = {
+	    };
+	    var plurals = {
 	        s: ['أقل من ثانية', 'ثانية واحدة', ['ثانيتان', 'ثانيتين'], '%d ثوان', '%d ثانية', '%d ثانية'],
 	        m: ['أقل من دقيقة', 'دقيقة واحدة', ['دقيقتان', 'دقيقتين'], '%d دقائق', '%d دقيقة', '%d دقيقة'],
 	        h: ['أقل من ساعة', 'ساعة واحدة', ['ساعتان', 'ساعتين'], '%d ساعات', '%d ساعة', '%d ساعة'],
 	        d: ['أقل من يوم', 'يوم واحد', ['يومان', 'يومين'], '%d أيام', '%d يومًا', '%d يوم'],
 	        M: ['أقل من شهر', 'شهر واحد', ['شهران', 'شهرين'], '%d أشهر', '%d شهرا', '%d شهر'],
 	        y: ['أقل من عام', 'عام واحد', ['عامان', 'عامين'], '%d أعوام', '%d عامًا', '%d عام']
-	    },
-	        pluralize = function pluralize(u) {
+	    };
+	    var pluralize = function pluralize(u) {
 	        return function (number, withoutSuffix, string, isFuture) {
 	            var f = pluralForm(number),
 	                str = plurals[u][pluralForm(number)];
@@ -22085,8 +22256,8 @@
 	            }
 	            return str.replace(/%d/i, number);
 	        };
-	    },
-	        months = ['كانون الثاني يناير', 'شباط فبراير', 'آذار مارس', 'نيسان أبريل', 'أيار مايو', 'حزيران يونيو', 'تموز يوليو', 'آب أغسطس', 'أيلول سبتمبر', 'تشرين الأول أكتوبر', 'تشرين الثاني نوفمبر', 'كانون الأول ديسمبر'];
+	    };
+	    var months = ['كانون الثاني يناير', 'شباط فبراير', 'آذار مارس', 'نيسان أبريل', 'أيار مايو', 'حزيران يونيو', 'تموز يوليو', 'آب أغسطس', 'أيلول سبتمبر', 'تشرين الأول أكتوبر', 'تشرين الثاني نوفمبر', 'كانون الأول ديسمبر'];
 	
 	    var ar = moment.defineLocale('ar', {
 	        months: months,
@@ -22165,6 +22336,70 @@
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
 	//! moment.js locale configuration
+	//! locale : Arabic (Algeria) [ar-dz]
+	//! author : Noureddine LOUAHEDJ : https://github.com/noureddineme
+	
+	;(function (global, factory) {
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(5)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(5)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	})(undefined, function (moment) {
+	    'use strict';
+	
+	    var arDz = moment.defineLocale('ar-dz', {
+	        months: 'جانفي_فيفري_مارس_أفريل_ماي_جوان_جويلية_أوت_سبتمبر_أكتوبر_نوفمبر_ديسمبر'.split('_'),
+	        monthsShort: 'جانفي_فيفري_مارس_أفريل_ماي_جوان_جويلية_أوت_سبتمبر_أكتوبر_نوفمبر_ديسمبر'.split('_'),
+	        weekdays: 'الأحد_الإثنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت'.split('_'),
+	        weekdaysShort: 'احد_اثنين_ثلاثاء_اربعاء_خميس_جمعة_سبت'.split('_'),
+	        weekdaysMin: 'أح_إث_ثلا_أر_خم_جم_سب'.split('_'),
+	        weekdaysParseExact: true,
+	        longDateFormat: {
+	            LT: 'HH:mm',
+	            LTS: 'HH:mm:ss',
+	            L: 'DD/MM/YYYY',
+	            LL: 'D MMMM YYYY',
+	            LLL: 'D MMMM YYYY HH:mm',
+	            LLLL: 'dddd D MMMM YYYY HH:mm'
+	        },
+	        calendar: {
+	            sameDay: '[اليوم على الساعة] LT',
+	            nextDay: '[غدا على الساعة] LT',
+	            nextWeek: 'dddd [على الساعة] LT',
+	            lastDay: '[أمس على الساعة] LT',
+	            lastWeek: 'dddd [على الساعة] LT',
+	            sameElse: 'L'
+	        },
+	        relativeTime: {
+	            future: 'في %s',
+	            past: 'منذ %s',
+	            s: 'ثوان',
+	            m: 'دقيقة',
+	            mm: '%d دقائق',
+	            h: 'ساعة',
+	            hh: '%d ساعات',
+	            d: 'يوم',
+	            dd: '%d أيام',
+	            M: 'شهر',
+	            MM: '%d أشهر',
+	            y: 'سنة',
+	            yy: '%d سنوات'
+	        },
+	        week: {
+	            dow: 0, // Sunday is the first day of the week.
+	            doy: 4 // The week that contains Jan 1st is the first week of the year.
+	        }
+	    });
+	
+	    return arDz;
+	});
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	//! moment.js locale configuration
 	//! locale : Arabic (Lybia) [ar-ly]
 	//! author : Ali Hmer: https://github.com/kikoanis
 	
@@ -22184,19 +22419,19 @@
 	        '8': '8',
 	        '9': '9',
 	        '0': '0'
-	    },
-	        pluralForm = function pluralForm(n) {
+	    };
+	    var pluralForm = function pluralForm(n) {
 	        return n === 0 ? 0 : n === 1 ? 1 : n === 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 ? 4 : 5;
-	    },
-	        plurals = {
+	    };
+	    var plurals = {
 	        s: ['أقل من ثانية', 'ثانية واحدة', ['ثانيتان', 'ثانيتين'], '%d ثوان', '%d ثانية', '%d ثانية'],
 	        m: ['أقل من دقيقة', 'دقيقة واحدة', ['دقيقتان', 'دقيقتين'], '%d دقائق', '%d دقيقة', '%d دقيقة'],
 	        h: ['أقل من ساعة', 'ساعة واحدة', ['ساعتان', 'ساعتين'], '%d ساعات', '%d ساعة', '%d ساعة'],
 	        d: ['أقل من يوم', 'يوم واحد', ['يومان', 'يومين'], '%d أيام', '%d يومًا', '%d يوم'],
 	        M: ['أقل من شهر', 'شهر واحد', ['شهران', 'شهرين'], '%d أشهر', '%d شهرا', '%d شهر'],
 	        y: ['أقل من عام', 'عام واحد', ['عامان', 'عامين'], '%d أعوام', '%d عامًا', '%d عام']
-	    },
-	        pluralize = function pluralize(u) {
+	    };
+	    var pluralize = function pluralize(u) {
 	        return function (number, withoutSuffix, string, isFuture) {
 	            var f = pluralForm(number),
 	                str = plurals[u][pluralForm(number)];
@@ -22205,10 +22440,10 @@
 	            }
 	            return str.replace(/%d/i, number);
 	        };
-	    },
-	        months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+	    };
+	    var months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
 	
-	    var ar_ly = moment.defineLocale('ar-ly', {
+	    var arLy = moment.defineLocale('ar-ly', {
 	        months: months,
 	        monthsShort: months,
 	        weekdays: 'الأحد_الإثنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت'.split('_'),
@@ -22271,11 +22506,11 @@
 	        }
 	    });
 	
-	    return ar_ly;
+	    return arLy;
 	});
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -22292,7 +22527,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var ar_ma = moment.defineLocale('ar-ma', {
+	    var arMa = moment.defineLocale('ar-ma', {
 	        months: 'يناير_فبراير_مارس_أبريل_ماي_يونيو_يوليوز_غشت_شتنبر_أكتوبر_نونبر_دجنبر'.split('_'),
 	        monthsShort: 'يناير_فبراير_مارس_أبريل_ماي_يونيو_يوليوز_غشت_شتنبر_أكتوبر_نونبر_دجنبر'.split('_'),
 	        weekdays: 'الأحد_الإتنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت'.split('_'),
@@ -22336,11 +22571,11 @@
 	        }
 	    });
 	
-	    return ar_ma;
+	    return arMa;
 	});
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -22367,8 +22602,8 @@
 	        '8': '٨',
 	        '9': '٩',
 	        '0': '٠'
-	    },
-	        numberMap = {
+	    };
+	    var numberMap = {
 	        '١': '1',
 	        '٢': '2',
 	        '٣': '3',
@@ -22381,7 +22616,7 @@
 	        '٠': '0'
 	    };
 	
-	    var ar_sa = moment.defineLocale('ar-sa', {
+	    var arSa = moment.defineLocale('ar-sa', {
 	        months: 'يناير_فبراير_مارس_أبريل_مايو_يونيو_يوليو_أغسطس_سبتمبر_أكتوبر_نوفمبر_ديسمبر'.split('_'),
 	        monthsShort: 'يناير_فبراير_مارس_أبريل_مايو_يونيو_يوليو_أغسطس_سبتمبر_أكتوبر_نوفمبر_ديسمبر'.split('_'),
 	        weekdays: 'الأحد_الإثنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت'.split('_'),
@@ -22441,16 +22676,16 @@
 	            }).replace(/,/g, '،');
 	        },
 	        week: {
-	            dow: 6, // Saturday is the first day of the week.
-	            doy: 12 // The week that contains Jan 1st is the first week of the year.
+	            dow: 0, // Sunday is the first day of the week.
+	            doy: 6 // The week that contains Jan 1st is the first week of the year.
 	        }
 	    });
 	
-	    return ar_sa;
+	    return arSa;
 	});
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -22466,7 +22701,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var ar_tn = moment.defineLocale('ar-tn', {
+	    var arTn = moment.defineLocale('ar-tn', {
 	        months: 'جانفي_فيفري_مارس_أفريل_ماي_جوان_جويلية_أوت_سبتمبر_أكتوبر_نوفمبر_ديسمبر'.split('_'),
 	        monthsShort: 'جانفي_فيفري_مارس_أفريل_ماي_جوان_جويلية_أوت_سبتمبر_أكتوبر_نوفمبر_ديسمبر'.split('_'),
 	        weekdays: 'الأحد_الإثنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت'.split('_'),
@@ -22510,11 +22745,11 @@
 	        }
 	    });
 	
-	    return ar_tn;
+	    return arTn;
 	});
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -22626,7 +22861,7 @@
 	});
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -22764,7 +22999,7 @@
 	});
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -22859,7 +23094,7 @@
 	});
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -22886,8 +23121,8 @@
 	        '8': '৮',
 	        '9': '৯',
 	        '0': '০'
-	    },
-	        numberMap = {
+	    };
+	    var numberMap = {
 	        '১': '1',
 	        '২': '2',
 	        '৩': '3',
@@ -22981,7 +23216,7 @@
 	});
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -23008,8 +23243,8 @@
 	        '8': '༨',
 	        '9': '༩',
 	        '0': '༠'
-	    },
-	        numberMap = {
+	    };
+	    var numberMap = {
 	        '༡': '1',
 	        '༢': '2',
 	        '༣': '3',
@@ -23103,7 +23338,7 @@
 	});
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -23216,7 +23451,7 @@
 	});
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -23364,7 +23599,7 @@
 	});
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -23415,7 +23650,7 @@
 	            sameElse: 'L'
 	        },
 	        relativeTime: {
-	            future: 'en %s',
+	            future: 'd\'aquí %s',
 	            past: 'fa %s',
 	            s: 'uns segons',
 	            m: 'un minut',
@@ -23447,7 +23682,7 @@
 	});
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -23463,8 +23698,8 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var months = 'leden_únor_březen_duben_květen_červen_červenec_srpen_září_říjen_listopad_prosinec'.split('_'),
-	        monthsShort = 'led_úno_bře_dub_kvě_čvn_čvc_srp_zář_říj_lis_pro'.split('_');
+	    var months = 'leden_únor_březen_duben_květen_červen_červenec_srpen_září_říjen_listopad_prosinec'.split('_');
+	    var monthsShort = 'led_úno_bře_dub_kvě_čvn_čvc_srp_zář_říj_lis_pro'.split('_');
 	    function plural(n) {
 	        return n > 1 && n < 5 && ~~(n / 10) !== 1;
 	    }
@@ -23638,7 +23873,7 @@
 	});
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -23706,7 +23941,7 @@
 	});
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -23791,7 +24026,7 @@
 	});
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -23856,7 +24091,7 @@
 	});
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -23939,7 +24174,7 @@
 	});
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -23972,7 +24207,7 @@
 	        return withoutSuffix ? format[key][0] : format[key][1];
 	    }
 	
-	    var de_at = moment.defineLocale('de-at', {
+	    var deAt = moment.defineLocale('de-at', {
 	        months: 'Jänner_Februar_März_April_Mai_Juni_Juli_August_September_Oktober_November_Dezember'.split('_'),
 	        monthsShort: 'Jän._Febr._Mrz._Apr._Mai_Jun._Jul._Aug._Sept._Okt._Nov._Dez.'.split('_'),
 	        monthsParseExact: true,
@@ -24019,11 +24254,11 @@
 	        }
 	    });
 	
-	    return de_at;
+	    return deAt;
 	});
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -24039,8 +24274,8 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var months = ['ޖެނުއަރީ', 'ފެބްރުއަރީ', 'މާރިޗު', 'އޭޕްރީލު', 'މޭ', 'ޖޫން', 'ޖުލައި', 'އޯގަސްޓު', 'ސެޕްޓެމްބަރު', 'އޮކްޓޯބަރު', 'ނޮވެމްބަރު', 'ޑިސެމްބަރު'],
-	        weekdays = ['އާދިއްތަ', 'ހޯމަ', 'އަންގާރަ', 'ބުދަ', 'ބުރާސްފަތި', 'ހުކުރު', 'ހޮނިހިރު'];
+	    var months = ['ޖެނުއަރީ', 'ފެބްރުއަރީ', 'މާރިޗު', 'އޭޕްރީލު', 'މޭ', 'ޖޫން', 'ޖުލައި', 'އޯގަސްޓު', 'ސެޕްޓެމްބަރު', 'އޮކްޓޯބަރު', 'ނޮވެމްބަރު', 'ޑިސެމްބަރު'];
+	    var weekdays = ['އާދިއްތަ', 'ހޯމަ', 'އަންގާރަ', 'ބުދަ', 'ބުރާސްފަތި', 'ހުކުރު', 'ހޮނިހިރު'];
 	
 	    var dv = moment.defineLocale('dv', {
 	        months: months,
@@ -24107,7 +24342,7 @@
 	});
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -24211,7 +24446,7 @@
 	});
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -24227,7 +24462,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var en_au = moment.defineLocale('en-au', {
+	    var enAu = moment.defineLocale('en-au', {
 	        months: 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_'),
 	        monthsShort: 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_'),
 	        weekdays: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_'),
@@ -24276,11 +24511,11 @@
 	        }
 	    });
 	
-	    return en_au;
+	    return enAu;
 	});
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -24296,7 +24531,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var en_ca = moment.defineLocale('en-ca', {
+	    var enCa = moment.defineLocale('en-ca', {
 	        months: 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_'),
 	        monthsShort: 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_'),
 	        weekdays: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_'),
@@ -24341,11 +24576,11 @@
 	        }
 	    });
 	
-	    return en_ca;
+	    return enCa;
 	});
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -24361,7 +24596,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var en_gb = moment.defineLocale('en-gb', {
+	    var enGb = moment.defineLocale('en-gb', {
 	        months: 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_'),
 	        monthsShort: 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_'),
 	        weekdays: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_'),
@@ -24410,11 +24645,11 @@
 	        }
 	    });
 	
-	    return en_gb;
+	    return enGb;
 	});
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -24430,7 +24665,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var en_ie = moment.defineLocale('en-ie', {
+	    var enIe = moment.defineLocale('en-ie', {
 	        months: 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_'),
 	        monthsShort: 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_'),
 	        weekdays: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_'),
@@ -24479,11 +24714,11 @@
 	        }
 	    });
 	
-	    return en_ie;
+	    return enIe;
 	});
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -24499,7 +24734,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var en_nz = moment.defineLocale('en-nz', {
+	    var enNz = moment.defineLocale('en-nz', {
 	        months: 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_'),
 	        monthsShort: 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_'),
 	        weekdays: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_'),
@@ -24548,11 +24783,11 @@
 	        }
 	    });
 	
-	    return en_nz;
+	    return enNz;
 	});
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -24630,7 +24865,7 @@
 	});
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -24646,8 +24881,8 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var monthsShortDot = 'ene._feb._mar._abr._may._jun._jul._ago._sep._oct._nov._dic.'.split('_'),
-	        _monthsShort = 'ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic'.split('_');
+	    var monthsShortDot = 'ene._feb._mar._abr._may._jun._jul._ago._sep._oct._nov._dic.'.split('_');
+	    var _monthsShort = 'ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic'.split('_');
 	
 	    var es = moment.defineLocale('es', {
 	        months: 'enero_febrero_marzo_abril_mayo_junio_julio_agosto_septiembre_octubre_noviembre_diciembre'.split('_'),
@@ -24716,7 +24951,7 @@
 	});
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -24731,10 +24966,10 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var monthsShortDot = 'ene._feb._mar._abr._may._jun._jul._ago._sep._oct._nov._dic.'.split('_'),
-	        _monthsShort = 'ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic'.split('_');
+	    var monthsShortDot = 'ene._feb._mar._abr._may._jun._jul._ago._sep._oct._nov._dic.'.split('_');
+	    var _monthsShort = 'ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic'.split('_');
 	
-	    var es_do = moment.defineLocale('es-do', {
+	    var esDo = moment.defineLocale('es-do', {
 	        months: 'enero_febrero_marzo_abril_mayo_junio_julio_agosto_septiembre_octubre_noviembre_diciembre'.split('_'),
 	        monthsShort: function monthsShort(m, format) {
 	            if (/-MMM-/.test(format)) {
@@ -24797,11 +25032,11 @@
 	        }
 	    });
 	
-	    return es_do;
+	    return esDo;
 	});
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -24886,7 +25121,7 @@
 	});
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -24957,7 +25192,7 @@
 	});
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -24984,8 +25219,8 @@
 	        '8': '۸',
 	        '9': '۹',
 	        '0': '۰'
-	    },
-	        numberMap = {
+	    };
+	    var numberMap = {
 	        '۱': '1',
 	        '۲': '2',
 	        '۳': '3',
@@ -25070,7 +25305,7 @@
 	});
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -25086,8 +25321,8 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var numbersPast = 'nolla yksi kaksi kolme neljä viisi kuusi seitsemän kahdeksan yhdeksän'.split(' '),
-	        numbersFuture = ['nolla', 'yhden', 'kahden', 'kolmen', 'neljän', 'viiden', 'kuuden', numbersPast[7], numbersPast[8], numbersPast[9]];
+	    var numbersPast = 'nolla yksi kaksi kolme neljä viisi kuusi seitsemän kahdeksan yhdeksän'.split(' ');
+	    var numbersFuture = ['nolla', 'yhden', 'kahden', 'kolmen', 'neljän', 'viiden', 'kuuden', numbersPast[7], numbersPast[8], numbersPast[9]];
 	    function translate(number, withoutSuffix, key, isFuture) {
 	        var result = '';
 	        switch (key) {
@@ -25179,7 +25414,7 @@
 	});
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -25244,7 +25479,7 @@
 	});
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -25313,7 +25548,7 @@
 	});
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -25329,7 +25564,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var fr_ca = moment.defineLocale('fr-ca', {
+	    var frCa = moment.defineLocale('fr-ca', {
 	        months: 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
 	        monthsShort: 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split('_'),
 	        monthsParseExact: true,
@@ -25374,11 +25609,11 @@
 	        }
 	    });
 	
-	    return fr_ca;
+	    return frCa;
 	});
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -25394,7 +25629,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var fr_ch = moment.defineLocale('fr-ch', {
+	    var frCh = moment.defineLocale('fr-ch', {
 	        months: 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
 	        monthsShort: 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split('_'),
 	        monthsParseExact: true,
@@ -25443,11 +25678,11 @@
 	        }
 	    });
 	
-	    return fr_ch;
+	    return frCh;
 	});
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -25463,8 +25698,8 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var monthsShortWithDots = 'jan._feb._mrt._apr._mai_jun._jul._aug._sep._okt._nov._des.'.split('_'),
-	        monthsShortWithoutDots = 'jan_feb_mrt_apr_mai_jun_jul_aug_sep_okt_nov_des'.split('_');
+	    var monthsShortWithDots = 'jan._feb._mrt._apr._mai_jun._jul._aug._sep._okt._nov._des.'.split('_');
+	    var monthsShortWithoutDots = 'jan_feb_mrt_apr_mai_jun_jul_aug_sep_okt_nov_des'.split('_');
 	
 	    var fy = moment.defineLocale('fy', {
 	        months: 'jannewaris_febrewaris_maart_april_maaie_juny_july_augustus_septimber_oktober_novimber_desimber'.split('_'),
@@ -25525,7 +25760,7 @@
 	});
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -25604,7 +25839,7 @@
 	});
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -25686,7 +25921,7 @@
 	});
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -25791,7 +26026,7 @@
 	});
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -25818,8 +26053,8 @@
 	        '8': '८',
 	        '9': '९',
 	        '0': '०'
-	    },
-	        numberMap = {
+	    };
+	    var numberMap = {
 	        '१': '1',
 	        '२': '2',
 	        '३': '3',
@@ -25920,7 +26155,7 @@
 	});
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -26070,7 +26305,7 @@
 	});
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -26176,7 +26411,7 @@
 	        ordinal: '%d.',
 	        week: {
 	            dow: 1, // Monday is the first day of the week.
-	            doy: 7 // The week that contains Jan 1st is the first week of the year.
+	            doy: 4 // The week that contains Jan 4th is the first week of the year.
 	        }
 	    });
 	
@@ -26184,7 +26419,7 @@
 	});
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -26200,7 +26435,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var hy_am = moment.defineLocale('hy-am', {
+	    var hyAm = moment.defineLocale('hy-am', {
 	        months: {
 	            format: 'հունվարի_փետրվարի_մարտի_ապրիլի_մայիսի_հունիսի_հուլիսի_օգոստոսի_սեպտեմբերի_հոկտեմբերի_նոյեմբերի_դեկտեմբերի'.split('_'),
 	            standalone: 'հունվար_փետրվար_մարտ_ապրիլ_մայիս_հունիս_հուլիս_օգոստոս_սեպտեմբեր_հոկտեմբեր_նոյեմբեր_դեկտեմբեր'.split('_')
@@ -26281,11 +26516,11 @@
 	        }
 	    });
 	
-	    return hy_am;
+	    return hyAm;
 	});
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -26373,7 +26608,7 @@
 	});
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -26505,7 +26740,7 @@
 	});
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -26580,7 +26815,7 @@
 	});
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -26661,7 +26896,7 @@
 	});
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -26669,7 +26904,7 @@
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
 	//! moment.js locale configuration
-	//! locale : Japanese [jv]
+	//! locale : Javanese [jv]
 	//! author : Rony Lantip : https://github.com/lantip
 	//! reference: http://jv.wikipedia.org/wiki/Basa_Jawa
 	
@@ -26749,7 +26984,7 @@
 	});
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -26842,7 +27077,7 @@
 	});
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -26934,7 +27169,7 @@
 	});
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -26997,7 +27232,7 @@
 	});
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -27067,7 +27302,7 @@
 	});
 
 /***/ },
-/* 62 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -27159,7 +27394,7 @@
 	});
 
 /***/ },
-/* 63 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -27302,7 +27537,7 @@
 	});
 
 /***/ },
-/* 64 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -27377,7 +27612,7 @@
 	});
 
 /***/ },
-/* 65 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -27439,7 +27674,7 @@
 	        months: {
 	            format: 'sausio_vasario_kovo_balandžio_gegužės_birželio_liepos_rugpjūčio_rugsėjo_spalio_lapkričio_gruodžio'.split('_'),
 	            standalone: 'sausis_vasaris_kovas_balandis_gegužė_birželis_liepa_rugpjūtis_rugsėjis_spalis_lapkritis_gruodis'.split('_'),
-	            isFormat: /D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?|MMMM?(\[[^\[\]]*\]|\s+)+D[oD]?/
+	            isFormat: /D[oD]?(\[[^\[\]]*\]|\s)+MMMM?|MMMM?(\[[^\[\]]*\]|\s)+D[oD]?/
 	        },
 	        monthsShort: 'sau_vas_kov_bal_geg_bir_lie_rgp_rgs_spa_lap_grd'.split('_'),
 	        weekdays: {
@@ -27499,7 +27734,7 @@
 	});
 
 /***/ },
-/* 66 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -27601,7 +27836,7 @@
 	});
 
 /***/ },
-/* 67 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -27709,7 +27944,7 @@
 	});
 
 /***/ },
-/* 68 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -27778,7 +28013,7 @@
 	});
 
 /***/ },
-/* 69 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -27873,7 +28108,7 @@
 	});
 
 /***/ },
-/* 70 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -27957,7 +28192,7 @@
 	});
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -27985,8 +28220,8 @@
 	        '8': '८',
 	        '9': '९',
 	        '0': '०'
-	    },
-	        numberMap = {
+	    };
+	    var numberMap = {
 	        '१': '1',
 	        '२': '2',
 	        '३': '3',
@@ -28141,7 +28376,7 @@
 	});
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -28228,7 +28463,7 @@
 	});
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -28245,7 +28480,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var ms_my = moment.defineLocale('ms-my', {
+	    var msMy = moment.defineLocale('ms-my', {
 	        months: 'Januari_Februari_Mac_April_Mei_Jun_Julai_Ogos_September_Oktober_November_Disember'.split('_'),
 	        monthsShort: 'Jan_Feb_Mac_Apr_Mei_Jun_Jul_Ogs_Sep_Okt_Nov_Dis'.split('_'),
 	        weekdays: 'Ahad_Isnin_Selasa_Rabu_Khamis_Jumaat_Sabtu'.split('_'),
@@ -28312,11 +28547,11 @@
 	        }
 	    });
 	
-	    return ms_my;
+	    return msMy;
 	});
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -28345,8 +28580,8 @@
 	        '8': '၈',
 	        '9': '၉',
 	        '0': '၀'
-	    },
-	        numberMap = {
+	    };
+	    var numberMap = {
 	        '၁': '1',
 	        '၂': '2',
 	        '၃': '3',
@@ -28417,7 +28652,7 @@
 	});
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -28485,7 +28720,7 @@
 	});
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -28512,8 +28747,8 @@
 	        '8': '८',
 	        '9': '९',
 	        '0': '०'
-	    },
-	        numberMap = {
+	    };
+	    var numberMap = {
 	        '१': '1',
 	        '२': '2',
 	        '३': '3',
@@ -28613,7 +28848,7 @@
 	});
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -28630,8 +28865,8 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var monthsShortWithDots = 'jan._feb._mrt._apr._mei_jun._jul._aug._sep._okt._nov._dec.'.split('_'),
-	        monthsShortWithoutDots = 'jan_feb_mrt_apr_mei_jun_jul_aug_sep_okt_nov_dec'.split('_');
+	    var monthsShortWithDots = 'jan._feb._mrt._apr._mei_jun._jul._aug._sep._okt._nov._dec.'.split('_');
+	    var monthsShortWithoutDots = 'jan_feb_mrt_apr_mei_jun_jul_aug_sep_okt_nov_dec'.split('_');
 	
 	    var monthsParse = [/^jan/i, /^feb/i, /^maart|mrt.?$/i, /^apr/i, /^mei$/i, /^jun[i.]?$/i, /^jul[i.]?$/i, /^aug/i, /^sep/i, /^okt/i, /^nov/i, /^dec/i];
 	    var monthsRegex = /^(januari|februari|maart|april|mei|april|ju[nl]i|augustus|september|oktober|november|december|jan\.?|feb\.?|mrt\.?|apr\.?|ju[nl]\.?|aug\.?|sep\.?|okt\.?|nov\.?|dec\.?)/i;
@@ -28704,7 +28939,98 @@
 	});
 
 /***/ },
-/* 78 */
+/* 79 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	//! moment.js locale configuration
+	//! locale : Dutch (Belgium) [nl-be]
+	//! author : Joris Röling : https://github.com/jorisroling
+	//! author : Jacob Middag : https://github.com/middagj
+	
+	;(function (global, factory) {
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(5)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(5)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	})(undefined, function (moment) {
+	    'use strict';
+	
+	    var monthsShortWithDots = 'jan._feb._mrt._apr._mei_jun._jul._aug._sep._okt._nov._dec.'.split('_');
+	    var monthsShortWithoutDots = 'jan_feb_mrt_apr_mei_jun_jul_aug_sep_okt_nov_dec'.split('_');
+	
+	    var monthsParse = [/^jan/i, /^feb/i, /^maart|mrt.?$/i, /^apr/i, /^mei$/i, /^jun[i.]?$/i, /^jul[i.]?$/i, /^aug/i, /^sep/i, /^okt/i, /^nov/i, /^dec/i];
+	    var monthsRegex = /^(januari|februari|maart|april|mei|april|ju[nl]i|augustus|september|oktober|november|december|jan\.?|feb\.?|mrt\.?|apr\.?|ju[nl]\.?|aug\.?|sep\.?|okt\.?|nov\.?|dec\.?)/i;
+	
+	    var nlBe = moment.defineLocale('nl-be', {
+	        months: 'januari_februari_maart_april_mei_juni_juli_augustus_september_oktober_november_december'.split('_'),
+	        monthsShort: function monthsShort(m, format) {
+	            if (/-MMM-/.test(format)) {
+	                return monthsShortWithoutDots[m.month()];
+	            } else {
+	                return monthsShortWithDots[m.month()];
+	            }
+	        },
+	
+	        monthsRegex: monthsRegex,
+	        monthsShortRegex: monthsRegex,
+	        monthsStrictRegex: /^(januari|februari|maart|mei|ju[nl]i|april|augustus|september|oktober|november|december)/i,
+	        monthsShortStrictRegex: /^(jan\.?|feb\.?|mrt\.?|apr\.?|mei|ju[nl]\.?|aug\.?|sep\.?|okt\.?|nov\.?|dec\.?)/i,
+	
+	        monthsParse: monthsParse,
+	        longMonthsParse: monthsParse,
+	        shortMonthsParse: monthsParse,
+	
+	        weekdays: 'zondag_maandag_dinsdag_woensdag_donderdag_vrijdag_zaterdag'.split('_'),
+	        weekdaysShort: 'zo._ma._di._wo._do._vr._za.'.split('_'),
+	        weekdaysMin: 'Zo_Ma_Di_Wo_Do_Vr_Za'.split('_'),
+	        weekdaysParseExact: true,
+	        longDateFormat: {
+	            LT: 'HH:mm',
+	            LTS: 'HH:mm:ss',
+	            L: 'DD/MM/YYYY',
+	            LL: 'D MMMM YYYY',
+	            LLL: 'D MMMM YYYY HH:mm',
+	            LLLL: 'dddd D MMMM YYYY HH:mm'
+	        },
+	        calendar: {
+	            sameDay: '[vandaag om] LT',
+	            nextDay: '[morgen om] LT',
+	            nextWeek: 'dddd [om] LT',
+	            lastDay: '[gisteren om] LT',
+	            lastWeek: '[afgelopen] dddd [om] LT',
+	            sameElse: 'L'
+	        },
+	        relativeTime: {
+	            future: 'over %s',
+	            past: '%s geleden',
+	            s: 'een paar seconden',
+	            m: 'één minuut',
+	            mm: '%d minuten',
+	            h: 'één uur',
+	            hh: '%d uur',
+	            d: 'één dag',
+	            dd: '%d dagen',
+	            M: 'één maand',
+	            MM: '%d maanden',
+	            y: 'één jaar',
+	            yy: '%d jaar'
+	        },
+	        ordinalParse: /\d{1,2}(ste|de)/,
+	        ordinal: function ordinal(number) {
+	            return number + (number === 1 || number === 8 || number >= 20 ? 'ste' : 'de');
+	        },
+	        week: {
+	            dow: 1, // Monday is the first day of the week.
+	            doy: 4 // The week that contains Jan 4th is the first week of the year.
+	        }
+	    });
+	
+	    return nlBe;
+	});
+
+/***/ },
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -28769,7 +29095,7 @@
 	});
 
 /***/ },
-/* 79 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -28796,8 +29122,8 @@
 	        '8': '੮',
 	        '9': '੯',
 	        '0': '੦'
-	    },
-	        numberMap = {
+	    };
+	    var numberMap = {
 	        '੧': '1',
 	        '੨': '2',
 	        '੩': '3',
@@ -28810,7 +29136,7 @@
 	        '੦': '0'
 	    };
 	
-	    var pa_in = moment.defineLocale('pa-in', {
+	    var paIn = moment.defineLocale('pa-in', {
 	        // There are months name as per Nanakshahi Calender but they are not used as rigidly in modern Punjabi.
 	        months: 'ਜਨਵਰੀ_ਫ਼ਰਵਰੀ_ਮਾਰਚ_ਅਪ੍ਰੈਲ_ਮਈ_ਜੂਨ_ਜੁਲਾਈ_ਅਗਸਤ_ਸਤੰਬਰ_ਅਕਤੂਬਰ_ਨਵੰਬਰ_ਦਸੰਬਰ'.split('_'),
 	        monthsShort: 'ਜਨਵਰੀ_ਫ਼ਰਵਰੀ_ਮਾਰਚ_ਅਪ੍ਰੈਲ_ਮਈ_ਜੂਨ_ਜੁਲਾਈ_ਅਗਸਤ_ਸਤੰਬਰ_ਅਕਤੂਬਰ_ਨਵੰਬਰ_ਦਸੰਬਰ'.split('_'),
@@ -28894,11 +29220,11 @@
 	        }
 	    });
 	
-	    return pa_in;
+	    return paIn;
 	});
 
 /***/ },
-/* 80 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -28914,8 +29240,8 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var monthsNominative = 'styczeń_luty_marzec_kwiecień_maj_czerwiec_lipiec_sierpień_wrzesień_październik_listopad_grudzień'.split('_'),
-	        monthsSubjective = 'stycznia_lutego_marca_kwietnia_maja_czerwca_lipca_sierpnia_września_października_listopada_grudnia'.split('_');
+	    var monthsNominative = 'styczeń_luty_marzec_kwiecień_maj_czerwiec_lipiec_sierpień_wrzesień_październik_listopad_grudzień'.split('_');
+	    var monthsSubjective = 'stycznia_lutego_marca_kwietnia_maja_czerwca_lipca_sierpnia_września_października_listopada_grudnia'.split('_');
 	    function plural(n) {
 	        return n % 10 < 5 && n % 10 > 1 && ~~(n / 10) % 10 !== 1;
 	    }
@@ -28952,7 +29278,7 @@
 	        },
 	        monthsShort: 'sty_lut_mar_kwi_maj_cze_lip_sie_wrz_paź_lis_gru'.split('_'),
 	        weekdays: 'niedziela_poniedziałek_wtorek_środa_czwartek_piątek_sobota'.split('_'),
-	        weekdaysShort: 'nie_pon_wt_śr_czw_pt_sb'.split('_'),
+	        weekdaysShort: 'ndz_pon_wt_śr_czw_pt_sob'.split('_'),
 	        weekdaysMin: 'Nd_Pn_Wt_Śr_Cz_Pt_So'.split('_'),
 	        longDateFormat: {
 	            LT: 'HH:mm',
@@ -29008,7 +29334,7 @@
 	});
 
 /***/ },
-/* 81 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -29077,7 +29403,7 @@
 	});
 
 /***/ },
-/* 82 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -29093,7 +29419,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var pt_br = moment.defineLocale('pt-br', {
+	    var ptBr = moment.defineLocale('pt-br', {
 	        months: 'Janeiro_Fevereiro_Março_Abril_Maio_Junho_Julho_Agosto_Setembro_Outubro_Novembro_Dezembro'.split('_'),
 	        monthsShort: 'Jan_Fev_Mar_Abr_Mai_Jun_Jul_Ago_Set_Out_Nov_Dez'.split('_'),
 	        weekdays: 'Domingo_Segunda-feira_Terça-feira_Quarta-feira_Quinta-feira_Sexta-feira_Sábado'.split('_'),
@@ -29138,11 +29464,11 @@
 	        ordinal: '%dº'
 	    });
 	
-	    return pt_br;
+	    return ptBr;
 	});
 
 /***/ },
-/* 83 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -29222,7 +29548,7 @@
 	});
 
 /***/ },
-/* 84 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -29410,7 +29736,7 @@
 	});
 
 /***/ },
-/* 85 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -29475,7 +29801,7 @@
 	});
 
 /***/ },
-/* 86 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -29552,7 +29878,7 @@
 	});
 
 /***/ },
-/* 87 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -29569,8 +29895,8 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var months = 'január_február_marec_apríl_máj_jún_júl_august_september_október_november_december'.split('_'),
-	        monthsShort = 'jan_feb_mar_apr_máj_jún_júl_aug_sep_okt_nov_dec'.split('_');
+	    var months = 'január_február_marec_apríl_máj_jún_júl_august_september_október_november_december'.split('_');
+	    var monthsShort = 'jan_feb_mar_apr_máj_jún_júl_aug_sep_okt_nov_dec'.split('_');
 	    function plural(n) {
 	        return n > 1 && n < 5;
 	    }
@@ -29718,7 +30044,7 @@
 	});
 
 /***/ },
-/* 88 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -29885,7 +30211,7 @@
 	});
 
 /***/ },
-/* 89 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -29960,7 +30286,7 @@
 	});
 
 /***/ },
-/* 90 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -30067,7 +30393,7 @@
 	});
 
 /***/ },
-/* 91 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -30106,7 +30432,7 @@
 	        }
 	    };
 	
-	    var sr_cyrl = moment.defineLocale('sr-cyrl', {
+	    var srCyrl = moment.defineLocale('sr-cyrl', {
 	        months: 'јануар_фебруар_март_април_мај_јун_јул_август_септембар_октобар_новембар_децембар'.split('_'),
 	        monthsShort: 'јан._феб._мар._апр._мај_јун_јул_авг._сеп._окт._нов._дец.'.split('_'),
 	        monthsParseExact: true,
@@ -30170,11 +30496,11 @@
 	        }
 	    });
 	
-	    return sr_cyrl;
+	    return srCyrl;
 	});
 
 /***/ },
-/* 92 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -30267,7 +30593,7 @@
 	});
 
 /***/ },
-/* 93 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -30338,7 +30664,7 @@
 	});
 
 /***/ },
-/* 94 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -30402,7 +30728,7 @@
 	});
 
 /***/ },
-/* 95 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -30429,8 +30755,8 @@
 	        '8': '௮',
 	        '9': '௯',
 	        '0': '௦'
-	    },
-	        numberMap = {
+	    };
+	    var numberMap = {
 	        '௧': '1',
 	        '௨': '2',
 	        '௩': '3',
@@ -30537,7 +30863,7 @@
 	});
 
 /***/ },
-/* 96 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -30631,7 +30957,77 @@
 	});
 
 /***/ },
-/* 97 */
+/* 99 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	//! moment.js locale configuration
+	//! locale : Tetun Dili (East Timor) [tet]
+	//! author : Joshua Brooks : https://github.com/joshbrooks
+	//! author : Onorio De J. Afonso : https://github.com/marobo
+	
+	;(function (global, factory) {
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(5)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(5)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	})(undefined, function (moment) {
+	    'use strict';
+	
+	    var tet = moment.defineLocale('tet', {
+	        months: 'Janeiru_Fevereiru_Marsu_Abril_Maiu_Juniu_Juliu_Augustu_Setembru_Outubru_Novembru_Dezembru'.split('_'),
+	        monthsShort: 'Jan_Fev_Mar_Abr_Mai_Jun_Jul_Aug_Set_Out_Nov_Dez'.split('_'),
+	        weekdays: 'Domingu_Segunda_Tersa_Kuarta_Kinta_Sexta_Sabadu'.split('_'),
+	        weekdaysShort: 'Dom_Seg_Ters_Kua_Kint_Sext_Sab'.split('_'),
+	        weekdaysMin: 'Do_Seg_Te_Ku_Ki_Sex_Sa'.split('_'),
+	        longDateFormat: {
+	            LT: 'HH:mm',
+	            LTS: 'HH:mm:ss',
+	            L: 'DD/MM/YYYY',
+	            LL: 'D MMMM YYYY',
+	            LLL: 'D MMMM YYYY HH:mm',
+	            LLLL: 'dddd, D MMMM YYYY HH:mm'
+	        },
+	        calendar: {
+	            sameDay: '[Ohin iha] LT',
+	            nextDay: '[Aban iha] LT',
+	            nextWeek: 'dddd [iha] LT',
+	            lastDay: '[Horiseik iha] LT',
+	            lastWeek: 'dddd [semana kotuk] [iha] LT',
+	            sameElse: 'L'
+	        },
+	        relativeTime: {
+	            future: 'iha %s',
+	            past: '%s liuba',
+	            s: 'minutu balun',
+	            m: 'minutu ida',
+	            mm: 'minutus %d',
+	            h: 'horas ida',
+	            hh: 'horas %d',
+	            d: 'loron ida',
+	            dd: 'loron %d',
+	            M: 'fulan ida',
+	            MM: 'fulan %d',
+	            y: 'tinan ida',
+	            yy: 'tinan %d'
+	        },
+	        ordinalParse: /\d{1,2}(st|nd|rd|th)/,
+	        ordinal: function ordinal(number) {
+	            var b = number % 10,
+	                output = ~~(number % 100 / 10) === 1 ? 'th' : b === 1 ? 'st' : b === 2 ? 'nd' : b === 3 ? 'rd' : 'th';
+	            return number + output;
+	        },
+	        week: {
+	            dow: 1, // Monday is the first day of the week.
+	            doy: 4 // The week that contains Jan 4th is the first week of the year.
+	        }
+	    });
+	
+	    return tet;
+	});
+
+/***/ },
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -30703,7 +31099,7 @@
 	});
 
 /***/ },
-/* 98 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -30719,7 +31115,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var tl_ph = moment.defineLocale('tl-ph', {
+	    var tlPh = moment.defineLocale('tl-ph', {
 	        months: 'Enero_Pebrero_Marso_Abril_Mayo_Hunyo_Hulyo_Agosto_Setyembre_Oktubre_Nobyembre_Disyembre'.split('_'),
 	        monthsShort: 'Ene_Peb_Mar_Abr_May_Hun_Hul_Ago_Set_Okt_Nob_Dis'.split('_'),
 	        weekdays: 'Linggo_Lunes_Martes_Miyerkules_Huwebes_Biyernes_Sabado'.split('_'),
@@ -30734,11 +31130,11 @@
 	            LLLL: 'dddd, MMMM DD, YYYY HH:mm'
 	        },
 	        calendar: {
-	            sameDay: '[Ngayon sa] LT',
-	            nextDay: '[Bukas sa] LT',
-	            nextWeek: 'dddd [sa] LT',
-	            lastDay: '[Kahapon sa] LT',
-	            lastWeek: 'dddd [huling linggo] LT',
+	            sameDay: 'LT [ngayong araw]',
+	            nextDay: '[Bukas ng] LT',
+	            nextWeek: 'LT [sa susunod na] dddd',
+	            lastDay: 'LT [kahapon]',
+	            lastWeek: 'LT [noong nakaraang] dddd',
 	            sameElse: 'L'
 	        },
 	        relativeTime: {
@@ -30766,11 +31162,11 @@
 	        }
 	    });
 	
-	    return tl_ph;
+	    return tlPh;
 	});
 
 /***/ },
-/* 99 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -30883,7 +31279,7 @@
 	});
 
 /***/ },
-/* 100 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -30979,7 +31375,7 @@
 	});
 
 /***/ },
-/* 101 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -31076,7 +31472,7 @@
 	});
 
 /***/ },
-/* 102 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -31139,7 +31535,7 @@
 	});
 
 /***/ },
-/* 103 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -31155,7 +31551,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var tzm_latn = moment.defineLocale('tzm-latn', {
+	    var tzmLatn = moment.defineLocale('tzm-latn', {
 	        months: 'innayr_brˤayrˤ_marˤsˤ_ibrir_mayyw_ywnyw_ywlywz_ɣwšt_šwtanbir_ktˤwbrˤ_nwwanbir_dwjnbir'.split('_'),
 	        monthsShort: 'innayr_brˤayrˤ_marˤsˤ_ibrir_mayyw_ywnyw_ywlywz_ɣwšt_šwtanbir_ktˤwbrˤ_nwwanbir_dwjnbir'.split('_'),
 	        weekdays: 'asamas_aynas_asinas_akras_akwas_asimwas_asiḍyas'.split('_'),
@@ -31198,11 +31594,11 @@
 	        }
 	    });
 	
-	    return tzm_latn;
+	    return tzmLatn;
 	});
 
 /***/ },
-/* 104 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -31348,7 +31744,7 @@
 	});
 
 /***/ },
-/* 105 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -31411,7 +31807,7 @@
 	});
 
 /***/ },
-/* 106 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -31496,7 +31892,7 @@
 	});
 
 /***/ },
-/* 107 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -31512,7 +31908,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var x_pseudo = moment.defineLocale('x-pseudo', {
+	    var xPseudo = moment.defineLocale('x-pseudo', {
 	        months: 'J~áñúá~rý_F~ébrú~árý_~Márc~h_Áp~ríl_~Máý_~Júñé~_Júl~ý_Áú~gúst~_Sép~témb~ér_Ó~ctób~ér_Ñ~óvém~bér_~Décé~mbér'.split('_'),
 	        monthsShort: 'J~áñ_~Féb_~Már_~Ápr_~Máý_~Júñ_~Júl_~Áúg_~Sép_~Óct_~Ñóv_~Déc'.split('_'),
 	        monthsParseExact: true,
@@ -31562,11 +31958,76 @@
 	        }
 	    });
 	
-	    return x_pseudo;
+	    return xPseudo;
 	});
 
 /***/ },
-/* 108 */
+/* 111 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	//! moment.js locale configuration
+	//! locale : Yoruba Nigeria [yo]
+	//! author : Atolagbe Abisoye : https://github.com/andela-batolagbe
+	
+	;(function (global, factory) {
+	    ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' && "function" === 'function' ? factory(__webpack_require__(5)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(5)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.moment);
+	})(undefined, function (moment) {
+	    'use strict';
+	
+	    var yo = moment.defineLocale('yo', {
+	        months: 'Sẹ́rẹ́_Èrèlè_Ẹrẹ̀nà_Ìgbé_Èbibi_Òkùdu_Agẹmo_Ògún_Owewe_Ọ̀wàrà_Bélú_Ọ̀pẹ̀̀'.split('_'),
+	        monthsShort: 'Sẹ́r_Èrl_Ẹrn_Ìgb_Èbi_Òkù_Agẹ_Ògú_Owe_Ọ̀wà_Bél_Ọ̀pẹ̀̀'.split('_'),
+	        weekdays: 'Àìkú_Ajé_Ìsẹ́gun_Ọjọ́rú_Ọjọ́bọ_Ẹtì_Àbámẹ́ta'.split('_'),
+	        weekdaysShort: 'Àìk_Ajé_Ìsẹ́_Ọjr_Ọjb_Ẹtì_Àbá'.split('_'),
+	        weekdaysMin: 'Àì_Aj_Ìs_Ọr_Ọb_Ẹt_Àb'.split('_'),
+	        longDateFormat: {
+	            LT: 'h:mm A',
+	            LTS: 'h:mm:ss A',
+	            L: 'DD/MM/YYYY',
+	            LL: 'D MMMM YYYY',
+	            LLL: 'D MMMM YYYY h:mm A',
+	            LLLL: 'dddd, D MMMM YYYY h:mm A'
+	        },
+	        calendar: {
+	            sameDay: '[Ònì ni] LT',
+	            nextDay: '[Ọ̀la ni] LT',
+	            nextWeek: 'dddd [Ọsẹ̀ tón\'bọ] [ni] LT',
+	            lastDay: '[Àna ni] LT',
+	            lastWeek: 'dddd [Ọsẹ̀ tólọ́] [ni] LT',
+	            sameElse: 'L'
+	        },
+	        relativeTime: {
+	            future: 'ní %s',
+	            past: '%s kọjá',
+	            s: 'ìsẹjú aayá die',
+	            m: 'ìsẹjú kan',
+	            mm: 'ìsẹjú %d',
+	            h: 'wákati kan',
+	            hh: 'wákati %d',
+	            d: 'ọjọ́ kan',
+	            dd: 'ọjọ́ %d',
+	            M: 'osù kan',
+	            MM: 'osù %d',
+	            y: 'ọdún kan',
+	            yy: 'ọdún %d'
+	        },
+	        ordinalParse: /ọjọ́\s\d{1,2}/,
+	        ordinal: 'ọjọ́ %d',
+	        week: {
+	            dow: 1, // Monday is the first day of the week.
+	            doy: 4 // The week that contains Jan 4th is the first week of the year.
+	        }
+	    });
+	
+	    return yo;
+	});
+
+/***/ },
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -31583,7 +32044,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var zh_cn = moment.defineLocale('zh-cn', {
+	    var zhCn = moment.defineLocale('zh-cn', {
 	        months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
 	        monthsShort: '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split('_'),
 	        weekdays: '星期日_星期一_星期二_星期三_星期四_星期五_星期六'.split('_'),
@@ -31693,11 +32154,11 @@
 	        }
 	    });
 	
-	    return zh_cn;
+	    return zhCn;
 	});
 
 /***/ },
-/* 109 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -31715,7 +32176,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var zh_hk = moment.defineLocale('zh-hk', {
+	    var zhHk = moment.defineLocale('zh-hk', {
 	        months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
 	        monthsShort: '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split('_'),
 	        weekdays: '星期日_星期一_星期二_星期三_星期四_星期五_星期六'.split('_'),
@@ -31803,11 +32264,11 @@
 	        }
 	    });
 	
-	    return zh_hk;
+	    return zhHk;
 	});
 
 /***/ },
-/* 110 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -31824,7 +32285,7 @@
 	})(undefined, function (moment) {
 	    'use strict';
 	
-	    var zh_tw = moment.defineLocale('zh-tw', {
+	    var zhTw = moment.defineLocale('zh-tw', {
 	        months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
 	        monthsShort: '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split('_'),
 	        weekdays: '星期日_星期一_星期二_星期三_星期四_星期五_星期六'.split('_'),
@@ -31912,16 +32373,16 @@
 	        }
 	    });
 	
-	    return zh_tw;
+	    return zhTw;
 	});
 
 /***/ },
-/* 111 */
+/* 115 */
 /***/ function(module, exports) {
 
 	module.exports = {
 		"name": "__MSG_appName__",
-		"version": "0.1.5",
+		"version": "0.1.6",
 		"manifest_version": 2,
 		"description": "__MSG_appDescription__",
 		"icons": {

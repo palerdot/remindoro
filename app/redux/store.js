@@ -22,17 +22,7 @@ console.log( "initial state", store.getState() );
 // every time the state changes, log it
 let unsubscribe = store.subscribe( () => {
     console.log( store.getState() );
-} )
-
-// dispatching some actions
-// store.dispatch( changePorumai("Patience") );
-// store.dispatch( addTodo("Learning Redux") );
-// store.dispatch( addTodo("Learning Actions") );
-// store.dispatch( addTodo("Learning Reducers") );
-// store.dispatch( addTodo("Learning Stores") );
-// store.dispatch( toggleTodo(0) );
-// store.dispatch( toggleTodo(1) );
-// store.dispatch( setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED) );
+} );
 
 // stop listening to state updates
 unsubscribe();

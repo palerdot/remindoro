@@ -26,7 +26,7 @@ const menu = {
 };
 
 const filterRemindoros = (remindoros, tab) => {
-    console.log("filtering remindoro based on tab");
+
     let ros = remindoros;
 
     const is_home_tab = (tab == "home"),
@@ -50,7 +50,6 @@ const filterRemindoros = (remindoros, tab) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-    console.log("app state ", state, ownProps);
     // return the props for App component with the required state
     return {
         menu: menu,
@@ -68,13 +67,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
         // dispatch "changeTab" action as "home" at the start to sort remindoros in right order
         initializeHomeScreen: () => {
-            console.log("initing home screen ", dispatch, ownProps);
             dispatch( changeTab("home") );
         },
 
         // handles creating a new remindoro
         handleAddRemindoro: (current_id) => {
-            console.log("[dispatch][add remindoro]");
             dispatch( addRemindoro(current_id) );
             // also change the tab to home
             dispatch( changeTab("home") );
@@ -84,27 +81,23 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
         // handles the navigation clicks of home, notifications etc
         onNavClick: (tab) => {
-            console.log("[dispatch][changeTab]", tab);
             dispatch( changeTab(tab) );
         },
 
         // handle title change; for now we are updating the title
         // TODO: later compare changes and update only if changed
         handleTitleChange: (id, title) => {
-            console.log("handling title change ", id, title);
             dispatch( updateTitle(id, title) );
         },
 
         // handle Note Change
         handleNoteChange: (id, note, orig) => {
-            console.log("handling note change ", id, note, orig);
             dispatch( updateNote(id, note) );
         },
 
         // handling menu click for a remindoro
         handleMenuClick: (id) => {
-            
-            console.log("handling menu click ", id);
+
             // dispatch an action to select the current remindoro
             dispatch( selectRemindoro(id) );
 
@@ -129,7 +122,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         // NOTE: this function will be triggered from two places; on from normal on/off switch
         // other from the onChange event of flatpickr! validate if id is present before triggering the action
         handleReminderStatus: (id, status, reminder_time) => {
-            console.log("reminder status change ", arguments);
             // dispatch reminder status change
             dispatch( updateReminderStatus(id, status, reminder_time) );
         },
@@ -138,26 +130,22 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         // IMPORTANT: This will be triggered by react whenever bottom modal is loaded
         // we need to double check if an remindoro id is passed and it has reminder status switched on
         handleReminderTimeChange: (id, status, reminder_time) => {
-            console.log("before flatpickr change ", id, status, reminder_time);
             if ( !(id && status) ) {
                 // do not proceed; it will be triggered when there is no current selected remindoro
                 return;
             }
-            console.log("AFTER flatpickr change ", id, status, reminder_time);
             // update reminder time change
             dispatch( updateReminderStatus(id, true, reminder_time) );
         },
 
         // updates repeat status when it is changed
         handleRepeatStatus: (id, status) => {
-            console.log("updating repeat change ", id, status);
             // dispatch repeat status change
             dispatch( updateRepeatStatus(id, status) );
         },
 
         // delete the remindoro
         deleteRemindoro: (id) => {
-            console.log("DELETING ", id);
             // close the bottom modal
             $("#options-modal").closeModal();
             // dispatch the delete action

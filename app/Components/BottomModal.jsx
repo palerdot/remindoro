@@ -37,7 +37,6 @@ const BottomModal = React.createClass({
                 const ro = current_ro ? this.props.remindoros.find( (ro) => (ro.id == this.props.current_selected_remindoro) ) : {};
 
                 let date_string = dateObj.length > 0 ? dateObj[0].toString() : "";
-                console.log("on change ", date_string);
 
                 // HACK: onUpdate is not triggered on AM/PM change. we are doing an additional check that flatpickr is open
                 // trigger the reminder change action
@@ -50,16 +49,12 @@ const BottomModal = React.createClass({
 
             // NOTE: careful this is triggered when a value is set and when AM/PM button is toggled
             // this will lead to a vicious cycle of react updates and chrome storage updates
-            onValueUpdate: (dateObj, dateStr, instance) => {
-            },
+            onValueUpdate: (dateObj, dateStr, instance) => {},
 
-            onOpen: function(dateObj, dateStr, instance) {
-                console.log("on open ", dateObj[0], arguments);
-            },
+            onOpen: function(dateObj, dateStr, instance) {},
 
-            onClose: function(dateObj, dateStr, instance){
+            onClose: function(dateObj, dateStr, instance){}
 
-            }
         };
 
         const current_ro = this.props.current_selected_remindoro;
@@ -73,7 +68,6 @@ const BottomModal = React.createClass({
     },
 
     componentDidUpdate: function() {
-        console.log("updating bottom modal component");
         // called after render is done when data changes
         // update the material select box !!!!
         $("select").material_select();
@@ -93,7 +87,6 @@ const BottomModal = React.createClass({
         // get a handle on the current selected remindoro
         const ro = this.props.remindoros.find( (ro) => (ro.id == this.props.current_selected_remindoro) );
         const current_ro = this.props.current_selected_remindoro;
-        console.log("rendering bottom modal ", ro, (ro && ro.reminder.is_repeat));
 
         const debounced_repeat_update = _.debounce( () => {
             this.props.onRepeatChange( this.props.current_selected_remindoro, true );
@@ -135,8 +128,6 @@ const BottomModal = React.createClass({
                                                         // set default time as 45 minutes from now
                                                         default_r_time = moment().add(45, "minutes").format();
                                                     }
-
-                                                    console.log("reminder change ", default_r_time);
 
                                                     this.flatpickr.setDate( default_r_time );
 

@@ -10,7 +10,7 @@ import manifest from "json!../manifest.json";
 chrome.runtime.onInstalled.addListener( initializeInstallEvents );
 
 function initializeInstallEvents () {
-    console.log("event page install event ? ", manifest, manifest.version);
+    console.log("event page install event !", manifest, manifest.version);
     // BUGFIX: converting storage.sync to local due to storage space constraints
     // if we detect there are some data in chrome.storage.sync, we will transfer it to chrome.storage.local
     // defined in utils storage
@@ -113,13 +113,10 @@ function init_chrome_events() {
 
     // handle when a "Read Now" button is clicked on notification
     chrome.notifications.onButtonClicked.addListener( function (notification_id, button_index) {
-        console.log("button clicked ", notification_id, button_index);
-        console.log(Notification.notification_ids);
         // getting the remindoro id from the notificatin id
         var ro_id = _.findKey( Notification.notification_ids, function (n_id, key) {
             return n_id == notification_id;
         } );
-        console.log("ro id ", ro_id);
         // getting remindoros from the storage
         chrome.storage.local.get("REMINDORO",  function (data) {
             // get the  remindoro data
@@ -130,7 +127,7 @@ function init_chrome_events() {
             var ro = _.find( remindoros, function (ro) {
                 return ro.id == ro_id;
             } );
-            console.log("note value ", ro, ro.note);
+
             if ( isValidUrl(ro.note) ) {
                 // if valid url; opening the link in new tab
                 chrome.tabs.create({ url: ro.note });
@@ -166,7 +163,6 @@ function create_context_menus () {
 
 
 function handleContextMenuClick (menu_details, tab_details, remindoros) {
-    console.log("context menu clicked !?!?", menu_details, tab_details);
     var remindoro_details = {};
     // we will be handling two types of context menus
     // page/link action => adding the page url as note, title as title

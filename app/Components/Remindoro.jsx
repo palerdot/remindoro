@@ -14,13 +14,9 @@ import _ from "lodash";
 // const Remindoro = (props) => {
 const Remindoro = React.createClass({
 
-    componentDidMount: function () {
-        console.log("remindoro component mounted");
-    },
+    componentDidMount: function () {},
 
-    componentDidUpdate: function () {
-        console.log("remindoro component updated");
-    },
+    componentDidUpdate: function () {},
 
     render: function () {
 
@@ -29,7 +25,7 @@ const Remindoro = React.createClass({
         let empty_remindoro_component = "";
 
         if (props.remindoros.length == 0) {
-            console.log("empty remindoros ", props);
+            
             let empty_msg = "",
                 is_event_tab = (props.current_tab == "events");
 

@@ -15,7 +15,6 @@ import config from "json!../config.json";
 const Navigator = React.createClass({
 
     componentDidMount: function () {
-        console.log("dispatching home screen");
         this.props.initializeHomeScreen();
     },
 
@@ -39,7 +38,6 @@ const Navigator = React.createClass({
                             className="btn btn-floating waves-light waves-effect"
                             onClick={
                                 () => {
-                                    console.log("clicked the close button ", window);
                                     // closing the popup window
                                     window.close();
                                 }
@@ -95,14 +93,12 @@ const Navigator = React.createClass({
                                                 // before triggering the navigator click, checking if current clicked menu
                                                 // is already a current tab
                                                 if (key == "add") {
-                                                    console.log("porumai! we will add a new remindoro ", current_id);
                                                     props.onAddClick( current_id );
                                                     // do not proceed;
                                                     return;
                                                 }
 
                                                 if (props.current_tab == key) {
-                                                    console.log("same tab clicked ", props.current_tab);
                                                     // do not proceed
                                                     return;
                                                 }

@@ -191,8 +191,8 @@ export const Notification = {
         var self = this; // save reference
 
         // before showing a message; send a message to extension about the updated remindoros
-        chrome.runtime.sendMessage({updated_remindoros: Notification.to_notify}, function(response) {
-            console.log(response);
+        chrome.runtime.sendMessage({updated_remindoros: Notification.to_notify}, function (response) {
+            // console.log(response);
         });
 
         _.each( this.to_notify, function (ro) {
