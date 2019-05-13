@@ -194,7 +194,7 @@ gulp.task("zip", () => {
   return gulp
     .src(`${DESTINATION_FOLDER}/**/`)
     .pipe(zip(zip_file_name))
-    .pipe(gulp.dest("."));
+    .pipe(gulp.dest(`${DESTINATION_FOLDER}`));
 });
 
 gulp.task("chromeManifest", () => {
