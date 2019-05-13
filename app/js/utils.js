@@ -477,13 +477,13 @@ export function is_chrome_error() {
 
   if (chrome_error == "storage") {
     // storage error
-    error.title = "Chrome Storage Limit Exceeded";
+    error.title = "Browser Storage Limit Exceeded";
     error.message = "Please delete few reminders and try again.";
   } else {
     // some error not related to storage
-    error.title = "Chrome Error";
+    error.title = "Error ...";
     error.message =
-      "Please try deleting few reminders and try again. If issue persists, please leave a feedback in Chrome Web Store";
+      "Please try deleting few reminders and try again. If issue persists, please leave a feedback in Extension page";
   }
 
   chrome_notify({

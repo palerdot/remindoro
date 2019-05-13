@@ -5,6 +5,7 @@ import del from "del";
 import runSequence from "run-sequence";
 import { stream as wiredep } from "wiredep";
 import flatten from "gulp-flatten";
+import merge from "merge-stream";
 
 import zip from "gulp-zip";
 
@@ -128,8 +129,23 @@ gulp.task("organize_files", () => {
     "!app/js/utils.js",
     "!app/js/general-initializer.js",
 
-    "app/js/*.js"
+    "build/js/*.js"
   ];
+
+  const REMINDORO_FILES = {
+    js: ["build/js/*.js*"],
+    // rest of the files can retain their folder structure
+    rest: [
+      `app/manifests/${process.env.TARGET_PLATFORM}/manifest.json`,
+      "app/config.json",
+      "app/_locales/**/*",
+      "app/fonts/**/*",
+      "app/images/**/*",
+      "app/*.html",
+      "app/css/**/*.css",
+      "app/js/**/*.min.js"
+    ]
+  };
 
   var is_production = process.env.NODE_ENV == "production";
   console.log("PRODUCTION ? => ", is_production, process.env.TARGET_PLATFORM);
@@ -138,29 +154,34 @@ gulp.task("organize_files", () => {
     compress: { drop_console: is_production ? true : false }
   };
 
-  return (
-    gulp
-      .src(REMINDORO_FILE_LIST, { base: "./app/" })
-      .pipe($.if("*.css", $.cleanCss({ compatibility: "*" })))
-      // .pipe($.if('*.js', $.sourcemaps.init()))
-      .pipe(
-        $.if(
-          "*.js",
-          $.uglify(uglify_options).on("error", function(e) {
-            console.log(e);
-          })
-        )
+  // copying JS files from the BUILD FOLDER
+
+  const JS_BUILD_FILES = gulp
+    .src(REMINDORO_FILES.js, { base: "./build/" })
+    .pipe(
+      $.if(
+        "*.js",
+        $.uglify(uglify_options).on("error", function(e) {
+          console.log(e);
+        })
       )
-      .pipe($.if("*.js", $.sourcemaps.write(".")))
-      // if manifest.json flatten the folder structure
-      .pipe(
-        $.if(
-          `manifests/${process.env.TARGET_PLATFORM}/manifest.json`,
-          flatten()
-        )
-      )
-      .pipe(gulp.dest(DESTINATION_FOLDER))
-  );
+    )
+    .pipe($.if("*.js", $.sourcemaps.write(".")))
+    // copy JS files to DESTINATION
+    .pipe(gulp.dest(DESTINATION_FOLDER));
+
+  const REST_OF_THE_FILES = gulp
+    // .src(REMINDORO_FILE_LIST, { base: "./app/" })
+    .src(REMINDORO_FILES.rest, { base: "./app/" })
+    .pipe($.if("*.css", $.cleanCss({ compatibility: "*" })))
+    // if manifest.json flatten the folder structure
+    .pipe(
+      $.if(`manifests/${process.env.TARGET_PLATFORM}/manifest.json`, flatten())
+    )
+    // copy REST of the files to DESTINATION
+    .pipe(gulp.dest(DESTINATION_FOLDER));
+
+  return merge(JS_BUILD_FILES, REST_OF_THE_FILES);
 });
 
 // creates a zip file for the dist folder
@@ -211,22 +232,30 @@ gulp.task("chromeManifest", () => {
 // });
 
 gulp.task("events-page", () => {
+  const DESTINATION_BUILD_FOLDER = "./build/js/";
   let config = require("./webpack.events.config.js");
 
-  return gulp
-    .src("./app/scripts.babel/events-modular.js")
-    .pipe(webpack(config))
-    .pipe(gulp.dest("./app/js/"));
+  return (
+    gulp
+      .src("./app/scripts.babel/events-modular.js")
+      .pipe(webpack(config))
+      // .pipe(gulp.dest("./app/js/"));
+      .pipe(gulp.dest(DESTINATION_BUILD_FOLDER))
+  );
 });
 
 // webpack tasks
 gulp.task("webpack", cb => {
+  const DESTINATION_BUILD_FOLDER = "./build/js/";
   let config = require("./webpack.config.js");
 
-  return gulp
-    .src("./app/index.js")
-    .pipe(webpack(config))
-    .pipe(gulp.dest("./app/js/"));
+  return (
+    gulp
+      .src("./app/index.js")
+      .pipe(webpack(config))
+      // .pipe(gulp.dest("./app/js/"))
+      .pipe(gulp.dest(DESTINATION_BUILD_FOLDER))
+  );
 });
 
 gulp.task("clean", del.bind(null, [".tmp", "dist"]));
