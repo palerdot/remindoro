@@ -70,7 +70,7 @@
 }
 
 .remindoro .remindoro-title {
-  font-size: 1.75em;
+  font-size: 1.59em;
 }
 
 .remindoro .remindoro-title div[contenteditable] {
@@ -84,7 +84,7 @@
 }
 
 .remindoro .remindoro-content {
-  font-size: 1.3em;
+  font-size: 1.19em;
 }
 
 .remindoro .remindoro-content div[contenteditable] {
@@ -191,8 +191,9 @@
 
 body {
   width: 550px;
-  height: 550px;
+  height: 750px;
   overflow: none;
+  font-size: 13px !important;
   background: #263238 !important;
   color: white !important;
 }
@@ -220,6 +221,9 @@ body #toast-container div {
 
 body .flatpickr-calendar {
   background: rgba(55, 71, 79, 0.95) !important;
+  position: absolute;
+  top: 7% !important;
+  left: 33% !important;
 }
 
 body i {
@@ -228,6 +232,14 @@ body i {
 
 body .indicator {
   background-color: #263238 !important;
+}
+
+body [contenteditable] {
+  min-height: 33px;
+}
+
+body [contenteditable]:focus {
+  border: thin solid #455a64;
 }
 
 body [placeholder]:empty:before {

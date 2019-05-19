@@ -32,7 +32,7 @@ function initializeInstallEvents() {
   var welcome_msg = {
     title: "Hello from Remindoro - " + REMINDORO_VERSION + " !",
     message:
-      "You can now set reminders for stuffs that matter to you like links to read/activities/notes .... Enjoy!"
+      "You can now set one-time/repeatable reminders for stuffs that matter to you ..."
   };
 
   chrome_notify(welcome_msg);

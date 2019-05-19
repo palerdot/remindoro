@@ -7,28 +7,26 @@ import _ from "lodash";
 
 import config from "../config.json";
 
-// new es6 stateless functions which is an alternative for React.createClass
-// the props are directly passed to this function by react
-// ref: https://facebook.github.io/react/docs/reusable-components.html#stateless-functions
-// not a stateless componenet; we will keep track of id counter
-// const Navigator = (props) => {
-const Navigator = React.createClass({
-  componentDidMount: function() {
-    this.props.initializeHomeScreen();
-  },
-
-  getInitialState: function() {
-    return {
-      id_counter: this.props.id_counter
+class Navigator extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      id_counter: props.id_counter
     };
-  },
+  }
 
-  render: function() {
-    let props = this.props;
+  componentDidMount() {
+    this.props.initializeHomeScreen();
+  }
+
+  displayName = "Navigator";
+
+  render() {
+    const { props } = this;
 
     return (
       <header className="row navigator valign-wrapper">
-        <div className="col s12 valign no-padding">
+        <div className="col s12 valign">
           <div className="col s6 left-align no-padding">
             <button
               className="btn btn-floating waves-light waves-effect"
@@ -105,6 +103,6 @@ const Navigator = React.createClass({
       </header>
     );
   }
-});
+}
 
 export default Navigator;

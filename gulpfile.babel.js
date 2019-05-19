@@ -158,15 +158,15 @@ gulp.task("organize_files", () => {
 
   const JS_BUILD_FILES = gulp
     .src(REMINDORO_FILES.js, { base: "./build/" })
-    .pipe(
-      $.if(
-        "*.js",
-        $.uglify(uglify_options).on("error", function(e) {
-          console.log(e);
-        })
-      )
-    )
-    .pipe($.if("*.js", $.sourcemaps.write(".")))
+    // .pipe(
+    //   $.if(
+    //     "*.js" && is_production,
+    //     $.uglify(uglify_options).on("error", function(e) {
+    //       console.log(e);
+    //     })
+    //   )
+    // )
+    // .pipe($.if("*.js", $.sourcemaps.write(".")))
     // copy JS files to DESTINATION
     .pipe(gulp.dest(DESTINATION_FOLDER));
 

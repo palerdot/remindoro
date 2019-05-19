@@ -8,8 +8,10 @@ body {
 
     // general styles
     width: 550px;
-    height: 550px;
+    height: 750px;
     overflow: none;
+    // set base font size for 'em/rem' sizes
+    font-size: 13px !important;
 
     background: $bg_color !important;
     color: $text_color !important;
@@ -46,6 +48,9 @@ body {
 
     .flatpickr-calendar {
         background: rgba(55, 71, 79, 0.95) !important;
+        position: absolute;
+        top: 7% !important;
+        left: 33% !important;
     }
 
     i {
@@ -54,6 +59,15 @@ body {
 
     .indicator {
         background-color: $theme_color !important;
+    }
+
+    [contenteditable] {
+        min-height: 33px;
+    }
+
+    // remove content editable focus
+    [contenteditable]:focus {
+        border: thin solid $placeholder_color;
     }
 
     // placeholder for contentEditable

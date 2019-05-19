@@ -1,4 +1,5 @@
-var webpack = require("webpack");
+const webpack = require("webpack");
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
   entry: "./app/index",
@@ -29,5 +30,17 @@ module.exports = {
     new webpack.DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
     })
-  ]
+  ],
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        sourceMap: true, // Must be set to true if using source-maps in production
+        terserOptions: {
+          compress: {
+            drop_console: process.env.NODE_ENV === "production"
+          }
+        }
+      })
+    ]
+  }
 };
