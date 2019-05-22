@@ -1,4 +1,8 @@
-// import _ from "lodash";
+import {
+  find as _find,
+  findKey as _findKey,
+  findIndex as _findIndex
+} from "lodash";
 // import moment from "moment";
 
 // import modular components from utils
@@ -137,7 +141,7 @@ function init_chrome_events() {
     button_index
   ) {
     // getting the remindoro id from the notificatin id
-    var ro_id = _.findKey(Notification.notification_ids, function(n_id, key) {
+    var ro_id = _findKey(Notification.notification_ids, function(n_id, key) {
       return n_id == notification_id;
     });
     // getting remindoros from the storage
@@ -147,7 +151,7 @@ function init_chrome_events() {
         remindoros = remindoro_data["remindoros"];
 
       // finding the remindoro matching the id
-      var ro = _.find(remindoros, function(ro) {
+      var ro = _find(remindoros, function(ro) {
         return ro.id == ro_id;
       });
 
@@ -260,7 +264,7 @@ function check_remindoro_link(menu_details, tab_details, remindoros) {
 
   // we are getting a page action only here
   // note here we need to check if the url is already present in the existing remindoros
-  var already_saved_link = _.findIndex(remindoros, function(ro) {
+  var already_saved_link = _findIndex(remindoros, function(ro) {
     var link = strip_html(ro.note);
     return note == link;
   });

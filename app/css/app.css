@@ -222,7 +222,7 @@ body #toast-container div {
 body .flatpickr-calendar {
   background: rgba(55, 71, 79, 0.95) !important;
   position: absolute;
-  top: 7% !important;
+  top: 3% !important;
   left: 33% !important;
 }
 

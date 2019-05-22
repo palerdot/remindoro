@@ -1,6 +1,13 @@
 // collection of utility scripts used for remindoro
 
-import _ from "lodash";
+import {
+  maxBy as _maxBy,
+  each as _each,
+  map as _map,
+  indexOf as _indexOf,
+  isEmpty as _isEmpty,
+  unionBy as _unionBy
+} from "lodash";
 import moment from "moment";
 
 // calculates unique remindoro id for a given set of remindoros
@@ -14,7 +21,7 @@ export function calculate_remindoro_id(remindoros) {
     return remindoro_count + 1;
   }
 
-  let max_id_remindoro = _.maxBy(remindoros, function(data) {
+  let max_id_remindoro = _maxBy(remindoros, function(data) {
     return data.id;
   });
 
@@ -25,151 +32,6 @@ export function calculate_remindoro_id(remindoros) {
   // increment count by one for uniqueness
   return remindoro_count + 1;
 }
-
-// checks for reminder time; COPIED from plain events.js bg page
-/*export function check (ro) {
-
-    // first let us take the current time
-    var current_time = new Date().getTime(),
-        // buffer time 15 minutes. i.e we will notify if the remindoro is atmost 15 minutes old
-        buffer = 15 * 60 * 1000,
-        ro_time = ro.reminder.time ? new Date(ro.reminder.time).getTime() : false,
-        time_delta = (current_time - ro_time),
-        is_repeat = ro.reminder.is_repeat;
-
-    // CASE 1: no reminder scheduled
-    // RESULT: WILL NOT NOTIFY; returning REMINDORO
-    if (!ro_time) {
-        // return the remindoro as it is
-        return ro;
-    }
-
-    // CASE 2: NON REPEATABLE reminders
-    if (!is_repeat) {
-        // CASE 3: remindoro is in future
-        // RESULT: WILL NOT NOTIFY; returning REMINDORO
-        if (time_delta < 0) {
-            // returning the remindoro as it is 
-            return ro;
-        }
-
-        // we have this remindoro scheduled at some time; we need to check if it is atmost 15 mins fresh
-        var to_be_notified = ( time_delta <= buffer );
-
-        // CASE 4: remindoro is 15 mins (buffer time) past. not fresh
-        // RESULT: WILL NOT NOTIFY; returning REMINDORO
-        if (!to_be_notified) {
-            return ro;
-        }
-
-        // CASE 5: remindoro is atmost 15 mins (buffer time) fresh
-        // RESULT: WILL NOTIFY
-        ro.reminder.time = false;
-    } else {
-
-        // CASE 6: REPEATABLE remindoros
-        // short repeat => minutes, hours; long repeat => days, months
-        var is_short_repeat = _.indexOf(["minutes", "hours"], ro.reminder.repeat.interval) > -1,
-            is_long_repeat = _.indexOf(["days", "months"], ro.reminder.repeat.interval) > -1;
-
-        // CASE 7: short repeat => minutes, hours
-        if (is_short_repeat) {
-            console.log("SHORT REPEAT");
-            // determines if the reminder time is in the same day exactly to the scheduled "minute"
-            var is_past = moment().isAfter( ro.reminder.time, "minute" ),
-                is_present = moment().isSame( ro.reminder.time, "minute" );
-
-            // CASE 7: exactly scheduled at current minute; short repeating remindoro
-            // RESULT: WILL NOTIFY
-            if (is_present) {
-                ro.reminder.time = moment( new Date(ro.reminder.time) )
-                                        .add( ro.reminder.repeat.time, ro.reminder.repeat.interval )
-                                        .format();
-            } else if (is_past) {
-                // CASE 8: reminder time is in past; short repeating remindoro
-
-                // if the reminder time is already past when our event page scans, we will schedule 
-                // the next reminder from the current minute
-
-                
-                ro.reminder.time = moment()
-                                    .add( ro.reminder.repeat.time, ro.reminder.repeat.interval )
-                                    .format();
-                
-                // RESULT: WILL NOT NOTIFY
-                return ro;
-            } else {
-                // CASE 9: remindoro is in future; short repeat remindoro
-                // RESULT: WILL NOT NOTIFY
-                console.log("NOT PAST OR PRESENT FOR SHORT REPEAT. probably future");
-                // do not notify
-                return ro;
-            }
-            
-        } else if (is_long_repeat) {
-            // CASE 9: Long repeat remindoro
-            // long repeat => days, months
-            
-            // we will notify on the exact time scheduled; 
-            // and will not update the reminder time till the day is done
-            // determines if the reminder time is in the same day exactly to the scheduled "DAY"
-            // is_past => checks if current moment is after the given moment
-            var is_past = moment().isAfter( ro.reminder.time, "day" ),
-                is_today = moment().isSame( ro.reminder.time, "day" );
-
-            // CASE 10: scheduled today for long repeat
-            if (is_today) {
-                // CASE 11: we will exactly notify on the scheduled minute
-                var is_current_minute = moment().isSame( ro.reminder.time, "minute" );
-                if (!is_current_minute) {
-                    //RESULT: WILL NOT notify
-                    return ro;
-                }
-                // CASE 12: current minute for today
-                // RESULT: WILL NOTIFY
-                console.log("LONG REPEAT CURRENT MINUTE !!?? ", ro.reminder.time);
-            } else if (is_past) {
-
-                // CASE 13: scheduled older than today
-                // we need to update the next reminder which should be in future
-                
-                var is_future_reminder_time = false,
-                    future_reminder_time = false;
-
-                // looping till we get a future reminder time
-                while (!is_future_reminder_time) {
-                    // NOTE: we need to do this till we are in the future
-                    // we will update the reminder time
-                    future_reminder_time = moment( new Date(ro.reminder.time) )
-                                                .add( ro.reminder.repeat.time, ro.reminder.repeat.interval );
-
-                    is_future_reminder_time = moment( future_reminder_time ).isAfter();
-                }
-                // updating reminder time with future reminder time
-                ro.reminder.time = future_reminder_time.format();
-
-                //RESULT: WILL NOT NOTIFY
-                return ro;
-            } else {
-                // CASE 14: not past; not present; probably future for long repeat
-                console.log("LONG REPEAT FUTURE REMINDER");
-                // WILL NOT NOTIFY
-                return ro;
-            }
-        } else {
-            // CASE 15: !!!
-            // CAUTION: some UNKNOWN unique use case; do not proceed;
-            // RESULT: WILL NOT NOTIFY
-            return ro;
-        }
-    }
-
-    // first pushing the remindoro in our list to notify later
-    this.to_notify.push( ro );
-
-    // returning the remindoro
-    return ro;
-}*/
 
 // modular event.js components
 // START: Notification Module
@@ -193,7 +55,7 @@ export const Notification = {
       }
     );
 
-    _.each(this.to_notify, function(ro) {
+    _each(this.to_notify, function(ro) {
       self.show(ro);
     });
 
@@ -256,7 +118,7 @@ export const Notification = {
     // clear the alarms to be notified
     this.to_notify = [];
     // go through the remindoros and update the time if they are to be notified
-    remindoros = _.map(remindoros, function(ro) {
+    remindoros = _map(remindoros, function(ro) {
       return self.check(ro);
     });
     console.log("NOTIFICATION LIST ", this.to_notify);
@@ -314,9 +176,9 @@ export const Notification = {
       // CASE 6: REPEATABLE remindoros
       // short repeat => minutes, hours; long repeat => days, months
       var is_short_repeat =
-          _.indexOf(["minutes", "hours"], ro.reminder.repeat.interval) > -1,
+          _indexOf(["minutes", "hours"], ro.reminder.repeat.interval) > -1,
         is_long_repeat =
-          _.indexOf(["days", "months"], ro.reminder.repeat.interval) > -1;
+          _indexOf(["days", "months"], ro.reminder.repeat.interval) > -1;
 
       // CASE 7: short repeat => minutes, hours
       if (is_short_repeat) {
@@ -503,7 +365,7 @@ export function handle_sync_local_storage() {
   chrome.storage.sync.get("REMINDORO", function(sync_data) {
     console.log("SYNC DATA! ", sync_data);
 
-    if (_.isEmpty(sync_data)) {
+    if (_isEmpty(sync_data)) {
       // if no sync data do not proceed
       return;
     }
@@ -511,7 +373,7 @@ export function handle_sync_local_storage() {
     // if sync data is present, let us try to merge those things with existing local data
     chrome.storage.local.get("REMINDORO", function(local_data) {
       // if local data is present will merge just the remindoros
-      if (!_.isEmpty(local_data)) {
+      if (!_isEmpty(local_data)) {
         let local_remindoros =
             local_data["REMINDORO"] && local_data["REMINDORO"]["remindoros"],
           sync_remindoros =
@@ -519,7 +381,7 @@ export function handle_sync_local_storage() {
 
         // merging local remindoros with sync remindoros
         // using lodash unionBy to merge with id property
-        local_data["remindoros"] = _.unionBy(
+        local_data["remindoros"] = _unionBy(
           local_remindoros,
           sync_remindoros,
           "id"

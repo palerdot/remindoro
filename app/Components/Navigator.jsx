@@ -3,7 +3,7 @@
 
 import React from "react";
 import classNames from "classnames";
-import _ from "lodash";
+import { map as _map } from "lodash";
 
 import config from "../config.json";
 
@@ -58,7 +58,7 @@ class Navigator extends React.Component {
           </div>
           {/* displaying the menu items returned as props */}
           <div className="col s6 right-align no-padding">
-            {_.map(props.menu, (value, key) => {
+            {_map(props.menu, (value, key) => {
               let nav_class = classNames(
                 "btn btn-floating waves-effect waves-light",
                 {

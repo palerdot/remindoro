@@ -34,6 +34,7 @@ class BottomModal extends React.Component {
   initFlatPicker = () => {
     const flatpicker_config = {
       // appendTo: document.getElementById("remindoros"),
+      allowInput: true,
       position: "above",
       enableTime: true,
       wrap: true,

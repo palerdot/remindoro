@@ -7,7 +7,7 @@ import ContentEditable from "react-contenteditable";
 import { Debounce } from "react-throttle";
 import moment from "moment";
 
-import _ from "lodash";
+import { indexOf as _indexOf } from "lodash";
 
 const Remindoro = props => {
   let empty_remindoro_component = "";
@@ -46,10 +46,9 @@ const Remindoro = props => {
           let is_ro_active = time_difference >= -buffer; // just 1 minute in past
 
           // note in case of long repeat => days, months we need to show the reminder for the current day
-          const is_short_repeat =
-              _.indexOf(["minutes", "hours"], ro.reminder.repeat.interval) > -1,
-            is_long_repeat =
-              _.indexOf(["days", "months"], ro.reminder.repeat.interval) > -1;
+          // const is_short_repeat = _.indexOf(["minutes", "hours"], ro.reminder.repeat.interval) > -1;
+          const is_long_repeat =
+            _indexOf(["days", "months"], ro.reminder.repeat.interval) > -1;
 
           let is_today = false, // for long repeat this is use to show "Today" info
             is_future = false;

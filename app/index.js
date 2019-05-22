@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import _ from "lodash";
+import { isEmpty as _isEmpty } from "lodash";
 
 import { Provider } from "react-redux";
 import { createStore } from "redux";
@@ -201,7 +201,7 @@ try {
       sender,
       sendResponse
     ) {
-      if (!_.isEmpty(request.updated_remindoros)) {
+      if (!_isEmpty(request.updated_remindoros)) {
         // if there are any updated remindoros, changing only those remindoros
         // dispatching an action to update changed remindoros
         console.log("UPDATING REMINDOROS ", request.updated_remindoros);
