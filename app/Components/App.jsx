@@ -2,15 +2,15 @@
 // <Navigation> => top menu
 // <Remindoro> => main remindoro view
 
-import React from "react";
+import React from 'react'
 
 // import required components
-import Navigator from "./Navigator";
-import Remindoro from "./Remindoro";
-import BottomModal from "./BottomModal";
+import Navigator from './Navigator'
+import Remindoro from './Remindoro'
+import BottomModal from './BottomModal'
 
 // for connecting this componenet to the store
-import { connect } from "react-redux";
+import { connect } from 'react-redux'
 import {
   changeTab,
   addRemindoro,
@@ -19,43 +19,43 @@ import {
   updateRepeatStatus,
   updateTitle,
   updateNote,
-  deleteRemindoro
-} from "../redux/actions/";
+  deleteRemindoro,
+} from '../redux/actions/'
 
 // menu options; for now we will define the menu options here
 // later we can move into a seperate location which is appropriate
 // for now we are mapping only the icon names
 const menu = {
-  add: "add_circle_outline",
-  home: "home",
+  add: 'add_circle_outline',
+  home: 'home',
   // "notes": "content_paste",
   // "lists": "format_list_bulleted",
   // "notifications": "notifications_active"
-  events: "event"
-};
+  events: 'event',
+}
 
 const filterRemindoros = (remindoros, tab) => {
-  let ros = remindoros;
+  let ros = remindoros
 
-  const is_home_tab = tab == "home",
-    is_events_tab = tab == "events";
+  const is_home_tab = tab == 'home',
+    is_events_tab = tab == 'events'
 
   if (is_events_tab) {
     let filtered_ros = _.filter(ros, function(ro) {
-      return ro.reminder.time;
-    });
+      return ro.reminder.time
+    })
     // sort the filtered array by update time
     ros = _.sortBy(filtered_ros, function(ro) {
       const reminder_time = new Date(ro.reminder.time).getTime(),
         current_time = new Date().getTime(),
-        isPast = current_time - reminder_time > 0;
+        isPast = current_time - reminder_time > 0
 
-      return isPast ? Infinity : reminder_time;
-    });
+      return isPast ? Infinity : reminder_time
+    })
   }
 
-  return ros;
-};
+  return ros
+}
 
 const mapStateToProps = (state, ownProps) => {
   // return the props for App component with the required state
@@ -65,67 +65,67 @@ const mapStateToProps = (state, ownProps) => {
     // remindoros: state.remindoros,
     remindoros: filterRemindoros(state.remindoros, state.current_tab),
     current_selected_remindoro: state.current_selected_remindoro,
-    id_counter: ownProps.id_counter
-  };
-};
+    id_counter: ownProps.id_counter,
+  }
+}
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   // return the props for App component with required dispatch methods
   return {
     // dispatch "changeTab" action as "home" at the start to sort remindoros in right order
     initializeHomeScreen: () => {
-      dispatch(changeTab("home"));
+      dispatch(changeTab('home'))
     },
 
     // handles creating a new remindoro
     handleAddRemindoro: current_id => {
-      dispatch(addRemindoro(current_id));
+      dispatch(addRemindoro(current_id))
       // also change the tab to home
-      dispatch(changeTab("home"));
+      dispatch(changeTab('home'))
       // scroll to the top of the screen in case we are at the bottom
-      $("#remindoros").animate({ scrollTop: "0px" }, 0);
+      $('#remindoros').animate({ scrollTop: '0px' }, 0)
     },
 
     // handles the navigation clicks of home, notifications etc
     onNavClick: tab => {
-      dispatch(changeTab(tab));
+      dispatch(changeTab(tab))
     },
 
     // handle title change; for now we are updating the title
     // TODO: later compare changes and update only if changed
     handleTitleChange: (id, title) => {
-      dispatch(updateTitle(id, title));
+      dispatch(updateTitle(id, title))
     },
 
     // handle Note Change
     handleNoteChange: (id, note, orig) => {
-      dispatch(updateNote(id, note));
+      dispatch(updateNote(id, note))
     },
 
     // handling menu click for a remindoro
     handleMenuClick: id => {
       // dispatch an action to select the current remindoro
-      dispatch(selectRemindoro(id));
+      dispatch(selectRemindoro(id))
 
       // scroll to the edited remindoro
       let animate_time = 750,
         marginTop = 50,
-        current_ro_offset = $("#remindoro-" + id).offset().top,
-        ros_offset = $("#remindoros").scrollTop(),
-        scrollTo = ros_offset + current_ro_offset - marginTop;
+        current_ro_offset = $('#remindoro-' + id).offset().top,
+        ros_offset = $('#remindoros').scrollTop(),
+        scrollTo = ros_offset + current_ro_offset - marginTop
 
-      $("#remindoros").animate(
+      $('#remindoros').animate(
         {
-          scrollTop: scrollTo + "px"
+          scrollTop: scrollTo + 'px',
         },
         animate_time
-      );
+      )
 
       // dispatch action to get the current edited remindoro
       // update the current remindoro details which will reflect in the modal
       // then updating the modal
       // $("#options-modal").openModal();
-      $("#options-modal").modal("open");
+      $('#options-modal').modal('open')
       // const elem = document.getElementById("options-modal");
       // const instance = M.Modal.getInstance(elem);
       // instance.open();
@@ -136,7 +136,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     // other from the onChange event of flatpickr! validate if id is present before triggering the action
     handleReminderStatus: (id, status, reminder_time) => {
       // dispatch reminder status change
-      dispatch(updateReminderStatus(id, status, reminder_time));
+      dispatch(updateReminderStatus(id, status, reminder_time))
     },
 
     // triggered by flatpickr timechange
@@ -145,33 +145,33 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     handleReminderTimeChange: (id, status, reminder_time) => {
       if (!(id && status)) {
         // do not proceed; it will be triggered when there is no current selected remindoro
-        return;
+        return
       }
       // update reminder time change
-      dispatch(updateReminderStatus(id, true, reminder_time));
+      dispatch(updateReminderStatus(id, true, reminder_time))
     },
 
     // updates repeat status when it is changed
     handleRepeatStatus: (id, status) => {
       // dispatch repeat status change
-      dispatch(updateRepeatStatus(id, status));
+      dispatch(updateRepeatStatus(id, status))
     },
 
     // delete the remindoro
     deleteRemindoro: id => {
       // close the bottom modal
       // $("#options-modal").closeModal();
-      $("#options-modal").modal("close");
+      $('#options-modal').modal('close')
       // const elem = document.getElementById("options-modal");
       // const instance = M.Modal.getInstance(elem);
       // instance.close();
       // dispatch the delete action
-      dispatch(deleteRemindoro(id));
+      dispatch(deleteRemindoro(id))
       // show a toast message
-      Materialize.toast("Deleted !", 2000, "center-align");
-    }
-  };
-};
+      Materialize.toast('Deleted !', 2000, 'center-align')
+    },
+  }
+}
 
 // we will get all the properties from mapStateToProps, mapDispatchToProps
 // we can access the props, and dispatch methods with appropriate names
@@ -202,14 +202,14 @@ let App = props => {
         onDelete={props.deleteRemindoro}
       />
     </div>
-  );
-};
+  )
+}
 
-App.displayName = "App";
+App.displayName = 'App'
 
 App = connect(
   mapStateToProps,
   mapDispatchToProps
-)(App);
+)(App)
 
-export default App;
+export default App

@@ -1,35 +1,35 @@
 // main remindoro componenet that displays the remindoro in home, notifications ... tabs
 // with appropriate filters
 
-import React from "react";
-import TimeAgo from "react-timeago";
-import ContentEditable from "react-contenteditable";
-import { Debounce } from "react-throttle";
-import moment from "moment";
+import React from 'react'
+import TimeAgo from 'react-timeago'
+import ContentEditable from 'react-contenteditable'
+import { Debounce } from 'react-throttle'
+import moment from 'moment'
 
-import { indexOf as _indexOf } from "lodash";
+import { indexOf as _indexOf } from 'lodash'
 
 const Remindoro = props => {
-  let empty_remindoro_component = "";
+  let empty_remindoro_component = ''
 
   if (props.remindoros.length == 0) {
-    let empty_msg = "",
-      is_event_tab = props.current_tab == "events";
+    let empty_msg = '',
+      is_event_tab = props.current_tab == 'events'
 
     if (is_event_tab) {
-      empty_msg = "No Scheduled Remindoros!";
+      empty_msg = 'No Scheduled Remindoros!'
     } else {
-      empty_msg = "Empty!";
+      empty_msg = 'Empty!'
     }
 
-    empty_remindoro_component = <div className="center">{empty_msg}</div>;
+    empty_remindoro_component = <div className="center">{empty_msg}</div>
   }
   return (
     <div id="remindoros" className="col s12">
       {props.remindoros.map(ro => {
         // decide if we have show a timeago element
-        let TimeAgo_Component = "",
-          Repeat_Component = "";
+        let TimeAgo_Component = '',
+          Repeat_Component = ''
 
         // if we have a reminder time scheduled
         if (ro.reminder.time) {
@@ -38,28 +38,28 @@ const Remindoro = props => {
             current_timestamp = new Date().getTime(),
             // buffer time 1 minutes. i.e we will notify if the remindoro is atmost 1 minute(s) old
             buffer = 1 * 60 * 1000,
-            time_difference = ro_timestamp - current_timestamp;
+            time_difference = ro_timestamp - current_timestamp
 
           // for now checking if the remindoro is in future or just 1 minute in past
           // const is_ro_active = (time_difference > 0) && (time_difference <= timeago_interval);
           // const is_ro_active = (time_difference > 0);
-          let is_ro_active = time_difference >= -buffer; // just 1 minute in past
+          let is_ro_active = time_difference >= -buffer // just 1 minute in past
 
           // note in case of long repeat => days, months we need to show the reminder for the current day
           // const is_short_repeat = _.indexOf(["minutes", "hours"], ro.reminder.repeat.interval) > -1;
           const is_long_repeat =
-            _indexOf(["days", "months"], ro.reminder.repeat.interval) > -1;
+            _indexOf(['days', 'months'], ro.reminder.repeat.interval) > -1
 
           let is_today = false, // for long repeat this is use to show "Today" info
-            is_future = false;
+            is_future = false
 
           if (is_long_repeat) {
             // actively we need to show if it is today
-            is_today = moment().isSame(ro.reminder.time, "day");
+            is_today = moment().isSame(ro.reminder.time, 'day')
             // check if current time is in past of "reminder time" => reminder time is in future
-            is_future = moment().isBefore(ro.reminder.time, "day");
+            is_future = moment().isBefore(ro.reminder.time, 'day')
             // if today we will show the alert
-            is_ro_active = is_today || is_future ? true : false;
+            is_ro_active = is_today || is_future ? true : false
           }
 
           if (is_ro_active) {
@@ -69,11 +69,11 @@ const Remindoro = props => {
                   <i className="material-icons">alarm</i>
                 </div>
                 <div className="col s10">
-                  {is_today ? "Today " : ""}
+                  {is_today ? 'Today ' : ''}
                   <TimeAgo date={ro.reminder.time} />
                 </div>
               </div>
-            );
+            )
           }
 
           if (ro.reminder.is_repeat) {
@@ -83,13 +83,13 @@ const Remindoro = props => {
                   <i className="material-icons">repeat</i>
                 </div>
               </div>
-            );
+            )
           }
         }
 
         return (
           <div
-            id={"remindoro-" + ro.id}
+            id={'remindoro-' + ro.id}
             className="remindoro row no-margin-vert"
             key={ro.id}
           >
@@ -100,7 +100,7 @@ const Remindoro = props => {
                     <Debounce time="250" handler="onChange">
                       <ContentEditable
                         html={ro.title}
-                        placeholder={"Title .."}
+                        placeholder={'Title ..'}
                         onChange={evt =>
                           props.onTitleChange(ro.id, evt.target.value)
                         }
@@ -111,7 +111,7 @@ const Remindoro = props => {
                     <Debounce time="250" handler="onChange">
                       <ContentEditable
                         html={ro.note}
-                        placeholder={"Add a Note ..."}
+                        placeholder={'Add a Note ...'}
                         onChange={evt =>
                           props.onNoteChange(ro.id, evt.target.value)
                         }
@@ -125,7 +125,7 @@ const Remindoro = props => {
                     <div
                       className="col s2"
                       style={{
-                        marginLeft: "1.1em"
+                        marginLeft: '1.1em',
                       }}
                     >
                       {Repeat_Component}
@@ -136,7 +136,7 @@ const Remindoro = props => {
                       className="btn-floating waves-effect transparent"
                       onClick={evt => {
                         // send the id of the remindoro for which menu is clicked
-                        props.onMenuClick(ro.id);
+                        props.onMenuClick(ro.id)
                       }}
                     >
                       <i className="material-icons">more_vert</i>
@@ -146,13 +146,13 @@ const Remindoro = props => {
               </div>
             </div>
           </div>
-        );
+        )
       })}
       {empty_remindoro_component}
     </div>
-  );
-};
+  )
+}
 
-Remindoro.displayName = "Remindoro";
+Remindoro.displayName = 'Remindoro'
 
-export default Remindoro;
+export default Remindoro

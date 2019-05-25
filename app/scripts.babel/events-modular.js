@@ -1,8 +1,8 @@
 import {
   find as _find,
   findKey as _findKey,
-  findIndex as _findIndex
-} from "lodash";
+  findIndex as _findIndex,
+} from 'lodash'
 // import moment from "moment";
 
 // import modular components from utils
@@ -13,88 +13,88 @@ import {
   isValidUrl,
   chrome_notify,
   is_chrome_error,
-  handle_sync_local_storage
-} from "../js/utils.js";
+  handle_sync_local_storage,
+} from '../js/utils.js'
 
 // chrome bg/event related tasks
-chrome.runtime.onInstalled.addListener(initializeInstallEvents);
+chrome.runtime.onInstalled.addListener(initializeInstallEvents)
 
 function initializeInstallEvents() {
-  console.log("event page install event !");
+  console.log('event page install event !')
   // BUGFIX: converting storage.sync to local due to storage space constraints
   // if we detect there are some data in chrome.storage.sync, we will transfer it to chrome.storage.local
   // defined in utils storage
-  handle_sync_local_storage();
+  handle_sync_local_storage()
 
-  const REMINDORO_VERSION = process.env.REMINDORO_VERSION;
+  const REMINDORO_VERSION = process.env.REMINDORO_VERSION
 
   // init_chrome_events();
-  create_context_menus();
+  create_context_menus()
   // show the welcome message
   const welcome_msg = {
     title: `Hello from Remindoro - ${REMINDORO_VERSION} !`,
     message:
-      "You can now set one-time/repeatable reminders for stuffs that matter to you ..."
-  };
+      'You can now set one-time/repeatable reminders for stuffs that matter to you ...',
+  }
 
-  chrome_notify(welcome_msg);
+  chrome_notify(welcome_msg)
 }
 
-init_chrome_events();
+init_chrome_events()
 
 function init_chrome_events() {
   // START: CHROME EVENTS
 
   // chrome handle alarm events
   // CREATE an alarm
-  chrome.alarms.create("remindoro-scan", {
+  chrome.alarms.create('remindoro-scan', {
     delayInMinutes: 0.1,
-    periodInMinutes: 1
-  });
+    periodInMinutes: 1,
+  })
 
   // listen for the alarm
   // and dig the remindoros from local chrome extension storage and check if we need to show any notifications
   chrome.alarms.onAlarm.addListener(() => {
-    chrome.storage.local.get("REMINDORO", data => {
+    chrome.storage.local.get('REMINDORO', data => {
       // get the  remindoro data
-      const remindoro_data = data["REMINDORO"];
-      const remindoros = remindoro_data && remindoro_data["remindoros"];
+      const remindoro_data = data['REMINDORO']
+      const remindoros = remindoro_data && remindoro_data['remindoros']
 
       // scan the remindoro and check if we need to update the time and notify it
-      Notification.scan(remindoros);
+      Notification.scan(remindoros)
       // save the store data to local storage
       chrome.storage.local.set({ REMINDORO: remindoro_data }, () => {
-        console.log("EVENT PAGE: STORE DATA saved to browser");
+        console.log('EVENT PAGE: STORE DATA saved to browser')
         // TODO: notification to be shown !!??
-        const chrome_error = is_chrome_error();
+        const chrome_error = is_chrome_error()
 
         if (chrome_error) {
           // notifications ALREADY shown in is_chrome_error module
           // do not proceed
-          return;
+          return
         }
-      });
-    });
-  });
+      })
+    })
+  })
 
   // handle browser context menu clicks
   chrome.contextMenus.onClicked.addListener((menu_details, tab_details) => {
-    chrome.storage.local.get("REMINDORO", data => {
+    chrome.storage.local.get('REMINDORO', data => {
       // get the  remindoro data
-      let remindoro_data = data["REMINDORO"];
-      const remindoros = remindoro_data["remindoros"];
+      let remindoro_data = data['REMINDORO']
+      const remindoros = remindoro_data['remindoros']
 
       // before adding we need to check if the link we are trying to save is already there
       const is_link_present = check_remindoro_link(
         menu_details,
         tab_details,
         remindoros
-      );
+      )
 
       if (is_link_present) {
         // we have notified
         // update the remindoros which we got
-        remindoro_data["remindoros"] = is_link_present;
+        remindoro_data['remindoros'] = is_link_present
       } else {
         // link is not already there
         // we need to add it
@@ -102,59 +102,59 @@ function init_chrome_events() {
           menu_details,
           tab_details,
           remindoros
-        );
+        )
 
         // push the remindoros to add
-        remindoros.push(to_add);
+        remindoros.push(to_add)
         // update the remindoros
-        remindoro_data["remindoros"] = remindoros;
+        remindoro_data['remindoros'] = remindoros
       }
 
       // save the store data to local storage
       chrome.storage.local.set({ REMINDORO: remindoro_data }, () => {
-        console.log("EVENT PAGE: NEW REMINDORO saved to browser");
+        console.log('EVENT PAGE: NEW REMINDORO saved to browser')
 
-        const chrome_error = is_chrome_error();
+        const chrome_error = is_chrome_error()
 
         if (chrome_error) {
           // notifications ALREADY shown in is_chrome_error module
           // do not proceed
-          return;
+          return
         }
 
         chrome_notify({
-          title: "Added Successfully",
-          message: to_add.title
-        });
-      });
-    });
-  });
+          title: 'Added Successfully',
+          message: to_add.title,
+        })
+      })
+    })
+  })
 
   // handle when a "Read Now" button is clicked on notification
   chrome.notifications.onButtonClicked.addListener(
     (notification_id, button_index) => {
       // getting the remindoro id from the notificatin id
       const ro_id = _findKey(Notification.notification_ids, (n_id, key) => {
-        return n_id == notification_id;
-      });
+        return n_id == notification_id
+      })
       // getting remindoros from the storage
-      chrome.storage.local.get("REMINDORO", data => {
+      chrome.storage.local.get('REMINDORO', data => {
         // get the  remindoro data
-        const remindoro_data = data["REMINDORO"];
-        const remindoros = remindoro_data["remindoros"];
+        const remindoro_data = data['REMINDORO']
+        const remindoros = remindoro_data['remindoros']
 
         // finding the remindoro matching the id
-        const ro = _find(remindoros, r => r.id == ro_id);
+        const ro = _find(remindoros, r => r.id == ro_id)
 
         if (isValidUrl(ro.note)) {
           // if valid url; opening the link in new tab
-          chrome.tabs.create({ url: ro.note });
+          chrome.tabs.create({ url: ro.note })
         }
         // either way we need to close the notification
-        chrome.notifications.clear(notification_id);
-      });
+        chrome.notifications.clear(notification_id)
+      })
     }
-  );
+  )
   // END: CHROME EVENTS
 }
 
@@ -163,66 +163,66 @@ function create_context_menus() {
   // creating a page context menu
   chrome.contextMenus.create(
     {
-      id: "remindoro-page-context-menu",
-      contexts: ["page", "link"],
-      title: "Add to Remindoro"
+      id: 'remindoro-page-context-menu',
+      contexts: ['page', 'link'],
+      title: 'Add to Remindoro',
     },
     () => {
-      console.log("context menu created ? ", arguments);
+      console.log('context menu created ? ', arguments)
     }
-  );
+  )
 
   // creating a highlight context menu
   chrome.contextMenus.create(
     {
-      id: "remindoro-highlight-context-menu",
-      contexts: ["selection"],
-      title: "Save Text to Remindoro"
+      id: 'remindoro-highlight-context-menu',
+      contexts: ['selection'],
+      title: 'Save Text to Remindoro',
     },
     () => {
-      console.log("context menu created ? ", arguments);
+      console.log('context menu created ? ', arguments)
     }
-  );
+  )
 }
 
 function handleContextMenuClick(menu_details, tab_details, remindoros) {
-  let remindoro_details = {};
+  let remindoro_details = {}
   // we will be handling two types of context menus
   // page/link action => adding the page url as note, title as title
   // highlighted action => title - url as title, highlighted text as body
-  const context_id = menu_details.menuItemId;
-  const page_action = context_id === "remindoro-page-context-menu";
-  const highlight_action = context_id === "remindoro-highlight-context-menu";
+  const context_id = menu_details.menuItemId
+  const page_action = context_id === 'remindoro-page-context-menu'
+  const highlight_action = context_id === 'remindoro-highlight-context-menu'
 
-  let title = "";
-  let note = "";
+  let title = ''
+  let note = ''
 
   if (page_action) {
     // page/link action
     // title => page title
     // note => url of the page
-    title = tab_details.title;
-    note = tab_details.url;
+    title = tab_details.title
+    note = tab_details.url
   } else if (highlight_action) {
     // highlight action
     // title => page title - url
     // note => highlighted text
-    title = tab_details.title + " - " + tab_details.url;
-    note = menu_details.selectionText || "";
+    title = tab_details.title + ' - ' + tab_details.url
+    note = menu_details.selectionText || ''
   }
 
   // save the  remindoro details
   remindoro_details = {
     title: title,
-    note: note
-  };
+    note: note,
+  }
 
-  const add_id = calculate_remindoro_id(remindoros);
+  const add_id = calculate_remindoro_id(remindoros)
   // return the new remindoro to be added
   const remindoro_to_add = {
     id: add_id,
     title: remindoro_details.title,
-    type: "note",
+    type: 'note',
     note: remindoro_details.note,
     list: [], // if list contains the list details
     created: Date.now(),
@@ -232,12 +232,12 @@ function handleContextMenuClick(menu_details, tab_details, remindoros) {
       is_repeat: false, // status if the alarm is recurring
       repeat: {
         interval: false,
-        time: false
-      }
-    }
-  };
+        time: false,
+      },
+    },
+  }
 
-  return remindoro_to_add;
+  return remindoro_to_add
 }
 
 // check if remindoro link already present
@@ -245,42 +245,42 @@ function check_remindoro_link(menu_details, tab_details, remindoros) {
   // we will be handling two types of context menus
   // page/link action => adding the page url as note, title as title
   // highlighted action => title - url as title, highlighted text as body
-  const context_id = menu_details.menuItemId;
-  const page_action = context_id === "remindoro-page-context-menu";
-  const highlight_action = context_id === "remindoro-highlight-context-menu";
+  const context_id = menu_details.menuItemId
+  const page_action = context_id === 'remindoro-page-context-menu'
+  const highlight_action = context_id === 'remindoro-highlight-context-menu'
 
   // if not page action we will return false
   if (!page_action) {
-    return false;
+    return false
   }
 
-  const title = tab_details.title;
-  const note = tab_details.url;
+  const title = tab_details.title
+  const note = tab_details.url
 
   // we are getting a page action only here
   // note here we need to check if the url is already present in the existing remindoros
   const already_saved_link = _findIndex(remindoros, ro => {
-    const link = strip_html(ro.note);
-    return note == link;
-  });
+    const link = strip_html(ro.note)
+    return note == link
+  })
 
   if (already_saved_link < 0) {
     // it is not present
-    return false;
+    return false
   }
 
   // it seems the link is already saved we need to update the
   // update the time with the index we have
-  remindoros[already_saved_link].updated = Date.now();
+  remindoros[already_saved_link].updated = Date.now()
   // update the title in case we get a updated title
-  remindoros[already_saved_link].title = title;
+  remindoros[already_saved_link].title = title
 
   // notify
   chrome_notify({
-    title: "Updated Successfully!",
-    message: note
-  });
+    title: 'Updated Successfully!',
+    message: note,
+  })
 
   // return the remindoros
-  return remindoros;
+  return remindoros
 }

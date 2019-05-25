@@ -1,28 +1,28 @@
 // top navigation bar containing the menu and close button
 // menu is given as props along with icon names to display
 
-import React from "react";
-import classNames from "classnames";
-import { map as _map } from "lodash";
+import React from 'react'
+import classNames from 'classnames'
+import { map as _map } from 'lodash'
 
-import config from "../config.json";
+import config from '../config.json'
 
 class Navigator extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      id_counter: props.id_counter
-    };
+      id_counter: props.id_counter,
+    }
   }
 
   componentDidMount() {
-    this.props.initializeHomeScreen();
+    this.props.initializeHomeScreen()
   }
 
-  displayName = "Navigator";
+  displayName = 'Navigator'
 
   render() {
-    const { props } = this;
+    const { props } = this
 
     return (
       <header className="row navigator valign-wrapper">
@@ -32,7 +32,7 @@ class Navigator extends React.Component {
               className="btn btn-floating waves-light waves-effect"
               onClick={() => {
                 // closing the popup window
-                window.close();
+                window.close()
               }}
             >
               <i className="material-icons">close</i>
@@ -42,8 +42,8 @@ class Navigator extends React.Component {
               onClick={() => {
                 // open the help file
                 chrome.tabs.create({
-                  url: config[process.env.TARGET_PLATFORM].help_url
-                });
+                  url: config[process.env.TARGET_PLATFORM].help_url,
+                })
               }}
             >
               <i className="material-icons">help</i>
@@ -53,8 +53,8 @@ class Navigator extends React.Component {
               onClick={() => {
                 // open the help file
                 chrome.tabs.create({
-                  url: config[process.env.TARGET_PLATFORM].rate_url
-                });
+                  url: config[process.env.TARGET_PLATFORM].rate_url,
+                })
               }}
             >
               <i className="material-icons">star</i>
@@ -64,49 +64,49 @@ class Navigator extends React.Component {
           <div className="col s6 right-align no-padding">
             {_map(props.menu, (value, key) => {
               let nav_class = classNames(
-                "btn btn-floating waves-effect waves-light",
+                'btn btn-floating waves-effect waves-light',
                 {
-                  current: props.current_tab == key
+                  current: props.current_tab == key,
                 }
-              );
+              )
 
               return (
                 <button
                   className={nav_class}
                   key={key}
                   onClick={() => {
-                    let current_id = this.state.id_counter;
+                    let current_id = this.state.id_counter
                     // NOTE: not needed now since we are already adding when creating id
                     // current_id++;
                     // update the state
                     this.setState({
-                      id_counter: current_id
-                    });
+                      id_counter: current_id,
+                    })
                     // before triggering the navigator click, checking if current clicked menu
                     // is already a current tab
-                    if (key == "add") {
-                      props.onAddClick(current_id);
+                    if (key == 'add') {
+                      props.onAddClick(current_id)
                       // do not proceed;
-                      return;
+                      return
                     }
 
                     if (props.current_tab == key) {
                       // do not proceed
-                      return;
+                      return
                     }
                     // a different tab is clicked; proceed with state change
-                    props.onClick(key);
+                    props.onClick(key)
                   }}
                 >
                   <i className="material-icons">{value}</i>
                 </button>
-              );
+              )
             })}
           </div>
         </div>
       </header>
-    );
+    )
   }
 }
 
-export default Navigator;
+export default Navigator

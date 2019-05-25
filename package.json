@@ -64,7 +64,8 @@
     "wiredep": "^4.0.0"
   },
   "scripts": {
-    "test": "mocha --compilers js:@babel/register"
+    "test": "mocha --compilers js:@babel/register",
+    "format-prettier": "prettier --write '{app/Components/*.jsx, app/js/utils.js, app/scripts.babel/*.js}'"
   },
   "eslintConfig": {
     "parser": "babel-eslint",
