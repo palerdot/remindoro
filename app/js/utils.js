@@ -1,5 +1,4 @@
 // collection of utility scripts used for remindoro
-
 import {
   maxBy as _maxBy,
   each as _each,
@@ -21,9 +20,7 @@ export function calculate_remindoro_id(remindoros) {
     return remindoro_count + 1;
   }
 
-  let max_id_remindoro = _maxBy(remindoros, function(data) {
-    return data.id;
-  });
+  let max_id_remindoro = _maxBy(remindoros, data => data.id);
 
   if (max_id_remindoro) {
     remindoro_count = max_id_remindoro.id;
@@ -45,19 +42,15 @@ export const Notification = {
 
   // takes the to_notify array and notifies it
   notify: function() {
-    var self = this; // save reference
-
     // before showing a message; send a message to extension about the updated remindoros
     chrome.runtime.sendMessage(
       { updated_remindoros: Notification.to_notify },
-      function(response) {
+      response => {
         // console.log(response);
       }
     );
 
-    _each(this.to_notify, function(ro) {
-      self.show(ro);
-    });
+    _each(this.to_notify, ro => this.show(ro));
 
     // clear the notify array
     this.to_notify = [];
@@ -65,15 +58,14 @@ export const Notification = {
 
   // shows individual notification for each message with specified details
   show: function(ro) {
-    var self = this; // save reference
-
-    var ro_noty_id = this.notification_ids[ro.id]
+    const ro_noty_id = this.notification_ids[ro.id]
       ? this.notification_ids[ro.id]
       : "";
 
     // if we have an url in the body we will show read now button;
-    var is_note_url = isValidUrl(ro.note),
-      buttons = [];
+    const is_note_url = isValidUrl(ro.note);
+    let buttons = [];
+
     if (is_note_url) {
       buttons = [
         {
@@ -104,23 +96,20 @@ export const Notification = {
     this.notification_ids[ro.id] = chrome.notifications.create(
       ro_noty_id,
       NOTIFICATION_OPTIONS,
-      function(notification_id) {
+      notification_id => {
         // SAVING the notification id
-        self.notification_ids[ro.id] = notification_id;
+        this.notification_ids[ro.id] = notification_id;
       }
     );
   },
 
   // checks whether we need to show notification for any upcoming remindoros
   scan: function(remindoros) {
-    var self = this; // save reference
     console.log("checking remindoros ", remindoros);
     // clear the alarms to be notified
     this.to_notify = [];
     // go through the remindoros and update the time if they are to be notified
-    remindoros = _map(remindoros, function(ro) {
-      return self.check(ro);
-    });
+    remindoros = _map(remindoros, ro => this.check(ro));
     console.log("NOTIFICATION LIST ", this.to_notify);
     // ok let us notify the remindoros
     this.notify();
@@ -134,12 +123,14 @@ export const Notification = {
   // it can be used for showing notifications
   check: function(ro) {
     // first let us take the current time
-    var current_time = new Date().getTime(),
-      // buffer time 15 minutes. i.e we will notify if the remindoro is atmost 15 minutes old
-      buffer = 15 * 60 * 1000,
-      ro_time = ro.reminder.time ? new Date(ro.reminder.time).getTime() : false,
-      time_delta = current_time - ro_time,
-      is_repeat = ro.reminder.is_repeat;
+    const current_time = new Date().getTime();
+    // buffer time 15 minutes. i.e we will notify if the remindoro is atmost 15 minutes old
+    const buffer = 15 * 60 * 1000;
+    const ro_time = ro.reminder.time
+      ? new Date(ro.reminder.time).getTime()
+      : false;
+    const time_delta = current_time - ro_time;
+    const is_repeat = ro.reminder.is_repeat;
 
     // CASE 1: no reminder scheduled
     // RESULT: WILL NOT NOTIFY; returning REMINDORO
@@ -158,7 +149,7 @@ export const Notification = {
       }
 
       // we have this remindoro scheduled at some time; we need to check if it is atmost 15 mins fresh
-      var to_be_notified = time_delta <= buffer;
+      const to_be_notified = time_delta <= buffer;
 
       // CASE 4: remindoro is 15 mins (buffer time) past. not fresh; very past event STILL ALIVE
       // RESULT: WILL NOT NOTIFY; returning REMINDORO by CLEARING remindoro time
@@ -175,17 +166,17 @@ export const Notification = {
     } else {
       // CASE 6: REPEATABLE remindoros
       // short repeat => minutes, hours; long repeat => days, months
-      var is_short_repeat =
-          _indexOf(["minutes", "hours"], ro.reminder.repeat.interval) > -1,
-        is_long_repeat =
-          _indexOf(["days", "months"], ro.reminder.repeat.interval) > -1;
+      const is_short_repeat =
+        _indexOf(["minutes", "hours"], ro.reminder.repeat.interval) > -1;
+      const is_long_repeat =
+        _indexOf(["days", "months"], ro.reminder.repeat.interval) > -1;
 
       // CASE 7: short repeat => minutes, hours
       if (is_short_repeat) {
         // console.log("SHORT REPEAT");
         // determines if the reminder time is in the same day exactly to the scheduled "minute"
-        var is_past = moment().isAfter(ro.reminder.time, "minute"),
-          is_present = moment().isSame(ro.reminder.time, "minute");
+        const is_past = moment().isAfter(ro.reminder.time, "minute");
+        const is_present = moment().isSame(ro.reminder.time, "minute");
 
         // CASE 7: exactly scheduled at current minute; short repeating remindoro
         // RESULT: WILL NOTIFY
@@ -219,13 +210,13 @@ export const Notification = {
         // and will not update the reminder time till the day is done
         // determines if the reminder time is in the same day exactly to the scheduled "DAY"
         // is_past => checks if current moment is after the given moment
-        var is_past = moment().isAfter(ro.reminder.time, "day"),
-          is_today = moment().isSame(ro.reminder.time, "day");
+        const is_past = moment().isAfter(ro.reminder.time, "day");
+        const is_today = moment().isSame(ro.reminder.time, "day");
 
         // CASE 10: scheduled today for long repeat
         if (is_today) {
           // CASE 11: we will exactly notify on the scheduled minute
-          var is_current_minute = moment().isSame(ro.reminder.time, "minute");
+          const is_current_minute = moment().isSame(ro.reminder.time, "minute");
           if (!is_current_minute) {
             //RESULT: WILL NOT notify
             return ro;
@@ -237,8 +228,8 @@ export const Notification = {
           // CASE 13: scheduled older than today
           // we need to update the next reminder which should be in future
 
-          var is_future_reminder_time = false,
-            future_reminder_time = new Date(ro.reminder.time);
+          const is_future_reminder_time = false;
+          let future_reminder_time = new Date(ro.reminder.time);
 
           // looping till we get a future reminder time
           while (!is_future_reminder_time) {
@@ -284,7 +275,7 @@ export const Notification = {
 // ref: http://stackoverflow.com/a/822486/1410291
 // note: this should return the string, if the incoming thing is a string and not html
 export function strip_html(html) {
-  var tmp = document.createElement("DIV");
+  let tmp = document.createElement("DIV");
   tmp.innerHTML = html;
 
   return tmp.textContent || tmp.innerText || "";
@@ -292,7 +283,7 @@ export function strip_html(html) {
 
 // check if it is a valid url
 export function isValidUrl(s) {
-  var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+  let regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
   return regexp.test(s);
 }
 
@@ -306,7 +297,7 @@ export function chrome_notify(details) {
       title: details.title ? details.title : "",
       message: details.message ? details.message : ""
     },
-    function() {
+    () => {
       console.log("chrome notification show callback ", arguments);
     }
   );
@@ -320,7 +311,7 @@ export function is_chrome_error() {
   }
 
   // there is an runtime error
-  var chrome_error =
+  const chrome_error =
     (chrome.runtime.lastError && chrome.runtime.lastError.message).indexOf(
       "QUOTA_BYTES"
     ) >= 0;
@@ -332,15 +323,15 @@ export function is_chrome_error() {
   console.log("CHROME ERROR ", chrome_error);
 
   // show chrome notification
-  var error = {
+  const error = {
     title: "",
     message: ""
   };
 
   if (chrome_error == "storage") {
     // storage error
-    error.title = "Browser Storage Limit Exceeded";
-    error.message = "Please delete few reminders and try again.";
+    error.title = "Browser Storage Limit maybe Exceeded";
+    error.message = "Please try deleting few reminders and try again.";
   } else {
     // some error not related to storage
     error.title = "Error ...";
@@ -362,7 +353,7 @@ export function is_chrome_error() {
 // if we detect there are some data in chrome.storage.sync, we will transfer it to chrome.storage.local
 export function handle_sync_local_storage() {
   // first get data from chrome.storage.sync
-  chrome.storage.sync.get("REMINDORO", function(sync_data) {
+  chrome.storage.sync.get("REMINDORO", sync_data => {
     console.log("SYNC DATA! ", sync_data);
 
     if (_isEmpty(sync_data)) {
@@ -371,7 +362,7 @@ export function handle_sync_local_storage() {
     }
     console.log("MIGRATING SYNC TO LOCAL ", sync_data);
     // if sync data is present, let us try to merge those things with existing local data
-    chrome.storage.local.get("REMINDORO", function(local_data) {
+    chrome.storage.local.get("REMINDORO", local_data => {
       // if local data is present will merge just the remindoros
       if (!_isEmpty(local_data)) {
         let local_remindoros =
@@ -387,27 +378,24 @@ export function handle_sync_local_storage() {
           "id"
         );
         // update the local storage
-        chrome.storage.local.set({ REMINDORO: local_data }, function() {
+        chrome.storage.local.set({ REMINDORO: local_data }, () => {
           console.log("CHROME LOCAL DATA updated ", local_data);
         });
         // nullify the sync storage
-        chrome.storage.sync.remove("REMINDORO", function() {
+        chrome.storage.sync.remove("REMINDORO", () => {
           console.log("CHROME SYNC DATA nullified");
         });
       } else {
         // if no local data, just make sync data as local data
         // update the local storage
-        chrome.storage.local.set(
-          { REMINDORO: sync_data["REMINDORO"] },
-          function() {
-            console.log(
-              "CHROME LOCAL DATA updated with sync data ",
-              sync_data["REMINDORO"]
-            );
-          }
-        );
+        chrome.storage.local.set({ REMINDORO: sync_data["REMINDORO"] }, () => {
+          console.log(
+            "CHROME LOCAL DATA updated with sync data ",
+            sync_data["REMINDORO"]
+          );
+        });
         // nullify the sync storage
-        chrome.storage.sync.remove("REMINDORO", function() {
+        chrome.storage.sync.remove("REMINDORO", () => {
           console.log("CHROME SYNC DATA nullified");
         });
       }
