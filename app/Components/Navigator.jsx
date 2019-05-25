@@ -41,7 +41,9 @@ class Navigator extends React.Component {
               className="btn btn-floating waves-light waves-effect"
               onClick={() => {
                 // open the help file
-                chrome.tabs.create({ url: config.help_url });
+                chrome.tabs.create({
+                  url: config[process.env.TARGET_PLATFORM].help_url
+                });
               }}
             >
               <i className="material-icons">help</i>
@@ -50,7 +52,9 @@ class Navigator extends React.Component {
               className="btn btn-floating waves-light waves-effect"
               onClick={() => {
                 // open the help file
-                chrome.tabs.create({ url: config.rate_url });
+                chrome.tabs.create({
+                  url: config[process.env.TARGET_PLATFORM].rate_url
+                });
               }}
             >
               <i className="material-icons">star</i>
