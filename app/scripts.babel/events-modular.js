@@ -15,9 +15,10 @@ import {
   is_chrome_error,
   handle_sync_local_storage,
 } from '../js/utils.js'
+import { browser } from 'webextension-polyfill-ts'
 
-// chrome bg/event related tasks
-chrome.runtime.onInstalled.addListener(initializeInstallEvents)
+// browser bg/event related tasks
+browser.runtime.onInstalled.addListener(initializeInstallEvents)
 
 function initializeInstallEvents() {
   console.log('event page install event !')
@@ -47,23 +48,27 @@ function init_chrome_events() {
 
   // chrome handle alarm events
   // CREATE an alarm
-  chrome.alarms.create('remindoro-scan', {
+  browser.alarms.create('remindoro-scan', {
     delayInMinutes: 0.1,
     periodInMinutes: 1,
   })
 
   // listen for the alarm
   // and dig the remindoros from local chrome extension storage and check if we need to show any notifications
-  chrome.alarms.onAlarm.addListener(() => {
-    chrome.storage.local.get('REMINDORO', data => {
-      // get the  remindoro data
-      const remindoro_data = data['REMINDORO']
-      const remindoros = remindoro_data && remindoro_data['remindoros']
+  browser.alarms.onAlarm.addListener(() => {
+    browser.storage.local
+      .get('REMINDORO')
+      .then(data => {
+        // get the  remindoro data
+        const remindoro_data = data['REMINDORO']
+        const remindoros = remindoro_data && remindoro_data['remindoros']
 
-      // scan the remindoro and check if we need to update the time and notify it
-      Notification.scan(remindoros)
-      // save the store data to local storage
-      chrome.storage.local.set({ REMINDORO: remindoro_data }, () => {
+        // scan the remindoro and check if we need to update the time and notify it
+        Notification.scan(remindoros)
+        // save the store data to local storage
+        return browser.storage.local.set({ REMINDORO: remindoro_data })
+      })
+      .then(() => {
         console.log('EVENT PAGE: STORE DATA saved to browser')
         // TODO: notification to be shown !!??
         const chrome_error = is_chrome_error()
@@ -74,44 +79,47 @@ function init_chrome_events() {
           return
         }
       })
-    })
   })
 
   // handle browser context menu clicks
-  chrome.contextMenus.onClicked.addListener((menu_details, tab_details) => {
-    chrome.storage.local.get('REMINDORO', data => {
-      // get the  remindoro data
-      let remindoro_data = data['REMINDORO']
-      const remindoros = remindoro_data['remindoros']
+  browser.contextMenus.onClicked.addListener((menu_details, tab_details) => {
+    browser.storage.local
+      .get('REMINDORO')
+      .then(data => {
+        // get the  remindoro data
+        let remindoro_data = data['REMINDORO']
+        const remindoros = remindoro_data['remindoros']
 
-      // before adding we need to check if the link we are trying to save is already there
-      const is_link_present = check_remindoro_link(
-        menu_details,
-        tab_details,
-        remindoros
-      )
-
-      if (is_link_present) {
-        // we have notified
-        // update the remindoros which we got
-        remindoro_data['remindoros'] = is_link_present
-      } else {
-        // link is not already there
-        // we need to add it
-        const to_add = handleContextMenuClick(
+        // before adding we need to check if the link we are trying to save is already there
+        const is_link_present = check_remindoro_link(
           menu_details,
           tab_details,
           remindoros
         )
 
-        // push the remindoros to add
-        remindoros.push(to_add)
-        // update the remindoros
-        remindoro_data['remindoros'] = remindoros
-      }
+        if (is_link_present) {
+          // we have notified
+          // update the remindoros which we got
+          remindoro_data['remindoros'] = is_link_present
+        } else {
+          // link is not already there
+          // we need to add it
+          const to_add = handleContextMenuClick(
+            menu_details,
+            tab_details,
+            remindoros
+          )
 
-      // save the store data to local storage
-      chrome.storage.local.set({ REMINDORO: remindoro_data }, () => {
+          // push the remindoros to add
+          remindoros.push(to_add)
+          // update the remindoros
+          remindoro_data['remindoros'] = remindoros
+        }
+
+        // save the store data to local storage
+        return browser.storage.local.set({ REMINDORO: remindoro_data })
+      })
+      .then(() => {
         console.log('EVENT PAGE: NEW REMINDORO saved to browser')
 
         const chrome_error = is_chrome_error()
@@ -127,18 +135,17 @@ function init_chrome_events() {
           message: to_add.title,
         })
       })
-    })
   })
 
   // handle when a "Read Now" button is clicked on notification
-  chrome.notifications.onButtonClicked.addListener(
+  browser.notifications.onButtonClicked.addListener(
     (notification_id, button_index) => {
       // getting the remindoro id from the notificatin id
       const ro_id = _findKey(Notification.notification_ids, (n_id, key) => {
         return n_id == notification_id
       })
       // getting remindoros from the storage
-      chrome.storage.local.get('REMINDORO', data => {
+      browser.storage.local.get('REMINDORO').then(data => {
         // get the  remindoro data
         const remindoro_data = data['REMINDORO']
         const remindoros = remindoro_data['remindoros']
@@ -148,10 +155,10 @@ function init_chrome_events() {
 
         if (isValidUrl(ro.note)) {
           // if valid url; opening the link in new tab
-          chrome.tabs.create({ url: ro.note })
+          browser.tabs.create({ url: ro.note })
         }
         // either way we need to close the notification
-        chrome.notifications.clear(notification_id)
+        browser.notifications.clear(notification_id)
       })
     }
   )
@@ -161,7 +168,8 @@ function init_chrome_events() {
 // creates context menus for different use cases => normal one, for links, highlighted text
 function create_context_menus() {
   // creating a page context menu
-  chrome.contextMenus.create(
+  // POLYFILL/PROMISES not supported
+  browser.contextMenus.create(
     {
       id: 'remindoro-page-context-menu',
       contexts: ['page', 'link'],
@@ -173,7 +181,7 @@ function create_context_menus() {
   )
 
   // creating a highlight context menu
-  chrome.contextMenus.create(
+  browser.contextMenus.create(
     {
       id: 'remindoro-highlight-context-menu',
       contexts: ['selection'],

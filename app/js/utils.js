@@ -8,6 +8,7 @@ import {
   unionBy as _unionBy,
 } from 'lodash'
 import moment from 'moment'
+import { browser } from 'webextension-polyfill-ts'
 
 // calculates unique remindoro id for a given set of remindoros
 // takes a set of remindoros; calculates max id among the given remindoros
@@ -43,12 +44,11 @@ export const Notification = {
   // takes the to_notify array and notifies it
   notify: function() {
     // before showing a message; send a message to extension about the updated remindoros
-    chrome.runtime.sendMessage(
-      { updated_remindoros: Notification.to_notify },
-      response => {
+    browser.runtime
+      .sendMessage({ updated_remindoros: Notification.to_notify })
+      .then(response => {
         // console.log(response);
-      }
-    )
+      })
 
     _each(this.to_notify, ro => this.show(ro))
 
@@ -93,14 +93,12 @@ export const Notification = {
       })
     }
 
-    this.notification_ids[ro.id] = chrome.notifications.create(
-      ro_noty_id,
-      NOTIFICATION_OPTIONS,
-      notification_id => {
+    this.notification_ids[ro.id] = browser.notifications
+      .create(ro_noty_id, NOTIFICATION_OPTIONS)
+      .then(notification_id => {
         // SAVING the notification id
         this.notification_ids[ro.id] = notification_id
-      }
-    )
+      })
   },
 
   // checks whether we need to show notification for any upcoming remindoros
@@ -289,18 +287,16 @@ export function isValidUrl(s) {
 
 // show a chrome notification
 export function chrome_notify(details) {
-  chrome.notifications.create(
-    '',
-    {
+  browser.notifications
+    .create('', {
       type: 'basic',
       iconUrl: '/images/icon-38.png',
       title: details.title ? details.title : '',
       message: details.message ? details.message : '',
-    },
-    () => {
+    })
+    .then(() => {
       console.log('chrome notification show callback ', arguments)
-    }
-  )
+    })
 }
 
 // check if chrome quota exceeded or similar runtime message
@@ -348,6 +344,7 @@ export function is_chrome_error() {
   return chrome_error
 }
 
+// LEGACY code to migrate data from sync to local storage
 // for v0.1.6
 // BUGFIX: converting storage.sync to local due to storage space constraints
 // if we detect there are some data in chrome.storage.sync, we will transfer it to chrome.storage.local
