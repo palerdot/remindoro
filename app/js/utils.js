@@ -49,6 +49,12 @@ export const Notification = {
       .then(response => {
         // console.log(response);
       })
+      .catch(err => {
+        console.log(
+          'porumai! browser runtime error ... probably popup is closed ',
+          err
+        )
+      })
 
     _each(this.to_notify, ro => this.show(ro))
 

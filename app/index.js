@@ -16,9 +16,10 @@ import { calculate_remindoro_id, is_chrome_error } from './js/utils'
 import './js/general-initializer.js'
 
 import App from './Components/App'
+import { browser } from 'webextension-polyfill-ts'
 
 // sniff if we are running as a chrome extension
-let is_chrome_extension = chrome && chrome.storage
+let is_browser_extension = browser && browser.storage
 
 // defining the store
 // we will initialize after getting initial data from chrome
@@ -32,8 +33,8 @@ let REMINDORO = {
   // count of total remindoros; used for generating unique ids by auto incrementing
   id_counter: 0,
 
-  initialize: function(chrome_local_data) {
-    let initial_data = chrome_local_data && chrome_local_data['REMINDORO']
+  initialize: function(browser_local_data) {
+    let initial_data = browser_local_data && browser_local_data['REMINDORO']
 
     // not added in version 0.1.0
     let is_empty_remindoros =
@@ -91,14 +92,14 @@ let REMINDORO = {
 
   // handle store changes
   handleSubscription: function() {
-    if (!is_chrome_extension) {
+    if (!is_browser_extension) {
       // do not sync with chrome storage
       return
     }
     // save the store data to local storage
-    chrome.storage.local.set({ REMINDORO: store.getState() }, function() {
+    browser.storage.local.set({ REMINDORO: store.getState() }).then(() => {
       console.log('STORE DATA saved to CHROME')
-      var chrome_error = is_chrome_error()
+      const chrome_error = is_chrome_error()
 
       if (chrome_error) {
         // notifications ALREADY shown in is_chrome_error module
@@ -109,11 +110,11 @@ let REMINDORO = {
   },
 
   handleContextMenuClick: function(menu_details, tab_details) {
-    var remindoro_details = {}
+    let remindoro_details = {}
     // we will be handling two types of context menus
     // page/link action => adding the page url as note, title as title
     // highlighted action => title - url as title, highlighted text as body
-    var context_id = menu_details.menuItemId,
+    const context_id = menu_details.menuItemId,
       page_action = context_id == 'remindoro-page-context-menu',
       highlight_action = context_id == 'remindoro-highlight-context-menu'
 
@@ -183,20 +184,17 @@ function get_initial_remindoros() {
 }
 
 try {
-  if (is_chrome_extension) {
+  if (is_browser_extension) {
     // we are dealing with a chrome extension; init normally
-    chrome.contextMenus.onClicked.addListener(function(
-      menu_details,
-      tab_details
-    ) {
+    browser.contextMenus.onClicked.addListener((menu_details, tab_details) => {
       console.log('processed in background page')
       REMINDORO.handleContextMenuClick(menu_details, tab_details)
     })
     // get current locally stored item from chrome
     // our data is within the key called "REMINDORO" // caps
-    chrome.storage.local.get('REMINDORO', REMINDORO.initialize.bind(REMINDORO))
+    browser.storage.local.get('REMINDORO', REMINDORO.initialize.bind(REMINDORO))
 
-    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
       console.log('porumai! runtime message ', request, sender, sendResponse)
       if (!_isEmpty(request.updated_remindoros)) {
         // if there are any updated remindoros, changing only those remindoros
