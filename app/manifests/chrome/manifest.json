@@ -9,11 +9,7 @@
     },
     "default_locale": "en",
     "background": {
-        "scripts": [
-            "js/lodash.min.js",
-            "js/moment.min.js",
-            "js/events.js"
-        ],
+        "scripts": ["js/events.js"],
         "persistent": false
     },
     "permissions": [
@@ -28,17 +24,6 @@
         "notifications",
         "storage"
     ],
-    "content_scripts": [{
-        "matches": [
-            "http://*/*",
-            "https://*/*"
-        ],
-        "js": [
-            "js/contentscript.js"
-        ],
-        "run_at": "document_end",
-        "all_frames": false
-    }],
     "omnibox": {
         "keyword": "OMNIBOX-KEYWORD"
     },

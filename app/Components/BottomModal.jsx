@@ -39,6 +39,7 @@ class BottomModal extends React.Component {
       enableTime: true,
       wrap: true,
       minDate: 'today',
+      // minDate: new Date(),
       dateFormat: this._reminder_date_format,
       // the default date is the reminder time previously saved if present or null
       // defaultDate: this.state.reminder_time,

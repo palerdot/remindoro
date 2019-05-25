@@ -192,7 +192,9 @@ try {
     })
     // get current locally stored item from chrome
     // our data is within the key called "REMINDORO" // caps
-    browser.storage.local.get('REMINDORO', REMINDORO.initialize.bind(REMINDORO))
+    browser.storage.local
+      .get('REMINDORO')
+      .then(() => REMINDORO.initialize.bind(REMINDORO)())
 
     browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
       console.log('porumai! runtime message ', request, sender, sendResponse)
@@ -208,5 +210,6 @@ try {
     REMINDORO.initialize({})
   }
 } catch (e) {
+  console.log('porumai! error in handling chrome error ', e)
   handleError(e)
 }

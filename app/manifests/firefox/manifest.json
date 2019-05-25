@@ -22,14 +22,6 @@
     "notifications",
     "storage"
   ],
-  "content_scripts": [
-    {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": ["js/contentscript.js"],
-      "run_at": "document_end",
-      "all_frames": false
-    }
-  ],
   "omnibox": {
     "keyword": "OMNIBOX-KEYWORD"
   },

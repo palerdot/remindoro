@@ -75,7 +75,8 @@
     },
     "globals": {
       "chrome": true,
-      "browser": true
+      "browser": true,
+      "Materialize": true
     },
     "rules": {
       "eol-last": 0
