@@ -16,19 +16,17 @@ import {
   handle_sync_local_storage
 } from "../js/utils.js";
 
-import manifest from "../manifest.json";
-
 // chrome bg/event related tasks
 chrome.runtime.onInstalled.addListener(initializeInstallEvents);
 
 function initializeInstallEvents() {
-  console.log("event page install event !", manifest, manifest.version);
+  console.log("event page install event !");
   // BUGFIX: converting storage.sync to local due to storage space constraints
   // if we detect there are some data in chrome.storage.sync, we will transfer it to chrome.storage.local
   // defined in utils storage
   handle_sync_local_storage();
 
-  const REMINDORO_VERSION = manifest.version;
+  const REMINDORO_VERSION = process.env.REMINDORO_VERSION;
 
   // init_chrome_events();
   create_context_menus();

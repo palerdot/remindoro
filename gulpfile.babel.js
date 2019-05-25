@@ -6,12 +6,18 @@ import runSequence from "run-sequence";
 import { stream as wiredep } from "wiredep";
 import flatten from "gulp-flatten";
 import merge from "merge-stream";
-
 import zip from "gulp-zip";
-
 // import webpack from 'webpack';
 // importing webpack stream for gulp
 import webpack from "webpack-stream";
+// import manifests
+import chrome_manifest from "./app/manifests/chrome/manifest";
+import firefox_manifest from "./app/manifests/firefox/manifest";
+
+let MANIFEST_META_DATA = {
+  chrome: chrome_manifest,
+  firefox: firefox_manifest
+};
 
 const $ = gulpLoadPlugins();
 
@@ -239,6 +245,9 @@ gulp.task("events-page", () => {
     gulp
       .src("./app/scripts.babel/events-modular.js")
       .pipe(webpack(config))
+      .on("error", err => {
+        console.log("porumai! webpack error ", err);
+      })
       // .pipe(gulp.dest("./app/js/"));
       .pipe(gulp.dest(DESTINATION_BUILD_FOLDER))
   );
@@ -253,6 +262,9 @@ gulp.task("webpack", cb => {
     gulp
       .src("./app/index.js")
       .pipe(webpack(config))
+      .on("error", err => {
+        console.log("porumai! webpack error ", err);
+      })
       // .pipe(gulp.dest("./app/js/"))
       .pipe(gulp.dest(DESTINATION_BUILD_FOLDER))
   );
@@ -349,7 +361,14 @@ gulp.task("build-firefox-remindoro", ["clean"], cb => {
   process.env.TARGET_PLATFORM = "firefox";
   // PRODUCTION BUILD
   process.env.NODE_ENV = "production";
-  console.log("porumai! building for ====> ", process.env.TARGET_PLATFORM);
+  // set manifest version
+  process.env.REMINDORO_VERSION =
+    MANIFEST_META_DATA[process.env.TARGET_PLATFORM].version;
+  console.log(
+    "porumai! building for ====> ",
+    process.env.TARGET_PLATFORM,
+    process.env.REMINDORO_VERSION
+  );
   runSequence("build", cb);
 });
 
@@ -358,6 +377,9 @@ gulp.task("debug-firefox-remindoro", ["clean"], cb => {
   process.env.TARGET_PLATFORM = "firefox";
   // PRODUCTION BUILD
   process.env.NODE_ENV = "development";
+  // set manifest version
+  process.env.REMINDORO_VERSION =
+    MANIFEST_META_DATA[process.env.TARGET_PLATFORM].version;
   console.log("porumai! building for ====> ", process.env.TARGET_PLATFORM);
   runSequence("build", cb);
 });
@@ -368,6 +390,9 @@ gulp.task("build-chrome-remindoro", ["clean"], cb => {
   process.env.TARGET_PLATFORM = "chrome";
   // PRODUCTION BUILD
   process.env.NODE_ENV = "production";
+  // set manifest version
+  process.env.REMINDORO_VERSION =
+    MANIFEST_META_DATA[process.env.TARGET_PLATFORM].version;
   console.log("porumai! building for chrome ", process.env.TARGET_PLATFORM);
   runSequence("build", cb);
 });
