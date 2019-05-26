@@ -34,6 +34,7 @@ gulp.task('extras', () => {
           '!app/*.json',
           '!app/*.html',
           '!app/styles.scss',
+          '!app/index.js',
         ],
         {
           base: 'app',
@@ -122,22 +123,6 @@ gulp.task('html', ['styles'], () => {
 
 gulp.task('organize_files', () => {
   const DESTINATION_FOLDER = `dist/${process.env.TARGET_PLATFORM}/`
-  // complete list of files needed for the "Remindoro" app
-  var REMINDORO_FILE_LIST = [
-    `app/manifests/${process.env.TARGET_PLATFORM}/manifest.json`,
-    'app/config.json',
-    'app/_locales/**/*',
-    'app/fonts/**/*',
-    'app/images/**/*',
-    'app/*.html',
-    'app/css/**/*.css',
-
-    '!app/js/utils.js',
-    '!app/js/general-initializer.js',
-
-    'build/js/*.js',
-  ]
-
   const REMINDORO_FILES = {
     js: ['build/js/*.js*'],
     // rest of the files can retain their folder structure
@@ -153,27 +138,13 @@ gulp.task('organize_files', () => {
     ],
   }
 
-  var is_production = process.env.NODE_ENV == 'production'
+  const is_production = process.env.NODE_ENV == 'production'
   console.log('PRODUCTION ? => ', is_production, process.env.TARGET_PLATFORM)
-
-  var uglify_options = {
-    compress: { drop_console: is_production ? true : false },
-  }
 
   // copying JS files from the BUILD FOLDER
 
   const JS_BUILD_FILES = gulp
     .src(REMINDORO_FILES.js, { base: './build/' })
-    // .pipe(
-    //   $.if(
-    //     "*.js" && is_production,
-    //     $.uglify(uglify_options).on("error", function(e) {
-    //       console.log(e);
-    //     })
-    //   )
-    // )
-    // .pipe($.if("*.js", $.sourcemaps.write(".")))
-    // copy JS files to DESTINATION
     .pipe(gulp.dest(DESTINATION_FOLDER))
 
   const REST_OF_THE_FILES = gulp
