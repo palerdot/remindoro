@@ -65,6 +65,10 @@ function init_chrome_events() {
 
         // scan the remindoro and check if we need to update the time and notify it
         Notification.scan(remindoros)
+        console.log(
+          'EVENT PAGE: STORE DATA About to be saved to browser ',
+          remindoro_data
+        )
         // save the store data to local storage
         return browser.storage.local.set({ REMINDORO: remindoro_data })
       })

@@ -98,7 +98,7 @@ let REMINDORO = {
     }
     // save the store data to local storage
     browser.storage.local.set({ REMINDORO: store.getState() }).then(() => {
-      console.log('STORE DATA saved to CHROME')
+      console.log('STORE DATA saved to CHROME ', store.getState())
       const chrome_error = is_chrome_error()
 
       if (chrome_error) {
@@ -194,7 +194,7 @@ try {
     // our data is within the key called "REMINDORO" // caps
     browser.storage.local
       .get('REMINDORO')
-      .then(() => REMINDORO.initialize.bind(REMINDORO)())
+      .then(local_data => REMINDORO.initialize.bind(REMINDORO)(local_data))
 
     browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
       console.log('porumai! runtime message ', request, sender, sendResponse)
