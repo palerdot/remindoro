@@ -232,7 +232,7 @@ export const Notification = {
           // CASE 13: scheduled older than today
           // we need to update the next reminder which should be in future
 
-          const is_future_reminder_time = false
+          let is_future_reminder_time = false
           let future_reminder_time = new Date(ro.reminder.time)
 
           // looping till we get a future reminder time
