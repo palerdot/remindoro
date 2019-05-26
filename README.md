@@ -1,6 +1,9 @@
 # Remindoro
 Browser Extension (Firefox/Chrome) to set one-time/repeatable reminders in Chrome Browser.
 
+[![Build Status](https://travis-ci.org/palerdot/remindoro.svg?branch=master)](https://travis-ci.org/palerdot/remindoro)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
 This extension is build with
 
 * [ReactJS](https://facebook.github.io/react/)
