@@ -150,11 +150,17 @@ let REMINDORO = {
 }
 
 function handleError(e) {
-  Materialize.toast('Error ' + e.message, 13000)
-  Materialize.toast(
-    'Please notify the error through browser extension site or to - palerdot@gmail.com',
-    13000
-  )
+  M.toast({
+    html: `Error - ${e.message}`,
+    displayDuration: 13000,
+    classes: 'center-align',
+  })
+  M.toast({
+    html:
+      'Please notify the error through browser extension site or to - palerdot@gmail.com',
+    displayDuration: 13000,
+    classes: 'center-align',
+  })
 }
 
 // if there are no remindoros saved, we will populate with a default set

@@ -168,7 +168,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       // dispatch the delete action
       dispatch(deleteRemindoro(id))
       // show a toast message
-      Materialize.toast('Deleted !', 2000, 'center-align')
+      M.toast({
+        html: 'Deleted!',
+        displayDuration: 3000,
+        classes: 'center-align',
+      })
     },
   }
 }
