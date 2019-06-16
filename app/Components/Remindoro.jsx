@@ -99,7 +99,7 @@ const Remindoro = props => {
                   <span className="card-title remindoro-title">
                     <Debounce time="250" handler="onChange">
                       <ContentEditable
-                        html={ro.title}
+                        html={ro.title || ""}
                         placeholder={'Title ..'}
                         onChange={evt =>
                           props.onTitleChange(ro.id, evt.target.value)
@@ -110,7 +110,7 @@ const Remindoro = props => {
                   <div className="remindoro-content flow-text">
                     <Debounce time="250" handler="onChange">
                       <ContentEditable
-                        html={ro.note}
+                        html={ro.note || ""}
                         placeholder={'Add a Note ...'}
                         onChange={evt =>
                           props.onNoteChange(ro.id, evt.target.value)

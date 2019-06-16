@@ -179,7 +179,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 // we will get all the properties from mapStateToProps, mapDispatchToProps
 // we can access the props, and dispatch methods with appropriate names
-let App = props => {
+const App = props => {
   return (
     <div className="col s12">
       <Navigator
@@ -211,9 +211,8 @@ let App = props => {
 
 App.displayName = 'App'
 
-App = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(App)
 
-export default App

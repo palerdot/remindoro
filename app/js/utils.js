@@ -6,6 +6,7 @@ import {
   indexOf as _indexOf,
   isEmpty as _isEmpty,
   unionBy as _unionBy,
+  unescape as _unescape
 } from 'lodash'
 import moment from 'moment'
 import { browser } from 'webextension-polyfill-ts'
@@ -83,8 +84,8 @@ export const Notification = {
     let NOTIFICATION_OPTIONS = {
       type: 'basic',
       iconUrl: '/images/icon-38.png',
-      title: ro.title ? ro.title : '',
-      message: ro.note ? strip_html(ro.note) : '',
+      title: ro.title ? _unescape(strip_html(ro.title)) : '',
+      message: ro.note ? _unescape(strip_html(ro.note)) : '',
       // buttons not supported in firefox
       // buttons: buttons,
       // indicates to force close our notification; not just to dismiss

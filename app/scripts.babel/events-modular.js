@@ -87,6 +87,7 @@ function init_chrome_events() {
 
   // handle browser context menu clicks
   browser.contextMenus.onClicked.addListener((menu_details, tab_details) => {
+    let to_add = {}
     browser.storage.local
       .get('REMINDORO')
       .then(data => {
@@ -108,7 +109,7 @@ function init_chrome_events() {
         } else {
           // link is not already there
           // we need to add it
-          const to_add = handleContextMenuClick(
+          to_add = handleContextMenuClick(
             menu_details,
             tab_details,
             remindoros

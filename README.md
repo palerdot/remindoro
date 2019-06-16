@@ -22,3 +22,7 @@ This extension is build with
 
 More information about the extension can be found at the [Remindoro website](https://palerdot.in/remindoro). 
 
+**************
+
+[Changelog](./CHANGELOG.md)
+
