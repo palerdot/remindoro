@@ -30,7 +30,7 @@ function initializeInstallEvents() {
   const REMINDORO_VERSION = process.env.REMINDORO_VERSION
 
   // init_chrome_events();
-  create_context_menus()
+  // create_context_menus()
   // show the welcome message
   const welcome_msg = {
     title: `Hello from Remindoro - ${REMINDORO_VERSION} !`,
@@ -41,10 +41,13 @@ function initializeInstallEvents() {
   chrome_notify(welcome_msg)
 }
 
-init_chrome_events()
+// create context menus
+create_context_menus()
+// init events
+init_extension_events()
 
-function init_chrome_events() {
-  // START: CHROME EVENTS
+function init_extension_events() {
+  // START: EXTENSION EVENTS
 
   // chrome handle alarm events
   // CREATE an alarm
@@ -109,11 +112,7 @@ function init_chrome_events() {
         } else {
           // link is not already there
           // we need to add it
-          to_add = handleContextMenuClick(
-            menu_details,
-            tab_details,
-            remindoros
-          )
+          to_add = handleContextMenuClick(menu_details, tab_details, remindoros)
 
           // push the remindoros to add
           remindoros.push(to_add)
@@ -167,7 +166,7 @@ function init_chrome_events() {
       })
     }
   )
-  // END: CHROME EVENTS
+  // END: EXTENSION EVENTS
 }
 
 // creates context menus for different use cases => normal one, for links, highlighted text
