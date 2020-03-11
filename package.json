@@ -67,6 +67,7 @@
   },
   "scripts": {
     "test": "jest",
+    "start:firefox": "web-ext run --source-dir ./extension-dist/",
     "format-prettier": "prettier --write '{app/Components/*.jsx, app/js/utils.js, app/scripts.babel/*.js}'"
   },
   "eslintConfig": {
