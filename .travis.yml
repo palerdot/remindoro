@@ -1,5 +1,5 @@
 language: node_js
 node_js:
-  - "lts/*"
+  - "lts/dubnium"
 matrix:
   fast_finish: true
