@@ -22,7 +22,7 @@
     &.bottom-sheet {
         height: auto;
         max-height: none !important; 
-        overflow: none;
+        overflow: hidden;
 
         .modal-content {
             height: auto;
