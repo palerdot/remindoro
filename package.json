@@ -32,10 +32,11 @@
     "type": "git",
     "url": "https://github.com/palerdot/remindoro.git"
   },
-  "dependencies": {
+  "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@polymer/paper-button": "^3.0.1",
     "@storybook/addon-actions": "^4.1.7",
     "@storybook/addon-links": "^4.1.7",
@@ -77,11 +78,7 @@
     "jest": "23.6.0",
     "jest-pnp-resolver": "1.0.1",
     "jest-resolve": "23.6.0",
-    "jquery": "^3.5.1",
-    "lodash": "^4.17.20",
-    "materialize-css": "^1.0.0",
     "mini-css-extract-plugin": "0.4.3",
-    "moment": "^2.29.1",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "ora": "^3.0.0",
     "pnp-webpack-plugin": "1.1.0",
@@ -90,16 +87,7 @@
     "postcss-preset-env": "6.3.1",
     "postcss-safe-parser": "4.0.1",
     "prop-types": "^15.6.2",
-    "react": "^16.14.0",
-    "react-app-polyfill": "^0.2.0",
-    "react-contenteditable": "^3.3.5",
-    "react-dev-utils": "^7.0.1",
-    "react-dom": "^16.14.0",
-    "react-materialize": "^3.9.3",
-    "react-redux": "^7.2.1",
-    "react-throttle": "^0.3.0",
-    "react-timeago": "^5.2.0",
-    "redux": "^4.0.5",
+    "prettier": "^2.1.2",
     "resolve": "1.8.1",
     "sass-loader": "7.1.0",
     "style-loader": "^0.23.1",
@@ -114,14 +102,25 @@
     "webpack-manifest-plugin": "2.0.4",
     "yargs": "^12.0.5"
   },
+  "dependencies": {
+    "lodash": "^4.17.20",
+    "materialize-css": "^1.0.0",
+    "moment": "^2.29.1",
+    "react": "^16.14.0",
+    "react-app-polyfill": "^0.2.0",
+    "react-contenteditable": "^3.3.5",
+    "react-dev-utils": "^7.0.1",
+    "react-dom": "^16.14.0",
+    "react-materialize": "^3.9.3",
+    "react-redux": "^7.2.1",
+    "react-throttle": "^0.3.0",
+    "react-timeago": "^5.2.0",
+    "redux": "^4.0.5"
+  },
   "browserslist": [
     ">0.2%",
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.12.1",
-    "prettier": "^2.1.2"
-  }
+  ]
 }

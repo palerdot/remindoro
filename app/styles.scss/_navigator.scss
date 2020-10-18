@@ -1,0 +1,42 @@
+@import "_colors";
+
+.navigator {
+
+    height: 50px;
+    overflow: none;
+
+    // border-bottom: thin solid $border_color;
+    padding: 7px 0;
+    margin-bottom: 0px !important;
+    text-align: center;
+
+    i {
+        // font-size: 1.5em !important;
+    }
+
+    .btn {
+        background: none;
+        box-shadow: none;
+
+        &.current {
+            // background-color: rgba(255,0,0,0.75) !important;
+            background-color: $remindoro_color !important;
+        }
+    }
+
+}
+
+.tabs {
+
+    background: inherit;
+
+    .tab {
+        a {
+            color: $theme_color;
+            &:hover {
+                color: $theme_color;
+                opacity: 0.5;
+            }
+        }
+    }
+}

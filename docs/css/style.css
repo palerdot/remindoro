@@ -1,0 +1,24 @@
+.download-button {
+    margin: 0 7px;
+}
+
+.download-button-footer {
+    margin: 7px 0;
+}
+
+.feature-headline {
+    line-height: 1.5em;
+    min-height: 77px;
+}
+
+.feature-description {
+    line-height: 1.7em;
+}
+
+#help-section .card-content {
+    line-height: 1.7em;
+}
+
+#help-section .card-content p, ol {
+    font-size: 15px;
+}

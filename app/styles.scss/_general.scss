@@ -1,0 +1,42 @@
+.no-padding {
+    padding: 0 !important;
+}
+
+// remove padding top bottom
+.no-padding-vert {
+    padding: inherit;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+// remove padding on sides
+.no-padding-hori {
+    padding: inherit;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+// remove margin top bottom
+.no-margin-vert {
+    margin: inherit;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+// remove margin on sides
+.no-margin-hori {
+    margin: inherit;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+
+// hack to remove margin top from "react-materialize"
+.child-no-margin-vert {
+    .input-field {
+        margin-top: 0 !important;
+    }
+}

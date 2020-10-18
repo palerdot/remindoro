@@ -1,0 +1,152 @@
+@import "_colors";
+@import "_general";
+@import "_navigator";
+@import "_remindoro";
+@import "_bottom-modal";
+
+body {
+
+    // general styles
+    width: 550px;
+    height: 750px;
+    overflow: none;
+    // set base font size for 'em/rem' sizes
+    font-size: 13px !important;
+
+    background: $bg_color !important;
+    color: $text_color !important;
+
+    ::-webkit-scrollbar {
+        height: 5px;
+        width: 5px;
+        // background: #222222;
+        background: #263238;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        // background: #555555;
+        background: #37474f;
+        -webkit-border-radius: 0;
+        -webkit-box-shadow: 0px 1px 2px rgba(255, 255, 255, 0.75);
+    }
+
+    // .progress {
+    //     background-color: $theme_shade_1;
+
+    //     .indeterminate {
+    //         background-color: $theme_shade_3;
+    //     }
+    // }
+
+    #toast-container {
+        background: transparent;
+        div {
+            display: block;
+            background: $theme_shade_1;    
+        }
+    }
+
+    .flatpickr-calendar {
+        background: rgba(55, 71, 79, 0.95) !important;
+        position: absolute;
+        top: 1% !important;
+        left: 33% !important;
+    }
+
+    // .flatpickr-time {
+    //     .numInputWrapper {
+    //         flex: 1 !important;
+    //     }
+    //     justify-content: center !important;
+    //     align-items: center !important;
+    //     .flatpicker-minute {
+    //         width: 100% !important;
+    //     }
+    // }
+
+    i {
+        font-size: 2.2em !important;
+    }
+
+    .indicator {
+        background-color: $theme_color !important;
+    }
+
+    [contenteditable] {
+        min-height: 33px;
+    }
+
+    // remove content editable focus
+    [contenteditable]:focus {
+        border: thin solid $placeholder_color;
+    }
+
+    // placeholder for contentEditable
+    // ref: http://stackoverflow.com/a/24827239/1410291
+    [placeholder]:empty:before {
+        content: attr(placeholder);
+        color: $placeholder_color; 
+    }
+
+    [placeholder]:empty:focus:before {
+        content: "";
+    }
+
+    .select-wrapper {
+
+        :disabled {
+            color: $theme_shade_3 !important;
+        }
+
+        span.caret {
+            color: $theme_shade_3;
+        }
+
+        .dropdown-content {
+            background: $theme_shade_3;
+            color: white;
+
+            li {
+                
+                span {
+                    color: white;
+                }
+
+                &:hover {
+                    background: $theme_shade_2;
+                }
+
+                &.active, &.selected {
+                    background: $theme_shade_1;
+                    &:hover {
+                        background: $theme_shade_2;
+                    }
+                }
+            }
+        }    
+    }
+
+    .range-field {
+        input[type=range] {
+            border: thin solid $theme_shade_3;
+        }
+        .thumb, .thumb.active {
+            background-color: $theme_shade_1;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            border: 1px solid $theme_shade_3;
+            height: 16px;
+            width: 16px;
+            margin-bottom: 5px;
+            border-radius: 13px;
+            background: $theme_shade_1;
+            cursor: pointer;
+            box-shadow: 1px 1px 1px $theme_shade_1, 0px 0px 1px $theme_shade_1; /* Add cool effects to your sliders! */
+        }
+    }
+
+    
+}
+

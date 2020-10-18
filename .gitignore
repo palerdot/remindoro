@@ -5,3 +5,17 @@ dist
 extension
 dev
 .vscode
+temp
+.tmp
+yarn-error.log
+
+# NOTE: to be cleaned up
+dist
+build
+.sass-cache
+app/bower_components
+test/bower_components
+package
+app/scripts
+app/styles
+.DS_Store
