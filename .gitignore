@@ -8,6 +8,7 @@ dev
 temp
 .tmp
 yarn-error.log
+*.code-*
 
 # NOTE: to be cleaned up
 dist
