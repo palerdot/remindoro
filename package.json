@@ -34,9 +34,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
-    "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@polymer/paper-button": "^3.0.1",
     "@storybook/addon-actions": "^4.1.7",
     "@storybook/addon-links": "^4.1.7",
@@ -86,8 +86,8 @@
     "postcss-loader": "3.0.0",
     "postcss-preset-env": "6.3.1",
     "postcss-safe-parser": "4.0.1",
-    "prop-types": "^15.6.2",
     "prettier": "^2.1.2",
+    "prop-types": "^15.6.2",
     "resolve": "1.8.1",
     "sass-loader": "7.1.0",
     "style-loader": "^0.23.1",
@@ -115,7 +115,8 @@
     "react-redux": "^7.2.1",
     "react-throttle": "^0.3.0",
     "react-timeago": "^5.2.0",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "styled-components": "^5.2.0"
   },
   "browserslist": [
     ">0.2%",

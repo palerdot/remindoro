@@ -4,6 +4,8 @@ import moment from 'moment'
 import flatpickr from 'flatpickr'
 import { Modal } from 'react-materialize'
 
+import { ModalWrapper } from '../Styles/'
+
 class BottomModal extends React.Component {
   componentDidMount() {
     this.initFlatPicker()
@@ -136,49 +138,49 @@ class BottomModal extends React.Component {
     )
 
     return (
-      <Modal
-        bottomSheet
-        actions={[
-          <button
-            className="modali-action modal-close waves-light waves-effect btn blue-grey darken-2 right"
-            onClick={() => this.props.setModalStatus(false)}
-          >
-            Close
-          </button>,
-          <button
-            className="waves-effect waves-light btn red left"
-            onClick={() => {
-              this.props.onDelete(ro.id)
-            }}
-          >
-            <i className="material-icons left">delete_forever</i>Delete
-          </button>,
-        ]}
-        fixedFooter={false}
-        // header="Modal Header"
-        id="remindoro-options"
-        open={this.props.isModalOpen}
-        options={{
-          dismissible: true,
-          endingTop: '10%',
-          inDuration: 250,
-          // we need this to properly reset modal state
-          onCloseEnd: () => {
-            this.props.setModalStatus(false)
-          },
-          onCloseStart: null,
-          onOpenEnd: null,
-          onOpenStart: null,
-          opacity: 0.5,
-          outDuration: 250,
-          preventScrolling: true,
-          startingTop: '4%',
-        }}
-        // root={[object HTMLBodyElement]}
-        // trigger={<Button node="button">MODAL BUTTOM SHEET STYLE</Button>}
-      >
-        <div id="options-modali" className="modali bottom-sheeti">
-          <div className="modal-content">
+      <ModalWrapper>
+        <Modal
+          bottomSheet
+          actions={[
+            <button
+              className="modal-close waves-light waves-effect btn blue-grey darken-2 right"
+              onClick={() => this.props.setModalStatus(false)}
+            >
+              Close
+            </button>,
+            <button
+              className="waves-effect waves-light btn red left"
+              onClick={() => {
+                this.props.onDelete(ro.id)
+              }}
+            >
+              <i className="material-icons left">delete_forever</i>Delete
+            </button>,
+          ]}
+          fixedFooter={false}
+          // header="Modal Header"
+          id="remindoro-options"
+          open={this.props.isModalOpen}
+          options={{
+            dismissible: true,
+            endingTop: '10%',
+            inDuration: 250,
+            // we need this to properly reset modal state
+            onCloseEnd: () => {
+              this.props.setModalStatus(false)
+            },
+            onCloseStart: null,
+            onOpenEnd: null,
+            onOpenStart: null,
+            opacity: 0.5,
+            outDuration: 250,
+            preventScrolling: true,
+            startingTop: '4%',
+          }}
+          // root={[object HTMLBodyElement]}
+          // trigger={<Button node="button">MODAL BUTTOM SHEET STYLE</Button>}
+        >
+          <div className="">
             <div className="row">
               <label>
                 <i className="material-icons">notifications</i>
@@ -371,9 +373,8 @@ class BottomModal extends React.Component {
               </div>
             </div>
           </div>
-          <div className="modali-footer"></div>
-        </div>
-      </Modal>
+        </Modal>
+      </ModalWrapper>
     )
   }
 }
