@@ -2,7 +2,7 @@ import React from 'react'
 import classNames from 'classnames'
 import moment from 'moment'
 import flatpickr from 'flatpickr'
-import { Modal } from 'react-materialize'
+import { Modal, Select } from 'react-materialize'
 
 import { ModalWrapper } from '../Styles/'
 
@@ -138,16 +138,16 @@ class BottomModal extends React.Component {
     )
 
     return (
-      <ModalWrapper>
-        <Modal
-          bottomSheet
-          actions={[
+      <Modal
+        bottomSheet
+        actions={[
+          <div className={'row'}>
             <button
               className="modal-close waves-light waves-effect btn blue-grey darken-2 right"
               onClick={() => this.props.setModalStatus(false)}
             >
               Close
-            </button>,
+            </button>
             <button
               className="waves-effect waves-light btn red left"
               onClick={() => {
@@ -155,199 +155,180 @@ class BottomModal extends React.Component {
               }}
             >
               <i className="material-icons left">delete_forever</i>Delete
-            </button>,
-          ]}
-          fixedFooter={false}
-          // header="Modal Header"
-          id="remindoro-options"
-          open={this.props.isModalOpen}
-          options={{
-            dismissible: true,
-            endingTop: '10%',
-            inDuration: 250,
-            // we need this to properly reset modal state
-            onCloseEnd: () => {
-              this.props.setModalStatus(false)
-            },
-            onCloseStart: null,
-            onOpenEnd: null,
-            onOpenStart: null,
-            opacity: 0.5,
-            outDuration: 250,
-            preventScrolling: true,
-            startingTop: '4%',
-          }}
-          // root={[object HTMLBodyElement]}
-          // trigger={<Button node="button">MODAL BUTTOM SHEET STYLE</Button>}
-        >
-          <div className="">
-            <div className="row">
-              <label>
-                <i className="material-icons">notifications</i>
-                <span>Reminder</span>
-              </label>
-              <div className="form-group">
-                <div className="row no-margin-vert">
-                  <div className="col s4 valign-wrapper">
-                    <div className="switch">
-                      <label>
-                        Off
-                        <input
-                          id="reminder-time-status"
-                          type="checkbox"
-                          checked={
-                            ro && ro.reminder && ro.reminder.time
-                              ? 'checked'
-                              : ''
-                          }
-                          onChange={event => {
-                            let default_r_time = null
-
-                            // update the reminder time
-                            if (event.target.checked) {
-                              // set default time as 45 minutes from now
-                              default_r_time = moment()
-                                .add(45, 'minutes')
-                                .format()
-                            }
-
-                            this.flatpickr.setDate(
-                              default_r_time,
-                              this._reminder_date_format
-                            )
-
-                            // calling the reminderchange module to update the status
-                            // we are also sending the current reminder time
-                            this.props.onReminderStatusChange(
-                              this.props.current_selected_remindoro,
-                              event.target.checked,
-                              default_r_time
-                            )
-                          }}
-                        />
-                        <span className="lever" />
-                        On
-                      </label>
-                    </div>
-                  </div>
-                  <div className="col s8">
-                    <div
-                      className="reminder-time-flatpickr flatpickr"
-                      data-wrap="true"
-                    >
+            </button>
+          </div>,
+        ]}
+        fixedFooter={false}
+        header=""
+        id="remindoro-options"
+        open={this.props.isModalOpen}
+        options={{
+          dismissible: true,
+          endingTop: '10%',
+          inDuration: 250,
+          // we need this to properly reset modal state
+          onCloseEnd: () => {
+            this.props.setModalStatus(false)
+          },
+          onCloseStart: null,
+          onOpenEnd: null,
+          onOpenStart: null,
+          opacity: 0.5,
+          outDuration: 250,
+          preventScrolling: true,
+          startingTop: '4%',
+        }}
+        // root={[object HTMLBodyElement]}
+        // trigger={<Button node="button">MODAL BUTTOM SHEET STYLE</Button>}
+      >
+        <ModalWrapper>
+          <div className="row">
+            <label>
+              <i className="material-icons">notifications</i>
+              <span>Reminder</span>
+            </label>
+            <div className="form-group">
+              <div className="row no-margin-vert">
+                <div className="col s3 valign-wrapper">
+                  <div className="switch">
+                    <label>
+                      Off
                       <input
-                        type="text"
-                        id="reminder-time"
-                        className="col s10"
-                        placeholder="Reminder time .."
-                        data-input
-                        data-open
-                        disabled={
-                          ro && ro.reminder && ro.reminder.time ? false : true
+                        id="reminder-time-status"
+                        type="checkbox"
+                        checked={
+                          ro && ro.reminder && ro.reminder.time ? 'checked' : ''
                         }
-                        style={{
-                          color: '#9e9e9e',
+                        onChange={event => {
+                          let default_r_time = null
+
+                          // update the reminder time
+                          if (event.target.checked) {
+                            // set default time as 45 minutes from now
+                            default_r_time = moment()
+                              .add(45, 'minutes')
+                              .format()
+                          }
+
+                          this.flatpickr.setDate(
+                            default_r_time,
+                            this._reminder_date_format
+                          )
+
+                          // calling the reminderchange module to update the status
+                          // we are also sending the current reminder time
+                          this.props.onReminderStatusChange(
+                            this.props.current_selected_remindoro,
+                            event.target.checked,
+                            default_r_time
+                          )
                         }}
                       />
-                      <div className="col s2">
-                        <button className={reminder_button_class} data-toggle>
-                          <i className="material-icons">event</i>
-                        </button>
-                      </div>
+                      <span className="lever" />
+                      On
+                    </label>
+                  </div>
+                </div>
+                <div className="col s9">
+                  <div
+                    className="reminder-time-flatpickr flatpickr"
+                    data-wrap="true"
+                  >
+                    <input
+                      type="text"
+                      id="reminder-time"
+                      className="col s10"
+                      placeholder="Reminder time .."
+                      data-input
+                      data-open
+                      disabled={
+                        ro && ro.reminder && ro.reminder.time ? false : true
+                      }
+                      style={{
+                        color: '#9e9e9e',
+                      }}
+                    />
+                    <div className="col s2">
+                      <button className={reminder_button_class} data-toggle>
+                        <i className="material-icons">event</i>
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            <div className="row no-margin-vert">
-              <label>
-                <i className="material-icons">update</i>
-                <span>Repeat</span>
-              </label>
-              <div className="form-group">
-                <div className="row no-margin-vert">
-                  <div className="col s4 valign-wrapper">
-                    <div className="switch">
-                      <label>
-                        Off
-                        <input
-                          type="checkbox"
-                          checked={
-                            ro && ro.reminder && ro.reminder.is_repeat
-                              ? 'checked'
-                              : ''
-                          }
-                          onChange={event => {
-                            // calling the repeat change module to update the status
-                            this.props.onRepeatChange(
-                              this.props.current_selected_remindoro,
-                              event.target.checked
-                            )
-                          }}
-                        />
-                        <span className="lever" />
-                        On
-                      </label>
-                    </div>
-                  </div>
-                  <div className="col s8">
-                    <div
-                      className="col s3 valign-wrapper"
-                      style={{
-                        color: '#9e9e9e',
-                      }}
-                    >
-                      <span
-                        className={
-                          ro && ro.reminder.is_repeat
-                            ? 'valign'
-                            : 'valign disabled'
+          <div className="row no-margin-vert">
+            <label>
+              <i className="material-icons">update</i>
+              <span>Repeat</span>
+            </label>
+            <div className="form-group">
+              <div className="row no-margin-vert">
+                <div className="col s3 valign-wrapper">
+                  <div className="switch">
+                    <label>
+                      Off
+                      <input
+                        type="checkbox"
+                        checked={
+                          ro && ro.reminder && ro.reminder.is_repeat
+                            ? 'checked'
+                            : ''
                         }
-                      >
-                        Every
-                      </span>
-                      <span className="repeat-time-info">
-                        {' '}
-                        {ro && ro.reminder && ro.reminder.is_repeat
-                          ? ro.reminder.repeat.time
-                          : ''}{' '}
-                      </span>
-                    </div>
-                    <div className="col s5">
-                      <div className="range-field">
-                        <input
-                          type="range"
-                          id="repeat-time"
-                          min="1"
-                          max="60"
-                          defaultValue={
-                            ro && ro.reminder && ro.reminder.repeat.time
-                              ? ro.reminder.repeat.time
-                              : '5'
-                          }
-                          disabled={
-                            ro && ro.reminder && ro.reminder.is_repeat
-                              ? false
-                              : true
-                          }
-                          onChange={event => {
-                            // we are just setting true for repeat. value will be taken in App.jsx
-                            // this.props.onRepeatChange( this.props.current_selected_remindoro, true );
-                            debounced_repeat_update()
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="col s4 no-margin-vert child-no-margin-vert">
-                      <select
-                        // type="select"
-                        id="repeat-interval"
-                        value={
-                          ro && ro.reminder && ro.reminder.repeat.interval
-                            ? ro.reminder.repeat.interval
-                            : 'minutes'
+                        onChange={event => {
+                          // calling the repeat change module to update the status
+                          this.props.onRepeatChange(
+                            this.props.current_selected_remindoro,
+                            event.target.checked
+                          )
+                        }}
+                      />
+                      <span className="lever" />
+                      On
+                    </label>
+                  </div>
+                </div>
+                <div className="col s9">
+                  <div
+                    className="col s3 valign-wrapper"
+                    style={{
+                      color: '#9e9e9e',
+                    }}
+                  >
+                    <span
+                      className={
+                        ro && ro.reminder.is_repeat
+                          ? 'valign'
+                          : 'valign disabled'
+                      }
+                    >
+                      Every
+                    </span>
+                    <span className="repeat-time-info">
+                      {' '}
+                      {ro && ro.reminder && ro.reminder.is_repeat
+                        ? ro.reminder.repeat.time
+                        : ''}{' '}
+                    </span>
+                  </div>
+                  <div
+                    className="col s5"
+                    style={{
+                      padding: '0 8px',
+                    }}
+                  >
+                    <div className="range-field">
+                      <input
+                        type="range"
+                        id="repeat-time"
+                        min="1"
+                        max="60"
+                        defaultValue={
+                          ro && ro.reminder && ro.reminder.repeat.time
+                            ? ro.reminder.repeat.time
+                            : '5'
                         }
                         disabled={
                           ro && ro.reminder && ro.reminder.is_repeat
@@ -356,25 +337,47 @@ class BottomModal extends React.Component {
                         }
                         onChange={event => {
                           // we are just setting true for repeat. value will be taken in App.jsx
-                          this.props.onRepeatChange(
-                            this.props.current_selected_remindoro,
-                            true
-                          )
+                          // this.props.onRepeatChange( this.props.current_selected_remindoro, true );
+                          debounced_repeat_update()
                         }}
-                      >
-                        <option value="minutes">Minute(s)</option>
-                        <option value="hours">Hour(s)</option>
-                        <option value="days">Day(s)</option>
-                        <option value="months">Month(s)</option>
-                      </select>
+                      />
                     </div>
+                  </div>
+
+                  <div className="col s4 no-margin-vert child-no-margin-vert">
+                    <Select
+                      // type="select"
+                      id="repeat-interval"
+                      value={
+                        ro && ro.reminder && ro.reminder.repeat.interval
+                          ? ro.reminder.repeat.interval
+                          : 'minutes'
+                      }
+                      disabled={
+                        ro && ro.reminder && ro.reminder.is_repeat
+                          ? false
+                          : true
+                      }
+                      onChange={event => {
+                        // we are just setting true for repeat. value will be taken in App.jsx
+                        this.props.onRepeatChange(
+                          this.props.current_selected_remindoro,
+                          true
+                        )
+                      }}
+                    >
+                      <option value="minutes">Minute(s)</option>
+                      <option value="hours">Hour(s)</option>
+                      <option value="days">Day(s)</option>
+                      <option value="months">Month(s)</option>
+                    </Select>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </Modal>
-      </ModalWrapper>
+        </ModalWrapper>
+      </Modal>
     )
   }
 }

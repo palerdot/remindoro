@@ -29,112 +29,111 @@ export const colors = {
 }
 
 export const ModalWrapper = styled.div`
-  & .modal {
-    background: transparent !important;
+  height: auto;
+  max-height: none !important;
+  overflow: hidden;
 
-    i.left {
-      margin-right: 5px;
+  i.left {
+    margin-right: 5px;
+  }
+
+  label {
+    i {
+      font-size: 1.5em !important;
     }
 
-    label {
-      i {
-        font-size: 1.5em !important;
+    span {
+      font-size: 1.3em !important;
+      margin-left: 5px;
+      vertical-align: text-bottom !important;
+    }
+  }
+
+  .form-group {
+    border: thin solid ${colors.$border_color} !important;
+    padding: 10px 5px;
+
+    div.col {
+      height: 3rem;
+    }
+
+    input {
+      margin-bottom: none !important;
+      color: #9e9e9e;
+    }
+  }
+
+  .disabled {
+    color: ${colors.$theme_shade_3} !important;
+  }
+
+  // classes to disable inside range field
+  .range-field {
+    :disabled {
+      &::-webkit-slider-runnable-track {
+        background: ${colors.$theme_shade_3} !important;
       }
 
-      span {
-        font-size: 1.3em !important;
-        margin-left: 5px;
-        vertical-align: text-bottom !important;
+      &::-webkit-slider-thumb {
+        display: none;
+      }
+    }
+  }
+
+  // classes to disable inside flatpickr
+  .flatpickr {
+    :disabled {
+      &::-webkit-input-placeholder {
+        color: ${colors.$theme_shade_3} !important;
       }
     }
 
-    &.bottom-sheet {
-      height: auto;
-      max-height: none !important;
-      overflow: none;
-
-      .modal-content {
-        height: auto;
-        max-height: 250px; // half the height
-        overflow-y: auto;
-        padding-top: 10px;
-        padding-bottom: 10px;
-      }
-    }
-
-    .modal-content,
-    .modal-footer {
-      background: ${colors.$modal_bg} !important;
-      color: ${colors.$modal_text_color} !important;
-    }
-
-    .modal-footer {
-      border-top: thin solid ${colors.$border_color} !important;
-    }
-
-    .form-group {
-      border: thin solid ${colors.$border_color} !important;
-      padding: 10px 5px;
-
-      div.col {
-        height: 3rem;
-      }
-
-      input {
-        margin-bottom: none !important;
-        color: #9e9e9e;
-      }
-    }
-
+    // for the reminder state to be shown in disabled state
     .disabled {
-      color: ${colors.$theme_shade_3} !important;
-    }
-
-    // classes to disable inside range field
-    .range-field {
-      :disabled {
-        &::-webkit-slider-runnable-track {
-          background: ${colors.$theme_shade_3} !important;
-        }
-
-        &::-webkit-slider-thumb {
-          display: none;
-        }
+      background: transparent !important;
+      i {
+        color: ${colors.$theme_shade_3} !important;
       }
     }
+  }
 
-    // classes to disable inside flatpickr
-    .flatpickr {
-      :disabled {
-        &::-webkit-input-placeholder {
-          color: ${colors.$theme_shade_3} !important;
-        }
-      }
+  // repeat time info showing time before slider
+  .repeat-time-info {
+    font-size: 16px;
+    margin-left: 10px;
+    padding: 5px;
+    border-radius: 50px;
+    border: thin solid ${colors.$theme_shade_2};
+  }
 
-      // for the reminder state to be shown in disabled state
-      .disabled {
-        background: transparent !important;
-        i {
-          color: ${colors.$theme_shade_3} !important;
-        }
-      }
+  .modal-footer {
+    border-top: thin solid ${colors.$border_color} !important;
+  }
+
+  & ul.dropdown-content {
+    background: ${colors.$modal_bg};
+    color: ${colors.$modal_text_color};
+
+    & li,
+    & li span {
+      background: ${colors.$modal_bg};
+      color: ${colors.$modal_text_color};
     }
 
-    // repeat time info showing time before slider
-    .repeat-time-info {
-      font-size: 16px;
-      margin-left: 10px;
-      padding: 5px;
-      border-radius: 50px;
-      border: thin solid ${colors.$theme_shade_2};
+    & li {
+      border-bottom: thin solid ${colors.$theme_shade_2};
+
+      &:hover {
+        background: ${colors.$theme_shade_2};
+      }
     }
   }
 `
 
 export const NavigatorWrapper = styled.div`
-  .navigator {
+  & .navigator {
     height: 50px;
-    overflow: none;
+    overflow: hidden;
 
     // border-bottom: thin solid ${colors.$border_color};
     padding: 7px 0;
@@ -156,7 +155,7 @@ export const NavigatorWrapper = styled.div`
     }
   }
 
-  .tabs {
+  & .tabs {
     background: inherit;
 
     .tab {
