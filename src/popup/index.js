@@ -41,7 +41,6 @@ let REMINDORO = {
   id_counter: 0,
 
   initialize: function (browser_local_data) {
-    console.log('porumai ... initing remindoro ??? ', browser_local_data)
     let initial_data = browser_local_data && browser_local_data['REMINDORO']
 
     // not added in version 0.1.0
