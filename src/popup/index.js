@@ -22,8 +22,9 @@ import './css/flatpickr/flatpickr.dark.min.css'
 import './css/app.css'
 
 import App from '../Components/App'
-// import { browser } from 'webextension-polyfill-ts'
-import * as browser from 'webextension-polyfill'
+
+import { browser } from 'webextension-polyfill-ts'
+// import * as browser from 'webextension-polyfill'
 
 // sniff if we are running as a chrome extension
 let is_browser_extension = browser && browser.storage
