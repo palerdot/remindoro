@@ -19,7 +19,7 @@ const doesSidebarHtmlExist = fs.existsSync(paths.sidebarTemplate)
 const doesBackgroundExist = fs.existsSync(paths.appBackgroundJs)
 const doesContentExist = fs.existsSync(paths.appContentJs)
 
-module.exports = function(webpackEnv) {
+module.exports = function (webpackEnv) {
   const isEnvDevelopment = webpackEnv === 'development'
   const isEnvProduction = webpackEnv === 'production'
 
@@ -82,7 +82,11 @@ module.exports = function(webpackEnv) {
       extensions: paths.moduleFileExtensions
         .map(ext => `.${ext}`)
         .filter(ext => useTypeScript || !ext.includes('ts')),
-      plugins: [PnpWebpackPlugin, plugins.moduleScopePlugin],
+      plugins: [
+        PnpWebpackPlugin,
+        plugins.moduleScopePlugin,
+        plugins.tsconfigPathsPlugin,
+      ],
     },
     resolveLoader: {
       plugins: [PnpWebpackPlugin.moduleLoader(module)],
