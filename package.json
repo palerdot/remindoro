@@ -109,6 +109,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/pickers": "^3.2.10",
     "lodash": "^4.17.20",
     "materialize-css": "^1.0.0",
     "moment": "^2.29.1",
