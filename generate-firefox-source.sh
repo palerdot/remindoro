@@ -2,6 +2,7 @@
 #  - `yarn` (or `yarn install`). This step will install all necessary dependencies
 # 
 # Build steps:
+# use `nvm use` to switch to recommended node version
 #  - `gulp build-firefox-remindoro`. 
 # 
 #  This gulp task will build the final archive from source. The location of final archive is `dist/firefox`. The zip file is the final file uploaded to add-on store. Rest of the files are the contents of the zip file.
