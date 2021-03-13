@@ -10,12 +10,17 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
+import CloseIcon from '@material-ui/icons/Close'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
 import MailIcon from '@material-ui/icons/Mail'
 
 import { colors } from '@app/Util/colors'
 
 const useStyles = makeStyles({
+  actionHolder: {
+    display: 'flex',
+    marginLeft: 'auto',
+  },
   listIcon: {
     color: 'white',
   },
@@ -26,10 +31,15 @@ const useStyles = makeStyles({
 
 const Holder = styled.div`
   display: flex;
+  flex-direction: row;
 `
 
-const MenuButton = styled(IconButton)`
+const IconButtonHolder = styled(IconButton)`
   color: white !important;
+
+  &:hover {
+    opacity: 0.75;
+  }
 `
 
 const DrawerHolder = styled.div`
@@ -45,42 +55,51 @@ function Header() {
 
   return (
     <Holder>
-      <MenuButton onClick={() => setMenuStatus(true)}>
-        <MenuIcon fontSize={'large'} />
-      </MenuButton>
-      <Drawer
-        anchor={'left'}
-        open={isMenuOpen}
-        onClose={() => setMenuStatus(false)}
-      >
-        <DrawerHolder
-          role="presentation"
-          onClick={() => setMenuStatus(false)}
-          onKeyDown={() => setMenuStatus(false)}
+      <div>
+        <IconButtonHolder onClick={() => setMenuStatus(true)}>
+          <MenuIcon fontSize={'large'} />
+        </IconButtonHolder>
+        <Drawer
+          anchor={'left'}
+          open={isMenuOpen}
+          onClose={() => setMenuStatus(false)}
         >
-          <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon className={classes.listIcon}>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-          <Divider className={classes.divider} />
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon className={classes.listIcon}>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-        </DrawerHolder>
-      </Drawer>
+          <DrawerHolder
+            role="presentation"
+            onClick={() => setMenuStatus(false)}
+            onKeyDown={() => setMenuStatus(false)}
+          >
+            <List>
+              {['Inbox', 'Starred', 'Send email', 'Drafts'].map(
+                (text, index) => (
+                  <ListItem button key={text}>
+                    <ListItemIcon className={classes.listIcon}>
+                      {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    </ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItem>
+                )
+              )}
+            </List>
+            <Divider className={classes.divider} />
+            <List>
+              {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                <ListItem button key={text}>
+                  <ListItemIcon className={classes.listIcon}>
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              ))}
+            </List>
+          </DrawerHolder>
+        </Drawer>
+      </div>
+      <div className={classes.actionHolder}>
+        <IconButtonHolder onClick={() => window.close()}>
+          <CloseIcon fontSize={'large'} />
+        </IconButtonHolder>
+      </div>
     </Holder>
   )
 }
