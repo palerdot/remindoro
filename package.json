@@ -68,8 +68,10 @@
   },
   "scripts": {
     "gulp": "gulp",
+    "build:chrome": "gulp build-chrome-remindoro",
     "debug:chrome": "gulp debug-chrome-remindoro",
     "start:chrome": "web-ext run --source-dir ./dist/chrome/ --target chromium",
+    "build:firefox": "gulp build-firefox-remindoro",
     "debug:firefox": "gulp debug-firefox-remindoro",
     "start:firefox": "web-ext run --source-dir ./dist/firefox/",
     "test": "jest",
