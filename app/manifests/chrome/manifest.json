@@ -19,7 +19,6 @@
         "https://*/*",
         "background",
         "clipboardRead",
-        "clipboardWrite",
         "contextMenus",
         "notifications",
         "storage"
