@@ -3,6 +3,9 @@
 - `node 10.x (lts/dubnium)` is the working version for this setup
 - `nvm use` in the root to switch to this node version
 
+The css changes should be applied only in `app.scss` and other `_<>.scss` files. The final compressed
+css files will be written to `app.css`.
+
 ### Development
 
 #### Firefox
