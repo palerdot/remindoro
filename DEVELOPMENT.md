@@ -1,12 +1,19 @@
-### Development instructions
+## Development instructions
 
 - `node 10.x (lts/dubnium)` is the working version for this setup
 - `nvm use` in the root to switch to this node version
 
-#### Building and running
+### Building and running
+
+#### Firefox
 
 - `yarn debug:firefox` will run gulp task (`gulp debug-firefox-remindoro`) and will build th files
 - `yarn start:firefox` will run the extension locally using `webext`
+
+#### Chrome
+
+- `yarn debug:chrome` will run gulp task (`gulp debug-chrome-remindoro`) and will build th files
+- `yarn start:chrome` will run the extension locally using `webext`
 
 Packages to be pinned 
 ```
