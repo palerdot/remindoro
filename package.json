@@ -59,6 +59,7 @@
     "run-sequence": "^1.1.5",
     "terser-webpack-plugin": "^1.2.4",
     "uglifyjs-webpack-plugin": "^2.1.3",
+    "web-ext": "5",
     "webextension-polyfill": "^0.4.0",
     "webextension-polyfill-ts": "^0.9.0",
     "webpack": "^4.31.0",
@@ -66,8 +67,12 @@
     "wiredep": "^4.0.0"
   },
   "scripts": {
+    "gulp": "gulp",
+    "debug:chrome": "gulp debug-chrome-remindoro",
+    "start:chrome": "web-ext run --source-dir ./dist/chrome/ --target chromium",
+    "debug:firefox": "gulp debug-firefox-remindoro",
+    "start:firefox": "web-ext run --source-dir ./dist/firefox/",
     "test": "jest",
-    "start:firefox": "web-ext run --source-dir ./extension-dist/",
     "format-prettier": "prettier --write '{app/Components/*.jsx, app/js/utils.js, app/scripts.babel/*.js}'"
   },
   "eslintConfig": {
