@@ -10,6 +10,6 @@
 
 Packages to be pinned 
 ```
-gulp => 3.9.x (4.0 has breaking changes)
+gulp => 3.9.x (4.0 has breaking changes) (`node-sass`, `gulp-sass` should be pinned to corresponding older versions)
 webext => 5.x (6+ will work only with node 10+)
 ```
