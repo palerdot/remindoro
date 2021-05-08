@@ -102,7 +102,7 @@
     "babel-loader": "^8.0.0",
     "classnames": "^2.2.6",
     "flatpickr": "^4.5.7",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-contenteditable": "^3.2.6",
