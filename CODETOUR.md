@@ -1,5 +1,15 @@
 # Code Tour
 
+
+### My pointers
+
+- Run `yarn start:chrome`, `yarn start:firefox` to launch dev stuffs for corresponding browser.
+- `src/app` is the main folder for the new setup. Once things are in shape, we have to clean up remaining folders.
+
+------------------------------------------------------------------------------------
+
+
+
 A quick introduction to the folders and files in this repo.
 
 ## Project anatomy
