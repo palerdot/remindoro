@@ -14,8 +14,6 @@ import CloseIcon from '@material-ui/icons/Close'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
 import MailIcon from '@material-ui/icons/Mail'
 
-import { colors } from '@app/Util/colors'
-
 const useStyles = makeStyles({
   actionHolder: {
     display: 'flex',
@@ -43,7 +41,7 @@ const IconButtonHolder = styled(IconButton)`
 `
 
 const DrawerHolder = styled.div`
-  background: ${colors.main};
+  background: ${props => props.theme.primary};
   color: white;
   width: 250px;
   height: 100%;

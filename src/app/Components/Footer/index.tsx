@@ -10,7 +10,9 @@ const Holder = styled.div`
 `
 
 function Footer() {
-  return <Holder>{'porumai ... wait and hope !!! footer ... '}</Holder>
+  return (
+    <Holder>{'porumai ... wait and hope !!! footer ... amaidhi !!! '}</Holder>
+  )
 }
 
 export default Footer

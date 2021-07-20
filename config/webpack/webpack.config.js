@@ -1,6 +1,5 @@
 const fs = require('fs')
 const path = require('path')
-const PnpWebpackPlugin = require('pnp-webpack-plugin')
 
 const paths = require('../paths')
 const initLoaders = require('./loaders')
@@ -19,7 +18,7 @@ const doesSidebarHtmlExist = fs.existsSync(paths.sidebarTemplate)
 const doesBackgroundExist = fs.existsSync(paths.appBackgroundJs)
 const doesContentExist = fs.existsSync(paths.appContentJs)
 
-module.exports = function (webpackEnv) {
+module.exports = function (webpackEnv = 'development') {
   const isEnvDevelopment = webpackEnv === 'development'
   const isEnvProduction = webpackEnv === 'production'
 
@@ -51,13 +50,13 @@ module.exports = function (webpackEnv) {
   })
 
   return {
-    mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
+    mode: isEnvProduction ? 'production' : 'development',
     bail: isEnvProduction, // stop compilation on the very first error itself
     devtool: isEnvProduction
       ? shouldUseSourceMap
         ? 'source-map'
         : false
-      : isEnvDevelopment && 'cheap-module-source-map',
+      : 'cheap-module-source-map',
     entry,
     output: {
       path: isEnvProduction ? paths.appExtension : paths.appDev,
@@ -68,8 +67,7 @@ module.exports = function (webpackEnv) {
             path
               .relative(paths.appSrc, info.absoluteResourcePath)
               .replace(/\\/g, '/')
-        : isEnvDevelopment &&
-          (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+        : info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },
     optimization: {
       minimize: isEnvProduction,
@@ -83,13 +81,23 @@ module.exports = function (webpackEnv) {
         .map(ext => `.${ext}`)
         .filter(ext => useTypeScript || !ext.includes('ts')),
       plugins: [
-        PnpWebpackPlugin,
+        // PnpWebpackPlugin,
         plugins.moduleScopePlugin,
         plugins.tsconfigPathsPlugin,
       ],
+
+      fallback: {
+        dgram: 'empty',
+        fs: 'empty',
+        net: 'empty',
+        tls: 'empty',
+        child_process: 'empty',
+      },
     },
     resolveLoader: {
-      plugins: [PnpWebpackPlugin.moduleLoader(module)],
+      plugins: [
+        // PnpWebpackPlugin.moduleLoader(module)
+      ],
     },
     module: {
       strictExportPresence: true,
@@ -106,9 +114,11 @@ module.exports = function (webpackEnv) {
             loaders.outsideBabelLoader,
             loaders.styleLoader,
             loaders.cssModuleLoader,
-            loaders.fileLoader,
+            loaders.typescriptLoader,
+
             // ** STOP ** Are you adding a new loader?
             // Make sure to add the new loader(s) before the "file" loader.
+            loaders.fileLoader,
           ],
         },
       ],
@@ -120,19 +130,23 @@ module.exports = function (webpackEnv) {
       doesSidebarHtmlExist && plugins.sidebarHtmlPlugin,
       plugins.htmlIncAssetsPlugin,
       plugins.moduleNotFoundPlugin,
-      isEnvDevelopment && plugins.CaseSensitivePathsPlugin,
+      isEnvDevelopment && plugins.caseSensitivePathsPlugin,
       isEnvDevelopment && plugins.watchMissingNodeModulesPlugin,
       isEnvProduction && plugins.miniCssExtractPlugin,
       plugins.ignorePlugin,
       plugins.copyPlugin,
+
+      // typescript compile type checking plugin
+      plugins.tsCompileTimeCheckPlugin,
     ].filter(Boolean),
     node: {
-      dgram: 'empty',
-      fs: 'empty',
-      net: 'empty',
-      tls: 'empty',
-      child_process: 'empty',
+      // dgram: 'empty',
+      // fs: 'empty',
+      // net: 'empty',
+      // tls: 'empty',
+      // child_process: 'empty',
     },
+
     performance: false,
   }
 }

@@ -5,13 +5,14 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const HtmlIncAssetsPlugin = require('html-webpack-include-assets-plugin')
+const HtmlIncAssetsPlugin = require('html-webpack-tags-plugin')
 const safePostCssParser = require('postcss-safe-parser')
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin')
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin')
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const { TsconfigPathsPlugin } = require('tsconfig-paths-webpack-plugin')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 const paths = require('../paths')
 const staticFiles = require('./static-files')
@@ -91,7 +92,12 @@ const getPlugins = (isEnvProduction = false, shouldUseSourceMap = false) => {
     filename: '[name].css',
     // chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
   })
-  const ignorePlugin = new IgnorePlugin(/^\.\/locale$/, /moment$/)
+  // const ignorePlugin = new IgnorePlugin(/^\.\/locale$/, /moment$/)
+  // const ignorePlugin = new IgnorePlugin({requestRegExp: /moment\/locale\//})
+  const ignorePlugin = new IgnorePlugin({
+    resourceRegExp: /^\.\/locale$/,
+    contextRegExp: /moment$/,
+  })
   const terserPlugin = new TerserPlugin({
     terserOptions: {
       parse: {
@@ -113,8 +119,8 @@ const getPlugins = (isEnvProduction = false, shouldUseSourceMap = false) => {
       },
     },
     parallel: true,
-    cache: true,
-    sourceMap: shouldUseSourceMap,
+    // cache: true,
+    // sourceMap: shouldUseSourceMap,
   })
   const optimizeCSSAssetsPlugin = new OptimizeCSSAssetsPlugin({
     cssProcessorOptions: {
@@ -130,16 +136,22 @@ const getPlugins = (isEnvProduction = false, shouldUseSourceMap = false) => {
   /* Include these static JS and CSS assets in the generated HTML files */
   const htmlIncAssetsPlugin = new HtmlIncAssetsPlugin({
     append: false,
-    assets: staticFiles.htmlAssets,
+    // assets: staticFiles.htmlAssets,
+    files: staticFiles.htmlAssets,
   })
 
   const moduleScopePlugin = new ModuleScopePlugin(paths.appSrc, [
     paths.appPackageJson,
   ])
-  const copyPlugin = new CopyPlugin(staticFiles.copyPatterns)
+  const copyPlugin = new CopyPlugin({
+    patterns: staticFiles.copyPatterns,
+  })
   const friendlyErrorsWebpackPlugin = new FriendlyErrorsWebpackPlugin()
 
   const tsconfigPathsPlugin = new TsconfigPathsPlugin({})
+
+  // ts checker plugin
+  const tsCompileTimeCheckPlugin = new ForkTsCheckerWebpackPlugin()
 
   return {
     optionsHtmlPlugin,
@@ -157,6 +169,7 @@ const getPlugins = (isEnvProduction = false, shouldUseSourceMap = false) => {
     htmlIncAssetsPlugin,
     friendlyErrorsWebpackPlugin,
     tsconfigPathsPlugin,
+    tsCompileTimeCheckPlugin,
   }
 }
 

@@ -20,3 +20,5 @@ package
 app/scripts
 app/styles
 .DS_Store
+
+*.tsbuildinfo
