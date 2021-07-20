@@ -1,10 +1,10 @@
 const { IgnorePlugin } = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-var FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
+var FriendlyErrorsWebpackPlugin = require('@nuxt/friendly-errors-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const OptimizeCSSAssetsPlugin = require('css-minimizer-webpack-plugin')
 const HtmlIncAssetsPlugin = require('html-webpack-tags-plugin')
 const safePostCssParser = require('postcss-safe-parser')
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin')
@@ -122,7 +122,7 @@ const getPlugins = (isEnvProduction = false, shouldUseSourceMap = false) => {
     // cache: true,
     // sourceMap: shouldUseSourceMap,
   })
-  const optimizeCSSAssetsPlugin = new OptimizeCSSAssetsPlugin({
+  /* const optimizeCSSAssetsPlugin = new OptimizeCSSAssetsPlugin({
     cssProcessorOptions: {
       parser: safePostCssParser,
       map: shouldUseSourceMap
@@ -132,7 +132,23 @@ const getPlugins = (isEnvProduction = false, shouldUseSourceMap = false) => {
           }
         : false,
     },
+  }) */
+
+  // ref: https://github.com/webpack-contrib/css-minimizer-webpack-plugin
+  const optimizeCSSAssetsPlugin = new OptimizeCSSAssetsPlugin({
+    minimizerOptions: {
+      processorOptions: {
+        parser: safePostCssParser,
+        map: shouldUseSourceMap
+          ? {
+              inline: false,
+              annotation: true,
+            }
+          : false,
+      },
+    },
   })
+
   /* Include these static JS and CSS assets in the generated HTML files */
   const htmlIncAssetsPlugin = new HtmlIncAssetsPlugin({
     append: false,

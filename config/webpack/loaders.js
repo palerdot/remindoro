@@ -74,21 +74,6 @@ const getLoaders = (
     return styleLoaders
   }
 
-  const eslintLoader = {
-    test: /\.(js|mjs|jsx)$/,
-    enforce: 'pre',
-    use: [
-      {
-        options: {
-          formatter: require.resolve('react-dev-utils/eslintFormatter'),
-          eslintPath: require.resolve('eslint'),
-        },
-        loader: require.resolve('eslint-loader'),
-      },
-    ],
-    include: paths.appSrc,
-  }
-
   const urlLoader = {
     test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
     loader: require.resolve('url-loader'),
@@ -193,7 +178,6 @@ const getLoaders = (
   }
 
   return {
-    eslintLoader,
     urlLoader,
     typescriptLoader,
     insideBabelLoader: insideBabelLoaderOnlyJS,

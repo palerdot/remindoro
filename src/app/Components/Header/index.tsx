@@ -41,7 +41,7 @@ const IconButtonHolder = styled(IconButton)`
 `
 
 const DrawerHolder = styled.div`
-  background: ${props => props.theme.porumai};
+  background: ${props => props.theme.primary};
   color: white;
   width: 250px;
   height: 100%;

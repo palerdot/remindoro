@@ -104,7 +104,6 @@ module.exports = function (webpackEnv = 'development') {
       rules: [
         { parser: { requireEnsure: false } },
         // NOTE: disabling eslint since we will using 'prettier' to format/lint codebase
-        // loaders.eslintLoader,
         {
           // "oneOf" will traverse all following loaders until one will match the requirements.
           // When no loader matches it will fall back to the "file" loader at the end of the loader list.
