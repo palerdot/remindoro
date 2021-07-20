@@ -11,7 +11,11 @@ const Holder = styled.div`
 
 function Footer() {
   return (
-    <Holder>{'porumai ... wait and hope !!! footer ... amaidhi !!! '}</Holder>
+    <Holder>
+      {
+        'porumai ... wait and hope !!! footer ... amaidhi !!! patience ... tom and jerry ???'
+      }
+    </Holder>
   )
 }
 

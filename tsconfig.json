@@ -79,6 +79,7 @@
     "node_modules",
     "dist",
     // exclude js files
+    // TODO: later include this in compilation pipeline
     "src/**/*.js", "src/**/*.jsx"
   ],
   "include": ["./src/**/*"]
