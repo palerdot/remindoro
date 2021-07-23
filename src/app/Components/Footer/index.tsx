@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { NotificationsActive, NotificationsOff } from '@material-ui/icons'
+
 const Holder = styled.div`
   display: flex;
   margin-top: auto;
@@ -12,9 +14,9 @@ const Holder = styled.div`
 function Footer() {
   return (
     <Holder>
-      {
-        'porumai ... wait and hope !!! footer ... amaidhi !!! patience ... tom and jerry ???'
-      }
+      {'porumai ... wait and hope !!!'}
+      <NotificationsActive />
+      <NotificationsOff />
     </Holder>
   )
 }

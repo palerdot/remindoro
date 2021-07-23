@@ -1,11 +1,21 @@
+enum Theme {
+  Main = 'main',
+}
+
 export interface ThemeInterface {
   primary: string
 }
 
-const themes = {
-  main: {
+export type Themes = {
+  [key in Theme]: ThemeInterface
+}
+
+const themes: Themes = {
+  [Theme.Main]: {
     primary: '#263238',
   },
 }
 
-export const colors: ThemeInterface = themes['main']
+export const defaultTheme = themes[Theme.Main]
+
+export const colors: ThemeInterface = defaultTheme

@@ -1,18 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import styled from 'styled-components'
 
+import type { ThemeInterface } from '@app/Util/colors'
+
 import { makeStyles } from '@material-ui/core/styles'
-import Drawer from '@material-ui/core/Drawer'
-import Divider from '@material-ui/core/Divider'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
-import IconButton from '@material-ui/core/IconButton'
-import MenuIcon from '@material-ui/icons/Menu'
-import CloseIcon from '@material-ui/icons/Close'
-import InboxIcon from '@material-ui/icons/MoveToInbox'
-import MailIcon from '@material-ui/icons/Mail'
+import {
+  Drawer,
+  Divider,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  IconButton,
+} from '@material-ui/core'
+import {
+  Inbox as InboxIcon,
+  Mail as MailIcon,
+  Close as CloseIcon,
+  Menu as MenuIcon,
+} from '@material-ui/icons/'
+import { SettingsContext } from '@app/Context/Settings'
 
 const useStyles = makeStyles({
   actionHolder: {
@@ -22,9 +29,10 @@ const useStyles = makeStyles({
   listIcon: {
     color: 'white',
   },
-  divider: {
-    background: '#AAAAAA',
-  },
+  divider: (props: { theme: ThemeInterface }) => ({
+    // background: '#AAAAAA',
+    background: props.theme.primary,
+  }),
 })
 
 const Holder = styled.div`
@@ -48,7 +56,9 @@ const DrawerHolder = styled.div`
 `
 
 function Header() {
-  const classes = useStyles()
+  const { theme } = useContext(SettingsContext)
+
+  const classes = useStyles({ theme })
   const [isMenuOpen, setMenuStatus] = useState(false)
 
   return (
