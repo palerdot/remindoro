@@ -1,10 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
-
-import type { ThemeInterface } from '@app/Util/colors'
-import type { RootState } from '@app/Store/'
-
 import { makeStyles } from '@material-ui/core/styles'
 import {
   Drawer,
@@ -21,6 +17,9 @@ import {
   Close as CloseIcon,
   Menu as MenuIcon,
 } from '@material-ui/icons/'
+
+import type { ThemeInterface } from '@app/Util/colors'
+import type { RootState } from '@app/Store/'
 
 const useStyles = makeStyles({
   actionHolder: {
