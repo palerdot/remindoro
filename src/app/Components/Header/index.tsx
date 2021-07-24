@@ -1,7 +1,9 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
 
 import type { ThemeInterface } from '@app/Util/colors'
+import type { RootState } from '@app/Store/'
 
 import { makeStyles } from '@material-ui/core/styles'
 import {
@@ -19,7 +21,6 @@ import {
   Close as CloseIcon,
   Menu as MenuIcon,
 } from '@material-ui/icons/'
-import { SettingsContext } from '@app/Context/Settings'
 
 const useStyles = makeStyles({
   actionHolder: {
@@ -56,7 +57,7 @@ const DrawerHolder = styled.div`
 `
 
 function Header() {
-  const { theme } = useContext(SettingsContext)
+  const theme = useSelector((state: RootState) => state.settings.theme)
 
   const classes = useStyles({ theme })
   const [isMenuOpen, setMenuStatus] = useState(false)
