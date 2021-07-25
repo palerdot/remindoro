@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   Drawer,
@@ -19,7 +18,8 @@ import {
 } from '@material-ui/icons/'
 
 import type { ThemeInterface } from '@app/Util/colors'
-import type { RootState } from '@app/Store/'
+
+import { useTheme } from '@app/Hooks/'
 
 const useStyles = makeStyles({
   actionHolder: {
@@ -56,7 +56,7 @@ const DrawerHolder = styled.div`
 `
 
 function Header() {
-  const theme = useSelector((state: RootState) => state.settings.theme)
+  const theme = useTheme()
 
   const classes = useStyles({ theme })
   const [isMenuOpen, setMenuStatus] = useState(false)

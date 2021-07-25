@@ -2,12 +2,10 @@ import React from 'react'
 import styled, { ThemeProvider } from 'styled-components'
 import { Provider } from 'react-redux'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import { useSelector } from 'react-redux'
 // main app css
 import './css/index.css'
 
-import type { RootState } from '@app/Store/'
-
+import { useTheme } from '@app/Hooks/'
 import { store } from '@app/Store/'
 import Header from '@app/Components/Header/'
 import Footer from '@app/Components/Footer/'
@@ -28,7 +26,7 @@ const Container = styled.div`
 `
 
 function App() {
-  const theme = useSelector((state: RootState) => state.settings.theme)
+  const theme = useTheme()
 
   return (
     <ThemeProvider theme={theme}>

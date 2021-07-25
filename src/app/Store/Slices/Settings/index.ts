@@ -2,16 +2,15 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // types
 import type { PayloadAction } from '@reduxjs/toolkit'
-import type { ThemeInterface, Theme } from '@app/Util/colors'
 
-import { defaultTheme, themes } from '@app/Util/colors'
+import { Theme } from '@app/Util/colors'
 
 export interface SettingsState {
-  theme: ThemeInterface
+  theme: Theme
 }
 
 const initialState: SettingsState = {
-  theme: defaultTheme,
+  theme: Theme.Main,
 }
 
 export const settingsSlice = createSlice({
@@ -21,7 +20,7 @@ export const settingsSlice = createSlice({
     setTheme: (state, action: PayloadAction<Theme>) => {
       const selectedTheme = action.payload
       // update theme
-      state.theme = themes[selectedTheme]
+      state.theme = selectedTheme
     },
   },
 })
