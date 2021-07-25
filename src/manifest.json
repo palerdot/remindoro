@@ -1,5 +1,5 @@
 {
-  "version": "0.3.0",
+  "version": "1.0.0",
   "manifest_version": 2,
   "name": "Remindoro",
   "description": "Reminders in your browser",
@@ -48,5 +48,10 @@
   "options_ui": {
     "page": "./options.html",
     "open_in_tab": true
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "porumai@remindoro.app"
+    }
   }
 }

@@ -20,7 +20,7 @@ const Holder = styled.div`
 
   & .icon-holder {
     display: flex;
-    margin-left: auto;
+    align-self: flex-start;
   }
 `
 
@@ -28,30 +28,32 @@ const IconHolder = styled.div`
   & button {
     border: thin solid transparent;
     padding: 6px;
+
+    &:hover {
+      background: grey;
+    }
   }
 
   & .notifications-off {
     color: red;
 
-    &:hover {
-      border: thin solid red;
-    }
+    /* &:hover {
+      border: thin solid lightgreen;
+    } */
   }
 
   & .notifications-on {
     color: lightgreen;
 
-    &:hover {
-      border: thin solid lightgreen;
-    }
+    /* &:hover {
+      border: thin solid red;
+    } */
   }
 `
 
 function Footer() {
   return (
     <Holder>
-      <div className={'message-section'}>{'porumai ... wait and hope !!!'}</div>
-
       <div className={'icon-holder'}>
         <IconHolder>
           <IconButton
@@ -71,6 +73,7 @@ function Footer() {
           </IconButton>
         </IconHolder>
       </div>
+      <div className={'message-section'}>{'porumai ... wait and hope !!!'}</div>
     </Holder>
   )
 }
