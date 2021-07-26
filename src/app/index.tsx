@@ -7,6 +7,7 @@ import './css/index.css'
 
 import { useTheme } from '@app/Hooks/'
 import { store } from '@app/Store/'
+import AddRemindoro from '@app/Components/AddRemindoro'
 import Header from '@app/Components/Header/'
 import Footer from '@app/Components/Footer/'
 
@@ -33,8 +34,11 @@ function App() {
       <Holder>
         <CssBaseline />
         <Header />
-        <Container>{'porumai ... wait and hope'}</Container>
+        <Container>
+          <div>{'porumai ... wait and hope'}</div>
+        </Container>
         <Footer />
+        <AddRemindoro />
       </Holder>
     </ThemeProvider>
   )

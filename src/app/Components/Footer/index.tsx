@@ -73,7 +73,9 @@ function Footer() {
           </IconButton>
         </IconHolder>
       </div>
-      <div className={'message-section'}>{'porumai ... wait and hope !!!'}</div>
+      <div className={'message-section'}>
+        {'porumai ... wait and hope !!! amaidhi ... '}
+      </div>
     </Holder>
   )
 }

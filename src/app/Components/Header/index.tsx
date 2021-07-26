@@ -1,15 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { makeStyles } from '@material-ui/core/styles'
-import {
-  Drawer,
-  Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  IconButton,
-} from '@material-ui/core'
+import { IconButton } from '@material-ui/core'
 import {
   Inbox as InboxIcon,
   Mail as MailIcon,
@@ -20,6 +12,7 @@ import {
 import type { ThemeInterface } from '@app/Util/colors'
 
 import { useTheme } from '@app/Hooks/'
+import Sidebar from './Sidebar'
 
 const useStyles = makeStyles({
   actionHolder: {
@@ -48,13 +41,6 @@ const IconButtonHolder = styled(IconButton)`
   }
 `
 
-const DrawerHolder = styled.div`
-  background: ${props => props.theme.primary};
-  color: white;
-  width: 250px;
-  height: 100%;
-`
-
 function Header() {
   const theme = useTheme()
 
@@ -67,41 +53,11 @@ function Header() {
         <IconButtonHolder onClick={() => setMenuStatus(true)}>
           <MenuIcon fontSize={'large'} />
         </IconButtonHolder>
-        <Drawer
-          anchor={'left'}
-          open={isMenuOpen}
-          onClose={() => setMenuStatus(false)}
-        >
-          <DrawerHolder
-            role="presentation"
-            onClick={() => setMenuStatus(false)}
-            onKeyDown={() => setMenuStatus(false)}
-          >
-            <List>
-              {['Inbox', 'Starred', 'Send email', 'Drafts'].map(
-                (text, index) => (
-                  <ListItem button key={text}>
-                    <ListItemIcon className={classes.listIcon}>
-                      {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                    </ListItemIcon>
-                    <ListItemText primary={text} />
-                  </ListItem>
-                )
-              )}
-            </List>
-            <Divider className={classes.divider} />
-            <List>
-              {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                <ListItem button key={text}>
-                  <ListItemIcon className={classes.listIcon}>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItem>
-              ))}
-            </List>
-          </DrawerHolder>
-        </Drawer>
+        <Sidebar
+          isMenuOpen={isMenuOpen}
+          setMenuStatus={setMenuStatus}
+          classes={classes}
+        />
       </div>
       <div className={classes.actionHolder}>
         <IconButtonHolder onClick={() => window.close()}>

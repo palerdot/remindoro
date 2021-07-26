@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "manifest_version": 2,
-  "name": "Remindoro",
+  "name": "remindoro",
   "description": "Reminders in your browser",
   "content_scripts": [
     {
@@ -51,7 +51,8 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "porumai@remindoro.app"
+      "id": "remindoro@palerdot.in",
+      "strict_min_version": "57.0"
     }
   }
 }
