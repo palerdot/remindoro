@@ -1,10 +1,12 @@
 import React from 'react'
 import styled, { ThemeProvider } from 'styled-components'
 import { Provider } from 'react-redux'
+import { MemoryRouter as Router, Link } from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
 // main app css
 import './css/index.css'
 
+import Routes from '@app/Routes/'
 import { useTheme } from '@app/Hooks/'
 import { store } from '@app/Store/'
 import AddRemindoro from '@app/Components/AddRemindoro'
@@ -31,15 +33,17 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Holder>
-        <CssBaseline />
-        <Header />
-        <Container>
-          <div>{'porumai ... wait and hope'}</div>
-        </Container>
-        <Footer />
-        <AddRemindoro />
-      </Holder>
+      <Router>
+        <Holder>
+          <CssBaseline />
+          <Header />
+          <Container>
+            <Routes />
+          </Container>
+          <Footer />
+          <AddRemindoro />
+        </Holder>
+      </Router>
     </ThemeProvider>
   )
 }
