@@ -1,6 +1,6 @@
 import React from 'react'
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
-import { Fab } from '@material-ui/core/'
+import { Fab, Zoom } from '@material-ui/core/'
 import { PlaylistAdd, PostAdd } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -19,14 +19,22 @@ function AddRemindoro() {
   const classes = useStyles()
 
   return (
-    <Fab
-      // size="medium"
-      color="secondary"
-      aria-label="add"
-      className={classes.fab}
+    <Zoom
+      in={true}
+      timeout={314}
+      style={{
+        transitionDelay: `314ms`,
+      }}
     >
-      <PlaylistAdd fontSize={'large'} />
-    </Fab>
+      <Fab
+        // size="medium"
+        color="secondary"
+        aria-label="add"
+        className={classes.fab}
+      >
+        <PlaylistAdd fontSize={'large'} />
+      </Fab>
+    </Zoom>
   )
 }
 
