@@ -51,6 +51,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.8",
     "@types/styled-components": "^5.1.4",
+    "@types/uuid": "^8.3.1",
     "@webcomponents/webcomponentsjs": "^2.2.6",
     "babel-jest": "23.6.0",
     "babel-loader": "^8.0.5",
@@ -124,7 +125,8 @@
     "react-throttle": "^0.3.0",
     "react-timeago": "^5.2.0",
     "redux": "^4.1.0",
-    "styled-components": "^5.2.0"
+    "styled-components": "^5.2.0",
+    "uuid": "^8.3.2"
   },
   "browserslist": [
     ">0.2%",

@@ -45,6 +45,11 @@ const IconButtonHolder = styled(IconButton)`
   &.highlight:hover,
   &.hightlight:focus {
     background: red;
+    opacity: 1;
+  }
+
+  &:hover {
+    opacity: 0.8;
   }
 `
 

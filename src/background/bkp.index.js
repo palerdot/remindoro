@@ -305,15 +305,49 @@ function check_remindoro_link(menu_details, tab_details, remindoros) {
     "current_tab": "home",
     "remindoros": [
       {
+        "id": 3,
+        "title": "porumai",
+        "type": "note",
+        "note": "test",
+        "list": [],
+        "created": 1627482387671,
+        "updated": 1627482392103,
+        "reminder": {
+          "time": false,
+          "is_repeat": false,
+          "repeat": {
+            "interval": false,
+            "time": false
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "",
+        "type": "note",
+        "note": "",
+        "list": [],
+        "created": 1627482379252,
+        "updated": 1627482379252,
+        "reminder": {
+          "time": false,
+          "is_repeat": false,
+          "repeat": {
+            "interval": false,
+            "time": false
+          }
+        }
+      },
+      {
         "id": 1,
         "title": "Take a Walk",
         "type": "note",
         "note": "Taking a walk for every 45 minutes is good for your health. Avoid continous sitting for long hours. Remember, 'Sitting is the new Smoking'. &nbsp;<div><br></div><div>NOTE: This is a default sample remindoro shown if no entries are saved. You can edit, save, delete and do whatever you want with this note. Enjoy!</div>",
         "list": [],
-        "created": 1627227087235,
-        "updated": 1627227087235,
+        "created": 1627482377767,
+        "updated": 1627482377767,
         "reminder": {
-          "time": "2021-07-26T20:31:11+05:30",
+          "time": 1627485077767,
           "is_repeat": true,
           "repeat": {
             "interval": "minutes",

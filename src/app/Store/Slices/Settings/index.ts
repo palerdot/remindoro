@@ -1,7 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
-
-// types
-import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { Theme } from '@app/Util/colors'
 
