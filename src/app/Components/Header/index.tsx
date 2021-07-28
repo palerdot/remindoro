@@ -57,8 +57,6 @@ function Header() {
   const location = useLocation()
   const theme = useTheme()
 
-  console.log('porumai ... location match ', location)
-
   const classes = useStyles({ theme })
   const [isMenuOpen, setMenuStatus] = useState(false)
 

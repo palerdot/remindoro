@@ -1,7 +1,10 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
 import { Fab, Zoom } from '@material-ui/core/'
-import { PlaylistAdd, PostAdd } from '@material-ui/icons'
+import { PlaylistAdd } from '@material-ui/icons'
+
+import { addNewRemindoro } from '@app/Store/Slices/Remindoros/'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -17,6 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function AddRemindoro() {
   const classes = useStyles()
+  const dispatch = useDispatch()
 
   return (
     <Zoom
@@ -31,6 +35,9 @@ function AddRemindoro() {
         color="secondary"
         aria-label="add"
         className={classes.fab}
+        onClick={() => {
+          dispatch(addNewRemindoro())
+        }}
       >
         <PlaylistAdd fontSize={'large'} />
       </Fab>

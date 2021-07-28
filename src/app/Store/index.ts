@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 // reducers
+import remindoroReducer from '@app/Store/Slices/Remindoros/'
 import settingsReducer from '@app/Store/Slices/Settings/'
 
 export const store = configureStore({
   reducer: {
+    remindoros: remindoroReducer,
     settings: settingsReducer,
   },
 })
