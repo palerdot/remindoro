@@ -4,10 +4,12 @@ import styled from 'styled-components'
 
 import Home from '@app/Screens/Home/'
 import Scheduled from '@app/Screens/Scheduled/'
+import RemindoroInfo from '@app/Screens/RemindoroInfo/'
 
 export enum Screens {
   Home = '/',
   Scheduled = '/scheduled',
+  RemindoroInfo = '/remindoro-info',
 }
 
 const PATHS = [
@@ -18,6 +20,12 @@ const PATHS = [
   {
     path: Screens.Scheduled,
     Screen: Scheduled,
+  },
+  // NOTE: This screen will not have an explicit 'Link'
+  // Will always be pushed to 'history' with remindoro data as state
+  {
+    path: Screens.RemindoroInfo,
+    Screen: RemindoroInfo,
   },
 ]
 

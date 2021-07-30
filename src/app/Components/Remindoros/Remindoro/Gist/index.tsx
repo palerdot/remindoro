@@ -1,13 +1,33 @@
 import React from 'react'
+import styled from 'styled-components'
+import { useHistory } from 'react-router-dom'
 
-import type { Remindoro as RemindoroType } from '@app/Store/Slices/Remindoros/'
+import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
-function Card({ id, title }: RemindoroType) {
+import { Screens } from '@app/Routes/'
+
+const Holder = styled.div`
+  cursor: pointer;
+
+  border: thin solid grey;
+`
+
+function Card(remindoro: Remindoro) {
+  const history = useHistory()
+
+  const { id, title } = remindoro
+
   return (
-    <div>
+    <Holder
+      onClick={() => {
+        history.push(Screens.RemindoroInfo, {
+          remindoro,
+        })
+      }}
+    >
       <div>{id}</div>
       <div>{title}</div>
-    </div>
+    </Holder>
   )
 }
 
