@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid'
-import { isNil, debounce } from 'lodash'
+import { isNil } from 'lodash'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type Maybe<T> = T | undefined
@@ -35,6 +35,11 @@ export interface Remindoro {
   reminder?: Reminder
 }
 
+type StorePayload<T> = PayloadAction<{
+  id: string
+  value: T
+}>
+
 // TODO: maybe init here with default remindoro 'Take a walk'
 const initialState: Array<Remindoro> = []
 
@@ -58,14 +63,10 @@ export const remindoroSlice = createSlice({
     },
 
     // update title
-    updateTitle: (
-      state,
-      action: PayloadAction<{
-        id: string
-        title: string
-      }>
-    ) => {
-      const { id, title } = action.payload
+    updateTitle: (state, action: StorePayload<string>) => {
+      console.log('porumai ... is title updated ?? ', action.payload)
+
+      const { id, value } = action.payload
       // extract remindoro
       const toUpdate: Maybe<Remindoro> = state.find(ro => ro.id === id)
 
@@ -75,15 +76,14 @@ export const remindoroSlice = createSlice({
         return state
       }
 
+      console.log('porumai ... store title update ', value)
+
       // we will update the title
-      toUpdate.title = title
+      toUpdate.title = value
     },
   },
 })
 
-// debounced version of actions to lazy update redux state
-export const updateTitle = debounce(remindoroSlice.actions.updateTitle, 3140)
-
-export const { addNewRemindoro } = remindoroSlice.actions
+export const { addNewRemindoro, updateTitle } = remindoroSlice.actions
 
 export default remindoroSlice.reducer

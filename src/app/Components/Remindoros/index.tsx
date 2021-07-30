@@ -16,7 +16,7 @@ function Remindoros({ remindoros }: Props) {
   return (
     <div>
       {remindoros.map(ro => (
-        <Gist {...ro} />
+        <Gist key={ro.id} {...ro} />
       ))}
     </div>
   )

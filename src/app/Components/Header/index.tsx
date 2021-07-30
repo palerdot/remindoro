@@ -74,8 +74,6 @@ function Header() {
   const classes = useStyles({ theme })
   const [isMenuOpen, setMenuStatus] = useState(false)
 
-  console.log('porumai ... header location match')
-
   const isHomePage = location.pathname === Screens.Home
 
   return (

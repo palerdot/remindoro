@@ -11,27 +11,24 @@ type Maybe<T> = T | undefined
 
 function RemindoroInfo() {
   const location = useLocation()
-
   const { state } = location
-
   const remindoro: Maybe<Remindoro> = get(state, 'remindoro')
 
   if (!remindoro) {
     // IMPORTANT: This edge case should never happen
     return (
       <div>
-        {'Cannot find information ...'}
+        {
+          'Cannot find information ... Please give feedback if you encounter this issue'
+        }
         <Link to={Screens.Home}>{'Go to Home'}</Link>
       </div>
     )
   }
 
-  console.log('porumai ... location data ', location)
-
   return (
     <div>
-      <div>{'porumai ... remindoro info'}</div>
-      <div>{remindoro.id}</div>
+      <Info {...remindoro} />
     </div>
   )
 }
