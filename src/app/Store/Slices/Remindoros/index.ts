@@ -1,5 +1,8 @@
 import { v4 as uuid } from 'uuid'
+import { isNil, debounce } from 'lodash'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+type Maybe<T> = T | undefined
 
 interface Repeat {
   interval: string // TODO: make this an Enum
@@ -53,8 +56,33 @@ export const remindoroSlice = createSlice({
       // update existing state with new remindoro
       state.push(newRemindoro)
     },
+
+    // update title
+    updateTitle: (
+      state,
+      action: PayloadAction<{
+        id: string
+        title: string
+      }>
+    ) => {
+      const { id, title } = action.payload
+      // extract remindoro
+      const toUpdate: Maybe<Remindoro> = state.find(ro => ro.id === id)
+
+      // if for some reason, we cannot find remindoro to update,
+      // we will return the state as is
+      if (isNil(toUpdate)) {
+        return state
+      }
+
+      // we will update the title
+      toUpdate.title = title
+    },
   },
 })
+
+// debounced version of actions to lazy update redux state
+export const updateTitle = debounce(remindoroSlice.actions.updateTitle, 3140)
 
 export const { addNewRemindoro } = remindoroSlice.actions
 

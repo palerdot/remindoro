@@ -10,7 +10,6 @@ const Holder = styled.div`
   margin-top: auto;
 
   border-top: thin solid red;
-  padding: 4px;
 
   & .message-section {
     display: flex;
@@ -21,6 +20,8 @@ const Holder = styled.div`
   & .icon-holder {
     display: flex;
     align-self: flex-start;
+
+    padding: 0 4px;
   }
 `
 

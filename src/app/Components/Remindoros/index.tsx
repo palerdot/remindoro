@@ -1,11 +1,14 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 
-import type { RootState } from '@app/Store/'
+import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
-function Remindoros() {
-  const remindoros = useSelector((state: RootState) => state.remindoros)
+import Gist from './Remindoro/Gist/'
 
+type Props = {
+  remindoros: Array<Remindoro>
+}
+
+function Remindoros({ remindoros }: Props) {
   if (remindoros.length === 0) {
     return <div>{'porumai ... no remindoros'}</div>
   }
@@ -13,7 +16,7 @@ function Remindoros() {
   return (
     <div>
       {remindoros.map(ro => (
-        <div>{ro.id}</div>
+        <Gist {...ro} />
       ))}
     </div>
   )
