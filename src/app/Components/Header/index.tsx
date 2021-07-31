@@ -70,8 +70,8 @@ const IconButtonHolder = styled(IconButton)`
 function Header() {
   const location = useLocation()
   const theme = useTheme()
-
   const classes = useStyles({ theme })
+
   const [isMenuOpen, setMenuStatus] = useState(false)
 
   const isHomePage = location.pathname === Screens.Home

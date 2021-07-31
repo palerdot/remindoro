@@ -1,10 +1,7 @@
 import React from 'react'
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
 import { Fab, Zoom } from '@material-ui/core/'
-import {
-  PlaylistAdd,
-  EditAttributesTwoTone as EditIcon,
-} from '@material-ui/icons'
+import { Settings as SettingsIcon } from '@material-ui/icons'
 
 type Props = {
   onClick: () => void
@@ -19,7 +16,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
       margin: theme.spacing(1),
 
-      color: 'steelblue',
+      background: 'yellow',
+
+      '&:hover': {
+        background: 'gold',
+      },
     },
   })
 )
@@ -45,7 +46,7 @@ function Edit({ onClick }: Props) {
           onClick()
         }}
       >
-        <EditIcon fontSize={'large'} />
+        <SettingsIcon fontSize={'large'} />
       </Fab>
     </Zoom>
   )

@@ -11,7 +11,7 @@ interface Repeat {
 
 interface Reminder {
   time: number // unix timestamp
-  is_repeat: boolean
+  // we are removing 'is_repeat' in favour of typescript repeat? assertion
   repeat?: Repeat
 }
 

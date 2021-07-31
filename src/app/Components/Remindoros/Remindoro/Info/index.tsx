@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
+import SettingsModal from '@app/Components/Remindoros/Remindoro/Info/SettingsModal'
 import Edit from '@app/Components/Remindoros/Remindoro/EditFab'
 import Title from './Title'
 import Note from './Note'
@@ -42,9 +43,12 @@ const Holder = styled.div`
   }
 `
 
-interface Props extends Remindoro {}
+function Info(remindoro: Remindoro) {
+  // settings modal status
+  const [isModalOpen, setModalStatus] = useState(false)
 
-function Info({ id, title, note }: Props) {
+  const { id, title, note } = remindoro
+
   return (
     <Holder>
       <div className={'title-holder'}>
@@ -56,7 +60,17 @@ function Info({ id, title, note }: Props) {
       <div className={'schedule-holder'}>schedule holder</div>
 
       {/* Edit Fab */}
-      <Edit onClick={() => {}} />
+      <Edit
+        onClick={() => {
+          setModalStatus(true)
+        }}
+      />
+      {/* Settings Modal */}
+      <SettingsModal
+        isModalOpen={isModalOpen}
+        setModalStatus={setModalStatus}
+        remindoro={remindoro}
+      />
     </Holder>
   )
 }
