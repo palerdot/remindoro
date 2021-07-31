@@ -23,7 +23,7 @@ function useLazyStoreUpdate<T>({ id, payload, updater }: Props<T>) {
 
   const lazyUpdate = useCallback(
     debounce(
-      updatedValue =>
+      (updatedValue: T) =>
         dispatch(
           updater({
             id,
