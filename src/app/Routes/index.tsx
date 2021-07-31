@@ -31,7 +31,7 @@ const PATHS = [
 
 const Holder = styled.div`
   width: 100%;
-  padding: 0 12px;
+  /* padding: 0 12px; */
 `
 
 function Routes() {

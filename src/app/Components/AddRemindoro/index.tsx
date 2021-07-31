@@ -29,6 +29,7 @@ function AddRemindoro() {
       style={{
         transitionDelay: `314ms`,
       }}
+      unmountOnExit
     >
       <Fab
         // size="medium"

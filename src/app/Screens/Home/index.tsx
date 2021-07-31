@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 
 import type { RootState } from '@app/Store/'
 
+import AddRemindoro from '@app/Components/AddRemindoro'
 import Remindoros from '@app/Components/Remindoros/'
 
 function Home() {
@@ -10,8 +11,8 @@ function Home() {
 
   return (
     <div>
-      {'porumai ... wait and hope ... HOME screen'}
       <Remindoros remindoros={remindoros} />
+      <AddRemindoro />
     </div>
   )
 }

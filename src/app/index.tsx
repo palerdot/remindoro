@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { ThemeProvider } from 'styled-components'
 import { Provider } from 'react-redux'
-import { MemoryRouter as Router, Link } from 'react-router-dom'
+import { MemoryRouter as Router } from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
 // main app css
 import './css/index.css'
@@ -9,7 +9,6 @@ import './css/index.css'
 import Routes from '@app/Routes/'
 import { useTheme } from '@app/Hooks/'
 import { store } from '@app/Store/'
-import AddRemindoro from '@app/Components/AddRemindoro'
 import Header from '@app/Components/Header/'
 import Footer from '@app/Components/Footer/'
 
@@ -41,7 +40,6 @@ function App() {
             <Routes />
           </Container>
           <Footer />
-          <AddRemindoro />
         </Holder>
       </Router>
     </ThemeProvider>

@@ -26,6 +26,10 @@ const Holder = styled.div`
   padding: 4px;
   padding-left: 28px;
 
+  &.read-only {
+    padding-left: 16px;
+  }
+
   & .ProseMirror[contenteditable] {
     height: 100%;
   }
@@ -47,8 +51,10 @@ function Note({ id, note, readOnly }: Props) {
     []
   )
 
+  console.log('porumai ... NOTE VALUE ', note)
+
   return (
-    <Holder>
+    <Holder className={readOnly ? 'read-only' : ''}>
       <Editor
         defaultValue={note}
         readOnly={readOnly}

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
+import Edit from '@app/Components/Remindoros/Remindoro/EditFab'
 import Title from './Title'
 import Note from './Note'
 
@@ -53,6 +54,9 @@ function Info({ id, title, note }: Props) {
         <Note id={id} note={note} readOnly={false} />
       </div>
       <div className={'schedule-holder'}>schedule holder</div>
+
+      {/* Edit Fab */}
+      <Edit onClick={() => {}} />
     </Holder>
   )
 }
