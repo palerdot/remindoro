@@ -64,8 +64,6 @@ export const remindoroSlice = createSlice({
 
     // update title
     updateTitle: (state, action: StorePayload<string>) => {
-      console.log('porumai ... is title updated ?? ', action.payload)
-
       const { id, value } = action.payload
       // extract remindoro
       const toUpdate: Maybe<Remindoro> = state.find(ro => ro.id === id)
@@ -77,13 +75,33 @@ export const remindoroSlice = createSlice({
       }
 
       console.log('porumai ... store title update ', value)
-
       // we will update the title
       toUpdate.title = value
+    },
+
+    // update note
+    updateNote: (state, action: StorePayload<string>) => {
+      const { id, value } = action.payload
+      // extract remindoro
+      const toUpdate: Maybe<Remindoro> = state.find(ro => ro.id === id)
+
+      // if for some reason, we cannot find remindoro to update,
+      // we will return the state as is
+      if (isNil(toUpdate)) {
+        return state
+      }
+
+      console.log('porumai ... store note update ', value)
+      // we will update the title
+      toUpdate.note = value
     },
   },
 })
 
-export const { addNewRemindoro, updateTitle } = remindoroSlice.actions
+export const {
+  addNewRemindoro,
+  updateTitle,
+  updateNote,
+} = remindoroSlice.actions
 
 export default remindoroSlice.reducer

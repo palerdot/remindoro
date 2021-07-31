@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom'
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
 import { Screens } from '@app/Routes/'
+import Note from '@app/Components/Remindoros/Remindoro/Info/Note'
 
 const Holder = styled.div`
   cursor: pointer;
@@ -15,7 +16,7 @@ const Holder = styled.div`
 function Card(remindoro: Remindoro) {
   const history = useHistory()
 
-  const { id, title } = remindoro
+  const { id, title, note } = remindoro
 
   return (
     <Holder
@@ -27,6 +28,7 @@ function Card(remindoro: Remindoro) {
     >
       <div>{id}</div>
       <div>{title}</div>
+      <Note id={id} note={note} readOnly />
     </Holder>
   )
 }

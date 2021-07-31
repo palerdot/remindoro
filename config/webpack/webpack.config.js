@@ -102,7 +102,11 @@ module.exports = function (webpackEnv = 'development') {
     module: {
       strictExportPresence: true,
       rules: [
-        { parser: { requireEnsure: false } },
+        {
+          parser: {
+            // requireEnsure: false
+          },
+        },
         // NOTE: disabling eslint since we will using 'prettier' to format/lint codebase
         {
           // "oneOf" will traverse all following loaders until one will match the requirements.
