@@ -11,6 +11,10 @@ const Holder = styled.div`
   cursor: pointer;
 
   border: thin solid grey;
+
+  & .note-holder {
+    height: 100px;
+  }
 `
 
 function Card(remindoro: Remindoro) {
@@ -28,7 +32,9 @@ function Card(remindoro: Remindoro) {
     >
       <div>{id}</div>
       <div>{title}</div>
-      <Note id={id} note={note} readOnly />
+      <div className={'note-holder'}>
+        <Note id={id} note={note} readOnly />
+      </div>
     </Holder>
   )
 }

@@ -16,16 +16,14 @@ function Title({ id, title }: Props) {
   })
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder={'Add Title'}
-        value={value}
-        onChange={e => {
-          setValue(e.target.value)
-        }}
-      />
-    </div>
+    <input
+      type="text"
+      placeholder={'Add Title'}
+      value={value}
+      onChange={e => {
+        setValue(e.target.value)
+      }}
+    />
   )
 }
 

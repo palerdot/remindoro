@@ -27,7 +27,7 @@ const Holder = styled.div`
   padding-left: 28px;
 
   & .ProseMirror[contenteditable] {
-    min-height: 150px;
+    height: 100%;
   }
 `
 
