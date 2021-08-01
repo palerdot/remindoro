@@ -1,23 +1,21 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled, { css } from 'styled-components'
 import { DateTimePicker } from '@material-ui/pickers'
-import {
-  InputAdornment,
-  IconButton,
-  Slider,
-  Typography,
-  Select,
-  FormControl,
-  MenuItem,
-} from '@material-ui/core'
+import { InputAdornment, IconButton } from '@material-ui/core'
 import { AddAlarm } from '@material-ui/icons'
 
-import type { Remindoro } from '@app/Store/Slices/Remindoros/'
+import type { Remindoro, Repeat } from '@app/Store/Slices/Remindoros/'
 
 import Switch from '@app/Components/Switch'
 import { useLazyStoreUpdate } from '@app/Hooks/'
 import { updateReminder } from '@app/Store/Slices/Remindoros/'
-import { handleReminderChange, handleRepeatChange } from './utils'
+import {
+  handleReminderChange,
+  handleRepeatChange,
+  handleRepeatDurationChange,
+  handleRepeatIntervalChange,
+} from './utils'
+import RepeatConfig from './RepeatConfig'
 
 const colStyles = css`
   display: flex;
@@ -100,6 +98,26 @@ function Reminder({ id, reminder }: Props) {
     updater: updateReminder,
   })
 
+  console.log('porumai ... seeding reminder ', reminder, id)
+
+  const onRepeatDurationChange = useCallback(
+    (duration: Repeat['time']) => {
+      setValue(currentReminder => {
+        return handleRepeatDurationChange(duration, currentReminder)
+      })
+    },
+    [setValue]
+  )
+
+  const onRepeatIntervalChange = useCallback(
+    (interval: Repeat['interval']) => {
+      setValue(currentReminder => {
+        return handleRepeatIntervalChange(interval, currentReminder)
+      })
+    },
+    [setValue]
+  )
+
   // inferred state
   const isScheduled = !!value
   const isRepeat = !!value?.repeat
@@ -168,45 +186,13 @@ function Reminder({ id, reminder }: Props) {
           />
         </div>
         {/* Repeat parameters */}
-        <div className={'second-col'}>
-          <div className={'duration-slider'}>
-            <Typography id="duration-slider" gutterBottom>
-              {'Repeat every'}
-            </Typography>
-            <Slider
-              defaultValue={45}
-              aria-labelledby="duration-slider"
-              step={1}
-              min={1}
-              max={60}
-              valueLabelDisplay="on"
-              onChangeCommitted={(_, value) => {
-                console.log(
-                  'porumai ... slider value changed ... amaidhi !!!',
-                  value
-                )
-              }}
-            />
-          </div>
-          <div className={'interval-select'}>
-            <FormControl className={'select-form'}>
-              <Select
-                displayEmpty
-                id="repeat-interval"
-                value={'minutes'}
-                onChange={event => {
-                  const value = event.target.value
-                  console.log('porumai ... duration changed ', value)
-                }}
-              >
-                <MenuItem value={'minutes'}>{'Minutes'}</MenuItem>
-                <MenuItem value={'hours'}>{'Hours'}</MenuItem>
-                <MenuItem value={'days'}>{'Days'}</MenuItem>
-                <MenuItem value={'months'}>{'Months'}</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-        </div>
+        <RepeatConfig
+          disabled={!isRepeat}
+          duration={value?.repeat?.time}
+          interval={value?.repeat?.interval}
+          onRepeatDurationChange={onRepeatDurationChange}
+          onRepeatIntervalChange={onRepeatIntervalChange}
+        />
       </Row>
     </Holder>
   )

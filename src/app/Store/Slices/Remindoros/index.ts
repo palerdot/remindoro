@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type Maybe<T> = T | undefined
 
-interface Repeat {
+export interface Repeat {
   interval: 'minutes' | 'hours' | 'days' | 'months'
   time: number
 }
@@ -98,9 +98,25 @@ export const remindoroSlice = createSlice({
 
     // update schedule
     updateReminder: (state, action: StorePayload<Maybe<Reminder>>) => {
-      console.log('porumai ... updating reminder ', action.payload)
+      const { id, value } = action.payload
 
-      return state
+      // extract remindoro
+      const toUpdate: Maybe<Remindoro> = state.find(ro => ro.id === id)
+
+      // if for some reason, we cannot find remindoro to update,
+      // we will return the state as is
+      if (isNil(toUpdate)) {
+        return state
+      }
+
+      console.log(
+        'porumai ... store reminder update ',
+
+        value
+      )
+
+      // we will update the reminder
+      toUpdate.reminder = value
     },
   },
 })

@@ -10,7 +10,7 @@ type Props = {
 
 function Remindoros({ remindoros }: Props) {
   if (remindoros.length === 0) {
-    return <div>{'porumai ... no remindoros'}</div>
+    return <div>{'No remindoros'}</div>
   }
 
   return (

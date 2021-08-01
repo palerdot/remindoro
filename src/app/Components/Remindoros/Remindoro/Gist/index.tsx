@@ -23,13 +23,13 @@ function Card(remindoro: Remindoro) {
 
   const { id, title, note } = remindoro
 
-  console.log('porumai ... card note ', note)
-
   return (
     <Holder
       onClick={() => {
         history.push(Screens.RemindoroInfo, {
-          remindoro,
+          remindoro: {
+            id,
+          },
         })
       }}
     >

@@ -3,8 +3,6 @@ import styled from 'styled-components'
 import { useLocation, Link } from 'react-router-dom'
 import { get } from 'lodash'
 
-import type { Remindoro } from '@app/Store/Slices/Remindoros/'
-
 import { Screens } from '@app/Routes/'
 import Info from '@app/Components/Remindoros/Remindoro/Info/'
 
@@ -17,9 +15,11 @@ type Maybe<T> = T | undefined
 function RemindoroInfo() {
   const location = useLocation()
   const { state } = location
-  const remindoro: Maybe<Remindoro> = get(state, 'remindoro')
+  const remindoroIdInfo: Maybe<{
+    id: string
+  }> = get(state, 'remindoro')
 
-  if (!remindoro) {
+  if (!remindoroIdInfo) {
     // IMPORTANT: This edge case should never happen
     return (
       <div>
@@ -31,9 +31,11 @@ function RemindoroInfo() {
     )
   }
 
+  const { id: remindoroId } = remindoroIdInfo
+
   return (
     <Holder>
-      <Info {...remindoro} />
+      <Info remindoroId={remindoroId} />
     </Holder>
   )
 }

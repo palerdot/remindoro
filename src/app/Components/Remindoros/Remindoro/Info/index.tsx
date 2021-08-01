@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
+import { useSelector } from 'react-redux'
+
+import type { RootState } from '@app/Store/'
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
 import SettingsModal from '@app/Components/Remindoros/Remindoro/Info/SettingsModal'
@@ -43,9 +46,25 @@ const Holder = styled.div`
   }
 `
 
-function Info(remindoro: Remindoro) {
+type Maybe<T> = T | undefined
+
+type Props = {
+  remindoroId: string
+}
+
+function Info({ remindoroId }: Props) {
+  // fetch remindoro details from store
+  const remindoro: Maybe<Remindoro> = useSelector((state: RootState) =>
+    state.remindoros.find(ro => ro.id === remindoroId)
+  )
+
   // settings modal status
   const [isModalOpen, setModalStatus] = useState(false)
+
+  if (!remindoro) {
+    // probably adding our new remindoro to store
+    return <div>{'Loading ...'}</div>
+  }
 
   const { id, title, note } = remindoro
 
