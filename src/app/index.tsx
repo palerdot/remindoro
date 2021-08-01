@@ -3,6 +3,8 @@ import styled, { ThemeProvider } from 'styled-components'
 import { Provider } from 'react-redux'
 import { MemoryRouter as Router } from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
+import DayjsUtils from '@date-io/dayjs'
 // main app css
 import './css/index.css'
 
@@ -31,18 +33,20 @@ function App() {
   const theme = useTheme()
 
   return (
-    <ThemeProvider theme={theme}>
-      <Router>
-        <Holder>
-          <CssBaseline />
-          <Header />
-          <Container>
-            <Routes />
-          </Container>
-          <Footer />
-        </Holder>
-      </Router>
-    </ThemeProvider>
+    <MuiPickersUtilsProvider utils={DayjsUtils}>
+      <ThemeProvider theme={theme}>
+        <Router>
+          <Holder>
+            <CssBaseline />
+            <Header />
+            <Container>
+              <Routes />
+            </Container>
+            <Footer />
+          </Holder>
+        </Router>
+      </ThemeProvider>
+    </MuiPickersUtilsProvider>
   )
 }
 

@@ -5,7 +5,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 type Maybe<T> = T | undefined
 
 interface Repeat {
-  interval: string // TODO: make this an Enum
+  interval: 'minutes' | 'hours' | 'days' | 'months'
   time: number
 }
 
@@ -95,6 +95,13 @@ export const remindoroSlice = createSlice({
       // we will update the title
       toUpdate.note = value
     },
+
+    // update schedule
+    updateReminder: (state, action: StorePayload<Maybe<Reminder>>) => {
+      console.log('porumai ... updating reminder ', action.payload)
+
+      return state
+    },
   },
 })
 
@@ -102,6 +109,7 @@ export const {
   addNewRemindoro,
   updateTitle,
   updateNote,
+  updateReminder,
 } = remindoroSlice.actions
 
 export default remindoroSlice.reducer

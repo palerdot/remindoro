@@ -8,7 +8,7 @@ type Props = {
 
 const md = Markdown()
 
-function Preview({ id, note }: Props) {
+function Preview({ note }: Props) {
   return (
     <div
       dangerouslySetInnerHTML={{

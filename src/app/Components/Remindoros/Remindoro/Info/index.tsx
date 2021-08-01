@@ -37,7 +37,7 @@ const Holder = styled.div`
   }
 
   & .schedule-holder {
-    height: 40px;
+    height: 35px;
 
     border: thin solid yellow;
   }
@@ -51,13 +51,13 @@ function Info(remindoro: Remindoro) {
 
   return (
     <Holder>
+      <div className={'schedule-holder'}>schedule holder</div>
       <div className={'title-holder'}>
         <Title id={id} title={title} />
       </div>
       <div className={'note-holder'}>
         <Note id={id} note={note} readOnly={false} />
       </div>
-      <div className={'schedule-holder'}>schedule holder</div>
 
       {/* Edit Fab */}
       <Edit

@@ -66,7 +66,7 @@ function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
         }}
       >
         <Holder>
-          <Reminder reminder={remindoro.reminder} />
+          <Reminder id={remindoro.id} reminder={remindoro.reminder} />
           <ActionBar>
             <Button
               variant="contained"
