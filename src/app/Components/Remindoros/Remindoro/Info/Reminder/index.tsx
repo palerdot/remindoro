@@ -98,8 +98,6 @@ function Reminder({ id, reminder }: Props) {
     updater: updateReminder,
   })
 
-  console.log('porumai ... seeding reminder ', reminder, id)
-
   const onRepeatDurationChange = useCallback(
     (duration: Repeat['time']) => {
       setValue(currentReminder => {
@@ -153,6 +151,12 @@ function Reminder({ id, reminder }: Props) {
             value={value?.time ? new Date(value.time) : new Date()}
             onChange={date => {
               console.log('porumai ... date changed ...', date)
+              /* setValue(currentReminder => {
+                return {
+                  ...currentReminder,
+                  time: date?.valueOf(),
+                }
+              }) */
             }}
             InputProps={{
               endAdornment: (

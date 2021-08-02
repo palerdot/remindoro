@@ -52,8 +52,6 @@ function Note({ id, note, readOnly }: Props) {
     [id, dispatch]
   )
 
-  console.log('porumai ... NOTE VALUE ', note)
-
   return (
     <Holder className={readOnly ? 'read-only' : ''}>
       <Editor

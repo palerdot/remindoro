@@ -56,8 +56,6 @@ type Props = {
 function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
   const classes = useStyles()
 
-  console.log('porumai ... seeding settings modal ', remindoro)
-
   return (
     <div role="presentation">
       <Drawer
