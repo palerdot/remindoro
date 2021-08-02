@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import {
   Typography,
   Slider,
@@ -27,8 +27,11 @@ function RepeatConfig({
   onRepeatIntervalChange,
 }: Props) {
   // we are tracking a local state to show better interval text - minute, minutes
+  const sliderInitialValue = duration || 45
+  // storing it in a ref for slider uncontrolled component
+  const sliderDefaultValue = useRef(sliderInitialValue)
   const [localSliderValue, setLocalSliderValue] = useState<number>(
-    duration || 45
+    sliderInitialValue
   )
 
   return (
@@ -39,7 +42,7 @@ function RepeatConfig({
         </Typography>
         <Slider
           disabled={disabled}
-          defaultValue={localSliderValue}
+          defaultValue={sliderDefaultValue.current}
           aria-labelledby="duration-slider"
           step={1}
           min={1}

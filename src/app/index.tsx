@@ -4,7 +4,9 @@ import { Provider } from 'react-redux'
 import { MemoryRouter as Router } from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
+import dayjs from 'dayjs'
 import DayjsUtils from '@date-io/dayjs'
+import DayjsRelativeTime from 'dayjs/plugin/relativeTime'
 // main app css
 import './css/index.css'
 
@@ -13,6 +15,10 @@ import { useTheme } from '@app/Hooks/'
 import { store } from '@app/Store/'
 import Header from '@app/Components/Header/'
 import Footer from '@app/Components/Footer/'
+
+// configure dayjs to use relative time comparison
+// ref: https://day.js.org/docs/en/plugin/relative-time
+dayjs.extend(DayjsRelativeTime)
 
 const Holder = styled.div`
   display: flex;
