@@ -138,6 +138,8 @@ module.exports = function (webpackEnv = 'development') {
       isEnvProduction && plugins.miniCssExtractPlugin,
       plugins.ignorePlugin,
       plugins.copyPlugin,
+      // eslint to lint typescript/react specific stuffs
+      plugins.eslintPlugin,
 
       // typescript compile type checking plugin
       plugins.tsCompileTimeCheckPlugin,

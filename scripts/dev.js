@@ -1,60 +1,71 @@
 /* Minimal start.js file */
 
-process.env.BABEL_ENV = 'development';
-process.env.NODE_ENV = 'development';
+process.env.BABEL_ENV = 'development'
+process.env.NODE_ENV = 'development'
 
-const Ora = require('ora');
-const execa = require('execa');
-const chalk = require('chalk');
-const webpack = require('webpack');
-const argv = require('yargs').argv;
-const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
-const printBuildError = require('react-dev-utils/printBuildError');
+const Ora = require('ora')
+const execa = require('execa')
+const chalk = require('chalk')
+const webpack = require('webpack')
+const argv = require('yargs').argv
+const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages')
+const printBuildError = require('react-dev-utils/printBuildError')
 
-require('colors');
+require('colors')
 
-let browserRunning = false;
+let browserRunning = false
 
-const webpackConfigFactory = require('../config/webpack/webpack.config');
+const webpackConfigFactory = require('../config/webpack/webpack.config')
 
-console.log('\n-----------------------------------------------------\n'.yellow.bold);
+console.log(
+  '\n-----------------------------------------------------\n'.yellow.bold
+)
 
 // generate webpack config from webpack config factory
-const webpackConfig = webpackConfigFactory('development');
+const webpackConfig = webpackConfigFactory('development')
 
 let spinner = new Ora({
   text: 'Bundling files and assets using Webpack'.blue,
-  stream: process.stdout
-});
-spinner.start();
+  stream: process.stdout,
+})
+spinner.start()
 
-const compiler = webpack(webpackConfig);
+const compiler = webpack(webpackConfig)
 /* try { */
 compiler.watch({}, (err, stats) => {
-  spinner.succeed();
-  let messages;
+  spinner.succeed()
+  let messages
   if (err) {
     if (!err.message) {
-      throw new Error(err);
+      throw new Error(err)
     }
+
+    console.log('porumai ... webpack err message ', err.message, err)
+
     messages = formatWebpackMessages({
       errors: [err.message],
       warnings: [],
-    });
-  }
-  else {
-    messages = formatWebpackMessages(
-      stats.toJson({ all: false, warnings: true, errors: true })
-    );
+    })
+  } else {
+    // ref: https://github.com/facebook/create-react-app/issues/9880#issuecomment-746131468
+    const rawMessages = stats.toJson({
+      all: false,
+      warnings: true,
+      errors: true,
+    })
+    messages = formatWebpackMessages({
+      errors: rawMessages.errors.map(e => e.message),
+      warnings: rawMessages.warnings.map(e => e.message),
+    })
   }
 
   if (messages.errors.length) {
     // Only keep the first error. Others are often indicative
     // of the same problem, but confuse the reader with noise.
     if (messages.errors.length > 1) {
-      messages.errors.length = 1;
+      messages.errors.length = 1
     }
-    console.log(chalk.red('Failed to compile.\n'));
+    console.log(chalk.red('Failed to compile.\n'))
     // process.exit(1);
   }
   if (
@@ -66,43 +77,41 @@ compiler.watch({}, (err, stats) => {
     console.log(
       chalk.yellow(
         '\nTreating warnings as errors because process.env.CI = true.\n' +
-        'Most CI servers set it automatically.\n'
+          'Most CI servers set it automatically.\n'
       )
-    );
+    )
     // throw new Error(messages.warnings.join('\n\n'));
-    process.exit(1);
+    process.exit(1)
   }
-
-
 
   // choose browser to display
   if (argv.browser === 'chrome' && !browserRunning) {
-    browserRunning = true;
+    browserRunning = true
     spinner = new Ora({
       text: 'Opening the extension in a new Chrome instance'.blue,
-      stream: process.stdout
-    });
-    spinner.start();
-    execa('node', ['scripts/chrome-launch.js']).stdout.pipe(process.stdout);
-  }
-  else if (argv.browser === 'firefox' && !browserRunning) {
-    browserRunning = true;
+      stream: process.stdout,
+    })
+    spinner.start()
+    execa('node', ['scripts/chrome-launch.js']).stdout.pipe(process.stdout)
+  } else if (argv.browser === 'firefox' && !browserRunning) {
+    browserRunning = true
     spinner = new Ora({
       text: 'Opening the extension in a new Firefox instance'.blue,
-      stream: process.stdout
-    });
-    spinner.start();
-    execa('web-ext', ['run', '--source-dir', 'dev', '--pref', 'startup.homepage_welcome_url=https://www.youtube.com']);
+      stream: process.stdout,
+    })
+    spinner.start()
+    execa('web-ext', [
+      'run',
+      '--source-dir',
+      'dev',
+      '--pref',
+      'startup.homepage_welcome_url=https://www.youtube.com',
+    ])
   }
-
-});
+})
 /* } catch (err) {
   console.log(chalk.red('Failed to compile.\n'));
   console.log(err.message);
   printBuildError(err);
   process.exit(1);
 } */
-
-
-
-

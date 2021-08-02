@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useDispatch } from 'react-redux'
 import { debounce } from 'lodash'
 
@@ -21,25 +21,26 @@ function useLazyStoreUpdate<T>({ id, payload, updater }: Props<T>) {
   const dispatch = useDispatch()
   const [value, setValue] = useState<T>(payload)
 
-  const lazyUpdate = useCallback(
-    debounce(
-      (updatedValue: T) =>
-        dispatch(
-          updater({
-            id,
-            value: updatedValue,
-          })
-        ),
-      STORE_UPDATE_DELAY
-    ),
-    []
+  const lazyUpdate = useMemo(
+    () =>
+      debounce(
+        (updatedValue: T) =>
+          dispatch(
+            updater({
+              id,
+              value: updatedValue,
+            })
+          ),
+        STORE_UPDATE_DELAY
+      ),
+    [id, dispatch, updater]
   )
 
   useEffect(() => {
-    console.log('porumai ... local value updated ', value)
+    console.log('porumai ... local value updated ... ', value)
     // update store(lazily)
     lazyUpdate(value)
-  }, [value])
+  }, [value, lazyUpdate])
 
   return {
     value,

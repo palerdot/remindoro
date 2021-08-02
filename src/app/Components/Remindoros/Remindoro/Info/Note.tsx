@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useMemo } from 'react'
 import Editor from 'rich-markdown-editor'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
@@ -38,17 +38,18 @@ const Holder = styled.div`
 function Note({ id, note, readOnly }: Props) {
   const dispatch = useDispatch()
 
-  const lazyUpdate = useCallback(
-    debounce((saveFn: SaveFn) => {
-      const updatedNote = saveFn()
-      dispatch(
-        updateNote({
-          id,
-          value: updatedNote,
-        })
-      )
-    }, 2500),
-    []
+  const lazyUpdate = useMemo(
+    () =>
+      debounce((saveFn: SaveFn) => {
+        const updatedNote = saveFn()
+        dispatch(
+          updateNote({
+            id,
+            value: updatedNote,
+          })
+        )
+      }, 2500),
+    [id, dispatch]
   )
 
   console.log('porumai ... NOTE VALUE ', note)

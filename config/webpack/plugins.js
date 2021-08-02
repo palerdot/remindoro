@@ -13,6 +13,7 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const { TsconfigPathsPlugin } = require('tsconfig-paths-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const ESLintPlugin = require('eslint-webpack-plugin')
 
 const paths = require('../paths')
 const staticFiles = require('./static-files')
@@ -166,10 +167,16 @@ const getPlugins = (isEnvProduction = false, shouldUseSourceMap = false) => {
 
   const tsconfigPathsPlugin = new TsconfigPathsPlugin({})
 
+  // eslint to enforce ts/react specific stuffs (prettier is just for formatting)
+  const eslintPlugin = new ESLintPlugin({
+    extensions: ['.ts', '.tsx'],
+  })
+
   // ts checker plugin
   const tsCompileTimeCheckPlugin = new ForkTsCheckerWebpackPlugin()
 
   return {
+    eslintPlugin,
     optionsHtmlPlugin,
     popupHtmlPlugin,
     sidebarHtmlPlugin,

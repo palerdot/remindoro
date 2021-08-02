@@ -51,13 +51,17 @@ function App() {
 }
 
 /*
+ * AppStore - App + Store !!!
+ *
  * NOTE: Wrapping App with Redux Store provider
  *
  * we are wrapping here, so that we can access store inside 'App'
  */
 
-export default () => (
+const AppStore = () => (
   <Provider store={store}>
     <App />
   </Provider>
 )
+
+export default AppStore
