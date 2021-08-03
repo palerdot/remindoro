@@ -18,7 +18,21 @@ import Footer from '@app/Components/Footer/'
 
 // configure dayjs to use relative time comparison
 // ref: https://day.js.org/docs/en/plugin/relative-time
-dayjs.extend(DayjsRelativeTime)
+const thresholds = [
+  { l: 's', r: 1 },
+  { l: 'm', r: 1 },
+  { l: 'mm', r: 59, d: 'minute' },
+  { l: 'h', r: 1 },
+  { l: 'hh', r: 23, d: 'hour' },
+  { l: 'd', r: 1 },
+  { l: 'dd', r: 29, d: 'day' },
+  { l: 'M', r: 1 },
+  { l: 'MM', r: 11, d: 'month' },
+  { l: 'y' },
+  { l: 'yy', d: 'year' },
+]
+// ref: https://day.js.org/docs/en/customization/relative-time
+dayjs.extend(DayjsRelativeTime, { thresholds })
 
 const Holder = styled.div`
   display: flex;

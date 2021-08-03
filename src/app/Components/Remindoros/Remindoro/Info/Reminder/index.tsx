@@ -150,13 +150,14 @@ function Reminder({ id, reminder }: Props) {
             label="Reminder time"
             value={value?.time ? new Date(value.time) : new Date()}
             onChange={date => {
-              console.log('porumai ... date changed ...', date)
-              /* setValue(currentReminder => {
+              console.log('porumai ... date changed ...', date, date?.valueOf())
+              const reminderTime = date?.valueOf() as number
+              setValue(currentReminder => {
                 return {
                   ...currentReminder,
-                  time: date?.valueOf(),
+                  time: reminderTime,
                 }
-              }) */
+              })
             }}
             InputProps={{
               endAdornment: (

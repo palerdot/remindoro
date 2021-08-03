@@ -8,6 +8,7 @@ import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
 import SettingsModal from '@app/Components/Remindoros/Remindoro/Info/SettingsModal'
 import Edit from '@app/Components/Remindoros/Remindoro/EditFab'
+import Timeago from '@app/Components/Timeago'
 import Title from './Title'
 import Note from './Note'
 
@@ -66,11 +67,13 @@ function Info({ remindoroId }: Props) {
     return <div>{'Loading ...'}</div>
   }
 
-  const { id, title, note } = remindoro
+  const { id, title, note, reminder } = remindoro
 
   return (
     <Holder>
-      <div className={'schedule-holder'}>schedule holder</div>
+      <div className={'schedule-holder'}>
+        {reminder && <Timeago timestamp={reminder.time} />}
+      </div>
       <div className={'title-holder'}>
         <Title id={id} title={title} />
       </div>
