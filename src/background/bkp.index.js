@@ -361,3 +361,25 @@ function check_remindoro_link(menu_details, tab_details, remindoros) {
 }
 
 */
+
+/*  
+
+[] time element for timeago + repeat icon
+[] route with remindoro id in path
+[] add remindoro -> info page
+[] delete remindoro + confirm + toast 
+[] data cleanup - 'reminder' + 'repeat' keys cleanup - 'list' key
+[] save to browser storage
+[] hydrate from browser storage
+
+background task
+[] init watch task with key
+[] retrieve remindoros
+[] calculate next notification time
+[] update time
+
+context menus
+[] add context menu hooks
+[] save to browser storage and notify
+
+*/

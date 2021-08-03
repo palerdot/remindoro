@@ -179,6 +179,8 @@ class Timeago extends PureComponent<Props, State> {
   }
 
   render() {
+    const datetime = new Date(this.props.timestamp).toDateString()
+
     return (
       <div
         style={{
@@ -187,7 +189,7 @@ class Timeago extends PureComponent<Props, State> {
           fontSize: '14px',
         }}
       >
-        {this.state.liveText}
+        <time dateTime={datetime}>{this.state.liveText}</time>
       </div>
     )
   }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-
 import { useSelector } from 'react-redux'
+import { Repeat as RepeatIcon } from '@material-ui/icons'
 
 import type { RootState } from '@app/Store/'
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
@@ -44,6 +44,10 @@ const Holder = styled.div`
     height: 35px;
 
     border: thin solid yellow;
+
+    & .time-holder {
+      display: flex;
+    }
   }
 `
 
@@ -72,7 +76,12 @@ function Info({ remindoroId }: Props) {
   return (
     <Holder>
       <div className={'schedule-holder'}>
-        {reminder && <Timeago timestamp={reminder.time} />}
+        {reminder && (
+          <div className={'time-holder'}>
+            <Timeago timestamp={reminder.time} />
+            {reminder.repeat && <RepeatIcon />}
+          </div>
+        )}
       </div>
       <div className={'title-holder'}>
         <Title id={id} title={title} />
