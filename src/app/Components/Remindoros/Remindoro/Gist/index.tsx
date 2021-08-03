@@ -18,19 +18,21 @@ const Holder = styled.div`
   }
 `
 
+// `/remindoro/:id` => '/remindoro/<ID>'
+function getRemindoroUrl(id: string) {
+  return Screens.RemindoroInfo.replace(':id', id)
+}
+
 function Card(remindoro: Remindoro) {
   const history = useHistory()
 
   const { id, title, note } = remindoro
+  const url = getRemindoroUrl(id)
 
   return (
     <Holder
       onClick={() => {
-        history.push(Screens.RemindoroInfo, {
-          remindoro: {
-            id,
-          },
-        })
+        history.push(url)
       }}
     >
       <div>{id}</div>

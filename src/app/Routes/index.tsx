@@ -9,7 +9,7 @@ import RemindoroInfo from '@app/Screens/RemindoroInfo/'
 export enum Screens {
   Home = '/',
   Scheduled = '/scheduled',
-  RemindoroInfo = '/remindoro-info',
+  RemindoroInfo = '/remindoro-info/:id',
 }
 
 const PATHS = [

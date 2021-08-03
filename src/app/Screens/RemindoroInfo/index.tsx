@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useLocation, Link } from 'react-router-dom'
-import { get } from 'lodash'
+import { Link, useParams } from 'react-router-dom'
 
 import { Screens } from '@app/Routes/'
 import Info from '@app/Components/Remindoros/Remindoro/Info/'
@@ -13,13 +12,13 @@ const Holder = styled.div`
 type Maybe<T> = T | undefined
 
 function RemindoroInfo() {
-  const location = useLocation()
-  const { state } = location
-  const remindoroIdInfo: Maybe<{
-    id: string
-  }> = get(state, 'remindoro')
+  const pathInfo = useParams<
+    Maybe<{
+      id: string
+    }>
+  >()
 
-  if (!remindoroIdInfo) {
+  if (!pathInfo?.id) {
     // IMPORTANT: This edge case should never happen
     return (
       <div>
@@ -31,7 +30,7 @@ function RemindoroInfo() {
     )
   }
 
-  const { id: remindoroId } = remindoroIdInfo
+  const { id: remindoroId } = pathInfo
 
   return (
     <Holder>
