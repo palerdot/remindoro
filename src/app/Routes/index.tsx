@@ -21,8 +21,6 @@ const PATHS = [
     path: Screens.Scheduled,
     Screen: Scheduled,
   },
-  // NOTE: This screen will not have an explicit 'Link'
-  // Will always be pushed to 'history' with remindoro data as state
   {
     path: Screens.RemindoroInfo,
     Screen: RemindoroInfo,

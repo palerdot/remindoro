@@ -41,7 +41,9 @@ const Holder = styled.div`
   }
 
   & .schedule-holder {
-    height: 35px;
+    display: flex;
+    align-items: center;
+    height: 30px;
 
     border: thin solid yellow;
 

@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid'
 import { isNil } from 'lodash'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
@@ -47,9 +46,10 @@ export const remindoroSlice = createSlice({
   name: 'remindoros',
   initialState,
   reducers: {
-    addNewRemindoro: state => {
+    addNewRemindoro: (state, action: PayloadAction<string>) => {
+      const id = action.payload
       const newRemindoro = {
-        id: uuid(),
+        id,
         title: '',
         note: '',
         type: RemindoroType.Note,

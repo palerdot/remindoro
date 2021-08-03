@@ -1,9 +1,12 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { v4 as uuid } from 'uuid'
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
 import { Fab, Zoom } from '@material-ui/core/'
 import { PlaylistAdd } from '@material-ui/icons'
 
+import { getRemindoroUrl } from '@app/Util/'
 import { addNewRemindoro } from '@app/Store/Slices/Remindoros/'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -21,6 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
 function AddRemindoro() {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const history = useHistory()
 
   return (
     <Zoom
@@ -37,7 +41,12 @@ function AddRemindoro() {
         aria-label="add"
         className={classes.fab}
         onClick={() => {
-          dispatch(addNewRemindoro())
+          const id = uuid()
+          const url = getRemindoroUrl(id)
+          // first redirect to info page
+          history.push(url)
+          // now add to our store
+          dispatch(addNewRemindoro(id))
         }}
       >
         <PlaylistAdd fontSize={'large'} />
