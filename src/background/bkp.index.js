@@ -371,6 +371,8 @@ function check_remindoro_link(menu_details, tab_details, remindoros) {
 [] data cleanup - 'reminder' + 'repeat' keys cleanup - 'list' key
 [] save to browser storage
 [] hydrate from browser storage
+[] save to browser storage on window close
+[] loading till store is hydrated
 
 background task
 [] init watch task with key

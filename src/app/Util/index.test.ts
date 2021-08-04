@@ -1,4 +1,10 @@
+import { getRemindoroUrl } from './'
 import { clean_v0_data } from './cleaners'
+
+describe('Remindoro url is constructed correctly', () => {
+  const id = 'porumai'
+  expect(getRemindoroUrl(id)).toEqual(`/remindoro-info/${id}`)
+})
 
 describe('V0.x => v1.x data cleaning is correct', () => {
   test(`'reminder' key is removed for empty reminder`, () => {

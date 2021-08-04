@@ -3,6 +3,11 @@ import { Remindoro, RemindoroType } from '@app/Store/Slices/Remindoros/'
 
 /*
  * Data cleaning modules
+ *
+ * Hopefully, not to be worried too much,
+ * since TS is just compile time check, and will just work fine
+ * with the final emitted JS (the actual extension)
+ * (which should be atleast more safe than original loose, untyped JS)
  */
 
 /*  
