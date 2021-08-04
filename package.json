@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "description": "Recurring Reminders in browser",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start:chrome": "npm run chrome-launch",
     "start:firefox": "npm run firefox-launch",
     "start:views": "node scripts/start.js",
@@ -102,6 +102,7 @@
     "react-dev-utils": "^11.0.4",
     "resolve": "1.8.1",
     "sass-loader": "^12.1.0",
+    "strip-json-comments": "^3.1.1",
     "style-loader": "^3.1.0",
     "terser-webpack-plugin": "^5.1.4",
     "ts-jest": "^27.0.4",

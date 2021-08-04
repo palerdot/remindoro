@@ -14,7 +14,7 @@ interface Reminder {
   repeat?: Repeat
 }
 
-enum RemindoroType {
+export enum RemindoroType {
   Note = 'note',
 }
 
@@ -24,8 +24,7 @@ export interface Remindoro {
   note: string
 
   // NOTE: we have to see the usage of this properties
-  type: string // TODO: harden this to specific types ('note'/ ???)
-  list: Array<string> // TODO: have to see if we can reuse this property
+  type: RemindoroType.Note
 
   // unix timestamp
   created: number
@@ -77,6 +76,8 @@ export const remindoroSlice = createSlice({
       console.log('porumai ... store title update ', value)
       // we will update the title
       toUpdate.title = value
+      // update 'updated' time
+      toUpdate.updated = Date.now()
     },
 
     // update note
@@ -94,6 +95,8 @@ export const remindoroSlice = createSlice({
       console.log('porumai ... store note update ', value)
       // we will update the title
       toUpdate.note = value
+      // update 'updated' time
+      toUpdate.updated = Date.now()
     },
 
     // update schedule
@@ -109,14 +112,12 @@ export const remindoroSlice = createSlice({
         return state
       }
 
-      console.log(
-        'porumai ... store reminder update ',
-
-        value
-      )
+      console.log('porumai ... store reminder update ', value)
 
       // we will update the reminder
       toUpdate.reminder = value
+      // update 'updated' time
+      toUpdate.updated = Date.now()
     },
   },
 })
