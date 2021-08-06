@@ -37,7 +37,6 @@ function useLazyStoreUpdate<T>({ id, payload, updater }: Props<T>) {
   )
 
   useEffect(() => {
-    console.log('porumai ... local value updated ... ', value)
     // update store(lazily)
     lazyUpdate(value)
   }, [value, lazyUpdate])

@@ -366,8 +366,8 @@ function check_remindoro_link(menu_details, tab_details, remindoros) {
 
 [x] time element for timeago + repeat icon
 [x] route with remindoro id in path
-[] add remindoro -> info page
-[] delete remindoro + confirm + toast 
+[x] add remindoro -> info page
+[x] delete remindoro + confirm + toast 
 [] data cleanup - 'reminder' + 'repeat' keys cleanup - 'list' key
 [] save to browser storage
 [] hydrate from browser storage

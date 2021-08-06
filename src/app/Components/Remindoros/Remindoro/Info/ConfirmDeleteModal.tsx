@@ -58,7 +58,7 @@ function ConfirmDelete({ isOpen, closeModal, onDelete }: Props) {
       <DialogTitle id="delete-dialog-title">{'Confirm Delete'}</DialogTitle>
       <DialogContent className={'delete-dialog-description'}>
         <DialogContentText id="alert-dialog-description">
-          {'Are you sure want to delete?'}
+          {`Are you sure you want to delete this note?`}
         </DialogContentText>
       </DialogContent>
       <DialogActions className={'action-holder'}>
