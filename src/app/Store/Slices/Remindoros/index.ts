@@ -119,6 +119,11 @@ export const remindoroSlice = createSlice({
       // update 'updated' time
       toUpdate.updated = Date.now()
     },
+
+    deleteRemindoro: (state, action: PayloadAction<string>) => {
+      const toDelete = action.payload
+      return state.filter(remindoro => remindoro.id !== toDelete)
+    },
   },
 })
 
@@ -127,6 +132,7 @@ export const {
   updateTitle,
   updateNote,
   updateReminder,
+  deleteRemindoro,
 } = remindoroSlice.actions
 
 export default remindoroSlice.reducer

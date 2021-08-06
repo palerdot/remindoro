@@ -66,7 +66,7 @@ function Info({ remindoroId }: Props) {
   )
 
   // settings modal status
-  const [isModalOpen, setModalStatus] = useState(false)
+  const [isSettingsModalOpen, setSettingsModalStatus] = useState(false)
 
   if (!remindoro) {
     // probably adding our new remindoro to store
@@ -95,13 +95,13 @@ function Info({ remindoroId }: Props) {
       {/* Edit Fab */}
       <Edit
         onClick={() => {
-          setModalStatus(true)
+          setSettingsModalStatus(true)
         }}
       />
       {/* Settings Modal */}
       <SettingsModal
-        isModalOpen={isModalOpen}
-        setModalStatus={setModalStatus}
+        isModalOpen={isSettingsModalOpen}
+        setModalStatus={setSettingsModalStatus}
         remindoro={remindoro}
       />
     </Holder>

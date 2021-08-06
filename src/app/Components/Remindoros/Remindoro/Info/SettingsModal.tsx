@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
+import { useDispatch } from 'react-redux'
 import {
   Drawer,
   Button,
@@ -8,9 +10,13 @@ import {
   Theme,
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
+import { useSnackbar } from 'notistack'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
+import { Screens } from '@app/Routes/'
+import { deleteRemindoro } from '@app/Store/Slices/Remindoros'
+import ConfirmDeleteModal from './ConfirmDeleteModal'
 import Reminder from './Reminder/'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -55,9 +61,16 @@ type Props = {
 
 function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
   const classes = useStyles()
+  const dispatch = useDispatch()
+  const history = useHistory()
+  const { enqueueSnackbar } = useSnackbar()
+
+  // confirm modal status
+  const [isDeleteModalOpen, setDeleteModalStatus] = useState(false)
 
   return (
     <div role="presentation">
+      {/* Setting Drawer */}
       <Drawer
         open={isModalOpen}
         anchor={'bottom'}
@@ -73,6 +86,12 @@ function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
               color="secondary"
               className={classes.button}
               startIcon={<DeleteIcon />}
+              onClick={() => {
+                // close settings modal
+                setModalStatus(false)
+                // open delete confirmation modal
+                setDeleteModalStatus(true)
+              }}
             >
               Delete
             </Button>
@@ -88,6 +107,27 @@ function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
           </ActionBar>
         </Holder>
       </Drawer>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmDeleteModal
+        isOpen={isDeleteModalOpen}
+        onDelete={() => {
+          console.log('porumai ... will delete ', remindoro.id)
+          // close the modal
+          setDeleteModalStatus(false)
+          // go to home page
+          history.push(Screens.Home)
+          // dispatch action to delete remindoro
+          dispatch(deleteRemindoro(remindoro.id))
+          // show success toast
+          enqueueSnackbar('Delete success', {
+            variant: 'success',
+          })
+        }}
+        closeModal={() => {
+          setDeleteModalStatus(false)
+        }}
+      />
     </div>
   )
 }
