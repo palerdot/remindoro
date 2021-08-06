@@ -1,4 +1,4 @@
-import { isEqual, omit } from 'lodash'
+import { isEqual, omit, flow } from 'lodash'
 import { Remindoro, RemindoroType } from '@app/Store/Slices/Remindoros/'
 
 /*
@@ -112,8 +112,8 @@ export function clean_v0_data(remindoro: OldRemindoro): Remindoro {
   // NOTE: compiler error is going away only with 'Object.assign'
   const cleanedRemindoro: Remindoro = Object.assign({
     id: String(remindoro.id),
-    title: remindoro.title,
-    note: remindoro.note,
+    title: clean_html(remindoro.title), // strip html
+    note: clean_html(remindoro.note), // strip html
     type: RemindoroType.Note,
     created: remindoro.created,
     updated: remindoro.updated,
@@ -147,4 +147,24 @@ export function migrate_v0_data(oldStoreData: OldStoreData): NewStoreData {
     ...oldStoreData,
     remindoros: oldStoreData.remindoros.map(clean_v0_data),
   }
+}
+
+/*
+ * helper function to strip html from input
+ * old v0 has html sprayed over the content
+ * we will strip the html (while transforming <br> => \n)
+ */
+function strip_html(html: string) {
+  let doc = new DOMParser().parseFromString(html, 'text/html')
+  return doc.body.textContent || ''
+}
+
+function br2nl(str: string) {
+  return str.replace(/<br\s*\/?>/gm, '\n')
+}
+
+export function clean_html(html: string) {
+  const cleaner = flow([br2nl, strip_html])
+
+  return cleaner(html)
 }

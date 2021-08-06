@@ -1,5 +1,9 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { getRemindoroUrl } from './'
-import { clean_v0_data, migrate_v0_data } from './cleaners'
+import { clean_v0_data, migrate_v0_data, clean_html } from './cleaners'
 
 describe('Remindoro url is constructed correctly', () => {
   const id = 'porumai'
@@ -88,8 +92,10 @@ const EXPECTED_NORMAL_REMINDORO = {
   id: '1', // id should be converted to string
   title: 'Take a Walk',
   type: 'note',
-  note:
-    "Taking a walk for every 45 minutes is good for your health. Avoid continous sitting for long hours. Remember, 'Sitting is the new Smoking'. &nbsp;<div><br></div><div>NOTE: This is a default sample remindoro shown if no entries are saved. You can edit, save, delete and do whatever you want with this note. Enjoy!</div>",
+  // html should be cleaned
+  note: clean_html(
+    "Taking a walk for every 45 minutes is good for your health. Avoid continous sitting for long hours. Remember, 'Sitting is the new Smoking'. &nbsp;<div><br></div><div>NOTE: This is a default sample remindoro shown if no entries are saved. You can edit, save, delete and do whatever you want with this note. Enjoy!</div>"
+  ),
   created: 1627482377767,
   updated: 1627482377767,
   reminder: {
@@ -139,4 +145,15 @@ describe('Migration v0.x => v1.x data is working fine', () => {
   }
 
   expect(migrate_v0_data(OLD_STORE_DATA)).toMatchObject(NEW_STORE_DATA)
+})
+
+describe('strip html tags', () => {
+  test('stripping html is working fine ', () => {
+    const input = '<div>porumai<br>wait and hope<br/>patience</div>'
+    const expected = `porumai
+wait and hope
+patience`
+    console.log('porumai ... stripped ', clean_html(input))
+    expect(clean_html(input)).toEqual(expected)
+  })
 })
