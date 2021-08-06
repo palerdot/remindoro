@@ -1,11 +1,12 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { debounce } from 'lodash'
 import { Provider } from 'react-redux'
 
-import { RootState } from '@app/Store/'
+import type { RootState } from '@app/Store/'
 
 import App from './App'
 import { getStore } from '@app/Store/'
+import { syncToStorage } from '@app/Util/BrowserStorage/'
 
 /*
  * AppStore - App + Store !!!
@@ -18,20 +19,35 @@ import { getStore } from '@app/Store/'
 // debounced store update
 const debouncedStoreUpdate = debounce(currentState => {
   console.log('porumai ... current store state ', currentState)
+  syncToStorage({
+    currentState,
+    onSuccess: storedState => {
+      console.log('porumai ... store sync success ', storedState)
+    },
+    onError: () => {
+      console.log('porumai ... error storing store state ')
+    },
+  })
 }, 1314)
 
-const AppStore = () => {
-  const [initialState] = useState<RootState | undefined>(undefined)
+type InitialState = RootState | undefined
 
-  const store = useMemo(() => {
-    return getStore(initialState)
-  }, [initialState])
+type Props = {
+  initialState: InitialState
+}
+
+const AppStore = ({ initialState }: Props) => {
+  const store = getStore(initialState)
 
   const unsubscribeStore = store.subscribe(() => {
     debouncedStoreUpdate(store.getState())
   })
 
   useEffect(() => {
+    window.addEventListener('unload', () => {
+      console.log('porumai ... unmounting app ')
+      unsubscribeStore()
+    })
     return () => {
       console.log('porumai ... unmounting app ')
       unsubscribeStore()
