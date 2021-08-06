@@ -1,5 +1,8 @@
 import { isEqual, omit, flow } from 'lodash'
+
+import type { RootState } from '@app/Store/'
 import { Remindoro, RemindoroType } from '@app/Store/Slices/Remindoros/'
+import { SettingsState } from '@app/Store/Slices/Settings'
 
 /*
  * Data cleaning modules
@@ -53,7 +56,7 @@ interface OldRemindoro {
   title: string
   type: string
   note: string
-  list: Array<string>
+  list?: Array<string>
   created: number
   updated: number
   reminder?: {
@@ -130,19 +133,27 @@ export function clean_v0_data(remindoro: OldRemindoro): Remindoro {
  * this should be a harmless migration, since generated JS from TS compiler
  * should be good enough even if something happens and migration is not run
  */
-interface OldStoreData {
+export interface OldStoreData {
   remindoros: Array<OldRemindoro>
   current_tab: string
   current_selected_remindoro: boolean | number | string
 }
 
-interface NewStoreData {
-  remindoros: Array<Remindoro>
-  current_tab: string
-  current_selected_remindoro: boolean | number | string
+// new store keys except 'remindoros' (which is mandatory)
+type NewStoreKeys = Omit<RootState, 'remindoros'>
+type OptionalNewStoreKeys = {
+  [Property in keyof NewStoreKeys]+?: NewStoreKeys[Property]
 }
 
-export function migrate_v0_data(oldStoreData: OldStoreData): NewStoreData {
+interface NewStoreData extends OptionalNewStoreKeys {
+  remindoros: Array<Remindoro>
+  current_tab?: string
+  current_selected_remindoro?: boolean | number | string
+}
+
+export function migrate_v0_data(
+  oldStoreData: OldStoreData | RootState
+): NewStoreData {
   return {
     ...oldStoreData,
     remindoros: oldStoreData.remindoros.map(clean_v0_data),
