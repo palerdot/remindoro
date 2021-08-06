@@ -61,8 +61,10 @@ type Props = {
 
 function Info({ remindoroId }: Props) {
   // fetch remindoro details from store
+  // NOTE: we are using String(ro.id) as an extra guard
+  // so that our 1.x update will work fine even without migration
   const remindoro: Maybe<Remindoro> = useSelector((state: RootState) =>
-    state.remindoros.find(ro => ro.id === remindoroId)
+    state.remindoros.find(ro => String(ro.id) === remindoroId)
   )
 
   // settings modal status
@@ -70,7 +72,7 @@ function Info({ remindoroId }: Props) {
 
   if (!remindoro) {
     // probably adding our new remindoro to store
-    return <div>{'Loading ...'}</div>
+    return <div>{'Loading ... '}</div>
   }
 
   const { id, title, note, reminder } = remindoro

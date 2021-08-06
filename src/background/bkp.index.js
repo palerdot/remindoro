@@ -368,11 +368,14 @@ function check_remindoro_link(menu_details, tab_details, remindoros) {
 [x] route with remindoro id in path
 [x] add remindoro -> info page
 [x] delete remindoro + confirm + toast 
+
+[x] save to browser storage
+[x] hydrate from browser storage before init
+[x] save to browser storage on window close
+
+cleanup
 [] data cleanup - 'reminder' + 'repeat' keys cleanup - 'list' key
-[] save to browser storage
-[] hydrate from browser storage
-[] save to browser storage on window close
-[] loading till store is hydrated
+[] data cleanup to be run on on install event
 
 background task
 [] init watch task with key
@@ -383,5 +386,9 @@ background task
 context menus
 [] add context menu hooks
 [] save to browser storage and notify
+
+misc
+[] better debounce timing
+[] better lazy update timing
 
 */

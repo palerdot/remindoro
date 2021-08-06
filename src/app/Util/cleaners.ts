@@ -122,3 +122,29 @@ export function clean_v0_data(remindoro: OldRemindoro): Remindoro {
 
   return cleanedRemindoro
 }
+
+/*
+ * NOTE: helper function to migrate v0.x => v1.x data
+ *
+ * This will be run on oninstall event
+ * this should be a harmless migration, since generated JS from TS compiler
+ * should be good enough even if something happens and migration is not run
+ */
+interface OldStoreData {
+  remindoros: Array<OldRemindoro>
+  current_tab: string
+  current_selected_remindoro: boolean | number | string
+}
+
+interface NewStoreData {
+  remindoros: Array<Remindoro>
+  current_tab: string
+  current_selected_remindoro: boolean | number | string
+}
+
+export function migrate_v0_data(oldStoreData: OldStoreData): NewStoreData {
+  return {
+    ...oldStoreData,
+    remindoros: oldStoreData.remindoros.map(clean_v0_data),
+  }
+}

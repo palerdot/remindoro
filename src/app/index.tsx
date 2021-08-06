@@ -43,7 +43,6 @@ const AppStore = ({ initialState }: Props) => {
 
   const unsubscribeStore = store.subscribe(() => {
     const currentState = store.getState()
-
     // before updating, let us compare current state with previous state
     if (isEqual(currentState, previousState.current)) {
       // do not proceed
