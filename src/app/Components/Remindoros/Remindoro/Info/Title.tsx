@@ -1,4 +1,5 @@
 import React from 'react'
+import { isEqual } from 'lodash'
 
 import { updateTitle } from '@app/Store/Slices/Remindoros'
 import { useLazyStoreUpdate } from '@app/Hooks/'
@@ -21,7 +22,12 @@ function Title({ id, title }: Props) {
       placeholder={'Add Title'}
       value={value}
       onChange={e => {
-        setValue(e.target.value)
+        setValue(currentTitle => {
+          const updatedTitle = e.target.value
+          return isEqual(currentTitle, updatedTitle)
+            ? currentTitle
+            : updatedTitle
+        })
       }}
     />
   )

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import Editor from 'rich-markdown-editor'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
-import { debounce } from 'lodash'
+import { debounce, isEqual } from 'lodash'
 
 import { updateNote } from '@app/Store/Slices/Remindoros'
 
@@ -42,6 +42,12 @@ function Note({ id, note, readOnly }: Props) {
     () =>
       debounce((saveFn: SaveFn) => {
         const updatedNote = saveFn()
+
+        if (isEqual(updatedNote, note)) {
+          // do not proceed
+          return
+        }
+
         dispatch(
           updateNote({
             id,
@@ -49,7 +55,7 @@ function Note({ id, note, readOnly }: Props) {
           })
         )
       }, 2500),
-    [id, dispatch]
+    [id, dispatch, note]
   )
 
   return (

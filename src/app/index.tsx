@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { debounce } from 'lodash'
+import React, { useEffect, useRef } from 'react'
+import { debounce, isEqual } from 'lodash'
 import { Provider } from 'react-redux'
 
 import type { RootState } from '@app/Store/'
@@ -38,20 +38,37 @@ type Props = {
 
 const AppStore = ({ initialState }: Props) => {
   const store = getStore(initialState)
+  // saving previous state (to compare before updating)
+  let previousState = useRef(initialState)
 
   const unsubscribeStore = store.subscribe(() => {
-    debouncedStoreUpdate(store.getState())
+    const currentState = store.getState()
+
+    // before updating, let us compare current state with previous state
+    if (isEqual(currentState, previousState.current)) {
+      // do not proceed
+      return
+    }
+    debouncedStoreUpdate(currentState)
+    // update previous state
+    previousState.current = currentState
   })
 
-  useEffect(() => {
-    window.addEventListener('unload', () => {
-      console.log('porumai ... unmounting app ')
-      unsubscribeStore()
+  const onAppClose = () => {
+    const currentState = store.getState()
+    // save current state to browser storage before exiting
+    syncToStorage({
+      currentState,
+      onSuccess: () => {},
+      onError: () => {},
     })
-    return () => {
-      console.log('porumai ... unmounting app ')
-      unsubscribeStore()
-    }
+    // and unsubscribe events
+    unsubscribeStore()
+  }
+
+  useEffect(() => {
+    window.addEventListener('unload', onAppClose)
+    return onAppClose
   })
 
   return (

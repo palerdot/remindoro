@@ -1,4 +1,4 @@
-import { isNil } from 'lodash'
+import { isNil, isEqual } from 'lodash'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type Maybe<T> = T | undefined
@@ -73,6 +73,12 @@ export const remindoroSlice = createSlice({
         return state
       }
 
+      // compare value before update
+      if (isEqual(toUpdate.title, value)) {
+        // return current state
+        return state
+      }
+
       console.log('porumai ... store title update ', value)
       // we will update the title
       toUpdate.title = value
@@ -89,6 +95,12 @@ export const remindoroSlice = createSlice({
       // if for some reason, we cannot find remindoro to update,
       // we will return the state as is
       if (isNil(toUpdate)) {
+        return state
+      }
+
+      // compare value before update
+      if (isEqual(toUpdate.note, value)) {
+        // return current state
         return state
       }
 
@@ -109,6 +121,12 @@ export const remindoroSlice = createSlice({
       // if for some reason, we cannot find remindoro to update,
       // we will return the state as is
       if (isNil(toUpdate)) {
+        return state
+      }
+
+      // compare value before update
+      if (isEqual(toUpdate.reminder, value)) {
+        // return current state
         return state
       }
 
