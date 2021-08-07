@@ -202,23 +202,20 @@ export class Notification {
       // CASE 13: scheduled time is in the past
       // we need to update the next reminder which should be in future
       if (is_past) {
-        // main switch to find out if we have a future reminder time
-        let is_future_reminder_time = false
-        // initial future reminder time (seeded from existing remindoro time)
-        let future_reminder_time = ro.reminder.time
+        // find past diff
+        const past_diff = dayjs().diff(
+          dayjs(ro.reminder.time),
+          ro.reminder.repeat.interval
+        )
+        const duration = ro.reminder.repeat.time
 
-        // looping till we get a future reminder time
-        while (!is_future_reminder_time) {
-          // NOTE: we need to do this till we are in the future
-          // we will update the reminder time
-          future_reminder_time = dayjs(future_reminder_time)
-            .add(ro.reminder.repeat.time, ro.reminder.repeat.interval)
-            .valueOf()
-
-          is_future_reminder_time = dayjs(future_reminder_time).isAfter(dayjs())
-        }
         // updating reminder time with future reminder time
-        ro.reminder.time = future_reminder_time
+        ro.reminder.time = dayjs(ro.reminder.time)
+          .add(
+            find_future_jump(past_diff, duration),
+            ro.reminder.repeat.interval
+          )
+          .valueOf()
 
         //RESULT: WILL NOT NOTIFY
         return ro
@@ -235,4 +232,17 @@ export class Notification {
     // RESULT: WILL NOT NOTIFY
     return ro
   }
+}
+
+/*
+ * Find future jump for long repeat
+ *
+ * 13 (past diff), 5 (duration) => 2
+ * 3 (past diff), 5 (duration) => 2
+ */
+
+export function find_future_jump(past_diff: number, duration: number): number {
+  const rem = past_diff % duration
+
+  return duration - rem
 }

@@ -2,7 +2,7 @@
 
 import { RemindoroType, RepeatDuration } from '@app/Store/Slices/Remindoros'
 import dayjs from 'dayjs'
-import { Notification } from './notification'
+import { Notification, find_future_jump } from './notification'
 
 // ref: https://jestjs.io/docs/expect#expectextendmatchers
 declare global {
@@ -362,7 +362,7 @@ describe('Notification modules are working fine', () => {
             ...sample_remindoro.reminder,
             // 2 days from now (3 days in past + 5 days)
             time: dayjs(sample_remindoro.reminder.time)
-              .add(5, 'days')
+              .add(2, 'days')
               .valueOf(),
           },
         }
@@ -416,5 +416,23 @@ describe('Notification modules are working fine', () => {
   test('CASE 15: unknown case', () => {
     // we don't know about this unknown case
     expect('porumai').toBe('porumai')
+  })
+})
+
+describe('future long jump', () => {
+  test('3 days in past, 5 days repeat => +2', () => {
+    expect(find_future_jump(3, 5)).toEqual(2)
+  })
+
+  test('13 days in past, 5 days repeat => +2', () => {
+    expect(find_future_jump(13, 5)).toEqual(2)
+  })
+
+  test('10 days in past, 3 days repeat => +2', () => {
+    expect(find_future_jump(10, 3)).toEqual(2)
+  })
+
+  test('3 days in past, 3 days repeat => +2', () => {
+    expect(find_future_jump(3, 3)).toEqual(3)
   })
 })
