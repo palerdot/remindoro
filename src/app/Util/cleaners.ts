@@ -2,7 +2,6 @@ import { isEqual, omit, flow } from 'lodash'
 
 import type { RootState } from '@app/Store/'
 import { Remindoro, RemindoroType } from '@app/Store/Slices/Remindoros/'
-import { SettingsState } from '@app/Store/Slices/Settings'
 
 /*
  * Data cleaning modules
@@ -142,6 +141,7 @@ export interface OldStoreData {
 // new store keys except 'remindoros' (which is mandatory)
 type NewStoreKeys = Omit<RootState, 'remindoros'>
 type OptionalNewStoreKeys = {
+  // adding 'optional' key to new store keys
   [Property in keyof NewStoreKeys]+?: NewStoreKeys[Property]
 }
 
@@ -151,6 +151,8 @@ interface NewStoreData extends OptionalNewStoreKeys {
   current_selected_remindoro?: boolean | number | string
 }
 
+// input can be oldstoredata or migrated data
+// so return type should be flexible enough to accomodate both
 export function migrate_v0_data(
   oldStoreData: OldStoreData | RootState
 ): NewStoreData {

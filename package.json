@@ -1,6 +1,6 @@
 {
   "name": "remindoro",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Recurring Reminders in browser",
   "scripts": {
     "test": "jest",
