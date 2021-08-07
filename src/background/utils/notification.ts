@@ -6,7 +6,7 @@ import type { Remindoro } from '@app/Store/Slices/Remindoros'
 
 // helper function to decide if we are dealing with firefox
 // firefox does not allow adding action buttons like 'Close'
-export const isFirefox = navigator.userAgent.indexOf('Firefox') > -1
+// export const isFirefox = window.navigator.userAgent.indexOf('Firefox') > -1
 
 // helper function to deal with time
 const SECONDS = 1000 // in milliseconds
@@ -41,7 +41,7 @@ export function notify({ title, note }: { title?: string; note?: string }) {
 
 type Remindoros = Array<Remindoro>
 
-class Notification {
+export class Notification {
   toNotify: Remindoros = []
 
   // parameter properties
@@ -57,7 +57,11 @@ class Notification {
    * - updates remindoro with new time
    * - adds remindoros 'toNotify' (if it has to be notified)
    */
-  scan() {}
+  scan = () => {
+    if (this.showNotification) {
+    }
+    return this.remindoros.map(this.check)
+  }
 
   /*
    * Check (remindoro)
@@ -69,7 +73,7 @@ class Notification {
    *
    * we will make sure we get only remindoro that has a reminder
    */
-  check(ro: Remindoro): Remindoro {
+  check = (ro: Remindoro): Remindoro => {
     // CASE 1: no reminder scheduled
     // RESULT: WILL NOT NOTIFY; returning REMINDORO
     if (!ro.reminder) {
@@ -112,7 +116,7 @@ class Notification {
         return omit(ro, 'reminder')
       }
 
-      // CASE 5: remindoro is atmost 15 mins (buffer time) old
+      // CASE 5: remindoro is atmost 15 mins (buffer time) old; (not older than 15 mins)
       // RESULT: WILL NOTIFY
       // we will add our 'toNotify'
       this.toNotify.push(ro)
