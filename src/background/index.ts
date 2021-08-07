@@ -1,6 +1,9 @@
 import { browser } from 'webextension-polyfill-ts'
 
+import type { RootState } from '@app/Store/'
+
 import { version } from '@package-info'
+import { ALARM_KEY, STORAGE_KEY } from '@app/Constants'
 import { migrate_v0_data_to_v1 } from './utils/'
 import { notify } from './utils/notification'
 
@@ -38,12 +41,35 @@ function initializeInstallEvents() {
  * Init Background tasks
  */
 
-function initRemindoro() {
+function init_extension_events() {
   console.log('porumai .... wait and hope ... TS background logic')
 
-  browser.storage.local.get('REMINDORO').then(data => {
-    console.log('porumai ... remindoro data ', data)
+  // CREATE an alarm
+  browser.alarms.create(ALARM_KEY, {
+    delayInMinutes: 0.1,
+    periodInMinutes: 1,
+  })
+
+  // listen for the alarm
+  // and dig the remindoros from local chrome extension storage and check if we need to show any notifications
+  browser.alarms.onAlarm.addListener(async alarmInfo => {
+    // let us make sure we are listening for right alarm
+    if (alarmInfo.name !== ALARM_KEY) {
+      // do not proceed
+      return
+    }
+
+    // here we can handle alarm
+    try {
+      const data = await browser.storage.local.get(STORAGE_KEY)
+      const remindoroData = data[STORAGE_KEY] as RootState
+      // NOTE: here we can fetch 'settings.showNotification' and use it to
+      // decide whether to show alarm or not
+      console.log('porumai ... remindoro data for ALARM', remindoroData)
+    } catch (e) {
+      // some error fetching remindoro data
+    }
   })
 }
 
-initRemindoro()
+init_extension_events()

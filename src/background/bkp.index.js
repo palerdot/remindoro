@@ -390,5 +390,7 @@ context menus
 misc
 [] better debounce timing
 [] better lazy update timing
+[] browser specific manifest.json parsing
+[] proper icon image parsing (popup menu/notification)
 
 */
