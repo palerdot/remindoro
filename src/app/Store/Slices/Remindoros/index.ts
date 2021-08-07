@@ -3,8 +3,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type Maybe<T> = T | undefined
 
+export type RepeatDuration = 'minutes' | 'hours' | 'days' | 'months'
+
 export interface Repeat {
-  interval: 'minutes' | 'hours' | 'days' | 'months'
+  interval: RepeatDuration
   time: number
 }
 

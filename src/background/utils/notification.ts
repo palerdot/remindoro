@@ -108,7 +108,7 @@ export class Notification {
       // for past, delta will be positive
       // we are checking if it is not too old
       const TO_BE_NOTIFIED = IS_PAST && TIME_DELTA <= NOTIFICATION_BUFFER_TIME
-      // CASE 4: remindoro is past 15 mins (buffer time). NOT FRESH;
+      // CASE 4: remindoro is older than 15 mins (buffer time). NOT FRESH;
       // very past event STILL ALIVE (maybe browser was not opened for quite some time)
       // RESULT: WILL NOT NOTIFY; returning REMINDORO by CLEARING remindoro time
       if (!TO_BE_NOTIFIED) {
@@ -136,7 +136,7 @@ export class Notification {
       const is_past = dayjs().isAfter(ro.reminder.time, 'minute')
       const is_present = dayjs().isSame(ro.reminder.time, 'minute')
 
-      // CASE 7: exactly scheduled at current minute; short repeating remindoro
+      // CASE 7: short repeat; exactly scheduled at current minute; short repeating remindoro
       // RESULT: WILL NOTIFY
       if (is_present) {
         // add to our notification list
@@ -155,7 +155,7 @@ export class Notification {
       // RESULT: WILL NOT NOTIFY
       if (is_past) {
         // the next reminder from the current minute
-        ro.reminder.time = dayjs(ro.reminder.time)
+        ro.reminder.time = dayjs()
           .add(ro.reminder.repeat.time, ro.reminder.repeat.interval)
           .valueOf()
         // return remindoro
@@ -180,7 +180,7 @@ export class Notification {
 
       // CASE 10: scheduled today for long repeat
       if (is_today) {
-        // CASE 11: we will exactly notify on the scheduled minute
+        // CASE 11: Not current minute - we will exactly notify on the scheduled minute
         const is_current_minute = dayjs().isSame(ro.reminder.time, 'minute')
         if (!is_current_minute) {
           //RESULT: WILL NOT notify
