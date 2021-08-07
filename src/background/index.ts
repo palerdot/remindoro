@@ -20,6 +20,8 @@ function initializeInstallEvents() {
   // migrating v0.x => v1.x data
   // mostly harmless migration - removing unwanted keys
   // we don't have to wait for migration - fire and forget!!!
+  // also we will not repeatedly migrate if we are already in v1.x
+  // we will be checking for 'version' key which is present in v.1.x
   migrate_v0_data_to_v1()
 
   // welcome message
