@@ -1,8 +1,10 @@
 import { browser } from 'webextension-polyfill-ts'
-import { omit } from 'lodash'
+import { omit, isEmpty } from 'lodash'
 import dayjs from 'dayjs'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros'
+
+import { syncToStorage, loadFromStorage } from '@app/Util/BrowserStorage'
 
 // helper function to decide if we are dealing with firefox
 // firefox does not allow adding action buttons like 'Close'
@@ -14,9 +16,15 @@ const MINUTES = 60 * SECONDS
 // buffer time to decide how fresh a reminder is
 const NOTIFICATION_BUFFER_TIME = 15 * MINUTES
 
-export function notify({ title, note }: { title?: string; note?: string }) {
+type Notify = {
+  id: string
+  title?: string
+  note?: string
+}
+
+export function notify({ id, title, note }: Notify) {
   browser.notifications
-    .create('', {
+    .create(id, {
       type: 'basic',
       iconUrl: '/images/icon-38.png',
       title: title || '',
@@ -231,6 +239,53 @@ export class Notification {
     // CAUTION: some UNKNOWN unique use case; do not proceed;
     // RESULT: WILL NOT NOTIFY
     return ro
+  }
+
+  /*
+   * Notify
+   */
+  notify = () => {
+    if (!this.showNotification) {
+      // do not proceed
+      console.log('porumai ... notifications paused ')
+      return
+    }
+
+    if (isEmpty(this.toNotify)) {
+      return
+    }
+
+    // show notification
+    this.toNotify.forEach(ro => notify(ro))
+  }
+
+  /*
+   * Save updated remindoros to store
+   */
+  updateStore = (remindoros: Remindoros) => {
+    // first let us load existing data from storage
+    loadFromStorage({
+      onSuccess: currentData => {
+        const updatedData = {
+          ...currentData,
+          remindoros,
+        }
+        // sync updated data to store
+        syncToStorage({
+          currentState: updatedData,
+          onSuccess: () => {
+            console.log('porumai ... ALARM => updated remindoros to store')
+          },
+          onError: () => {
+            // error syncing to store
+          },
+        })
+      },
+      onError: () => {
+        // error fetching updated data
+        // should let go of this use case
+      },
+    })
   }
 }
 

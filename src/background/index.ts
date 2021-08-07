@@ -5,7 +5,7 @@ import type { RootState } from '@app/Store/'
 import { version } from '@package-info'
 import { ALARM_KEY, STORAGE_KEY } from '@app/Constants'
 import { migrate_v0_data_to_v1 } from './utils/'
-import { notify } from './utils/notification'
+import { notify, Notification } from './utils/notification'
 
 /*
  * ref: https://github.com/Lusito/webextension-polyfill-ts
@@ -29,6 +29,7 @@ function initializeInstallEvents() {
 
   // welcome message
   const welcome_message = {
+    id: 'welcome-message',
     title: `Hello from Remindoro - ${version} !`,
     note:
       'Welcome to new refreshed Remindoro! You can now set one-time/repeatable reminders (with markdown support) for stuffs that matter to you ...',
@@ -62,10 +63,22 @@ function init_extension_events() {
     // here we can handle alarm
     try {
       const data = await browser.storage.local.get(STORAGE_KEY)
-      const remindoroData = data[STORAGE_KEY] as RootState
       // NOTE: here we can fetch 'settings.showNotification' and use it to
       // decide whether to show alarm or not
-      console.log('porumai ... remindoro data for ALARM', remindoroData)
+      const remindoroData = data[STORAGE_KEY] as RootState
+      // handle notifications
+      const notification = new Notification(remindoroData.remindoros, true)
+      const updatedRemindoros = notification.scan()
+      // let us notify
+      notification.notify()
+      // and update stuffs to store
+      notification.updateStore(updatedRemindoros)
+
+      console.log(
+        'porumai ... remindoro data for ALARM',
+        remindoroData,
+        updatedRemindoros
+      )
     } catch (e) {
       // some error fetching remindoro data
     }

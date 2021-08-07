@@ -392,5 +392,7 @@ misc
 [] better lazy update timing
 [] browser specific manifest.json parsing
 [] proper icon image parsing (popup menu/notification)
+[] strip br tags for title (migration)
+[] convert markdown to plain string before notification
 
 */

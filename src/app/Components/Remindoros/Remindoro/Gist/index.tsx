@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom'
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
 import { getRemindoroUrl } from '@app/Util/'
+import ScheduleInfo from '@app/Components/Remindoros/Remindoro/ScheduleInfo'
 import NotePreview from '@app/Components/Remindoros/Remindoro/Gist/NotePreview'
 
 const Holder = styled.div`
@@ -21,7 +22,7 @@ const Holder = styled.div`
 function Card(remindoro: Remindoro) {
   const history = useHistory()
 
-  const { id, title, note } = remindoro
+  const { id, title, note, reminder } = remindoro
   const url = getRemindoroUrl(id)
 
   return (
@@ -30,7 +31,7 @@ function Card(remindoro: Remindoro) {
         history.push(url)
       }}
     >
-      <div>{id}</div>
+      <ScheduleInfo reminder={reminder} />
       <div>{title}</div>
       <div className={'note-holder'}>
         <NotePreview id={id} note={note} />
