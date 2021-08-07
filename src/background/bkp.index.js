@@ -394,5 +394,6 @@ misc
 [] proper icon image parsing (popup menu/notification)
 [] strip br tags for title (migration)
 [] convert markdown to plain string before notification
+[] button logic for chrome/firefox
 
 */

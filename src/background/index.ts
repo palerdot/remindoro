@@ -3,9 +3,10 @@ import { browser } from 'webextension-polyfill-ts'
 import type { RootState } from '@app/Store/'
 
 import { version } from '@package-info'
-import { ALARM_KEY, STORAGE_KEY } from '@app/Constants'
+import { ALARM_KEY, STORAGE_KEY, ContextMenuKeys } from '@app/Constants'
 import { migrate_v0_data_to_v1 } from './utils/'
 import { notify, Notification } from './utils/notification'
+import { handle_context_menu } from './utils/context-menu'
 
 /*
  * ref: https://github.com/Lusito/webextension-polyfill-ts
@@ -16,9 +17,9 @@ import { notify, Notification } from './utils/notification'
  * Install Events
  */
 
-browser.runtime.onInstalled.addListener(initializeInstallEvents)
+browser.runtime.onInstalled.addListener(initialize_install_events)
 
-function initializeInstallEvents() {
+function initialize_install_events() {
   console.log('porumai ... initing install events ', version)
   // migrating v0.x => v1.x data
   // mostly harmless migration - removing unwanted keys
@@ -42,7 +43,18 @@ function initializeInstallEvents() {
  * Init Background tasks
  */
 
+init_extension_events()
+
 function init_extension_events() {
+  init_alarms()
+  init_context_menus()
+}
+
+/*
+ * Init alarms
+ */
+
+function init_alarms() {
   console.log('porumai .... wait and hope ... TS background logic')
 
   // CREATE an alarm
@@ -85,4 +97,35 @@ function init_extension_events() {
   })
 }
 
-init_extension_events()
+/*
+ * Init context menus
+ */
+
+browser.contextMenus.onClicked.addListener(handle_context_menu)
+
+function init_context_menus() {
+  // creating a page context menu
+  // POLYFILL/PROMISES not supported
+  browser.contextMenus.create(
+    {
+      id: ContextMenuKeys.SAVE_LINK,
+      contexts: ['page', 'link'],
+      title: 'Add to Remindoro',
+    },
+    () => {
+      console.log('context menu created for "Add to Page" ')
+    }
+  )
+
+  // creating a highlight context menu
+  browser.contextMenus.create(
+    {
+      id: ContextMenuKeys.SAVE_HIGHLIGHT,
+      contexts: ['selection'],
+      title: 'Save Text to Remindoro',
+    },
+    () => {
+      console.log('context menu created for "Save Text" ')
+    }
+  )
+}
