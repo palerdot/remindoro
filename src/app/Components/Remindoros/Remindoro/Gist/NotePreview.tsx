@@ -1,20 +1,19 @@
 import React from 'react'
-import Markdown from 'markdown-it'
+import styled from 'styled-components'
+import Editor from 'rich-markdown-editor'
+
+const Holder = styled.div``
 
 type Props = {
   id: string
   note: string
 }
 
-const md = Markdown()
-
 function Preview({ note }: Props) {
   return (
-    <div
-      dangerouslySetInnerHTML={{
-        __html: md.render(note),
-      }}
-    ></div>
+    <Holder>
+      <Editor readOnly defaultValue={note} />
+    </Holder>
   )
 }
 

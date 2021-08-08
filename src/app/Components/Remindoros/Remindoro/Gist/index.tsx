@@ -9,13 +9,18 @@ import ScheduleInfo from '@app/Components/Remindoros/Remindoro/ScheduleInfo'
 import NotePreview from '@app/Components/Remindoros/Remindoro/Gist/NotePreview'
 
 const Holder = styled.div`
+  margin: 16px;
   cursor: pointer;
-
   border: thin solid grey;
 
+  &:hover {
+    border: thin solid blue;
+  }
+
   & .note-holder {
-    height: 100px;
+    max-height: 100px;
     pointer-events: none;
+    overflow-y: auto;
   }
 `
 

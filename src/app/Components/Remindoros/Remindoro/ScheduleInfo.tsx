@@ -10,11 +10,20 @@ const Holder = styled.div`
   display: flex;
   align-items: center;
   height: 30px;
+  width: 175px;
 
   border: thin solid yellow;
 
   & .time-holder {
     display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 8px;
+
+    & .icon-holder {
+      display: flex;
+      margin-left: auto;
+    }
   }
 `
 
@@ -33,7 +42,11 @@ function ScheduleInfo({ reminder }: Props) {
     <Holder>
       <div className={'time-holder'}>
         <Timeago timestamp={reminder.time} />
-        {reminder.repeat && <RepeatIcon />}
+        {reminder.repeat && (
+          <div className={'icon-holder'}>
+            <RepeatIcon />
+          </div>
+        )}
       </div>
     </Holder>
   )

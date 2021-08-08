@@ -397,5 +397,6 @@ misc
 [] button logic for chrome/firefox
 [] default remindoro (with markdown)
 [] handle old 'chrome_error' and hook it to all error handlers?
+[] readonly/compose mode switching for note
 
 */

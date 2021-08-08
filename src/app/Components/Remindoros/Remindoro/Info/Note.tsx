@@ -2,14 +2,16 @@ import React, { useMemo } from 'react'
 import Editor from 'rich-markdown-editor'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
-import { debounce, isEqual } from 'lodash'
+import { debounce, isEqual, get } from 'lodash'
 
 import { updateNote } from '@app/Store/Slices/Remindoros'
 
 type Props = {
   id: string
   note: string
-  readOnly: boolean
+
+  isFocussed: boolean
+  setFocus: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 // Rich markdown editor save function signature
@@ -26,17 +28,18 @@ const Holder = styled.div`
   padding: 4px;
   padding-left: 28px;
 
-  &.read-only {
-    padding-left: 16px;
-  }
-
   & .ProseMirror[contenteditable] {
     height: 100%;
   }
+
+  & > div {
+    width: 100%;
+  }
 `
 
-function Note({ id, note, readOnly }: Props) {
+function Note({ id, note, isFocussed, setFocus }: Props) {
   const dispatch = useDispatch()
+  const readOnly = !isFocussed
 
   const lazyUpdate = useMemo(
     () =>
@@ -59,12 +62,43 @@ function Note({ id, note, readOnly }: Props) {
   )
 
   return (
-    <Holder className={readOnly ? 'read-only' : ''}>
+    <Holder
+      className={readOnly ? 'read-only' : ''}
+      onClick={() => {
+        setFocus(true)
+      }}
+    >
       <Editor
         defaultValue={note}
         readOnly={readOnly}
+        autoFocus={isFocussed}
         disableExtensions={['image', 'container_notice']}
         onChange={lazyUpdate}
+        handleDOMEvents={{
+          focus: () => {
+            setFocus(true)
+            return false
+          },
+          blur: (_, event) => {
+            const relatedTarget: HTMLElement | undefined = get(
+              event,
+              'relatedTarget'
+            )
+            if (relatedTarget) {
+              const classList = relatedTarget.classList
+              const isMenuTrigger = classList.contains('block-menu-trigger')
+
+              if (isMenuTrigger) {
+                // menu trigger
+                // do not proceed
+                return false
+              }
+            }
+
+            setFocus(false)
+            return false
+          },
+        }}
       />
     </Holder>
   )
