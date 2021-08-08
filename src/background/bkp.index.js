@@ -398,5 +398,13 @@ misc
 [] default remindoro (with markdown)
 [] handle old 'chrome_error' and hook it to all error handlers?
 [] readonly/compose mode switching for note
+[] roboto font
+
+new build script !!!
+
+clean old files
+[] inside src - 'app/background/typings/manifests'
+to remove (check before cleaning)
+[] inside src - 'Components/Styles/common/lib/config.json/popup/sidebar'
 
 */

@@ -33,7 +33,8 @@ const minifyHtml = {
 
 const getPlugins = (isEnvProduction = false, shouldUseSourceMap = false) => {
   /* HTML Plugins for options, sidebar, options */
-  const optionsHtmlPlugin = new HtmlWebpackPlugin(
+  // we are ignoring options for time being
+  /* const optionsHtmlPlugin = new HtmlWebpackPlugin(
     Object.assign(
       {},
       {
@@ -48,7 +49,7 @@ const getPlugins = (isEnvProduction = false, shouldUseSourceMap = false) => {
           }
         : undefined
     )
-  )
+  ) */
 
   const popupHtmlPlugin = new HtmlWebpackPlugin(
     Object.assign(
@@ -67,7 +68,11 @@ const getPlugins = (isEnvProduction = false, shouldUseSourceMap = false) => {
     )
   )
 
-  const sidebarHtmlPlugin = new HtmlWebpackPlugin(
+  /*
+   * We are ignoring sidebar for timebeing
+   */
+
+  /* const sidebarHtmlPlugin = new HtmlWebpackPlugin(
     Object.assign(
       {},
       {
@@ -82,7 +87,7 @@ const getPlugins = (isEnvProduction = false, shouldUseSourceMap = false) => {
           }
         : undefined
     )
-  )
+  ) */
 
   const moduleNotFoundPlugin = new ModuleNotFoundPlugin(paths.appPath)
   const caseSensitivePathsPlugin = new CaseSensitivePathsPlugin()
@@ -123,17 +128,6 @@ const getPlugins = (isEnvProduction = false, shouldUseSourceMap = false) => {
     // cache: true,
     // sourceMap: shouldUseSourceMap,
   })
-  /* const optimizeCSSAssetsPlugin = new OptimizeCSSAssetsPlugin({
-    cssProcessorOptions: {
-      parser: safePostCssParser,
-      map: shouldUseSourceMap
-        ? {
-            inline: false,
-            annotation: true,
-          }
-        : false,
-    },
-  }) */
 
   // ref: https://github.com/webpack-contrib/css-minimizer-webpack-plugin
   const optimizeCSSAssetsPlugin = new OptimizeCSSAssetsPlugin({
@@ -177,9 +171,9 @@ const getPlugins = (isEnvProduction = false, shouldUseSourceMap = false) => {
 
   return {
     eslintPlugin,
-    optionsHtmlPlugin,
-    popupHtmlPlugin,
-    sidebarHtmlPlugin,
+    // optionsHtmlPlugin,
+    popupHtmlPlugin, // main app
+    // sidebarHtmlPlugin,
     moduleNotFoundPlugin,
     caseSensitivePathsPlugin,
     watchMissingNodeModulesPlugin,

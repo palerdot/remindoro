@@ -10,11 +10,11 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
 const useTypeScript = fs.existsSync(paths.appTsConfig)
 
 const doesOptionsExist = fs.existsSync(paths.appOptionsJs)
-const doesOptionsHtmlExist = fs.existsSync(paths.optionsTemplate)
+// const doesOptionsHtmlExist = fs.existsSync(paths.optionsTemplate)
 const doesPopupExist = fs.existsSync(paths.appPopupJs)
 const doesPopupHtmlExist = fs.existsSync(paths.popupTemplate)
 const doesSidebarExist = fs.existsSync(paths.appSidebarJs)
-const doesSidebarHtmlExist = fs.existsSync(paths.sidebarTemplate)
+// const doesSidebarHtmlExist = fs.existsSync(paths.sidebarTemplate)
 const doesBackgroundExist = fs.existsSync(paths.appBackgroundJs)
 const doesContentExist = fs.existsSync(paths.appContentJs)
 
@@ -128,9 +128,9 @@ module.exports = function (webpackEnv = 'development') {
     },
     plugins: [
       plugins.friendlyErrorsWebpackPlugin,
-      doesOptionsHtmlExist && plugins.optionsHtmlPlugin,
+      // doesOptionsHtmlExist && plugins.optionsHtmlPlugin,
       doesPopupHtmlExist && plugins.popupHtmlPlugin,
-      doesSidebarHtmlExist && plugins.sidebarHtmlPlugin,
+      // doesSidebarHtmlExist && plugins.sidebarHtmlPlugin,
       plugins.htmlIncAssetsPlugin,
       plugins.moduleNotFoundPlugin,
       isEnvDevelopment && plugins.caseSensitivePathsPlugin,

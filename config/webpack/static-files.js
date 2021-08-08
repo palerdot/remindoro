@@ -1,5 +1,8 @@
+const argv = require('yargs').argv
+const stripJsonComments = require('strip-json-comments')
+
 function transformManifestVersion(content) {
-  const manifest = JSON.parse(content.toString())
+  const manifest = JSON.parse(stripJsonComments(content.toString()))
   manifest.version = process.env.npm_package_version
   return Buffer.from(JSON.stringify(manifest))
 }
@@ -7,7 +10,7 @@ function transformManifestVersion(content) {
 /* Copied as it is to the `to` destination via CopyWebpackPlugin */
 const copyPatterns = [
   {
-    from: 'src/manifest.json',
+    from: `src/manifests/${argv.browser}/manifest.json`,
     to: '.',
     transform: transformManifestVersion,
   },

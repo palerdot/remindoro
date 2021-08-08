@@ -83,8 +83,12 @@ module.exports = {
   // appPopupJs: resolveModule(resolveApp, 'src/popup/index'),
   appPopupJs: resolveModule(resolveApp, 'src/app/Init'),
 
+  // we will be ignoring options/sidebar for timebeing
+  /* 
   appOptionsJs: resolveModule(resolveApp, 'src/options/index'),
-  appSidebarJs: resolveModule(resolveApp, 'src/sidebar/index'),
+  appSidebarJs: resolveModule(resolveApp, 'src/sidebar/index'), 
+  */
+
   appBackgroundJs: resolveModule(resolveApp, 'src/background/index'),
   appContentJs: resolveModule(resolveApp, 'src/content_scripts/index'),
   appPackageJson: resolveApp('package.json'),
