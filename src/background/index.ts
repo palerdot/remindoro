@@ -84,6 +84,9 @@ function init_alarms() {
       // let us notify
       notification.notify()
       // and update stuffs to store
+      // IMPORTANT: we are not emitting event to the open popup
+      // to indicate that remindoro time are updated in background
+      // for now, we are allowing people to focus in the open popup
       notification.updateStore(updatedRemindoros)
 
       console.log(

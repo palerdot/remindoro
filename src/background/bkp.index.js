@@ -395,5 +395,7 @@ misc
 [] strip br tags for title (migration)
 [] convert markdown to plain string before notification
 [] button logic for chrome/firefox
+[] default remindoro (with markdown)
+[] handle old 'chrome_error' and hook it to all error handlers?
 
 */

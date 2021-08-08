@@ -54,7 +54,6 @@ export const remindoroSlice = createSlice({
         title: '',
         note: '',
         type: RemindoroType.Note,
-        list: [],
         created: Date.now(),
         updated: Date.now(),
       }
