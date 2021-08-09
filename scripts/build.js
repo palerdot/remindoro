@@ -16,6 +16,7 @@ require('../config/env')
 
 const path = require('path')
 const chalk = require('chalk')
+const argv = require('yargs').argv
 const fs = require('fs-extra')
 const webpack = require('webpack')
 const bfj = require('bfj')
@@ -37,14 +38,28 @@ const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024
 
 const isInteractive = process.stdout.isTTY
 
+require('colors')
+const { zip } = require('zip-a-folder')
+
+const npm_version = process.env.npm_package_version
+const browser = argv.browser
+const release_zip_name = `remindoro-${browser}-v${npm_version}.zip`
+
+if (!['firefox', 'chrome'].includes(browser)) {
+  console.log(
+    'porumai ... firefox/chrome browser not specified for prod build'.red.bold
+  )
+  process.exit(1)
+}
+
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml])) {
   process.exit(1)
 }
 
 // Process CLI arguments
-const argv = process.argv.slice(2)
-const writeStatsJson = argv.indexOf('--stats') !== -1
+// const argv = process.argv.slice(2)
+// const writeStatsJson = argv.indexOf('--stats') !== -1
 
 // Generate configuration
 const config = configFactory('production')
@@ -61,7 +76,9 @@ checkBrowsers(paths.appPath, isInteractive)
   .then(previousFileSizes => {
     // Remove all content but keep the directory so that
     // if you're in it, you don't end up in Trash
-    fs.emptyDirSync(paths.appExtension)
+    // we are deleting the root release path - 'release/'
+    fs.emptyDirSync(paths.appRelease)
+    // fs.emptyDirSync(paths.appExtension)
     // Merge with the public folder
     // copyPublicFolder();
     // Start the webpack build
@@ -90,13 +107,19 @@ checkBrowsers(paths.appPath, isInteractive)
       printFileSizesAfterBuild(
         stats,
         previousFileSizes,
-        paths.appExtension,
+        // paths.appExtension,
+        paths.appRelease,
         WARN_AFTER_BUNDLE_GZIP_SIZE,
         WARN_AFTER_CHUNK_GZIP_SIZE
       )
-      console.log()
 
-      const appPackage = require(paths.appPackageJson)
+      const buildFolder = path.relative(process.cwd(), paths.appExtension)
+
+      console.log(
+        chalk.blue(`porumai ... ${browser} build complete - ${npm_version}`)
+      )
+
+      /* const appPackage = require(paths.appPackageJson)
       const publicUrl = paths.publicUrl
       const publicPath = config.output.publicPath
       const buildFolder = path.relative(process.cwd(), paths.appExtension)
@@ -106,7 +129,7 @@ checkBrowsers(paths.appPath, isInteractive)
         publicPath,
         buildFolder,
         useYarn
-      )
+      ) */
     },
     err => {
       console.log(chalk.red('Failed to compile.\n'))
@@ -114,6 +137,19 @@ checkBrowsers(paths.appPath, isInteractive)
       process.exit(1)
     }
   )
+  .then(() => {
+    console.log(
+      chalk.yellow(`Creating Remindoro zip archive => ${npm_version}`)
+    )
+    return zip(paths.appExtension, `${paths.appRelease}/${release_zip_name}`)
+  })
+  .then(() => {
+    const zipFolder = path.relative(process.cwd(), paths.appRelease)
+    console.log(
+      chalk.blue(`porumai ... wait and hope !!!`),
+      chalk.cyan(`${zipFolder}/${release_zip_name}`)
+    )
+  })
   .catch(err => {
     if (err && err.message) {
       console.log(err.message)
@@ -181,12 +217,13 @@ function build(previousFileSizes) {
         previousFileSizes,
         warnings: messages.warnings,
       }
-      if (writeStatsJson) {
+
+      /* if (writeStatsJson) {
         return bfj
           .write(paths.appExtension + '/bundle-stats.json', stats.toJson())
           .then(() => resolve(resolveArgs))
           .catch(error => reject(new Error(error)))
-      }
+      } */
 
       return resolve(resolveArgs)
     })

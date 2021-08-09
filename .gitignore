@@ -3,6 +3,7 @@ try.js
 old-extension
 dist
 extension
+release
 dev
 .vscode
 temp

@@ -6,7 +6,6 @@ const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('css-minimizer-webpack-plugin')
 const HtmlIncAssetsPlugin = require('html-webpack-tags-plugin')
-const safePostCssParser = require('postcss-safe-parser')
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin')
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin')
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin')
@@ -132,15 +131,7 @@ const getPlugins = (isEnvProduction = false, shouldUseSourceMap = false) => {
   // ref: https://github.com/webpack-contrib/css-minimizer-webpack-plugin
   const optimizeCSSAssetsPlugin = new OptimizeCSSAssetsPlugin({
     minimizerOptions: {
-      processorOptions: {
-        parser: safePostCssParser,
-        map: shouldUseSourceMap
-          ? {
-              inline: false,
-              annotation: true,
-            }
-          : false,
-      },
+      processorOptions: {},
     },
   })
 
