@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
-import { BorderColor } from '@material-ui/icons'
 
 import type { RootState } from '@app/Store/'
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
@@ -10,7 +9,7 @@ import ScheduleInfo from '@app/Components/Remindoros/Remindoro/ScheduleInfo'
 import SettingsModal from '@app/Components/Remindoros/Remindoro/Info/SettingsModal'
 import Edit from '@app/Components/Remindoros/Remindoro/EditFab'
 import Title from './Title'
-import Note from './Note'
+import LiveNote from '@app/Components/LiveNote/'
 
 const Holder = styled.div`
   display: flex;
@@ -58,8 +57,6 @@ type Props = {
 }
 
 function Info({ remindoroId }: Props) {
-  const [isNoteFocussed, setNoteFocus] = useState(false)
-
   // fetch remindoro details from store
   // NOTE: we are using String(ro.id) as an extra guard
   // so that our 1.x update will work fine even without migration
@@ -75,25 +72,19 @@ function Info({ remindoroId }: Props) {
     return <div>{'Loading ... '}</div>
   }
 
-  const { id, title, note, reminder } = remindoro
+  const { id, title, reminder } = remindoro
 
   return (
     <Holder>
       <div className={'info-corner'}>
         <ScheduleInfo reminder={reminder} />
-        <div className={'info'}>{isNoteFocussed && <BorderColor />}</div>
       </div>
 
       <div className={'title-holder'}>
         <Title id={id} title={title} />
       </div>
       <div className={'note-holder'}>
-        <Note
-          id={id}
-          note={note}
-          isFocussed={isNoteFocussed}
-          setFocus={setNoteFocus}
-        />
+        <LiveNote />
       </div>
 
       {/* Edit Fab */}

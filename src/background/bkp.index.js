@@ -398,9 +398,15 @@ misc
 [] default remindoro (with markdown)
 [] handle old 'chrome_error' and hook it to all error handlers?
 [] readonly/compose mode switching for note
-[] roboto font
+[] roboto font (src/fonts)
 
-new build script !!!
+[] new build script !!!
+
+Live Note
+[] Try out plate/slate
+
+Error handling 
+[] Error boundary (around live note)
 
 clean old files
 [] inside src - 'app/background/typings/manifests'
