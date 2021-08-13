@@ -125,6 +125,10 @@ const getLoaders = (
   const outsideBabelLoader = {
     test: /\.(js|mjs)$/,
     exclude: /@babel(?:\/|\\{1,2})runtime/,
+    resolve: {
+      // ref: https://github.com/webpack/webpack/issues/11467
+      fullySpecified: false,
+    },
     loader: require.resolve('babel-loader'),
     options: {
       babelrc: false,

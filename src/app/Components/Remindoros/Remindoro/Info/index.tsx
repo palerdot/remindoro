@@ -72,7 +72,7 @@ function Info({ remindoroId }: Props) {
     return <div>{'Loading ... '}</div>
   }
 
-  const { id, title, reminder } = remindoro
+  const { id, title, note, reminder } = remindoro
 
   return (
     <Holder>
@@ -84,7 +84,7 @@ function Info({ remindoroId }: Props) {
         <Title id={id} title={title} />
       </div>
       <div className={'note-holder'}>
-        <LiveNote />
+        <LiveNote id={id} note={note} />
       </div>
 
       {/* Edit Fab */}
