@@ -4,10 +4,6 @@ import {
   isElement,
   isType,
   toggleList,
-  insertEmptyCodeBlock,
-  insertCodeBlock,
-  insertCodeLine,
-  getPlatePluginType,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
@@ -21,7 +17,6 @@ import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_BLOCKQUOTE,
-  ELEMENT_DEFAULT,
   ELEMENT_PARAGRAPH,
   MARK_BOLD,
   MARK_ITALIC,
@@ -29,11 +24,26 @@ import {
   KEYS_HEADING,
   isBlockAboveEmpty,
   isSelectionAtBlockStart,
-  isStart,
-  isFirstChild,
+  // plugins
+  createReactPlugin,
+  createHistoryPlugin,
+  createParagraphPlugin,
+  createBlockquotePlugin,
+  createCodeBlockPlugin,
+  createHeadingPlugin,
+  createBoldPlugin,
+  createItalicPlugin,
+  createCodePlugin,
+  createListPlugin,
+  createAutoformatPlugin,
+  createExitBreakPlugin,
+  createResetNodePlugin,
+  createTodoListPlugin,
+  createTrailingBlockPlugin,
+  createPlateOptions,
+  createPlateComponents,
 } from '@udecode/plate'
 import type {
-  TEditor,
   SPEditor,
   AutoformatRule,
   WithAutoformatOptions,
@@ -214,3 +224,31 @@ export const optionsExitBreakPlugin: ExitBreakPluginOptions = {
     },
   ],
 }
+
+export const options = createPlateOptions()
+export const components = createPlateComponents()
+
+export const plugins = [
+  // editor
+  createReactPlugin(), // withReact
+  createHistoryPlugin(), // withHistory
+
+  // elements
+  createParagraphPlugin(), // paragraph element
+  createBlockquotePlugin(), // blockquote element
+  createCodeBlockPlugin(), // code block element
+  createHeadingPlugin(), // heading elements
+
+  // marks
+  createBoldPlugin(), // bold mark
+  createItalicPlugin(), // italic mark
+  createCodePlugin(), // code mark
+  createListPlugin(),
+  createTodoListPlugin(),
+
+  // auto format
+  createAutoformatPlugin(optionsAutoformat),
+  createExitBreakPlugin(optionsExitBreakPlugin),
+  createResetNodePlugin(optionsResetBlockTypePlugin),
+  createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
+]

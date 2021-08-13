@@ -57,6 +57,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.8",
     "@types/styled-components": "^5.1.4",
+    "@types/turndown": "^5.0.1",
     "@types/uuid": "^8.3.1",
     "@typescript-eslint/parser": "^4.28.5",
     "@webcomponents/webcomponentsjs": "^2.2.6",
@@ -131,6 +132,7 @@
     "@udecode/plate": "^1.1.7",
     "dayjs": "^1.10.6",
     "lodash": "^4.17.20",
+    "node-html-markdown": "^1.1.1",
     "notistack": "^1.0.10",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -149,6 +151,7 @@
     "slate-hyperscript": "^0.62.0",
     "slate-react": "^0.65.2",
     "styled-components": "^5.2.0",
+    "turndown": "^7.1.1",
     "unified": "^10.1.0",
     "uuid": "^8.3.2"
   },

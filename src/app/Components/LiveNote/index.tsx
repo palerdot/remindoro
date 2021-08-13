@@ -1,31 +1,17 @@
 import React, { useMemo } from 'react'
+import { isEmpty, debounce, isEqual } from 'lodash'
+import { useDispatch } from 'react-redux'
 import {
-  createReactPlugin,
-  createHistoryPlugin,
-  createParagraphPlugin,
-  createBlockquotePlugin,
-  createCodeBlockPlugin,
-  createHeadingPlugin,
-  createBoldPlugin,
-  createItalicPlugin,
-  createCodePlugin,
-  createAutoformatPlugin,
-  createExitBreakPlugin,
-  createResetNodePlugin,
-  createTodoListPlugin,
-  createTrailingBlockPlugin,
-  ELEMENT_PARAGRAPH,
   Plate,
-  createListPlugin,
-  createPlateOptions,
-  createPlateComponents,
+  useStoreEditorRef,
+  useEventEditorId,
+  deserializeMD,
+  SPEditor,
 } from '@udecode/plate'
 
-import {
-  optionsAutoformat,
-  optionsExitBreakPlugin,
-  optionsResetBlockTypePlugin,
-} from './options'
+import Toolbar from './Toolbar'
+import { plugins, options, components } from './options'
+import { toHTML, toMd } from './utils'
 
 const editableProps = {
   placeholder: 'Enter some rich text…',
@@ -33,35 +19,42 @@ const editableProps = {
   padding: '0 30px',
 }
 
-function LiveNote() {
-  const options = createPlateOptions()
-  const components = createPlateComponents()
-  const plugins = useMemo(() => {
-    return [
-      // editor
-      createReactPlugin(), // withReact
-      createHistoryPlugin(), // withHistory
+type Props = {
+  id: string
+  note: string
+}
 
-      // elements
-      createParagraphPlugin(), // paragraph element
-      createBlockquotePlugin(), // blockquote element
-      createCodeBlockPlugin(), // code block element
-      createHeadingPlugin(), // heading elements
+function LiveNote({ id, note }: Props) {
+  const dispatch = useDispatch()
+  const editor = useStoreEditorRef(useEventEditorId('focus')) as SPEditor
+  const initialValue = useMemo(() => {
+    if (isEmpty(note.trim())) {
+      // ref: https://github.com/ianstormtaylor/slate/issues/713
+      return [{ type: 'paragraph', children: [{ text: '' }] }]
+    }
+    return deserializeMD(editor, note)
+  }, [editor, note])
 
-      // marks
-      createBoldPlugin(), // bold mark
-      createItalicPlugin(), // italic mark
-      createCodePlugin(), // code mark
-      createListPlugin(),
-      createTodoListPlugin(),
+  const lazyUpdate = useMemo(
+    () =>
+      // IMPORTANT: `remark-slate` has imperfect types
+      // ref: https://github.com/hanford/remark-slate/issues/25
+      // once we have correct types, we can type this properly
+      debounce(updatedPlateNote => {
+        // const updatedNote = toMd(updatedPlateNote)
+        const updatedNote = toMd(toHTML(editor, updatedPlateNote))
 
-      // auto format
-      createAutoformatPlugin(optionsAutoformat),
-      createExitBreakPlugin(optionsExitBreakPlugin),
-      createResetNodePlugin(optionsResetBlockTypePlugin),
-      createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
-    ]
-  }, [])
+        console.log('porumai ... udpated note ', updatedNote, updatedPlateNote)
+
+        /* dispatch(
+          updateNote({
+            id,
+            value: updatedNote,
+          })
+        ) */
+      }, 2500),
+    [id, dispatch, note, editor]
+  )
 
   return (
     <div>
@@ -71,7 +64,13 @@ function LiveNote() {
         components={components}
         options={options}
         editableProps={editableProps}
-      />
+        initialValue={initialValue}
+        onChange={updatedNote => {
+          lazyUpdate(updatedNote)
+        }}
+      >
+        <Toolbar />
+      </Plate>
     </div>
   )
 }
