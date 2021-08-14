@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { debounce, isEqual } from 'lodash'
+import { debounce, isEqual } from '@lodash'
 import { Provider } from 'react-redux'
 
 import type { RootState } from '@app/Store/'

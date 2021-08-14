@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import Editor from 'rich-markdown-editor'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
-import { debounce, isEqual, get } from 'lodash'
+import { debounce, isEqual, get } from '@lodash'
 
 import { updateNote } from '@app/Store/Slices/Remindoros'
 

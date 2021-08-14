@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { isEmpty, debounce, isEqual } from 'lodash'
+import { isEmpty, debounce } from '@lodash'
 import { useDispatch } from 'react-redux'
 import {
   Plate,

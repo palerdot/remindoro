@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { omit } from 'lodash'
+import { omit } from '@lodash'
 
 import type { Remindoro, Repeat } from '@app/Store/Slices/Remindoros/'
 

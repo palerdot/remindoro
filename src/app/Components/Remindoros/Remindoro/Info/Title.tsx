@@ -1,5 +1,5 @@
 import React from 'react'
-import { isEqual } from 'lodash'
+import { isEqual } from '@lodash'
 
 import { updateTitle } from '@app/Store/Slices/Remindoros'
 import { useLazyStoreUpdate } from '@app/Hooks/'

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useDispatch } from 'react-redux'
-import { debounce } from 'lodash'
+import { debounce } from '@lodash'
 
 import type { ActionCreatorWithPayload } from '@reduxjs/toolkit'
 

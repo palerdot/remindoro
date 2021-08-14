@@ -80,11 +80,7 @@ module.exports = function (webpackEnv = 'development') {
       extensions: paths.moduleFileExtensions
         .map(ext => `.${ext}`)
         .filter(ext => useTypeScript || !ext.includes('ts')),
-      plugins: [
-        // PnpWebpackPlugin,
-        plugins.moduleScopePlugin,
-        plugins.tsconfigPathsPlugin,
-      ],
+      plugins: [plugins.moduleScopePlugin, plugins.tsconfigPathsPlugin],
 
       fallback: {
         dgram: 'empty',
@@ -95,9 +91,7 @@ module.exports = function (webpackEnv = 'development') {
       },
     },
     resolveLoader: {
-      plugins: [
-        // PnpWebpackPlugin.moduleLoader(module)
-      ],
+      plugins: [],
     },
     module: {
       strictExportPresence: true,

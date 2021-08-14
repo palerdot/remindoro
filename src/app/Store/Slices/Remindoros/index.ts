@@ -1,4 +1,4 @@
-import { isNil, isEqual } from 'lodash'
+import { isNil, isEqual } from '@lodash'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type Maybe<T> = T | undefined

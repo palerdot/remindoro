@@ -1,4 +1,4 @@
-import { isEqual, omit, flow } from 'lodash'
+import { isEqual, omit, flow } from '@lodash'
 
 import type { RootState } from '@app/Store/'
 import { Remindoro, RemindoroType } from '@app/Store/Slices/Remindoros/'
