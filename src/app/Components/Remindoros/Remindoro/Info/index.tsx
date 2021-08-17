@@ -84,7 +84,7 @@ function Info({ remindoroId }: Props) {
         <Title id={id} title={title} />
       </div>
       <div className={'note-holder'}>
-        <LiveNote id={id} note={note} />
+        <LiveNote id={id} note={note} readOnly={false} />
       </div>
 
       {/* Edit Fab */}

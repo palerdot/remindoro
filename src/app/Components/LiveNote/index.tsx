@@ -22,9 +22,10 @@ const editableProps = {
 type Props = {
   id: string
   note: string
+  readOnly?: boolean
 }
 
-function LiveNote({ id, note }: Props) {
+function LiveNote({ id, note, readOnly }: Props) {
   const dispatch = useDispatch()
   const editor = useStoreEditorRef(useEventEditorId('focus')) as SPEditor
   const initialValue = useMemo(() => {
@@ -63,13 +64,17 @@ function LiveNote({ id, note }: Props) {
         plugins={plugins}
         components={components}
         options={options}
-        editableProps={editableProps}
+        editableProps={{
+          ...editableProps,
+          readOnly,
+          placeholder: readOnly ? '' : editableProps.placeholder,
+        }}
         initialValue={initialValue}
         onChange={updatedNote => {
           lazyUpdate(updatedNote)
         }}
       >
-        <Toolbar />
+        {!readOnly && <Toolbar />}
       </Plate>
     </div>
   )

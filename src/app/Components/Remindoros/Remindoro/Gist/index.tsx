@@ -6,7 +6,7 @@ import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
 import { getRemindoroUrl } from '@app/Util/'
 import ScheduleInfo from '@app/Components/Remindoros/Remindoro/ScheduleInfo'
-import NotePreview from '@app/Components/Remindoros/Remindoro/Gist/NotePreview'
+import LiveNote from '@app/Components/LiveNote/'
 
 const Holder = styled.div`
   margin: 16px;
@@ -18,7 +18,7 @@ const Holder = styled.div`
   }
 
   & .note-holder {
-    max-height: 100px;
+    max-height: 123px;
     pointer-events: none;
     overflow-y: auto;
   }
@@ -39,7 +39,7 @@ function Card(remindoro: Remindoro) {
       <ScheduleInfo reminder={reminder} />
       <div>{title}</div>
       <div className={'note-holder'}>
-        <NotePreview id={id} note={note} />
+        <LiveNote id={id} note={note} readOnly={true} />
       </div>
     </Holder>
   )
