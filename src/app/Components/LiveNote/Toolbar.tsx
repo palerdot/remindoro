@@ -10,8 +10,6 @@ import {
   MARK_BOLD,
   MARK_ITALIC,
   MARK_CODE,
-  MARK_UNDERLINE,
-  MARK_STRIKETHROUGH,
   useStoreEditorRef,
   useEventEditorId,
   getPlatePluginType,
@@ -28,8 +26,6 @@ import {
   FormatQuote,
   FormatListBulleted,
   FormatListNumbered,
-  FormatUnderlined,
-  FormatStrikethrough,
 } from '@material-ui/icons'
 
 import { LooksOne, LooksTwo } from '@app/Util/Icons/'
@@ -54,14 +50,6 @@ function Toolbar() {
       <ToolbarMark
         type={getPlatePluginType(editor, MARK_ITALIC)}
         icon={<FormatItalic />}
-      />
-      <ToolbarMark
-        type={getPlatePluginType(editor, MARK_UNDERLINE)}
-        icon={<FormatUnderlined />}
-      />
-      <ToolbarMark
-        type={getPlatePluginType(editor, MARK_STRIKETHROUGH)}
-        icon={<FormatStrikethrough />}
       />
       <ToolbarMark
         type={getPlatePluginType(editor, MARK_CODE)}
