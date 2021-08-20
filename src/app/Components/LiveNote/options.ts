@@ -21,6 +21,8 @@ import {
   MARK_BOLD,
   MARK_ITALIC,
   MARK_CODE,
+  MARK_UNDERLINE,
+  MARK_STRIKETHROUGH,
   KEYS_HEADING,
   isBlockAboveEmpty,
   isSelectionAtBlockStart,
@@ -33,6 +35,8 @@ import {
   createHeadingPlugin,
   createBoldPlugin,
   createItalicPlugin,
+  createUnderlinePlugin,
+  createStrikethroughPlugin,
   createCodePlugin,
   createListPlugin,
   createAutoformatPlugin,
@@ -182,8 +186,14 @@ export const optionsAutoformat: WithAutoformatOptions = {
       insertTrigger: true,
     },
     {
-      type: MARK_ITALIC,
+      type: MARK_UNDERLINE,
       between: ['_', '_'],
+      mode: 'inline',
+      insertTrigger: true,
+    },
+    {
+      type: MARK_STRIKETHROUGH,
+      between: ['~', '~'],
       mode: 'inline',
       insertTrigger: true,
     },
@@ -242,6 +252,8 @@ export const plugins = [
   // marks
   createBoldPlugin(), // bold mark
   createItalicPlugin(), // italic mark
+  createUnderlinePlugin(), // underline
+  createStrikethroughPlugin(), // strikethrough
   createCodePlugin(), // code mark
   createListPlugin(),
   createTodoListPlugin(),

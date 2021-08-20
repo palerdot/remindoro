@@ -149,6 +149,7 @@
     "slate": "^0.63.0",
     "slate-history": "^0.62.0",
     "slate-hyperscript": "^0.62.0",
+    "slate-mark": "^0.0.3",
     "slate-react": "^0.65.2",
     "styled-components": "^5.2.0",
     "turndown": "^7.1.1",

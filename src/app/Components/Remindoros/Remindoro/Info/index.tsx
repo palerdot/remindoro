@@ -34,10 +34,10 @@ const Holder = styled.div`
   }
 
   & .note-holder {
-    height: 400px;
-
-    overflow-y: auto;
-    border: thin solid green;
+    & .editor {
+      height: 400px;
+      overflow-y: auto;
+    }
   }
 
   & .info-corner {

@@ -17401,6 +17401,11 @@ slate-hyperscript@^0.62.0:
   dependencies:
     is-plain-object "^3.0.0"
 
+slate-mark@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/slate-mark/-/slate-mark-0.0.3.tgz#9a818316a08588bdcc50d2569878ba379bbae14e"
+  integrity sha512-kfm/gke22JhfhSRYJ34NixMMxSu7XG7Mk8tPA/nHd5ap6BMGkhkjMZorrUUe0EvhbZeUmmGe8QmbXwSAY10LBA==
+
 slate-react@^0.65.2:
   version "0.65.2"
   resolved "https://registry.yarnpkg.com/slate-react/-/slate-react-0.65.2.tgz#71ca66f7b9c6d4ffaffb291494b85ce0398c1530"

@@ -3,15 +3,36 @@ import styled from 'styled-components'
 import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_BLOCKQUOTE,
+  ELEMENT_UL,
+  ELEMENT_OL,
+  ELEMENT_H2,
+  ELEMENT_H3,
   MARK_BOLD,
   MARK_ITALIC,
+  MARK_CODE,
+  MARK_UNDERLINE,
+  MARK_STRIKETHROUGH,
   useStoreEditorRef,
   useEventEditorId,
   getPlatePluginType,
   ToolbarElement,
   ToolbarMark,
+  ToolbarCodeBlock,
+  ToolbarList,
 } from '@udecode/plate'
-import { FormatBold, FormatItalic, Code, FormatQuote } from '@material-ui/icons'
+import {
+  FormatBold,
+  FormatItalic,
+  Code,
+  DeveloperMode,
+  FormatQuote,
+  FormatListBulleted,
+  FormatListNumbered,
+  FormatUnderlined,
+  FormatStrikethrough,
+} from '@material-ui/icons'
+
+import { LooksOne, LooksTwo } from '@app/Util/Icons/'
 
 const Holder = styled.div`
   display: flex;
@@ -34,13 +55,41 @@ function Toolbar() {
         type={getPlatePluginType(editor, MARK_ITALIC)}
         icon={<FormatItalic />}
       />
-      <ToolbarElement
-        type={getPlatePluginType(editor, ELEMENT_CODE_BLOCK)}
+      <ToolbarMark
+        type={getPlatePluginType(editor, MARK_UNDERLINE)}
+        icon={<FormatUnderlined />}
+      />
+      <ToolbarMark
+        type={getPlatePluginType(editor, MARK_STRIKETHROUGH)}
+        icon={<FormatStrikethrough />}
+      />
+      <ToolbarMark
+        type={getPlatePluginType(editor, MARK_CODE)}
         icon={<Code />}
+      />
+      <ToolbarCodeBlock
+        type={getPlatePluginType(editor, ELEMENT_CODE_BLOCK)}
+        icon={<DeveloperMode />}
       />
       <ToolbarElement
         type={getPlatePluginType(editor, ELEMENT_BLOCKQUOTE)}
         icon={<FormatQuote />}
+      />
+      <ToolbarList
+        type={getPlatePluginType(editor, ELEMENT_UL)}
+        icon={<FormatListBulleted />}
+      />
+      <ToolbarList
+        type={getPlatePluginType(editor, ELEMENT_OL)}
+        icon={<FormatListNumbered />}
+      />
+      <ToolbarElement
+        type={getPlatePluginType(editor, ELEMENT_H2)}
+        icon={<LooksOne />}
+      />
+      <ToolbarElement
+        type={getPlatePluginType(editor, ELEMENT_H3)}
+        icon={<LooksTwo />}
       />
     </Holder>
   )
