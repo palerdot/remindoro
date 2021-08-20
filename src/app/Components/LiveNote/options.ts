@@ -21,7 +21,6 @@ import {
   MARK_BOLD,
   MARK_ITALIC,
   MARK_CODE,
-  MARK_STRIKETHROUGH,
   KEYS_HEADING,
   isBlockAboveEmpty,
   isSelectionAtBlockStart,
