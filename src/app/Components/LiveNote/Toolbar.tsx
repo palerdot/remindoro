@@ -7,6 +7,7 @@ import {
   ELEMENT_OL,
   ELEMENT_H2,
   ELEMENT_H3,
+  ELEMENT_TODO_LI,
   MARK_BOLD,
   MARK_ITALIC,
   MARK_CODE,
@@ -26,6 +27,7 @@ import {
   FormatQuote,
   FormatListBulleted,
   FormatListNumbered,
+  PlaylistAddCheck,
 } from '@material-ui/icons'
 
 import { LooksOne, LooksTwo } from '@app/Util/Icons/'
@@ -78,6 +80,10 @@ function Toolbar() {
       <ToolbarElement
         type={getPlatePluginType(editor, ELEMENT_H3)}
         icon={<LooksTwo />}
+      />
+      <ToolbarElement
+        type={getPlatePluginType(editor, ELEMENT_TODO_LI)}
+        icon={<PlaylistAddCheck />}
       />
     </Holder>
   )

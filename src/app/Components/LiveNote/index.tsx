@@ -12,6 +12,7 @@ import {
 
 import Toolbar from './Toolbar'
 import { plugins, options, components } from './options'
+import { parseMd } from './transformers'
 import { updateNote } from '@app/Store/Slices/Remindoros'
 
 const editableProps = {
@@ -37,6 +38,12 @@ function LiveNote({ id, note, readOnly }: Props) {
     }
 
     // we are going to replace '\n' with `&nbsp;\n`
+    console.log(
+      'porumai ... md deserializing ',
+      deserializeMD(editor, note.replaceAll(' \n ', '&nbsp;\n')),
+      parseMd(editor, note)
+    )
+
     return deserializeMD(editor, note.replaceAll(' \n ', '&nbsp;\n'))
   }, [editor, note])
 

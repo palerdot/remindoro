@@ -159,6 +159,14 @@ export const optionsAutoformat: WithAutoformatOptions = {
       markup: ['[]'],
     },
     {
+      type: ELEMENT_TODO_LI,
+      markup: ['[ ]'],
+    },
+    {
+      type: ELEMENT_TODO_LI,
+      markup: ['[x]'],
+    },
+    {
       type: ELEMENT_BLOCKQUOTE,
       markup: ['>'],
       preFormat,

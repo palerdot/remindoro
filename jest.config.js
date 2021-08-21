@@ -12,10 +12,23 @@ let tsConfig = fs.readFileSync('./tsconfig.json', 'utf8')
 tsConfig = JSON.parse(stripJsonComments(tsConfig))
 const { compilerOptions } = tsConfig
 
+const tsPathMapper = pathsToModuleNameMapper(compilerOptions.paths, {
+  prefix: '<rootDir>/src/',
+})
+
+const moduleNameMapper = {
+  ...tsPathMapper,
+  // IMPORTANT: we are using lodash-es (ES6 modules exports/imports)
+  // jest has problem with es6 modules - https://github.com/facebook/jest/issues/4842
+  // and instructing jest to use lodash in test environments
+  // we are not adding 'lodash' explicitly as dev dependency since
+  // thousands of dev dependency packages already depend on lodash
+  // ref: https://stackoverflow.com/a/54117206/1410291
+  '^lodash-es$': 'lodash',
+}
+
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-    prefix: '<rootDir>/src/',
-  }),
+  moduleNameMapper,
 }
