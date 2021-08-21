@@ -17,7 +17,7 @@ const PARSED_ACTION_ITEM = [
     type: 'action_item',
     children: [
       {
-        text: '[ ] porumai\n',
+        text: 'porumai',
       },
     ],
   },
@@ -25,7 +25,7 @@ const PARSED_ACTION_ITEM = [
     type: 'action_item',
     children: [
       {
-        text: '[x] amaidhi\n',
+        text: 'amaidhi',
       },
     ],
     checked: true,
@@ -34,7 +34,7 @@ const PARSED_ACTION_ITEM = [
     type: 'action_item',
     children: [
       {
-        text: '[ ] patience\n \n \n ',
+        text: 'patience',
       },
     ],
   },
@@ -93,8 +93,56 @@ describe('Nodes are parsed correctly', () => {
     ]
 
     const sample_input = [...NORMAL_NODES, UNPARSED_ACTION_ITEM]
-
     const EXPECTED = [...NORMAL_NODES, ...PARSED_ACTION_ITEM]
+
+    expect(handleExtraMdParse(sample_input)).toMatchObject(EXPECTED)
+  })
+
+  test('Nodes WITH action item (with blank lines) are correctly parsed', () => {
+    const NORMAL_NODES = [
+      {
+        type: 'p',
+        children: [
+          {
+            text: 'porumai',
+          },
+        ],
+      },
+      {
+        type: 'blockquote',
+        children: [
+          {
+            text: 'porumai',
+          },
+        ],
+      },
+    ]
+
+    const action_items = {
+      type: 'p',
+      children: [
+        { text: ' ' },
+        { text: '' },
+        {
+          text: '[ ] porumai\n[x] amaidhi\n[ ] patience\n \n \n ',
+        },
+      ],
+    }
+
+    const expected_action_items = [
+      {
+        type: 'p',
+        children: [{ text: ' ' }],
+      },
+      {
+        type: 'p',
+        children: [{ text: '' }],
+      },
+      ...PARSED_ACTION_ITEM,
+    ]
+
+    const sample_input = [...NORMAL_NODES, action_items]
+    const EXPECTED = [...NORMAL_NODES, ...expected_action_items]
 
     expect(handleExtraMdParse(sample_input)).toMatchObject(EXPECTED)
   })

@@ -44,7 +44,8 @@ function LiveNote({ id, note, readOnly }: Props) {
       parseMd(editor, note)
     )
 
-    return deserializeMD(editor, note.replaceAll(' \n ', '&nbsp;\n'))
+    // return deserializeMD(editor, note.replaceAll(' \n ', '&nbsp;\n'))
+    return parseMd(editor, note)
   }, [editor, note])
 
   const lazyUpdate = useMemo(

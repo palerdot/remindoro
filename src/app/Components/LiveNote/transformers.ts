@@ -1,5 +1,5 @@
-import { get, compact, flatten, isString, isArray } from '@lodash'
-import { SlateNode, LeafNode, isLeafNode } from 'slate-mark'
+import { get, compact, flatten } from '@lodash'
+import { SlateNode, LeafNode, isLeafNode, isLeaf } from 'slate-mark'
 import { TNode, deserializeMD, SPEditor } from '@udecode/plate'
 
 /*
@@ -34,22 +34,97 @@ export function handleExtraMdParse(nodes: TNode): TNode {
       // push node to our transformed nodes
       transformedNodes.push(node)
     } else {
-      const firstElem = node.children[0]
+      // ok; let us deal with the children
+      /*  
+      Case 1: we have our action item directly
+      children: [
+        {
+          text: "[ ] action item \n[x] checked item"
+        }
+      ]
 
-      if (!isLeafNode(firstElem)) {
-        return
-      }
+      Case 2: we have empty lines nested (unexpected behaviour from slate)
+      children: [
+        {
+          text: " " // empty lines
+        },
+        {
+          text: "" // empty lines
+        },
+        {
+          text: "[ ] action item \n[x] checked item"
+        }
+      ]
+      */
 
-      // we have valid action items
-      const actionItems = transformActionItems(firstElem)
-      // we will get list of items
-      actionItems.forEach(actionItem => {
-        transformedNodes.push(actionItem)
+      const children = node.children
+
+      // so we are going to loop through the children and if not valid action item
+      // we are going to return text as a new 'p' element
+      children.forEach(node => {
+        // we will not deal if not leaf node
+        if (!isLeafNode(node)) {
+          return
+        }
+
+        const text = node.text
+        const isValidActionItem =
+          text.startsWith('[ ]') || text.startsWith('[x]')
+
+        if (!isValidActionItem) {
+          transformedNodes.push({
+            type: 'p',
+            children: [{ text }],
+          })
+        } else {
+          // we are going to deal with action items
+          // we have valid action items
+          const actionItems = transformActionItems(node)
+          // we will get list of items
+          actionItems.forEach(actionItem => {
+            transformedNodes.push(actionItem)
+          })
+        }
       })
     }
   })
 
   return transformedNodes
+}
+
+export function checkActionItemNode(children: Array<LeafNode>) {
+  /*  
+   Case 1: we have our action item directly
+   children: [
+     {
+       text: "[ ] action item \n[x] checked item"
+     }
+   ]
+
+   Case 2: we have empty lines nested (unexpected behaviour from slate)
+   children: [
+     {
+       text: " " // empty lines
+     },
+     {
+       text: "" // empty lines
+     },
+     {
+       text: "[ ] action item \n[x] checked item"
+     }
+   ]
+   */
+  let isValid = false
+  children.forEach(node => {
+    const text = node.text
+    // it is valid if it is an empty text/or valid action item
+    const isBlankLine = text.trim() === ''
+    const isValidActionItem = text.startsWith('[ ]') || text.startsWith('[x]')
+
+    isValid = isBlankLine || isValidActionItem
+  })
+
+  return isValid
 }
 
 // helper function to decide if node is valid action item
@@ -64,33 +139,7 @@ export function isNodeActionItem(node: SlateNode) {
     return false
   }
 
-  const isValidChildren = isArray(children) && children.length === 1
-  if (!isValidChildren) {
-    // not an action item
-    return false
-  }
-
-  // we will deal only with leaf node
-  if (!isLeafNode(children[0])) {
-    return false
-  }
-
-  const isValidText = isString(children[0].text)
-  if (!isValidText) {
-    // not an action item
-    return false
-  }
-
-  // valid action item starts with [ ] or [x]
-  const text: string = isString(children[0].text) ? children[0].text : ''
-  const isValidActionItem = text.startsWith('[ ]') || text.startsWith('[x]')
-  if (!isValidActionItem) {
-    // not an action item
-    return false
-  }
-
-  // we have a valid action item
-  return true
+  return isLeaf(children) && checkActionItemNode(children)
 }
 
 // we are sniffing for action item which is not yet parsed
@@ -122,7 +171,11 @@ export function transformActionItems({ text }: LeafNode) {
     const isCheckedItem = item.includes('[x]')
     if (!isCheckedItem) {
       // we are returning an array, so that we can flatten things out
-      return [`[ ]${item}`]
+
+      return {
+        text: item.trim(),
+        checked: false,
+      }
     }
 
     // we have checked item
@@ -134,7 +187,10 @@ export function transformActionItems({ text }: LeafNode) {
     return checkedItems.map((checkedItem, index) => {
       // anything not first item is normal checked item
       if (index > 0) {
-        return `[x]${checkedItem}`
+        return {
+          text: checkedItem.trim(),
+          checked: true,
+        }
       }
 
       // special cases for first item
@@ -142,18 +198,22 @@ export function transformActionItems({ text }: LeafNode) {
       // starts with [x]
       if (item.startsWith('[x]')) {
         // all is fine; we just need to prefix everything with [x]
-        return `[x]${checkedItem}`
+        return {
+          text: checkedItem.trim(),
+          checked: true,
+        }
       } else {
         // case 2: The original string started with [ ]
-        return `[ ]${checkedItem}`
+        return {
+          text: checkedItem.trim(),
+          checked: false,
+        }
       }
     })
   })
 
   // let us flatten and add type 'action item'
-  const actionItems = flatten(parsed).map(text => {
-    // here we decide if the item is checked or not
-    const isChecked = text.startsWith('[x]')
+  const actionItems = flatten(parsed).map(({ text, checked }) => {
     return Object.assign(
       {
         type: 'action_item',
@@ -163,7 +223,7 @@ export function transformActionItems({ text }: LeafNode) {
           },
         ],
       },
-      isChecked
+      checked
         ? {
             checked: true,
           }
