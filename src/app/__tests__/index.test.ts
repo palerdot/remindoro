@@ -7,7 +7,7 @@ const UNPARSED_ACTION_ITEM = {
   type: 'p',
   children: [
     {
-      text: '[ ] porumai\n[x] amaidhi\n[ ] patience\n \n \n ',
+      text: '[ ] porumai\n[x] amaidhi\n[ ] patience\n',
     },
   ],
 }
@@ -45,6 +45,34 @@ describe('parseMd correctly parses action item', () => {
     const sample_input = UNPARSED_ACTION_ITEM.children[0]
 
     expect(transformActionItems(sample_input)).toMatchObject(PARSED_ACTION_ITEM)
+  })
+
+  test('action item with ending new lines are parsed correctly', () => {
+    const sample_input = {
+      text: UNPARSED_ACTION_ITEM.children[0].text + '  \n  \n',
+    }
+
+    const EXPECTED = [
+      ...PARSED_ACTION_ITEM,
+      {
+        type: 'p',
+        children: [
+          {
+            text: '  \n',
+          },
+        ],
+      },
+      {
+        type: 'p',
+        children: [
+          {
+            text: '  \n',
+          },
+        ],
+      },
+    ]
+
+    expect(transformActionItems(sample_input)).toMatchObject(EXPECTED)
   })
 })
 
@@ -124,7 +152,7 @@ describe('Nodes are parsed correctly', () => {
         { text: ' ' },
         { text: '' },
         {
-          text: '[ ] porumai\n[x] amaidhi\n[ ] patience\n \n \n ',
+          text: '[ ] porumai\n[x] amaidhi\n[ ] patience\n',
         },
       ],
     }

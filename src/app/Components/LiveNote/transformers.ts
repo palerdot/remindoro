@@ -1,4 +1,4 @@
-import { get, compact, flatten } from '@lodash'
+import { get, compact, flatten, times } from '@lodash'
 import { SlateNode, LeafNode, isLeafNode, isLeaf } from 'slate-mark'
 import { TNode, deserializeMD, SPEditor } from '@udecode/plate'
 
@@ -231,5 +231,32 @@ export function transformActionItems({ text }: LeafNode) {
     )
   })
 
+  // EDGE CASE
+  // If there is a list and we insert a blank line between the list items
+  // we have to make sure the the blank line at the end of the list is parsed correctly
+  const totalEndingNewLines = checkEndingNewLine(text)
+  if (totalEndingNewLines > 1) {
+    times(totalEndingNewLines - 1, () => {
+      actionItems.push({
+        type: 'p',
+        children: [
+          {
+            text: '  \n',
+          },
+        ],
+      })
+    })
+  }
+
   return actionItems
+}
+
+// helper function to add ending new line break
+function checkEndingNewLine(text: string): number {
+  const trimmed = text.trimEnd()
+  const diffIndex = text.length - trimmed.length
+  const ending: string = text.slice(-diffIndex)
+  const splitted = ending.split('\n')
+
+  return splitted.length - 1 // excluding initial ""
 }
