@@ -6,7 +6,6 @@ import {
   Plate,
   useStoreEditorRef,
   useEventEditorId,
-  deserializeMD,
   SPEditor,
 } from '@udecode/plate'
 
@@ -14,6 +13,7 @@ import Toolbar from './Toolbar'
 import { plugins, options, components } from './options'
 import { parseMd } from './transformers'
 import { updateNote } from '@app/Store/Slices/Remindoros'
+import BackupEditor from './BackupEditor'
 
 const editableProps = {
   placeholder: 'Enter some rich text…',
@@ -36,13 +36,6 @@ function LiveNote({ id, note, readOnly }: Props) {
       // ref: https://github.com/ianstormtaylor/slate/issues/713
       return [{ type: 'paragraph', children: [{ text: '' }] }]
     }
-
-    // we are going to replace '\n' with `&nbsp;\n`
-    console.log(
-      'porumai ... md deserializing ',
-      deserializeMD(editor, note.replaceAll(' \n ', '&nbsp;\n')),
-      parseMd(editor, note)
-    )
 
     // return deserializeMD(editor, note.replaceAll(' \n ', '&nbsp;\n'))
     return parseMd(editor, note)
@@ -98,4 +91,26 @@ function LiveNote({ id, note, readOnly }: Props) {
   )
 }
 
-export default LiveNote
+const ResilientLiveNote = ({ id, note, readOnly }: Props) => {
+  const dispatch = useDispatch()
+  const lazyUpdate = useMemo(
+    () =>
+      debounce((updatedNote: string) => {
+        dispatch(
+          updateNote({
+            id,
+            value: updatedNote,
+          })
+        )
+      }, 750),
+    [id, dispatch]
+  )
+
+  return (
+    <BackupEditor id={id} readOnly={readOnly} note={note} onChange={lazyUpdate}>
+      <LiveNote id={id} note={note} readOnly={readOnly} />
+    </BackupEditor>
+  )
+}
+
+export default ResilientLiveNote

@@ -13,6 +13,7 @@ import { TNode, deserializeMD, SPEditor } from '@udecode/plate'
  * Sniff for text that starts with `[ ]` or `[x]` and convert it to action item
  */
 export function parseMd(editor: SPEditor, note: string): TNode {
+  throw new Error('porumai ... testing Editor error')
   // inital pass will use 'deserializeMD' and handle new lines
   const initialParse = deserializeMD(
     editor,
