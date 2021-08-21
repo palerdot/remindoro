@@ -406,7 +406,8 @@ Live Note
 [] Try out plate/slate
 
 Error handling 
-[] Error boundary (around live note)
+[] Naked textarea with error boundary around Live Note
+[] General App Error boundary 
 
 clean old files
 [] inside src - 'app/background/typings/manifests'

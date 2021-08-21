@@ -35,7 +35,7 @@ const Holder = styled.div`
   color: grey;
 
   & .slate-ToolbarButton-active {
-    color: steelblue;
+    color: lightblue;
   }
 `
 
