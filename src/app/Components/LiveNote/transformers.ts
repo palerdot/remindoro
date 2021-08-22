@@ -1,6 +1,116 @@
 import { get, compact, flatten, times } from '@lodash'
 import { SlateNode, LeafNode, isLeafNode, isLeaf } from 'slate-mark'
-import { TNode, deserializeMD, SPEditor } from '@udecode/plate'
+import {
+  TNode,
+  SPEditor,
+  getPlatePluginType,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_BLOCKQUOTE,
+  ELEMENT_LINK,
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_UL,
+  ELEMENT_OL,
+  ELEMENT_LI,
+  ELEMENT_H1,
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ELEMENT_H4,
+  ELEMENT_H5,
+  ELEMENT_H6,
+} from '@udecode/plate'
+import { deserialize } from 'remark-slate'
+import { fromMarkdown } from 'mdast-util-from-markdown'
+import { gfmStrikethrough } from 'micromark-extension-gfm-strikethrough'
+import { gfmStrikethroughFromMarkdown } from 'mdast-util-gfm-strikethrough'
+
+import { transformNewLines } from './utils'
+
+type NodeTypes = {
+  paragraph: string
+  block_quote: string
+  link: string
+  code_block: string
+  ul_list: string
+  ol_list: string
+  listItem: string
+  heading: {
+    1: string
+    2: string
+    3: string
+    4: string
+    5: string
+    6: string
+  }
+}
+
+function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
+  const NEW_LINE_SEPARATOR = ' \n'
+
+  // markdown does not support multiple new lines
+  // we are manually injecting `&nbsp;\n` so that we can preserve multiple new lines
+  const tree = fromMarkdown(doc.replaceAll(NEW_LINE_SEPARATOR, '&nbsp;\n'), {
+    extensions: [gfmStrikethrough()],
+    mdastExtensions: [gfmStrikethroughFromMarkdown],
+  })
+
+  const parsed: TNode = []
+
+  tree.children.forEach(t => {
+    const output = deserialize(t, {
+      nodeTypes,
+    })
+
+    const withNewLines =
+      output.type === 'p' && output.children && isLeaf(output.children as any)
+
+    if (withNewLines) {
+      const transformed = transformNewLines(output.children as any)
+      transformed.forEach(node => {
+        parsed.push(node)
+      })
+    } else {
+      // normal output
+      parsed.push(output)
+    }
+  })
+
+  return parsed
+}
+
+/*
+ * Customized deserializeMD
+ * https://github.com/udecode/plate/blob/main/packages/serializers/md-serializer/src/deserializer/utils/deserializeMD.ts
+ *
+ * We are going to deal with extra space using - https://github.com/remarkjs/remark-breaks
+ * We will be dealing with task lists (github flavoured markdown) - https://github.com/remarkjs/remark-gfm
+ */
+
+function deserializeMD(editor: SPEditor, note: string): TNode {
+  const nodeTypes = {
+    paragraph: getPlatePluginType(editor, ELEMENT_PARAGRAPH),
+    block_quote: getPlatePluginType(editor, ELEMENT_BLOCKQUOTE),
+    link: getPlatePluginType(editor, ELEMENT_LINK),
+    code_block: getPlatePluginType(editor, ELEMENT_CODE_BLOCK),
+    ul_list: getPlatePluginType(editor, ELEMENT_UL),
+    ol_list: getPlatePluginType(editor, ELEMENT_OL),
+    listItem: getPlatePluginType(editor, ELEMENT_LI),
+    heading: {
+      1: getPlatePluginType(editor, ELEMENT_H1),
+      2: getPlatePluginType(editor, ELEMENT_H2),
+      3: getPlatePluginType(editor, ELEMENT_H3),
+      4: getPlatePluginType(editor, ELEMENT_H4),
+      5: getPlatePluginType(editor, ELEMENT_H5),
+      6: getPlatePluginType(editor, ELEMENT_H6),
+    },
+  }
+
+  const initialParse = porumaiMd(note, nodeTypes)
+  const transformedItems = handleExtraMdParse(initialParse)
+
+  console.log('porumai ... MD TREE ... ', initialParse, transformedItems)
+
+  return transformedItems
+}
 
 /*
  * Convert MD -> slate/plate
@@ -13,15 +123,7 @@ import { TNode, deserializeMD, SPEditor } from '@udecode/plate'
  * Sniff for text that starts with `[ ]` or `[x]` and convert it to action item
  */
 export function parseMd(editor: SPEditor, note: string): TNode {
-  // inital pass will use 'deserializeMD' and handle new lines
-  const initialParse = deserializeMD(
-    editor,
-    note.replaceAll(' \n ', '&nbsp;&nbsp;&nbsp;&nbsp;\n')
-  )
-
-  // const initialParse = deserializeMD(editor, note)
-
-  return handleExtraMdParse(initialParse)
+  return deserializeMD(editor, note)
 }
 
 export function handleExtraMdParse(nodes: TNode): TNode {
@@ -119,11 +221,10 @@ export function checkActionItemNode(children: Array<LeafNode>) {
   let isValid = false
   children.forEach(node => {
     const text = node.text
-    // it is valid if it is an empty text/or valid action item
-    const isBlankLine = text.trim() === ''
+    // it is valid it should have atleast one valid action item
     const isValidActionItem = text.startsWith('[ ]') || text.startsWith('[x]')
 
-    isValid = isBlankLine || isValidActionItem
+    isValid = isValidActionItem
   })
 
   return isValid

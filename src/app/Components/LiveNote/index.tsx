@@ -37,7 +37,7 @@ function LiveNote({ id, note, readOnly }: Props) {
       return [{ type: 'paragraph', children: [{ text: '' }] }]
     }
 
-    console.log('porumai ... parsing md ??? ', parseMd(editor, note))
+    console.log('porumai ... parsing md ??? ', parseMd(editor, note), note)
     return parseMd(editor, note)
   }, [editor, note])
 
