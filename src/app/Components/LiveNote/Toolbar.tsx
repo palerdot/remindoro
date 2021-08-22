@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { delay } from '@lodash'
 import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_BLOCKQUOTE,
@@ -81,10 +82,21 @@ function Toolbar() {
         type={getPlatePluginType(editor, ELEMENT_H3)}
         icon={<LooksTwo />}
       />
-      <ToolbarElement
-        type={getPlatePluginType(editor, ELEMENT_TODO_LI)}
-        icon={<PlaylistAddCheck />}
-      />
+      <div
+        onClick={() => {
+          delay(() => {
+            // remove bold marks??
+            editor.removeMark(MARK_BOLD)
+            // remove italic marks
+            editor.removeMark(MARK_ITALIC)
+          }, 1234)
+        }}
+      >
+        <ToolbarElement
+          type={getPlatePluginType(editor, ELEMENT_TODO_LI)}
+          icon={<PlaylistAddCheck />}
+        />
+      </div>
     </Holder>
   )
 }

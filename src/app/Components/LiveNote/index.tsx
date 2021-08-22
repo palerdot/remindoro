@@ -37,7 +37,7 @@ function LiveNote({ id, note, readOnly }: Props) {
       return [{ type: 'paragraph', children: [{ text: '' }] }]
     }
 
-    // return deserializeMD(editor, note.replaceAll(' \n ', '&nbsp;\n'))
+    console.log('porumai ... parsing md ??? ', parseMd(editor, note))
     return parseMd(editor, note)
   }, [editor, note])
 
