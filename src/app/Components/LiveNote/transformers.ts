@@ -17,6 +17,7 @@ import {
   ELEMENT_H4,
   ELEMENT_H5,
   ELEMENT_H6,
+  MARK_STRIKETHROUGH,
 } from '@udecode/plate'
 import { deserialize } from 'remark-slate'
 import { fromMarkdown } from 'mdast-util-from-markdown'
@@ -102,6 +103,7 @@ function deserializeMD(editor: SPEditor, note: string): TNode {
       5: getPlatePluginType(editor, ELEMENT_H5),
       6: getPlatePluginType(editor, ELEMENT_H6),
     },
+    delete_mark: getPlatePluginType(editor, MARK_STRIKETHROUGH),
   }
 
   const initialParse = porumaiMd(note, nodeTypes)

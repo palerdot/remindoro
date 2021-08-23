@@ -12,6 +12,7 @@ import {
   MARK_BOLD,
   MARK_ITALIC,
   MARK_CODE,
+  MARK_STRIKETHROUGH,
   useStoreEditorRef,
   useEventEditorId,
   getPlatePluginType,
@@ -23,6 +24,7 @@ import {
 import {
   FormatBold,
   FormatItalic,
+  FormatStrikethrough,
   Code,
   DeveloperMode,
   FormatQuote,
@@ -53,6 +55,10 @@ function Toolbar() {
       <ToolbarMark
         type={getPlatePluginType(editor, MARK_ITALIC)}
         icon={<FormatItalic />}
+      />
+      <ToolbarMark
+        type={getPlatePluginType(editor, MARK_STRIKETHROUGH)}
+        icon={<FormatStrikethrough />}
       />
       <ToolbarMark
         type={getPlatePluginType(editor, MARK_CODE)}

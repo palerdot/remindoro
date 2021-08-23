@@ -20,6 +20,7 @@ import {
   ELEMENT_PARAGRAPH,
   MARK_BOLD,
   MARK_ITALIC,
+  MARK_STRIKETHROUGH,
   MARK_CODE,
   KEYS_HEADING,
   isBlockAboveEmpty,
@@ -33,6 +34,7 @@ import {
   createHeadingPlugin,
   createBoldPlugin,
   createItalicPlugin,
+  createStrikethroughPlugin,
   createCodePlugin,
   createListPlugin,
   createAutoformatPlugin,
@@ -190,6 +192,12 @@ export const optionsAutoformat: WithAutoformatOptions = {
       insertTrigger: true,
     },
     {
+      type: MARK_STRIKETHROUGH,
+      between: ['~~', '~~'],
+      mode: 'inline',
+      insertTrigger: true,
+    },
+    {
       type: MARK_CODE,
       between: ['`'],
       mode: 'inline',
@@ -238,6 +246,7 @@ export const plugins = [
   // elements
   createParagraphPlugin(), // paragraph element
   createBlockquotePlugin(), // blockquote element
+  createStrikethroughPlugin(), // strikethrough
   createCodeBlockPlugin(), // code block element
   createHeadingPlugin(), // heading elements
 
