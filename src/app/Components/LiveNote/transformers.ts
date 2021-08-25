@@ -1,5 +1,5 @@
-import { get, compact, flatten, times } from '@lodash'
-import { SlateNode, LeafNode, isLeafNode, isLeaf } from 'slate-mark'
+import { every, isBoolean } from '@lodash'
+import { isLeaf } from 'slate-mark'
 import {
   TNode,
   SPEditor,
@@ -23,8 +23,10 @@ import { deserialize } from 'remark-slate'
 import { fromMarkdown } from 'mdast-util-from-markdown'
 import { gfmStrikethrough } from 'micromark-extension-gfm-strikethrough'
 import { gfmStrikethroughFromMarkdown } from 'mdast-util-gfm-strikethrough'
+import { gfmTaskListItem } from 'micromark-extension-gfm-task-list-item'
+import { gfmTaskListItemFromMarkdown } from 'mdast-util-gfm-task-list-item'
 
-import { transformNewLines } from './utils'
+import { transformNewLines, NEWLINE_MAGIC_TOKEN } from './utils'
 
 type NodeTypes = {
   paragraph: string
@@ -46,17 +48,78 @@ type NodeTypes = {
 
 function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
   const NEW_LINE_SEPARATOR = ' \n'
+  /*
+   * IMPORTANT: Handling multiple new lines
+   *
+   * In our editor, we have to show the empty newlines as is
+   * as per markdown format, multiple new lines will be trimmed to single new line
+   * We have to somehow maintain the new lines
+   * we will replace newlines in original markdown with our unique token
+   * Once tree is parsed, we will replace unique token back to empty new line
+   * by this time, we will have multiple p tags which will give back original new lines
+   */
 
   // markdown does not support multiple new lines
   // we are manually injecting `&nbsp;\n` so that we can preserve multiple new lines
-  const tree = fromMarkdown(doc.replaceAll(NEW_LINE_SEPARATOR, '&nbsp;\n'), {
-    extensions: [gfmStrikethrough()],
-    mdastExtensions: [gfmStrikethroughFromMarkdown],
-  })
+  const tree = fromMarkdown(
+    doc.replaceAll(NEW_LINE_SEPARATOR, `${NEWLINE_MAGIC_TOKEN}\n`),
+    {
+      extensions: [gfmStrikethrough(), gfmTaskListItem],
+      mdastExtensions: [
+        gfmStrikethroughFromMarkdown,
+        gfmTaskListItemFromMarkdown,
+      ],
+    }
+  )
 
   const parsed: TNode = []
 
   tree.children.forEach(t => {
+    const isActionItem =
+      t.type === 'list' &&
+      every(t.children, x => {
+        return x.type === 'listItem' && isBoolean(x.checked)
+      })
+
+    // ok; we have an action item
+    // this is an edge case where we can have to proactively deserialize
+    if (isActionItem) {
+      // extra check to make compiler happy
+      if (t.type !== 'list') {
+        return
+      }
+
+      const actionItems = t.children.map(x => {
+        const parsedActionItems = deserialize(x.children[0], { nodeTypes })
+
+        const children = parsedActionItems.children?.map((x, index, orig) => {
+          const isLast = index === orig.length - 1
+
+          // replace our unique token
+          const text = (x.text || '').replaceAll(NEWLINE_MAGIC_TOKEN, '')
+
+          return {
+            ...x,
+            text: isLast ? text.trim() : text,
+          }
+        })
+
+        return {
+          type: 'action_item',
+          checked: x.checked,
+          children,
+        }
+      })
+
+      // insert action items
+      actionItems.forEach(item => {
+        parsed.push(item)
+      })
+
+      // do not proceed
+      return
+    }
+
     const output = deserialize(t, {
       nodeTypes,
     })
@@ -75,15 +138,18 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
     }
   })
 
+  console.log('porumai ... parsed ', tree, parsed)
+
   return parsed
 }
 
 /*
  * Customized deserializeMD
- * https://github.com/udecode/plate/blob/main/packages/serializers/md-serializer/src/deserializer/utils/deserializeMD.ts
  *
- * We are going to deal with extra space using - https://github.com/remarkjs/remark-breaks
- * We will be dealing with task lists (github flavoured markdown) - https://github.com/remarkjs/remark-gfm
+ * we are going to manually parse markdown -> slate in two stesps
+ *
+ * Step 1: markdown -> mdast (mdast-util)
+ * Step 2: mdast -> slate (remark-slate)
  */
 
 function deserializeMD(editor: SPEditor, note: string): TNode {
@@ -107,11 +173,10 @@ function deserializeMD(editor: SPEditor, note: string): TNode {
   }
 
   const initialParse = porumaiMd(note, nodeTypes)
-  const transformedItems = handleExtraMdParse(initialParse)
+  // const transformedItems = handleExtraMdParse(initialParse)
 
-  console.log('porumai ... MD TREE ... ', initialParse, transformedItems)
-
-  return transformedItems
+  // return transformedItems
+  return initialParse
 }
 
 /*
@@ -126,242 +191,4 @@ function deserializeMD(editor: SPEditor, note: string): TNode {
  */
 export function parseMd(editor: SPEditor, note: string): TNode {
   return deserializeMD(editor, note)
-}
-
-export function handleExtraMdParse(nodes: TNode): TNode {
-  const transformedNodes: TNode = []
-
-  // NOTE: we cannot do a map since there is no 1:1
-  // transformation of nodes. for eg: one entry will
-  // split into multiple action items
-  nodes.forEach((node: SlateNode) => {
-    // for now we are transforming only action items
-    if (!isNodeActionItem(node)) {
-      // push node to our transformed nodes
-      transformedNodes.push(node)
-    } else {
-      // ok; let us deal with the children
-      /*  
-      Case 1: we have our action item directly
-      children: [
-        {
-          text: "[ ] action item \n[x] checked item"
-        }
-      ]
-
-      Case 2: we have empty lines nested (unexpected behaviour from slate)
-      children: [
-        {
-          text: " " // empty lines
-        },
-        {
-          text: "" // empty lines
-        },
-        {
-          text: "[ ] action item \n[x] checked item"
-        }
-      ]
-      */
-
-      const children = node.children
-
-      // so we are going to loop through the children and if not valid action item
-      // we are going to return text as a new 'p' element
-      children.forEach(node => {
-        // we will not deal if not leaf node
-        if (!isLeafNode(node)) {
-          return
-        }
-
-        const text = node.text
-        const isValidActionItem =
-          text.startsWith('[ ]') || text.startsWith('[x]')
-
-        if (!isValidActionItem) {
-          transformedNodes.push({
-            type: 'p',
-            children: [{ text }],
-          })
-        } else {
-          // we are going to deal with action items
-          // we have valid action items
-          const actionItems = transformActionItems(node)
-          // we will get list of items
-          actionItems.forEach(actionItem => {
-            transformedNodes.push(actionItem)
-          })
-        }
-      })
-    }
-  })
-
-  return transformedNodes
-}
-
-export function checkActionItemNode(children: Array<LeafNode>) {
-  /*  
-   Case 1: we have our action item directly
-   children: [
-     {
-       text: "[ ] action item \n[x] checked item"
-     }
-   ]
-
-   Case 2: we have empty lines nested (unexpected behaviour from slate)
-   children: [
-     {
-       text: " " // empty lines
-     },
-     {
-       text: "" // empty lines
-     },
-     {
-       text: "[ ] action item \n[x] checked item"
-     }
-   ]
-   */
-  let isValid = false
-  children.forEach(node => {
-    const text = node.text
-    // it is valid it should have atleast one valid action item
-    const isValidActionItem = text.startsWith('[ ]') || text.startsWith('[x]')
-
-    isValid = isValidActionItem
-  })
-
-  return isValid
-}
-
-// helper function to decide if node is valid action item
-export function isNodeActionItem(node: SlateNode) {
-  const nodeType = get(node, 'type')
-  const children = get(node, 'children')
-
-  const isDefaultType = nodeType === 'p' || nodeType === 'paragraph'
-
-  if (!isDefaultType) {
-    // not an action item
-    return false
-  }
-
-  return isLeaf(children) && checkActionItemNode(children)
-}
-
-// we are sniffing for action item which is not yet parsed
-/*  
-  {
-    type: "p",
-    children: [
-      { text: "[ ] porumai\n[x] amaidhi\n[ ] patience\n \n \n " }
-    ]
-  }
-
-  // here we are going to sniff for [ ] or [x] as entry point
-  // Case 1:
-  // "[ ] porumai\n[x] amaidhi\n[ ] patience\n \n \n "
-  
-  // Case 2:
-  // "[x] porumai\n[x] amaidhi\n[ ] patience\n \n \n "
-*/
-export function transformActionItems({ text }: LeafNode) {
-  // seems like we have a valid action item
-  // let us parse the action item
-  // eg: "[ ] porumai\n[x] amaidhi\n[ ] patience\n \n \n "
-  // first let us split by [ ]
-  // [" porumai\n[x] amaidhi\n", " patience\n \n \n " ]
-  const parsed = compact(text.split('[ ]')).map(item => {
-    // ok; happy path case
-    // if we don't have [x] in the text; all items are unchecked
-    // we just have to prefix with [ ]
-    const isCheckedItem = item.includes('[x]')
-    if (!isCheckedItem) {
-      // we are returning an array, so that we can flatten things out
-
-      return {
-        text: item.trim(),
-        checked: false,
-      }
-    }
-
-    // we have checked item
-    // two cases - string starts/does not start with [x]
-    // case 1: [x] porumai\n[x] amaidhi\n
-    // case 2:  porumai\n[x] amaidhi\n
-    const checkedItems = compact(item.split('[x]'))
-
-    return checkedItems.map((checkedItem, index) => {
-      // anything not first item is normal checked item
-      if (index > 0) {
-        return {
-          text: checkedItem.trim(),
-          checked: true,
-        }
-      }
-
-      // special cases for first item
-      // case 1: [x] porumai\n[x] amaidhi\n
-      // starts with [x]
-      if (item.startsWith('[x]')) {
-        // all is fine; we just need to prefix everything with [x]
-        return {
-          text: checkedItem.trim(),
-          checked: true,
-        }
-      } else {
-        // case 2: The original string started with [ ]
-        return {
-          text: checkedItem.trim(),
-          checked: false,
-        }
-      }
-    })
-  })
-
-  // let us flatten and add type 'action item'
-  const actionItems = flatten(parsed).map(({ text, checked }) => {
-    return Object.assign(
-      {
-        type: 'action_item',
-        children: [
-          {
-            text,
-          },
-        ],
-      },
-      checked
-        ? {
-            checked: true,
-          }
-        : {}
-    )
-  })
-
-  // EDGE CASE
-  // If there is a list and we insert a blank line between the list items
-  // we have to make sure the the blank line at the end of the list is parsed correctly
-  const totalEndingNewLines = checkEndingNewLine(text)
-  if (totalEndingNewLines > 1) {
-    times(totalEndingNewLines - 1, () => {
-      actionItems.push({
-        type: 'p',
-        children: [
-          {
-            text: '  \n',
-          },
-        ],
-      })
-    })
-  }
-
-  return actionItems
-}
-
-// helper function to add ending new line break
-function checkEndingNewLine(text: string): number {
-  const trimmed = text.trimEnd()
-  const diffIndex = text.length - trimmed.length
-  const ending: string = text.slice(-diffIndex)
-  const splitted = ending.split('\n')
-
-  return splitted.length - 1 // excluding initial ""
 }

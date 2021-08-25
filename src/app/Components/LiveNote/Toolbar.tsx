@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import styled from 'styled-components'
-import { delay } from '@lodash'
 import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_BLOCKQUOTE,
@@ -20,6 +19,7 @@ import {
   ToolbarMark,
   ToolbarCodeBlock,
   ToolbarList,
+  SPEditor,
 } from '@udecode/plate'
 import {
   FormatBold,
@@ -42,16 +42,25 @@ const Holder = styled.div`
   & .slate-ToolbarButton-active {
     color: lightblue;
   }
+
+  & .disabled {
+    pointer-events: none;
+  }
 `
 
 function Toolbar() {
-  const editor = useStoreEditorRef(useEventEditorId('focus'))
+  const editor: SPEditor | undefined = useStoreEditorRef(
+    useEventEditorId('focus')
+  )
+  const $holder = useRef(null)
+
   return (
-    <Holder>
+    <Holder ref={$holder}>
       <ToolbarMark
         type={getPlatePluginType(editor, MARK_BOLD)}
         icon={<FormatBold />}
       />
+
       <ToolbarMark
         type={getPlatePluginType(editor, MARK_ITALIC)}
         icon={<FormatItalic />}
@@ -88,21 +97,10 @@ function Toolbar() {
         type={getPlatePluginType(editor, ELEMENT_H3)}
         icon={<LooksTwo />}
       />
-      <div
-        onClick={() => {
-          delay(() => {
-            // remove bold marks??
-            editor.removeMark(MARK_BOLD)
-            // remove italic marks
-            editor.removeMark(MARK_ITALIC)
-          }, 1234)
-        }}
-      >
-        <ToolbarElement
-          type={getPlatePluginType(editor, ELEMENT_TODO_LI)}
-          icon={<PlaylistAddCheck />}
-        />
-      </div>
+      <ToolbarElement
+        type={getPlatePluginType(editor, ELEMENT_TODO_LI)}
+        icon={<PlaylistAddCheck />}
+      />
     </Holder>
   )
 }

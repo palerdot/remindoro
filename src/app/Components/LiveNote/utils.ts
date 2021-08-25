@@ -19,11 +19,15 @@ type PNode = {
   children: Array<LeafNode>
 }
 
+// we will replace new line with this MAGIC STRING
+// if someone enters content that matches this MAGIC STRING
+// it will disappear !!!
+export const NEWLINE_MAGIC_TOKEN = '{{porumai-wait-and-hope}}'
+
 export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
   const transformed: Array<PNode> = []
 
   children.forEach(mark => {
-    console.log('porumai .... handling new line split ', mark)
     const splitted = mark.text.split('\n')
     // IMPORTANT
     // Interesting edge case
@@ -31,12 +35,13 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
     // we cannot be splitting that and making again a new p tag
     // that will cyclically increase the new lines
     // so we need to deliberatly ignore the ending newline
-    const TOTAL_NEWLINES_TO_IGNORE = 2
+    const TOTAL_NEWLINES_TO_IGNORE = 1
     let ENDING_NEWLINE_IGNORED = 0
 
     splitted.forEach(s => {
+      const text = s.replaceAll(NEWLINE_MAGIC_TOKEN, '')
       // if empty we will push empty p tag
-      const isEmpty = s.trim() === ''
+      const isEmpty = text.trim() === ''
       if (isEmpty) {
         // but before that
         // we will ignore the ending new line
@@ -53,12 +58,13 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
         })
       } else {
         // we will push the text with marks (bold, italic etc)
+        // let us replace our new line token
         transformed.push({
           type: 'p',
           children: [
             {
               ...mark,
-              text: s,
+              text,
             },
           ],
         })
