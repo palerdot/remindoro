@@ -1,4 +1,5 @@
 import { LeafNode } from 'slate-mark'
+import { compact } from '@lodash'
 
 // ok; we are going to split new lines into their own 'p' tag
 /*  
@@ -28,21 +29,40 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
   const transformed: Array<PNode> = []
 
   children.forEach(mark => {
-    const splitted = mark.text.split('\n')
+    const splitted = mark.text.split(`${NEWLINE_MAGIC_TOKEN}\n`)
+
+    // edge case:
+    // we may deal with only empty lines or content + empty lines
+    // if content + empty lines; we may have to ignore new lines (see below)
+    const onlyEmptyLines =
+      splitted.join('').replaceAll(NEWLINE_MAGIC_TOKEN, '').trim() === ''
+
+    const hasEmptySpaces = onlyEmptyLines && compact(splitted).length > 0
+
     // IMPORTANT
     // Interesting edge case
     // Each p/paragraph already has a \n (newline) ending
     // we cannot be splitting that and making again a new p tag
     // that will cyclically increase the new lines
     // so we need to deliberatly ignore the ending newline
-    const TOTAL_NEWLINES_TO_IGNORE = 1
+    const TOTAL_NEWLINES_TO_IGNORE = onlyEmptyLines
+      ? hasEmptySpaces
+        ? 0
+        : 1
+      : 1
     let ENDING_NEWLINE_IGNORED = 0
 
     splitted.forEach(s => {
       const text = s.replaceAll(NEWLINE_MAGIC_TOKEN, '')
+
       // if empty we will push empty p tag
       const isEmpty = text.trim() === ''
       if (isEmpty) {
+        // we will ignore empty spaces ??? ' '
+        if (text !== '') {
+          return
+        }
+
         // but before that
         // we will ignore the ending new line
         if (ENDING_NEWLINE_IGNORED < TOTAL_NEWLINES_TO_IGNORE) {
