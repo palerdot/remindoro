@@ -26,7 +26,7 @@ import { gfmStrikethroughFromMarkdown } from 'mdast-util-gfm-strikethrough'
 import { gfmTaskListItem } from 'micromark-extension-gfm-task-list-item'
 import { gfmTaskListItemFromMarkdown } from 'mdast-util-gfm-task-list-item'
 
-import { transformNewLines, NEWLINE_MAGIC_TOKEN } from './utils'
+import { transformNewLines, NEWLINE_MAGIC_TOKEN, drillTillLeaf } from './utils'
 
 type NodeTypes = {
   paragraph: string
@@ -139,8 +139,9 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
   })
 
   console.log('porumai ... parsed ', tree, parsed)
-
-  return parsed
+  // before passing the final tree
+  // let us make sure we are removing our magic token
+  return parsed.map(drillTillLeaf)
 }
 
 /*

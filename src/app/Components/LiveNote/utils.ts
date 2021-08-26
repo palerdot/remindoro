@@ -1,4 +1,4 @@
-import { LeafNode } from 'slate-mark'
+import { LeafNode, SlateNode, isLeafNode } from 'slate-mark'
 import { compact } from '@lodash'
 
 // ok; we are going to split new lines into their own 'p' tag
@@ -49,7 +49,8 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
       ? hasEmptySpaces
         ? 0
         : 1
-      : 1
+      : // : 1
+        0
     let ENDING_NEWLINE_IGNORED = 0
 
     splitted.forEach(s => {
@@ -93,4 +94,28 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
   })
 
   return transformed
+}
+
+// drill down the nodes till we reach the leaf node
+// if we reach leaf node transform the text by removing our new line modifiers
+// have a limit so that we don't loop infinitely
+export function drillTillLeaf(node: SlateNode): SlateNode {
+  const children = node.children.map(n1 => {
+    // if leaf node we will transform the text
+    if (isLeafNode(n1)) {
+      return {
+        ...n1,
+        text: n1.text.replaceAll(NEWLINE_MAGIC_TOKEN, ''),
+      }
+    }
+
+    // we are not in the leaf node
+    // we have to do further drilling
+    return drillTillLeaf(n1)
+  })
+
+  return {
+    ...node,
+    children,
+  }
 }
