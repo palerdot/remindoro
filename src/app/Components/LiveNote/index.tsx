@@ -14,6 +14,7 @@ import { plugins, options, components } from './options'
 import { parseMd } from './transformers'
 import { updateNote } from '@app/Store/Slices/Remindoros'
 import BackupEditor from './BackupEditor'
+import { EditorHolder } from './utils'
 
 const editableProps = {
   placeholder: 'Enter some rich text…',
@@ -70,7 +71,7 @@ function LiveNote({ id, note, readOnly }: Props) {
   return (
     <div>
       {!readOnly && <Toolbar />}
-      <div className={'editor'}>
+      <EditorHolder className={'editor'}>
         <Plate
           id="porumai"
           plugins={plugins}
@@ -86,7 +87,7 @@ function LiveNote({ id, note, readOnly }: Props) {
             lazyUpdate(updatedNote)
           }}
         />
-      </div>
+      </EditorHolder>
     </div>
   )
 }

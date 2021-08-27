@@ -1,5 +1,18 @@
 import { LeafNode, SlateNode, isLeafNode } from 'slate-mark'
 import { compact } from '@lodash'
+import styled, { css } from 'styled-components'
+
+export const LiveNoteStyles = css`
+  .slate-li {
+    & .slate-p {
+      padding: 0;
+    }
+  }
+`
+
+export const EditorHolder = styled.div`
+  ${LiveNoteStyles}
+`
 
 // ok; we are going to split new lines into their own 'p' tag
 /*  
