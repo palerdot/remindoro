@@ -1,3 +1,4 @@
+import { get } from '@lodash'
 import {
   unwrapList,
   getParent,
@@ -54,6 +55,24 @@ import type {
 
 const preFormat: AutoformatRule['preFormat'] = editor =>
   unwrapList(editor as SPEditor)
+
+// helper function to prevent marks
+// used inside code block
+function preventMarksInsideCodeBlock(editor: SPEditor): boolean {
+  if (editor.selection) {
+    const parentEntry = getParent(editor, editor.selection)
+    if (!parentEntry) {
+      return true
+    }
+    const isCodeBlock = get(parentEntry, '[0].type') === 'code_block'
+    if (isCodeBlock) {
+      return false
+    }
+    return true
+  }
+
+  return true
+}
 
 const resetBlockTypesCommonRule = {
   types: [
@@ -178,24 +197,44 @@ export const optionsAutoformat: WithAutoformatOptions = {
       between: ['**', '**'],
       mode: 'inline',
       insertTrigger: true,
+      query: actualEditor => {
+        const editor = actualEditor as SPEditor
+        // prevent marks inside codeblock
+        return preventMarksInsideCodeBlock(editor)
+      },
     },
     {
       type: MARK_BOLD,
       between: ['__', '__'],
       mode: 'inline',
       insertTrigger: true,
+      query: actualEditor => {
+        const editor = actualEditor as SPEditor
+        // prevent marks inside codeblock
+        return preventMarksInsideCodeBlock(editor)
+      },
     },
     {
       type: MARK_ITALIC,
       between: ['*', '*'],
       mode: 'inline',
       insertTrigger: true,
+      query: actualEditor => {
+        const editor = actualEditor as SPEditor
+        // prevent marks inside codeblock
+        return preventMarksInsideCodeBlock(editor)
+      },
     },
     {
       type: MARK_STRIKETHROUGH,
       between: ['~~', '~~'],
       mode: 'inline',
       insertTrigger: true,
+      query: actualEditor => {
+        const editor = actualEditor as SPEditor
+        // prevent marks inside codeblock
+        return preventMarksInsideCodeBlock(editor)
+      },
     },
     {
       type: MARK_CODE,
@@ -203,6 +242,11 @@ export const optionsAutoformat: WithAutoformatOptions = {
       mode: 'inline',
       trigger: '`',
       ignoreTrim: false,
+      query: actualEditor => {
+        const editor = actualEditor as SPEditor
+        // prevent marks inside codeblock
+        return preventMarksInsideCodeBlock(editor)
+      },
     },
 
     {

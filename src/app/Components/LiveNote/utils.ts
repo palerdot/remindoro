@@ -41,7 +41,11 @@ export const NEWLINE_MAGIC_TOKEN = '{{porumai-wait-and-hope}}'
 export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
   const transformed: Array<PNode> = []
 
-  children.forEach(mark => {
+  children.forEach((mark, index, origChildren) => {
+    // track ignore count
+    let EMPTY_LINES_IGNORE_COUNT = 1
+    let NON_EMPTY_LINES_IGNORE_COUNT = 0
+
     const splitted = mark.text.split(`${NEWLINE_MAGIC_TOKEN}\n`)
 
     // edge case:
@@ -50,7 +54,28 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
     const onlyEmptyLines =
       splitted.join('').replaceAll(NEWLINE_MAGIC_TOKEN, '').trim() === ''
 
+    if (onlyEmptyLines) {
+      EMPTY_LINES_IGNORE_COUNT = 1
+    }
+
     const hasEmptySpaces = onlyEmptyLines && compact(splitted).length > 0
+
+    if (hasEmptySpaces) {
+      EMPTY_LINES_IGNORE_COUNT = 0
+
+      // one more edge case; we need to check if previous line is a mark
+      const prevLine = origChildren[index - 1]
+      const isBold = prevLine.bold === true
+      const isItalic = prevLine.italic === true
+      const isStrikeThrough = prevLine.strikethrough === true
+      const isInlineCode = prevLine.code === true
+      const isPrevLineMark =
+        isBold || isItalic || isStrikeThrough || isInlineCode
+
+      if (isPrevLineMark) {
+        EMPTY_LINES_IGNORE_COUNT = 1
+      }
+    }
 
     // IMPORTANT
     // Interesting edge case
@@ -59,11 +84,9 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
     // that will cyclically increase the new lines
     // so we need to deliberatly ignore the ending newline
     const TOTAL_NEWLINES_TO_IGNORE = onlyEmptyLines
-      ? hasEmptySpaces
-        ? 0
-        : 1
+      ? EMPTY_LINES_IGNORE_COUNT
       : // : 1
-        0
+        NON_EMPTY_LINES_IGNORE_COUNT // 0
     let ENDING_NEWLINE_IGNORED = 0
 
     splitted.forEach(s => {
