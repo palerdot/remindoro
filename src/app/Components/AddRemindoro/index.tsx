@@ -6,6 +6,9 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
 import { Fab, Zoom } from '@material-ui/core/'
 import { PlaylistAdd } from '@material-ui/icons'
 
+import type { ThemeInterface } from '@app/Util/colors'
+
+import { useTheme } from '@app/Hooks/'
 import { getRemindoroUrl } from '@app/Util/'
 import { addNewRemindoro } from '@app/Store/Slices/Remindoros/'
 
@@ -17,12 +20,15 @@ const useStyles = makeStyles((theme: Theme) =>
       right: theme.spacing(0.5),
 
       margin: theme.spacing(1),
+      background: (props: { theme: ThemeInterface }) => props.theme.highlight,
+      color: 'white',
     },
   })
 )
 
 function AddRemindoro() {
-  const classes = useStyles()
+  const theme = useTheme()
+  const classes = useStyles({ theme })
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -37,7 +43,6 @@ function AddRemindoro() {
     >
       <Fab
         // size="medium"
-        color="secondary"
         aria-label="add"
         className={classes.fab}
         onClick={() => {

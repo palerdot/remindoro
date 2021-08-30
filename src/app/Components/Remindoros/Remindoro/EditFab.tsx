@@ -3,6 +3,10 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
 import { Fab, Zoom } from '@material-ui/core/'
 import { Settings as SettingsIcon } from '@material-ui/icons'
 
+import type { ThemeInterface } from '@app/Util/colors'
+
+import { useTheme } from '@app/Hooks/'
+
 type Props = {
   onClick: () => void
 }
@@ -16,17 +20,19 @@ const useStyles = makeStyles((theme: Theme) =>
 
       margin: theme.spacing(1),
 
-      background: 'yellow',
+      background: (props: { theme: ThemeInterface }) => props.theme.highlight,
+      color: 'white',
 
       '&:hover': {
-        background: 'gold',
+        opacity: 0.89,
       },
     },
   })
 )
 
 function Edit({ onClick }: Props) {
-  const classes = useStyles()
+  const theme = useTheme()
+  const classes = useStyles({ theme })
 
   return (
     <Zoom
