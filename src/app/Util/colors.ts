@@ -26,6 +26,17 @@ export const colors: ThemeInterface = defaultTheme
 
 /*  
 
+// shades
+background: #3C0078
+primary: #8117b8
+primaryDark: #5F0098
+primaryLight: #A33EDA
+highlight: #c55ffc
+
+*/
+
+/*  
+
 $remindoro_color: #FF3000;
 
 $theme_color: #263238;
