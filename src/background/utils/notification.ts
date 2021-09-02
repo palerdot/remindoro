@@ -26,7 +26,7 @@ export function notify({ id, title, note }: Notify) {
   browser.notifications
     .create(id, {
       type: 'basic',
-      iconUrl: '/images/icon-38.png',
+      iconUrl: '/img/remindoro-icon.png',
       title: title || '',
       message: note || '',
     })

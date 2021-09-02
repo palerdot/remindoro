@@ -21,7 +21,7 @@ type Props = {
 }
 
 const DrawerHolder = styled.div`
-  background: ${props => props.theme.primary};
+  background: ${props => props.theme.primaryDark};
   color: white;
   width: 250px;
   height: 100%;

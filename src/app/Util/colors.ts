@@ -5,6 +5,8 @@ export enum Theme {
 export interface ThemeInterface {
   background: string
   primary: string
+  primaryDark: string
+  primaryLight: string
   highlight: string
 }
 
@@ -14,8 +16,11 @@ type Themes = {
 
 export const themes: Themes = {
   [Theme.Main]: {
-    background: '#263238',
-    primary: '#546e7a',
+    // background: '#3C0078',
+    background: '#271332',
+    primary: '#8117b8',
+    primaryDark: '#5F0098',
+    primaryLight: '#A33EDA',
     highlight: '#c55ffc',
   },
 }

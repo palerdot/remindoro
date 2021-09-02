@@ -37,10 +37,10 @@ import { LooksOne, LooksTwo } from '@app/Util/Icons/'
 
 const Holder = styled.div`
   display: flex;
-  color: grey;
+  color: ${props => props.theme.primaryDark};
 
   & .slate-ToolbarButton-active {
-    color: lightblue;
+    color: ${props => props.theme.highlight};
   }
 
   & .disabled {

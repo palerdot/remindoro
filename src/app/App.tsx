@@ -43,6 +43,8 @@ const Holder = styled.div`
   /* inherits width/height of html body dimensions */
   width: 100%;
   height: 100%;
+
+  background: ${props => props.theme.background};
 `
 
 const Container = styled.div`

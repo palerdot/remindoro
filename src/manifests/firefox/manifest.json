@@ -26,7 +26,7 @@
       ]
     },
     "browser_action": {
-      "default_icon": "img/icon.png",
+      "default_icon": "img/remindoro-icon.png",
       "default_title": "Remindoro",
       "default_popup": "popup.html"
     },
@@ -40,7 +40,7 @@
       "storage"
     ],
     "icons": {
-      "128": "img/icon.png"
+      "128": "img/remindoro-icon.png"
     },
     /* "web_accessible_resources": [
       "sidebar.html"
