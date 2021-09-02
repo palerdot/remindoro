@@ -65,15 +65,18 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
 
       // one more edge case; we need to check if previous line is a mark
       const prevLine = origChildren[index - 1]
-      const isBold = prevLine.bold === true
-      const isItalic = prevLine.italic === true
-      const isStrikeThrough = prevLine.strikethrough === true
-      const isInlineCode = prevLine.code === true
-      const isPrevLineMark =
-        isBold || isItalic || isStrikeThrough || isInlineCode
 
-      if (isPrevLineMark) {
-        EMPTY_LINES_IGNORE_COUNT = 1
+      if (prevLine) {
+        const isBold = prevLine.bold === true
+        const isItalic = prevLine.italic === true
+        const isStrikeThrough = prevLine.strikethrough === true
+        const isInlineCode = prevLine.code === true
+        const isPrevLineMark =
+          isBold || isItalic || isStrikeThrough || isInlineCode
+
+        if (isPrevLineMark) {
+          EMPTY_LINES_IGNORE_COUNT = 1
+        }
       }
     }
 
