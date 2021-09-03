@@ -26,7 +26,7 @@ const useStyles = makeStyles({
   },
   divider: (props: { theme: ThemeInterface }) => ({
     // background: '#AAAAAA',
-    background: props.theme.primary,
+    background: props.theme.primaryDark,
   }),
 })
 
@@ -58,7 +58,7 @@ const IconButtonHolder = styled(IconButton)`
   &.highlight,
   &.highlight:hover,
   &.hightlight:focus {
-    background: ${props => props.theme.highlight};
+    background: ${props => props.theme.primaryLight};
     opacity: 1;
   }
 

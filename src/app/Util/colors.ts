@@ -4,10 +4,15 @@ export enum Theme {
 
 export interface ThemeInterface {
   background: string
+  backgroundLight: string
   primary: string
   primaryDark: string
   primaryLight: string
   highlight: string
+  border: string
+  textColor: string
+  success: string
+  danger: string
 }
 
 type Themes = {
@@ -18,10 +23,15 @@ export const themes: Themes = {
   [Theme.Main]: {
     // background: '#3C0078',
     background: '#271332',
+    backgroundLight: '#400a60',
     primary: '#8117b8',
     primaryDark: '#5F0098',
     primaryLight: '#A33EDA',
     highlight: '#c55ffc',
+    border: '#808080',
+    textColor: '#ffffff',
+    success: 'lightgreen',
+    danger: '#FF5050',
   },
 }
 

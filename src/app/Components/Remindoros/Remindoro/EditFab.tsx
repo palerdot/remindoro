@@ -20,12 +20,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
       margin: theme.spacing(1),
 
-      background: (props: { theme: ThemeInterface }) => props.theme.highlight,
+      background: (props: { theme: ThemeInterface }) =>
+        props.theme.primaryLight,
       color: 'white',
 
       '&:hover': {
-        background: (props: { theme: ThemeInterface }) =>
-          props.theme.primaryLight,
+        background: (props: { theme: ThemeInterface }) => props.theme.highlight,
       },
     },
   })

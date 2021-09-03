@@ -7,6 +7,7 @@ import {
   DialogContentText,
   DialogTitle,
   makeStyles,
+  Theme,
 } from '@material-ui/core'
 
 import { Delete as DeleteIcon } from '@material-ui/icons'
@@ -15,14 +16,14 @@ import type { ThemeInterface } from '@app/Util/colors'
 
 import { useTheme } from '@app/Hooks/'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   paper: (props: { theme: ThemeInterface }) => ({
     // background: '#AAAAAA',
-    background: props.theme.primary,
-    color: '#DEDEDE',
+    background: props.theme.primaryDark,
+    color: props.theme.textColor,
 
     '& .delete-dialog-description p': {
-      color: '#DEDEDE',
+      color: props.theme.textColor,
     },
 
     '& .action-holder': {
@@ -31,7 +32,30 @@ const useStyles = makeStyles({
       margin: '0 16px',
     },
   }),
-})
+
+  deleteButton: {
+    margin: theme.spacing(0),
+    background: (props: { theme: ThemeInterface }) => props.theme.danger,
+    color: (props: { theme: ThemeInterface }) => props.theme.textColor,
+
+    '&:hover': {
+      background: (props: { theme: ThemeInterface }) => props.theme.danger,
+      color: (props: { theme: ThemeInterface }) => props.theme.textColor,
+      opacity: 0.89,
+    },
+  },
+
+  cancelButton: {
+    margin: theme.spacing(0),
+    background: (props: { theme: ThemeInterface }) =>
+      props.theme.backgroundLight,
+    color: (props: { theme: ThemeInterface }) => props.theme.textColor,
+    borderColor: (props: { theme: ThemeInterface }) => props.theme.border,
+    '&:hover': {
+      background: (props: { theme: ThemeInterface }) => props.theme.background,
+    },
+  },
+}))
 
 type Props = {
   isOpen: boolean
@@ -64,7 +88,7 @@ function ConfirmDelete({ isOpen, closeModal, onDelete }: Props) {
       <DialogActions className={'action-holder'}>
         <Button
           variant="contained"
-          color="secondary"
+          className={classes.deleteButton}
           startIcon={<DeleteIcon />}
           onClick={() => {
             onDelete()
@@ -74,7 +98,7 @@ function ConfirmDelete({ isOpen, closeModal, onDelete }: Props) {
           Delete
         </Button>
 
-        <Button onClick={closeModal} color="primary">
+        <Button onClick={closeModal} className={classes.cancelButton}>
           Cancel
         </Button>
       </DialogActions>

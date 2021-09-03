@@ -13,7 +13,9 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import { useSnackbar } from 'notistack'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
+import type { ThemeInterface } from '@app/Util/colors'
 
+import { useTheme } from '@app/Hooks/'
 import { Screens } from '@app/Routes/'
 import { deleteRemindoro } from '@app/Store/Slices/Remindoros'
 import ConfirmDeleteModal from './ConfirmDeleteModal'
@@ -21,15 +23,26 @@ import Reminder from './Reminder/'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    button: {
+    deleteButton: {
       margin: theme.spacing(0),
+      background: (props: { theme: ThemeInterface }) => props.theme.danger,
+      color: (props: { theme: ThemeInterface }) => props.theme.textColor,
+
+      '&:hover': {
+        background: (props: { theme: ThemeInterface }) => props.theme.danger,
+        color: (props: { theme: ThemeInterface }) => props.theme.textColor,
+        opacity: 0.89,
+      },
     },
 
     closeButton: {
-      color: 'lightblue',
-      borderColor: 'lightblue',
+      background: (props: { theme: ThemeInterface }) =>
+        props.theme.backgroundLight,
+      color: (props: { theme: ThemeInterface }) => props.theme.textColor,
+      borderColor: (props: { theme: ThemeInterface }) => props.theme.border,
       '&:hover': {
-        opacity: 0.89,
+        background: (props: { theme: ThemeInterface }) =>
+          props.theme.primaryDark,
       },
     },
   })
@@ -40,13 +53,14 @@ const Holder = styled.div`
   flex-direction: column;
 
   height: 314px;
-  background: ${props => props.theme.primary};
+  background: ${props => props.theme.background};
+  color: ${props => props.theme.textColor};
 `
 
 const ActionBar = styled.div`
   display: flex;
   justify-content: space-between;
-  border-top: thin solid grey;
+  border-top: ${props => `thin solid ${props.theme.border}`};
 
   margin-top: auto;
   padding: 16px;
@@ -60,7 +74,8 @@ type Props = {
 }
 
 function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
-  const classes = useStyles()
+  const theme = useTheme()
+  const classes = useStyles({ theme })
   const dispatch = useDispatch()
   const history = useHistory()
   const { enqueueSnackbar } = useSnackbar()
@@ -83,8 +98,7 @@ function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
           <ActionBar>
             <Button
               variant="contained"
-              color="secondary"
-              className={classes.button}
+              className={classes.deleteButton}
               startIcon={<DeleteIcon />}
               onClick={() => {
                 // close settings modal

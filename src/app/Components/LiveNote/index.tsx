@@ -73,7 +73,7 @@ function LiveNote({ id, note, readOnly }: Props) {
       {!readOnly && <Toolbar />}
       <EditorHolder className={'editor'}>
         <Plate
-          id="porumai"
+          id={id}
           plugins={plugins}
           components={components}
           options={options}

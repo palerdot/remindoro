@@ -10,14 +10,23 @@ import LiveNote from '@app/Components/LiveNote/'
 
 const Holder = styled.div`
   margin: 16px;
+
   cursor: pointer;
-  border: thin solid grey;
+  border: ${props => `thin solid ${props.theme.primaryDark}`};
+  background: ${props => props.theme.backgroundLight};
 
   &:hover {
-    border: thin solid blue;
+    border: ${props => `thin solid ${props.theme.highlight}`};
+  }
+
+  & .title-holder {
+    padding: 4px;
+    background: ${props => props.theme.backgroundLight};
+    border-bottom: ${props => `thin solid ${props.theme.primaryDark}`};
   }
 
   & .note-holder {
+    padding: 4px;
     max-height: 123px;
     pointer-events: none;
     overflow-y: auto;
@@ -37,7 +46,7 @@ function Card(remindoro: Remindoro) {
       }}
     >
       <ScheduleInfo reminder={reminder} />
-      <div>{title}</div>
+      {title && <div className={'title-holder'}>{title}</div>}
       <div className={'note-holder'}>
         <LiveNote id={id} note={note} readOnly={true} />
       </div>
