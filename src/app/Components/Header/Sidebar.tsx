@@ -21,10 +21,16 @@ type Props = {
 }
 
 const DrawerHolder = styled.div`
-  background: ${props => props.theme.primaryDark};
+  background: ${props => props.theme.background};
   color: white;
   width: 250px;
   height: 100%;
+
+  & > ul > div.MuiListItem-root {
+    &:hover {
+      background: ${props => props.theme.primaryDark};
+    }
+  }
 `
 
 function Sidebar({ isMenuOpen, setMenuStatus, classes }: Props) {

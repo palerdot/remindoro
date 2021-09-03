@@ -24,7 +24,8 @@ const useStyles = makeStyles((theme: Theme) =>
       color: 'white',
 
       '&:hover': {
-        opacity: 0.89,
+        background: (props: { theme: ThemeInterface }) =>
+          props.theme.primaryLight,
       },
     },
   })
