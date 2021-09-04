@@ -14,9 +14,10 @@ import LiveNote from '@app/Components/LiveNote/'
 const Holder = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
   align-self: flex-start;
-  margin: 0 16px;
+
+  height: 100%;
+  overflow-y: hidden;
 
   background: ${props => props.theme.borderDark};
 
@@ -30,7 +31,7 @@ const Holder = styled.div`
       height: 100%;
 
       background: transparent;
-      padding: 8px;
+      padding: 16px;
       font-size: 18px;
 
       border: none;
@@ -48,12 +49,16 @@ const Holder = styled.div`
     & .editor {
       height: 400px;
       overflow-y: auto;
+
+      padding: 8px;
     }
   }
 
   & .info-corner {
     display: flex;
+
     height: 30px;
+    padding: 0 16px;
 
     & .info {
       margin-left: auto;
