@@ -10,6 +10,7 @@ export interface ThemeInterface {
   primaryLight: string
   highlight: string
   border: string
+  borderDark: string
   textColor: string
   success: string
   danger: string
@@ -23,12 +24,15 @@ export const themes: Themes = {
   [Theme.Main]: {
     // background: '#3C0078',
     background: '#271332',
+    // border: '#5A5A5A',
+    borderDark: '#360e4e', // middle of background/backgroundLight
     backgroundLight: '#400a60',
+    border: '#641190', // middle of backgroundLight/primary
     primary: '#8117b8',
     primaryDark: '#5F0098',
     primaryLight: '#A33EDA',
     highlight: '#c55ffc',
-    border: '#808080',
+
     textColor: '#ffffff',
     success: 'lightgreen',
     danger: '#FF5050',
