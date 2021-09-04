@@ -20,13 +20,15 @@ const Holder = styled.div`
   }
 
   & .title-holder {
-    padding: 4px;
+    padding: 8px;
+    font-size: 18px;
+
     background: ${props => props.theme.backgroundLight};
     border-bottom: ${props => `thin solid ${props.theme.primaryDark}`};
   }
 
   & .note-holder {
-    padding: 4px;
+    padding: 8px;
     max-height: 123px;
     pointer-events: none;
     overflow-y: auto;

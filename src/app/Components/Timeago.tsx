@@ -34,27 +34,23 @@ function liveUpdateInterval(timestamp: number) {
 
   // < 90s
   if (diff < 90 * SECONDS) {
-    console.log('porumai ... time ago 32 sec update')
     // 32 seconds
     return 32 * SECONDS
   }
 
   // < 90m
   if (diff < 90 * MINUTES) {
-    console.log('porumai ... time ago 1 m update')
     // 1 minute
     return 1 * MINUTES
   }
 
   // < 5h
   if (diff < 5 * HOURS) {
-    console.log('porumai ... time ago 15 min update')
     // 15 minutes
     return 15 * MINUTES
   }
 
   // default 32 minutes
-  console.log('porumai ... time ago 32 min update', timestamp, diff)
   return 32 * MINUTES
 }
 
@@ -109,11 +105,6 @@ class Timeago extends PureComponent<Props, State> {
 
     // this particular check prevents infinite loop
     if (newUpdateInterval !== this.updateInterval) {
-      console.log(
-        'porumai ... switching to new interval ',
-        this.updateInterval,
-        newUpdateInterval
-      )
       this.resetTimer()
       // do not proceed to update the text
       return
@@ -132,7 +123,6 @@ class Timeago extends PureComponent<Props, State> {
   // 1 - when timestamp has changed
   // 2 - before updating live text, we realise timer interval needs to be changed
   resetTimer() {
-    console.log('porumai ... timeago ... reset timer')
     // update new interval
     this.updateInterval = liveUpdateInterval(this.props.timestamp)
 
@@ -145,8 +135,6 @@ class Timeago extends PureComponent<Props, State> {
     // always clear existing timer
     this.clearTimer()
 
-    console.log('porumai ... timeago ... setup timer ', this.updateInterval)
-
     // setup live update timer
     this.timerId = window.setInterval(() => {
       this.updateText()
@@ -155,7 +143,6 @@ class Timeago extends PureComponent<Props, State> {
 
   // clears the live updating timer
   clearTimer() {
-    console.log('porumai ... timeago ... clearing timer')
     window.clearInterval(this.timerId)
   }
 
@@ -182,13 +169,7 @@ class Timeago extends PureComponent<Props, State> {
     const datetime = new Date(this.props.timestamp).toDateString()
 
     return (
-      <div
-        style={{
-          color: 'green',
-          fontStyle: 'italic',
-          fontSize: '14px',
-        }}
-      >
+      <div className={'time-ago'}>
         <time dateTime={datetime}>{this.state.liveText}</time>
       </div>
     )

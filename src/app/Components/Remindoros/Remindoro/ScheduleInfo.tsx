@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Repeat as RepeatIcon } from '@material-ui/icons'
+import { Repeat as RepeatIcon, Alarm as AlarmIcon } from '@material-ui/icons'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
@@ -12,17 +12,41 @@ const Holder = styled.div`
   height: 30px;
   width: 175px;
 
-  border: thin solid yellow;
+  border: ${props => `thin solid ${props.theme.highlight}`};
+  background: ${props => props.theme.background};
 
   & .time-holder {
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 0 8px;
+    padding: 0 4px;
+
+    & .time-info {
+      display: flex;
+      align-items: center;
+
+      & svg {
+        fill: ${props => props.theme.highlight};
+      }
+
+      & .time-ago {
+        margin-left: 6px;
+        font-size: 15px;
+        font-style: italic;
+      }
+    }
+
+    & svg {
+      font-size: 1.314rem;
+    }
 
     & .icon-holder {
       display: flex;
       margin-left: auto;
+
+      & svg {
+        fill: ${props => props.theme.success};
+      }
     }
   }
 `
@@ -39,9 +63,13 @@ function ScheduleInfo({ reminder }: Props) {
   }
 
   return (
-    <Holder>
+    <Holder className={'schedule-info'}>
       <div className={'time-holder'}>
-        <Timeago timestamp={reminder.time} />
+        <div className={'time-info'}>
+          <AlarmIcon />
+          <Timeago timestamp={reminder.time} />
+        </div>
+
         {reminder.repeat && (
           <div className={'icon-holder'}>
             <RepeatIcon />

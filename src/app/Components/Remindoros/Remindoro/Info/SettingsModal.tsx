@@ -36,13 +36,12 @@ const useStyles = makeStyles((theme: Theme) =>
     },
 
     closeButton: {
-      background: (props: { theme: ThemeInterface }) =>
-        props.theme.backgroundLight,
+      background: (props: { theme: ThemeInterface }) => props.theme.primaryDark,
       color: (props: { theme: ThemeInterface }) => props.theme.textColor,
       borderColor: (props: { theme: ThemeInterface }) => props.theme.border,
       '&:hover': {
         background: (props: { theme: ThemeInterface }) =>
-          props.theme.primaryDark,
+          props.theme.backgroundLight,
       },
     },
   })
