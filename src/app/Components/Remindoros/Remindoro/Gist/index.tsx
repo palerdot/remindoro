@@ -13,7 +13,8 @@ const Holder = styled.div`
 
   cursor: pointer;
   border: ${props => `thin solid ${props.theme.primaryDark}`};
-  background: ${props => props.theme.backgroundLight};
+  // background: ${props => props.theme.backgroundLight};
+  background: ${props => props.theme.borderDark};
 
   &:hover {
     border: ${props => `thin solid ${props.theme.highlight}`};
@@ -23,7 +24,6 @@ const Holder = styled.div`
     padding: 8px;
     font-size: 18px;
 
-    background: ${props => props.theme.backgroundLight};
     border-bottom: ${props => `thin solid ${props.theme.primaryDark}`};
   }
 

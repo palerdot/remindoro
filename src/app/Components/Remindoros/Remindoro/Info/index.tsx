@@ -18,22 +18,33 @@ const Holder = styled.div`
   align-self: flex-start;
   margin: 0 16px;
 
+  background: ${props => props.theme.borderDark};
+
   & .title-holder {
     height: 40px;
 
-    border: thin solid red;
+    border-bottom: ${props => `thin solid ${props.theme.primaryDark}`};
 
     & input {
       width: 100%;
       height: 100%;
 
       background: transparent;
-      color: white;
-      padding: 4px;
+      padding: 8px;
+      font-size: 18px;
+
+      border: none;
+      color: ${props => props.theme.textColor};
+
+      &:focus {
+        border: none;
+      }
     }
   }
 
   & .note-holder {
+    padding: 8px;
+
     & .editor {
       height: 400px;
       overflow-y: auto;
