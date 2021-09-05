@@ -9,7 +9,7 @@ import ScheduleInfo from '@app/Components/Remindoros/Remindoro/ScheduleInfo'
 import LiveNote from '@app/Components/LiveNote/'
 
 const Holder = styled.div`
-  margin: 16px;
+  margin: 16px 8px;
 
   cursor: pointer;
   border: ${props => `thin solid ${props.theme.primaryDark}`};

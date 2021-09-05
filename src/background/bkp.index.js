@@ -420,6 +420,8 @@ mui v5
 [] https://next.material-ui.com/getting-started/installation/#npm
 [] https://next.material-ui.com/guides/pickers-migration/
 [] https://next.material-ui.com/guides/minimizing-bundle-size/#option-2
+// bugs to watch out for
+// https://github.com/mui-org/material-ui/issues/25422
 
 Roboto fonts
 [] download roboto fonts locally

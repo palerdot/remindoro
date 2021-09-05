@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import styled, { css } from 'styled-components'
-import DateTimePicker from '@mui/lab/DateTimePicker'
+import DateTimePicker from '@mui/lab/MobileDateTimePicker'
 import { InputAdornment, IconButton } from '@mui/material'
 import { AddAlarm } from '@mui/icons-material'
 import TextField from '@mui/material/TextField'
@@ -169,6 +169,10 @@ function Reminder({ id, reminder }: Props) {
               ),
             }}
             renderInput={params => <TextField {...params} />}
+            ampm={true}
+            ampmInClock={true}
+            disableOpenPicker={true}
+            showToolbar={true}
           />
         </div>
       </Row>
