@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Repeat as RepeatIcon, Alarm as AlarmIcon } from '@material-ui/icons'
+import { Repeat as RepeatIcon, Alarm as AlarmIcon } from '@mui/icons-material'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 

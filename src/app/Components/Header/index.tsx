@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
 import { Link, useLocation } from 'react-router-dom'
-import { makeStyles } from '@material-ui/core/styles'
-import { IconButton } from '@material-ui/core'
+import makeStyles from '@mui/styles/makeStyles'
+import { IconButton } from '@mui/material'
 import {
   Close as CloseIcon,
   Menu as MenuIcon,
   Home as HomeIcon,
   Event as EventIcon,
-} from '@material-ui/icons/'
+} from '@mui/icons-material/'
 
 import type { ThemeInterface } from '@app/Util/colors'
 

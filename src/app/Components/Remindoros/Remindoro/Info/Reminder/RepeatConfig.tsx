@@ -5,7 +5,7 @@ import {
   FormControl,
   Select,
   MenuItem,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import type { Repeat } from '@app/Store/Slices/Remindoros/'
 

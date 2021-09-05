@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react'
 import styled, { css } from 'styled-components'
-import { DateTimePicker } from '@material-ui/pickers'
-import { InputAdornment, IconButton } from '@material-ui/core'
-import { AddAlarm } from '@material-ui/icons'
+import DateTimePicker from '@mui/lab/DateTimePicker'
+import { InputAdornment, IconButton } from '@mui/material'
+import { AddAlarm } from '@mui/icons-material'
+import TextField from '@mui/material/TextField'
 
 import type { Remindoro, Repeat } from '@app/Store/Slices/Remindoros/'
 
@@ -146,7 +147,6 @@ function Reminder({ id, reminder }: Props) {
           <DateTimePicker
             disabled={!isScheduled}
             className={`date-picker ${!isScheduled ? 'disabled' : ''}`}
-            variant="inline"
             label="Reminder time"
             value={value?.time ? new Date(value.time) : new Date()}
             onChange={date => {
@@ -162,12 +162,13 @@ function Reminder({ id, reminder }: Props) {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton>
+                  <IconButton size="large">
                     <AddAlarm />
                   </IconButton>
                 </InputAdornment>
               ),
             }}
+            renderInput={params => <TextField {...params} />}
           />
         </div>
       </Row>

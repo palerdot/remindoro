@@ -1,13 +1,20 @@
 import React, { createRef } from 'react'
 import styled, { ThemeProvider } from 'styled-components'
+import {
+  StyledEngineProvider,
+  Theme,
+  ThemeProvider as MUIThemeProvider,
+  createTheme,
+} from '@mui/material/styles'
 import { MemoryRouter as Router } from 'react-router-dom'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import { Button, CssBaseline } from '@material-ui/core'
+import AdapterDateFns from '@mui/lab/AdapterDayjs'
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import { Button, CssBaseline } from '@mui/material'
 import { SnackbarProvider } from 'notistack'
 import dayjs from 'dayjs'
-import DayjsUtils from '@date-io/dayjs'
 import DayjsRelativeTime from 'dayjs/plugin/relativeTime'
 
+// import type { ThemeInterface } from '@app/Util/colors'
 import type { SnackbarKey } from 'notistack'
 
 import Routes from '@app/Routes/'
@@ -17,6 +24,10 @@ import Footer from '@app/Components/Footer/'
 
 // main app css
 import './css/index.css'
+
+declare module '@mui/styles/defaultTheme' {
+  interface DefaultTheme extends Theme {}
+}
 
 // configure dayjs to use relative time comparison
 // ref: https://day.js.org/docs/en/plugin/relative-time
@@ -56,6 +67,9 @@ const Container = styled.div`
   overflow-x: hidden;
 `
 
+// mui v5 default theme
+const muiTheme = createTheme()
+
 function App() {
   const theme = useTheme()
 
@@ -66,30 +80,36 @@ function App() {
   }
 
   return (
-    <SnackbarProvider
-      ref={notistackRef}
-      anchorOrigin={{
-        horizontal: 'center',
-        vertical: 'bottom',
-      }}
-      preventDuplicate={true}
-      action={key => <Button onClick={onClickDismiss(key)}>{'Dismiss'}</Button>}
-    >
-      <MuiPickersUtilsProvider utils={DayjsUtils}>
+    <StyledEngineProvider injectFirst>
+      <MUIThemeProvider theme={muiTheme}>
         <ThemeProvider theme={theme}>
-          <Router>
-            <Holder>
-              <CssBaseline />
-              <Header />
-              <Container>
-                <Routes />
-              </Container>
-              <Footer />
-            </Holder>
-          </Router>
+          <SnackbarProvider
+            ref={notistackRef}
+            anchorOrigin={{
+              horizontal: 'center',
+              vertical: 'bottom',
+            }}
+            preventDuplicate={true}
+            action={key => (
+              <Button onClick={onClickDismiss(key)}>{'Dismiss'}</Button>
+            )}
+          >
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <Router>
+                <Holder>
+                  <CssBaseline />
+                  <Header />
+                  <Container>
+                    <Routes />
+                  </Container>
+                  <Footer />
+                </Holder>
+              </Router>
+            </LocalizationProvider>
+          </SnackbarProvider>
         </ThemeProvider>
-      </MuiPickersUtilsProvider>
-    </SnackbarProvider>
+      </MUIThemeProvider>
+    </StyledEngineProvider>
   )
 }
 

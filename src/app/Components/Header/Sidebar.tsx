@@ -7,8 +7,8 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-} from '@material-ui/core'
-import { Inbox as InboxIcon, Mail as MailIcon } from '@material-ui/icons/'
+} from '@mui/material'
+import { Inbox as InboxIcon, Mail as MailIcon } from '@mui/icons-material/'
 
 type StyleClasses = 'listIcon' | 'divider'
 

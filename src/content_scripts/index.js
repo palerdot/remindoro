@@ -1,1 +1,1 @@
-console.log('Content scripts has loaded');
+console.log('Content scripts has loaded')

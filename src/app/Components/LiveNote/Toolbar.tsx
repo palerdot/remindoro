@@ -31,7 +31,7 @@ import {
   FormatListBulleted,
   FormatListNumbered,
   PlaylistAddCheck,
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 
 import { LooksOne, LooksTwo } from '@app/Util/Icons/'
 

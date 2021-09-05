@@ -6,17 +6,15 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  makeStyles,
-  Theme,
-} from '@material-ui/core'
-
-import { Delete as DeleteIcon } from '@material-ui/icons'
+} from '@mui/material'
+import makeStyles from '@mui/styles/makeStyles'
+import { Delete as DeleteIcon } from '@mui/icons-material'
 
 import type { ThemeInterface } from '@app/Util/colors'
 
 import { useTheme } from '@app/Hooks/'
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(theme => ({
   paper: (props: { theme: ThemeInterface }) => ({
     // background: '#AAAAAA',
     background: props.theme.primaryDark,

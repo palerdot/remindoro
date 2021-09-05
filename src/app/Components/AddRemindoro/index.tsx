@@ -2,9 +2,10 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { v4 as uuid } from 'uuid'
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
-import { Fab, Zoom } from '@material-ui/core/'
-import { PlaylistAdd } from '@material-ui/icons'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
+import { Fab, Zoom } from '@mui/material/'
+import { PlaylistAdd } from '@mui/icons-material'
 
 import type { ThemeInterface } from '@app/Util/colors'
 
@@ -12,7 +13,7 @@ import { useTheme } from '@app/Hooks/'
 import { getRemindoroUrl } from '@app/Util/'
 import { addNewRemindoro } from '@app/Store/Slices/Remindoros/'
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(theme =>
   createStyles({
     fab: {
       position: 'absolute',

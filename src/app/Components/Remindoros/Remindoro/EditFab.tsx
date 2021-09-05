@@ -1,7 +1,8 @@
 import React from 'react'
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
-import { Fab, Zoom } from '@material-ui/core/'
-import { Settings as SettingsIcon } from '@material-ui/icons'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
+import { Fab, Zoom } from '@mui/material/'
+import { Settings as SettingsIcon } from '@mui/icons-material'
 
 import type { ThemeInterface } from '@app/Util/colors'
 
@@ -11,7 +12,7 @@ type Props = {
   onClick: () => void
 }
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(theme =>
   createStyles({
     fab: {
       position: 'absolute',

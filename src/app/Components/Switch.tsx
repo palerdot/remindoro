@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Switch as SwitchInput, Grid, Typography } from '@material-ui/core'
+import { Switch as SwitchInput, Grid, Typography } from '@mui/material'
 
 const SwitchHolder = styled.div`
   & .switch-base {

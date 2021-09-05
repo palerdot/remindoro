@@ -2,14 +2,10 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
-import {
-  Drawer,
-  Button,
-  makeStyles,
-  createStyles,
-  Theme,
-} from '@material-ui/core'
-import DeleteIcon from '@material-ui/icons/Delete'
+import { Drawer, Button } from '@mui/material'
+import makeStyles from '@mui/styles/makeStyles'
+import createStyles from '@mui/styles/createStyles'
+import DeleteIcon from '@mui/icons-material/Delete'
 import { useSnackbar } from 'notistack'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
@@ -21,7 +17,7 @@ import { deleteRemindoro } from '@app/Store/Slices/Remindoros'
 import ConfirmDeleteModal from './ConfirmDeleteModal'
 import Reminder from './Reminder/'
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(theme =>
   createStyles({
     deleteButton: {
       margin: theme.spacing(0),
