@@ -56,6 +56,13 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
 
     if (onlyEmptyLines) {
       EMPTY_LINES_IGNORE_COUNT = 1
+    } else {
+      // in non empty lines
+      // we might have a text like 'text   '
+      // if it ends with space we have to ignore a space
+      if (splitted[0].endsWith(' ')) {
+        NON_EMPTY_LINES_IGNORE_COUNT = 1
+      }
     }
 
     const hasEmptySpaces = onlyEmptyLines && compact(splitted).length > 0
@@ -86,6 +93,7 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
     // we cannot be splitting that and making again a new p tag
     // that will cyclically increase the new lines
     // so we need to deliberatly ignore the ending newline
+
     const TOTAL_NEWLINES_TO_IGNORE = onlyEmptyLines
       ? EMPTY_LINES_IGNORE_COUNT
       : // : 1
@@ -99,9 +107,9 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
       const isEmpty = text.trim() === ''
       if (isEmpty) {
         // we will ignore empty spaces ??? ' '
-        if (text !== '') {
+        /* if (text !== '') {
           return
-        }
+        } */
 
         // but before that
         // we will ignore the ending new line
