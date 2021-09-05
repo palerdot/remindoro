@@ -18065,6 +18065,13 @@ ts-easing@^0.2.0:
   resolved "https://registry.yarnpkg.com/ts-easing/-/ts-easing-0.2.0.tgz#c8a8a35025105566588d87dbda05dd7fbfa5a4ec"
   integrity sha512-Z86EW+fFFh/IFB1fqQ3/+7Zpf9t2ebOAxNI/V6Wo7r5gqiqtxmgTlQ1qbqQcjLKYeSHPTsEmvlJUDg/EuL0uHQ==
 
+ts-import-plugin@^1.6.7:
+  version "1.6.7"
+  resolved "https://registry.yarnpkg.com/ts-import-plugin/-/ts-import-plugin-1.6.7.tgz#219cabef4a8b50d8321ac750758837378492914c"
+  integrity sha512-6qbRME6Cj9RzhlqXGc1275lAK3IEJjmwYPmX0/jVPBwtdoDqHVbdRURYcvR195uFi8ZpBqT2WjL4E56buPQ4sg==
+  dependencies:
+    tslib "^2.0.3"
+
 ts-jest@^27.0.4:
   version "27.0.4"
   resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-27.0.4.tgz#df49683535831560ccb58f94c023d831b1b80df0"
@@ -18119,6 +18126,11 @@ tslib@^1.9.0:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.3.tgz#d7e4dd79245d85428c4d7e4822a79917954ca286"
   integrity sha512-4krF8scpejhaOgqzBEcGM7yDIEfi0/8+8zDRZhNZZ2kjmHJ4hv3zCbQWxoJGz1iw5U0Jl0nma13xzHXcncMavQ==
+
+tslib@^2.0.3:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
+  integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
 
 tslib@^2.1.0:
   version "2.3.0"

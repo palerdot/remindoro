@@ -84,6 +84,30 @@ const getLoaders = (
   }
 
   // TS transpilation
+  // ref: https://github.com/Brooooooklyn/ts-import-plugin
+  const tsImportPluginFactory = require('ts-import-plugin')
+
+  const treeShakingLibOptions = [
+    {
+      libraryName: '@mui/material',
+      libraryDirectory: '',
+      camel2DashComponentName: false,
+    },
+    {
+      libraryName: '@mui/icons-material',
+      libraryDirectory: '',
+      camel2DashComponentName: false,
+    },
+    // we are already using 'lodash-es' mapped as '@lodash'
+    // this can be used in case of some emergency
+    /* {
+      style: false,
+      libraryName: 'lodash',
+      libraryDirectory: null,
+      camel2DashComponentName: false
+    } */
+  ]
+
   const typescriptLoader = {
     test: /\.tsx?$/,
     loader: require.resolve('ts-loader'),
@@ -91,6 +115,12 @@ const getLoaders = (
     options: {
       // disable type checker - we will use it in fork plugin
       transpileOnly: true,
+      getCustomTransformers: () => ({
+        before: [tsImportPluginFactory(treeShakingLibOptions)],
+      }),
+      compilerOptions: {
+        module: 'es2015',
+      },
     },
   }
 
