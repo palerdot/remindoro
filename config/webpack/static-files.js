@@ -34,7 +34,8 @@ const copyPatterns = [
   },
   {
     from: 'src/fonts/*/*',
-    to: 'fonts/googlefonts/[name].[ext]',
+    // [ext] => .ext (no need to add .)
+    to: 'fonts/googlefonts/[name][ext]',
   },
   /* {
     from:

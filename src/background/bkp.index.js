@@ -414,4 +414,17 @@ clean old files
 to remove (check before cleaning)
 [] inside src - 'Components/Styles/common/lib/config.json/popup/sidebar'
 
+mui v5
+[] https://next.material-ui.com/guides/migration-v4/
+[] https://next.material-ui.com/guides/styled-engine/
+[] https://next.material-ui.com/getting-started/installation/#npm
+[] https://next.material-ui.com/guides/pickers-migration/
+[] https://next.material-ui.com/guides/minimizing-bundle-size/#option-2
+
+Roboto fonts
+[] download roboto fonts locally
+[] reference local font files in fonts/roboto.css
+[] add the css file in html
+[] add roboto as font in body tag
+
 */
