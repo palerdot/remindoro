@@ -1,4 +1,4 @@
-import { transformNewLines } from './utils'
+import { transformNewLines, chunkParagraphs } from './utils'
 
 describe('New line transformation is working fine', () => {
   test('Properly splitting new lines and preserving text', () => {
@@ -42,5 +42,35 @@ describe('New line transformation is working fine', () => {
     ]
 
     expect(transformNewLines(sample_input)).toMatchObject(EXPECTED)
+  })
+})
+
+describe('paragraph chunking is working fine', () => {
+  test('multiple paragraphs are chunked fine', () => {
+    const sample_input = [
+      'porumai  ',
+      '',
+      '',
+      'amaidhi ',
+      '',
+      '',
+      'patience ',
+      '',
+      '',
+    ]
+    const EXPECTED = [
+      ['porumai  ', '', ''],
+      ['amaidhi ', '', ''],
+      ['patience ', '', ''],
+    ]
+
+    expect(chunkParagraphs(sample_input)).toMatchObject(EXPECTED)
+  })
+
+  test('single paragraphs are chunked fine', () => {
+    const sample_input = ['porumai  ', '', '']
+    const EXPECTED = [['porumai  ', '', '']]
+
+    expect(chunkParagraphs(sample_input)).toMatchObject(EXPECTED)
   })
 })

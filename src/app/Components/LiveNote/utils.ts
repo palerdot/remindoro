@@ -1,5 +1,5 @@
 import { LeafNode, SlateNode, isLeafNode } from 'slate-mark'
-import { compact } from '@lodash'
+import { compact, head, tail, isEmpty, findIndex, slice } from '@lodash'
 import styled, { css } from 'styled-components'
 
 export const LiveNoteStyles = css`
@@ -48,6 +48,10 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
 
     const splitted = mark.text.split(`${NEWLINE_MAGIC_TOKEN}\n`)
 
+    // todo: multi split
+    // input => ["porumai  ", "", "", "patience ", "", "", "amaidhi ", "", ""]
+    // output => [ ["porumai  ", "", ""], ["patience ", "", ""], ["amaidhi ", "", ""] ]
+
     // edge case:
     // we may deal with only empty lines or content + empty lines
     // if content + empty lines; we may have to ignore new lines (see below)
@@ -57,10 +61,13 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
     if (onlyEmptyLines) {
       EMPTY_LINES_IGNORE_COUNT = 1
     } else {
-      // in non empty lines
-      // we might have a text like 'text   '
-      // if it ends with space we have to ignore a space
-      if (splitted[0].endsWith(' ')) {
+      // edge case
+      // if it is a line with first element as non empty
+      // and rest of the lines are empty
+      const first = head(splitted) || ''
+      const rest = tail(splitted)
+
+      if (first.endsWith(' ') && isEmpty(compact(rest))) {
         NON_EMPTY_LINES_IGNORE_COUNT = 1
       }
     }
@@ -99,6 +106,13 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
       : // : 1
         NON_EMPTY_LINES_IGNORE_COUNT // 0
     let ENDING_NEWLINE_IGNORED = 0
+
+    console.log(
+      'porumai ... new line split ',
+      splitted,
+      TOTAL_NEWLINES_TO_IGNORE,
+      children
+    )
 
     splitted.forEach(s => {
       const text = s.replaceAll(NEWLINE_MAGIC_TOKEN, '')
@@ -165,4 +179,33 @@ export function drillTillLeaf(node: SlateNode): SlateNode {
     ...node,
     children,
   }
+}
+
+// chunk lines
+// if multiple paragraphs are inside a single 'p' tag
+// we have to split for better whitespace handling
+// for eg: if three lines are clumped in a single node
+// INPUT: ["porumai  ", "", "", "amaidhi ", "", "", "patience ", "", ""]
+// OUTPUT: [ ["porumai  ", "", ""], ["amaidhi ", "", ""], ["patience ", "", ""] ]
+//
+// INPUT: ["porumai  ", "", "", ""]
+// OUTPUT: [ ["porumai  ", "", "", ""] ]
+type ChunkInput = Array<string>
+type ChunkOutput = Array<ChunkInput>
+
+export function chunkParagraphs(input: ChunkInput): ChunkOutput {
+  const cleaned = compact(input)
+  const indexes = cleaned.map(x => {
+    return findIndex(input, i => i === x)
+  })
+
+  const chunked: ChunkOutput = indexes.map((index, i, arr) => {
+    const nextIndex = i + 1
+    const nextChunkIndex =
+      nextIndex < arr.length ? indexes[nextIndex] : input.length
+
+    return slice(input, index, nextChunkIndex)
+  })
+
+  return chunked
 }
