@@ -1,5 +1,5 @@
 import React, { createRef } from 'react'
-import styled, { ThemeProvider } from 'styled-components'
+import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
 import {
   StyledEngineProvider,
   Theme,
@@ -17,6 +17,7 @@ import DayjsRelativeTime from 'dayjs/plugin/relativeTime'
 // import type { ThemeInterface } from '@app/Util/colors'
 import type { SnackbarKey } from 'notistack'
 
+import { classNames } from '@app/Constants'
 import Routes from '@app/Routes/'
 import { useTheme } from '@app/Hooks/'
 import Header from '@app/Components/Header/'
@@ -47,6 +48,30 @@ const thresholds = [
 // ref: https://day.js.org/docs/en/customization/relative-time
 dayjs.extend(DayjsRelativeTime, { thresholds })
 
+// global style
+const GlobalStyle = createGlobalStyle`
+  body {
+    & .${classNames.datepickerInput} {
+      & .Mui-focused {
+        /* color: ${props => props.theme.highlight};
+        border-color: ${props => props.theme.highlight}; */
+      }
+
+      & label {
+        color: ${props => props.theme.primaryLight};
+      }
+
+      & input {
+        color: ${props => props.theme.textColor};
+      }
+
+      & .MuiInputAdornment-root .MuiIconButton-root {
+        color: ${props => props.theme.primaryLight};
+      }
+    }
+  }
+`
+
 const Holder = styled.div`
   display: flex;
   flex-direction: column;
@@ -67,11 +92,32 @@ const Container = styled.div`
   overflow-x: hidden;
 `
 
-// mui v5 default theme
-const muiTheme = createTheme()
-
 function App() {
   const theme = useTheme()
+  // mui v5 default theme
+  const muiTheme = createTheme({
+    palette: {
+      primary: {
+        main: theme.highlight,
+        // light: theme.highlight,
+        // dark: theme.highlight,
+      },
+      /* info: {
+        main: theme.highlight,
+        light: theme.highlight,
+        dark: theme.highlight,
+      }, */
+      background: {
+        default: theme.backgroundLight,
+        paper: theme.background,
+      },
+      text: {
+        primary: theme.textColor,
+        secondary: theme.highlight,
+        disabled: theme.primaryDark,
+      },
+    },
+  })
 
   // add action to all snackbars
   const notistackRef = createRef<SnackbarProvider>()
@@ -83,6 +129,7 @@ function App() {
     <StyledEngineProvider injectFirst>
       <MUIThemeProvider theme={muiTheme}>
         <ThemeProvider theme={theme}>
+          <GlobalStyle />
           <SnackbarProvider
             ref={notistackRef}
             anchorOrigin={{

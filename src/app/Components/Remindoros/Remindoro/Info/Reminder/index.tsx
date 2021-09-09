@@ -1,9 +1,5 @@
 import React, { useCallback } from 'react'
 import styled, { css } from 'styled-components'
-import DateTimePicker from '@mui/lab/MobileDateTimePicker'
-import { InputAdornment, IconButton } from '@mui/material'
-import { AddAlarm } from '@mui/icons-material'
-import TextField from '@mui/material/TextField'
 
 import type { Remindoro, Repeat } from '@app/Store/Slices/Remindoros/'
 
@@ -16,6 +12,7 @@ import {
   handleRepeatDurationChange,
   handleRepeatIntervalChange,
 } from './utils'
+import DateTimePicker from './DatePicker'
 import RepeatConfig from './RepeatConfig'
 
 const colStyles = css`
@@ -146,7 +143,7 @@ function Reminder({ id, reminder }: Props) {
         <div className={'second-col'}>
           <DateTimePicker
             disabled={!isScheduled}
-            className={`date-picker ${!isScheduled ? 'disabled' : ''}`}
+            className={`reminder-datepicker ${!isScheduled ? 'disabled' : ''}`}
             label="Reminder time"
             value={value?.time ? new Date(value.time) : new Date()}
             onChange={date => {
@@ -159,20 +156,6 @@ function Reminder({ id, reminder }: Props) {
                 }
               })
             }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton size="large">
-                    <AddAlarm />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            renderInput={params => <TextField {...params} />}
-            ampm={true}
-            ampmInClock={true}
-            disableOpenPicker={true}
-            showToolbar={true}
           />
         </div>
       </Row>

@@ -429,4 +429,6 @@ Roboto fonts
 [] add the css file in html
 [] add roboto as font in body tag
 
+[] self heal backup editor (click here to fix this issue, setState: false to hide error)
+
 */
