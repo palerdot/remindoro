@@ -51,12 +51,45 @@ dayjs.extend(DayjsRelativeTime, { thresholds })
 // global style
 const GlobalStyle = createGlobalStyle`
   body {
-    & .${classNames.datepickerInput} {
-      & .Mui-focused {
-        /* color: ${props => props.theme.highlight};
-        border-color: ${props => props.theme.highlight}; */
+    /* 
+     * hide the manual input toggle button;  
+     *
+     * reminder time can be edited only in calender view
+     */
+    button.PrivateDateTimePickerToolbar-penIcon {
+      display: none;
+    }
+
+    /*  
+     * hide scroll in datepicker
+     */
+    .MuiCalendarPicker-root > div {
+      margin-bottom: 0;
+    }
+
+    .MuiCalendarPicker-root {
+      & .MuiIconButton-edgeStart, .MuiIconButton-edgeEnd {
+        color: ${props => props.theme.primary}; 
       }
 
+      & .MuiIconButton-sizeSmall {
+      color: ${props => props.theme.primary}; 
+      }
+    }
+
+    /*  
+     * AM / PM button customization
+     */
+    & .MuiDialogContent-root {
+      & button.MuiIconButton-root.MuiIconButton-sizeMedium {
+        color: ${props => props.theme.textColor};
+        /* hack to fix - https://github.com/mui-org/material-ui/issues/25422#issuecomment-916304719 */
+        bottom: 4rem;
+      }
+    }
+    
+
+    & .${classNames.datepickerInput} {
       & label {
         color: ${props => props.theme.primaryLight};
       }
@@ -102,11 +135,11 @@ function App() {
         // light: theme.highlight,
         // dark: theme.highlight,
       },
-      /* info: {
+      info: {
         main: theme.highlight,
-        light: theme.highlight,
-        dark: theme.highlight,
-      }, */
+        // light: theme.highlight,
+        // dark: theme.highlight,
+      },
       background: {
         default: theme.backgroundLight,
         paper: theme.background,
