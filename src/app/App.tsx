@@ -140,6 +140,10 @@ const GlobalStyle = createGlobalStyle`
         color: ${props => props.theme.highlight};
       }
 
+      & label.Mui-disabled {
+        color: ${props => props.theme.primaryDark};
+      }
+
       & input {
         color: ${props => props.theme.textColor};
       }
@@ -147,6 +151,13 @@ const GlobalStyle = createGlobalStyle`
       & .MuiInputAdornment-root .MuiIconButton-root {
         color: ${props => props.theme.highlight};
       }
+    }
+
+    /*  
+     * Snackbar notification
+     */
+    .SnackbarItem-action button {
+      color: ${props => props.theme.textColor};
     }
   }
 `

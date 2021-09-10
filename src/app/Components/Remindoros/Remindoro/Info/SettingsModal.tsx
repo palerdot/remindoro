@@ -121,7 +121,6 @@ function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
       <ConfirmDeleteModal
         isOpen={isDeleteModalOpen}
         onDelete={() => {
-          console.log('porumai ... will delete ', remindoro.id)
           // close the modal
           setDeleteModalStatus(false)
           // go to home page
