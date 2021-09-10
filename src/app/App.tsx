@@ -87,11 +87,20 @@ const GlobalStyle = createGlobalStyle`
         bottom: 4rem;
       }
     }
+
+    /*  
+     * Outlined text input border customization
+     */
+    & .MuiOutlinedInput-root:not(.Mui-disabled) {
+      &:hover .MuiOutlinedInput-notchedOutline {
+        border-color: ${props => props.theme.highlight};
+      }
+    }
     
 
     & .${classNames.datepickerInput} {
       & label {
-        color: ${props => props.theme.primaryLight};
+        color: ${props => props.theme.highlight};
       }
 
       & input {
@@ -99,7 +108,7 @@ const GlobalStyle = createGlobalStyle`
       }
 
       & .MuiInputAdornment-root .MuiIconButton-root {
-        color: ${props => props.theme.primaryLight};
+        color: ${props => props.theme.highlight};
       }
     }
   }

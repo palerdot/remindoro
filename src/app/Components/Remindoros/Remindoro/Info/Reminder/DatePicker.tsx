@@ -28,17 +28,19 @@ function DatePicker(props: Props) {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton
-                  onClick={event => {
-                    if (params.inputProps?.onClick) {
-                      params.inputProps?.onClick(
-                        event as React.MouseEvent<HTMLInputElement>
-                      )
-                    }
-                  }}
-                >
-                  <AddAlarm />
-                </IconButton>
+                {!props.disabled && (
+                  <IconButton
+                    onClick={event => {
+                      if (params.inputProps?.onClick) {
+                        params.inputProps?.onClick(
+                          event as React.MouseEvent<HTMLInputElement>
+                        )
+                      }
+                    }}
+                  >
+                    <AddAlarm />
+                  </IconButton>
+                )}
               </InputAdornment>
             ),
           }}
