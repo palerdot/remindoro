@@ -4,7 +4,7 @@ import DateTimePicker, {
 } from '@mui/lab/MobileDateTimePicker'
 import { InputAdornment, IconButton, TextField } from '@mui/material'
 import { AddAlarm } from '@mui/icons-material'
-import { Dayjs } from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 
 import { classNames } from '@app/Constants'
 
@@ -51,6 +51,7 @@ function DatePicker(props: Props) {
       ampm={true}
       ampmInClock={true}
       showToolbar={true}
+      minDateTime={dayjs()}
     />
   )
 }
