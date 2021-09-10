@@ -22,7 +22,7 @@ const Holder = styled.div`
   background: ${props => props.theme.borderDark};
 
   & .title-holder {
-    height: 40px;
+    height: 55px;
 
     border-bottom: ${props => `thin solid ${props.theme.primaryDark}`};
 
@@ -44,6 +44,7 @@ const Holder = styled.div`
   }
 
   & .note-holder {
+    background: ${props => props.theme.background};
     padding: 8px;
 
     & .editor {
