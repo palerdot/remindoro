@@ -97,6 +97,29 @@ const GlobalStyle = createGlobalStyle`
       }
     }
     
+    /*  
+     * Select box customization
+     */
+    & .MuiSelect-root:not(.Mui-disabled) {
+      border: ${props => `thin solid ${props.theme.primaryDark}`};
+
+      & .MuiSelect-icon {
+        color: ${props => props.theme.highlight};
+      }
+    }
+
+    /*  
+     * Select menu customization
+     */
+    & .MuiPopover-root {
+      & .MuiPopover-paper {
+        border: ${props => `thin solid ${props.theme.primaryDark}`};
+
+        & ul.MuiMenu-list li:hover {
+          background: ${props => props.theme.primaryDark};
+        }
+      }
+    }
 
     & .${classNames.datepickerInput} {
       & label {
