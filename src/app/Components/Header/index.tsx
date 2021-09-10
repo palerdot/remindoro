@@ -9,24 +9,12 @@ import {
   Home as HomeIcon,
   Event as EventIcon,
 } from '@mui/icons-material/'
-import Breadcrumbs from '@mui/material/Breadcrumbs'
-import MuiLink, { LinkProps } from '@mui/material/Link'
 
 import type { ThemeInterface } from '@app/Util/colors'
 
 import { Screens } from '@app/Routes/'
 import { useTheme } from '@app/Hooks/'
 import Sidebar from './Sidebar'
-
-// ref: https://next.material-ui.com/components/breadcrumbs/
-interface LinkRouterProps extends LinkProps {
-  to: string
-  replace?: boolean
-}
-
-const LinkRouter = (props: LinkRouterProps) => (
-  <MuiLink {...props} component={Link as any} />
-)
 
 const useStyles = makeStyles({
   actionHolder: {
@@ -37,7 +25,6 @@ const useStyles = makeStyles({
     color: 'white',
   },
   divider: (props: { theme: ThemeInterface }) => ({
-    // background: '#AAAAAA',
     background: props.theme.primaryDark,
   }),
 })
@@ -86,7 +73,7 @@ function Header() {
 
   const [isMenuOpen, setMenuStatus] = useState(false)
 
-  const isHomePage = location.pathname === Screens.Home
+  // const isHomePage = location.pathname === Screens.Home
 
   return (
     <Holder>
@@ -129,20 +116,6 @@ function Header() {
           </IconButtonHolder>
         </div>
       </NavHolder>
-      {!isHomePage && (
-        <Breadcrumbs className={'nav-crumb'} aria-label="breadcrumb">
-          <LinkRouter
-            underline="hover"
-            sx={{ display: 'flex', alignItems: 'center' }}
-            // color="inherit"
-            color={theme.highlight}
-            to={Screens.Home}
-          >
-            <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-            {'Home'}
-          </LinkRouter>
-        </Breadcrumbs>
-      )}
     </Holder>
   )
 }
