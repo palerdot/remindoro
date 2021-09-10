@@ -121,6 +121,20 @@ const GlobalStyle = createGlobalStyle`
       }
     }
 
+    /*  
+     * Slider customization
+     */
+    & .MuiSlider-root {
+      &.Mui-disabled {
+        color: ${props => props.theme.backgroundLight};
+      }
+      
+
+      & .MuiSlider-valueLabelOpen {
+        background: ${props => props.theme.primaryLight};
+      }
+    }
+
     & .${classNames.datepickerInput} {
       & label {
         color: ${props => props.theme.highlight};
