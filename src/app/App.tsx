@@ -156,9 +156,22 @@ const GlobalStyle = createGlobalStyle`
     /*  
      * Snackbar notification
      */
-    .SnackbarItem-action button {
-      color: ${props => props.theme.textColor};
+    .SnackbarContainer-root {
+      
+      & .SnackbarItem-variantSuccess {
+        background: ${props => props.theme.success};
+        & .SnackbarItem-message {
+          color: ${props => props.theme.background};
+        }
+
+        & .SnackbarItem-action {
+          & button {
+            color: ${props => props.theme.background};
+          }
+        }
+      }
     }
+    
   }
 `
 
