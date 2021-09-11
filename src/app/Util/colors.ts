@@ -12,6 +12,7 @@ export interface ThemeInterface {
   border: string
   borderDark: string
   textColor: string
+  contrastTextColor: string
   success: string
   danger: string
 }
@@ -32,8 +33,8 @@ export const themes: Themes = {
     primaryDark: '#5F0098',
     primaryLight: '#A33EDA',
     highlight: '#c55ffc',
-
     textColor: '#ffffff',
+    contrastTextColor: '#000000',
     success: 'lightgreen',
     danger: '#FF5050',
   },

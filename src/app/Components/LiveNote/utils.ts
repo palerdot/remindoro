@@ -49,6 +49,13 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
       originalSplitted = originalSplitted.slice(0, -1)
     }
 
+    // edge case; for only empty lines ["", "", "", "{{porumai-wait-and-hope}}"]
+    // we have to replace the first empty string with our magic token so as
+    // we are not ignoring them during chunking
+    if (originalSplitted[0] === '') {
+      originalSplitted[0] = NEWLINE_MAGIC_TOKEN
+    }
+
     const multiLineSplit = chunkParagraphs(originalSplitted)
 
     multiLineSplit.forEach(splitted => {
@@ -113,11 +120,12 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
       let ENDING_NEWLINE_IGNORED = 0
 
       console.log(
-        'porumai ... new line split ',
+        'porumai ... new line handling ',
         splitted,
         TOTAL_NEWLINES_TO_IGNORE,
-        children,
-        originalSplitted
+        onlyEmptyLines,
+        originalSplitted,
+        multiLineSplit
       )
 
       splitted.forEach(s => {
@@ -127,9 +135,9 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
         const isEmpty = text.trim() === ''
         if (isEmpty) {
           // we will ignore empty spaces ??? ' '
-          /* if (text !== '') {
-        return
-      } */
+          if (text !== '') {
+            return
+          }
 
           // but before that
           // we will ignore the ending new line
@@ -139,6 +147,8 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
             // do not proceed to enter an empty p tag
             return
           }
+
+          console.log('porumai ... NEW LINE INSERT !!!')
 
           transformed.push({
             type: 'p',

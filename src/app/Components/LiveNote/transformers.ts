@@ -89,6 +89,15 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
         return
       }
 
+      // new line parsing edge case
+      // if we have new lines after action item, it would be suffixed with last item
+      // for eg: 'last item \n \n \n'
+      // here the three newlines following action item is stuck at the end of action item
+      const ENDING_NEWLINES: Array<{
+        type: 'p'
+        children: Array<{ text: string }>
+      }> = []
+
       const actionItems = t.children.map(x => {
         const parsedActionItems = deserialize(x.children[0], { nodeTypes })
 
@@ -97,6 +106,20 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
 
           // replace our unique token
           const text = (x.text || '').replaceAll(NEWLINE_MAGIC_TOKEN, '')
+
+          if (isLast) {
+            // if new lines is present at the end of action item
+            // keep track of it so that it can be inserted
+            const splitted = text.split('\n')
+            const newlines = splitted.filter(s => s.trim() === '')
+
+            newlines.forEach(() => {
+              ENDING_NEWLINES.push({
+                type: 'p',
+                children: [{ text: '' }],
+              })
+            })
+          }
 
           return {
             ...x,
@@ -113,6 +136,11 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
 
       // insert action items
       actionItems.forEach(item => {
+        parsed.push(item)
+      })
+
+      // if there are ending new lines; insert that also
+      ENDING_NEWLINES.forEach(item => {
         parsed.push(item)
       })
 

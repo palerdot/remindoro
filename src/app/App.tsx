@@ -161,12 +161,12 @@ const GlobalStyle = createGlobalStyle`
       & .SnackbarItem-variantSuccess {
         background: ${props => props.theme.success};
         & .SnackbarItem-message {
-          color: ${props => props.theme.background};
+          color: ${props => props.theme.contrastTextColor};
         }
 
         & .SnackbarItem-action {
           & button {
-            color: ${props => props.theme.background};
+            color: ${props => props.theme.contrastTextColor};
           }
         }
       }
