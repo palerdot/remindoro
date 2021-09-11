@@ -8,6 +8,16 @@ export const LiveNoteStyles = css`
       padding: 0;
     }
   }
+
+  & h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    color: ${props => props.theme.highlight};
+  }
 `
 
 export const EditorHolder = styled.div`
@@ -57,6 +67,12 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
     }
 
     const multiLineSplit = chunkParagraphs(originalSplitted)
+
+    console.log(
+      'porumai ... INCOMING NEW LINE ',
+      multiLineSplit,
+      originalSplitted
+    )
 
     multiLineSplit.forEach(splitted => {
       // track ignore count
@@ -211,7 +227,7 @@ type ChunkInput = Array<string>
 type ChunkOutput = Array<ChunkInput>
 
 export function chunkParagraphs(input: ChunkInput): ChunkOutput {
-  const cleaned = compact(input.map(i => i.replaceAll(NEWLINE_MAGIC_TOKEN, '')))
+  const cleaned = compact(input)
   const indexes = cleaned.map(x => {
     return findIndex(input, i => i === x)
   })
