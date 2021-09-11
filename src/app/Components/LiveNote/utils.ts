@@ -121,11 +121,11 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
 
       console.log(
         'porumai ... new line handling ',
+        multiLineSplit,
         splitted,
         TOTAL_NEWLINES_TO_IGNORE,
         onlyEmptyLines,
-        originalSplitted,
-        multiLineSplit
+        originalSplitted
       )
 
       splitted.forEach(s => {
@@ -135,9 +135,9 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
         const isEmpty = text.trim() === ''
         if (isEmpty) {
           // we will ignore empty spaces ??? ' '
-          if (text !== '') {
+          /* if (text !== '') {
             return
-          }
+          } */
 
           // but before that
           // we will ignore the ending new line
@@ -211,7 +211,7 @@ type ChunkInput = Array<string>
 type ChunkOutput = Array<ChunkInput>
 
 export function chunkParagraphs(input: ChunkInput): ChunkOutput {
-  const cleaned = compact(input)
+  const cleaned = compact(input.map(i => i.replaceAll(NEWLINE_MAGIC_TOKEN, '')))
   const indexes = cleaned.map(x => {
     return findIndex(input, i => i === x)
   })
