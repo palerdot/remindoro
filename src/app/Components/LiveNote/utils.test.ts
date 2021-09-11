@@ -73,4 +73,58 @@ describe('paragraph chunking is working fine', () => {
 
     expect(chunkParagraphs(sample_input)).toMatchObject(EXPECTED)
   })
+
+  test('Repeated word chunking is working fine', () => {
+    const sample_input = [
+      '{{porumai-wait-and-hope}}',
+      '',
+      'patience ',
+      '',
+      '',
+      'patience2 ',
+      '',
+      '',
+      'patience3 ',
+      '',
+      'patience ',
+      '',
+      '{{porumai-wait-and-hope}}',
+    ]
+
+    const EXPECTED = [
+      ['{{porumai-wait-and-hope}}', ''],
+      ['patience ', '', ''],
+      ['patience2 ', '', ''],
+      ['patience3 ', ''],
+      ['patience ', ''],
+      ['{{porumai-wait-and-hope}}'],
+    ]
+
+    expect(chunkParagraphs(sample_input)).toMatchObject(EXPECTED)
+  })
+
+  test('Empty new line start with Repeated word chunking is working fine', () => {
+    const sample_input = [
+      '',
+      '',
+      'patience ',
+      '',
+      '',
+      'patience2 ',
+      '',
+      '',
+      'patience3 ',
+      '{{porumai-wait-and-hope}}',
+    ]
+
+    const EXPECTED = [
+      ['', ''],
+      ['patience ', '', ''],
+      ['patience2 ', '', ''],
+      ['patience3 '],
+      ['{{porumai-wait-and-hope}}'],
+    ]
+
+    expect(chunkParagraphs(sample_input)).toMatchObject(EXPECTED)
+  })
 })

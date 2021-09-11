@@ -1,5 +1,5 @@
 import { LeafNode, SlateNode, isLeafNode } from 'slate-mark'
-import { compact, last, isEmpty, findIndex, slice } from '@lodash'
+import { compact, last, isEmpty, slice } from '@lodash'
 import styled, { css } from 'styled-components'
 
 export const LiveNoteStyles = css`
@@ -16,7 +16,7 @@ export const LiveNoteStyles = css`
   h5,
   h6 {
     margin: 0;
-    color: ${props => props.theme.highlight};
+    color: ${props => props.theme.textHighlightColor};
   }
 `
 
@@ -59,20 +59,13 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
       originalSplitted = originalSplitted.slice(0, -1)
     }
 
-    // edge case; for only empty lines ["", "", "", "{{porumai-wait-and-hope}}"]
-    // we have to replace the first empty string with our magic token so as
-    // we are not ignoring them during chunking
+    // we will replace first empty new line with magic token
+    // works fine for certain only empty lines
     if (originalSplitted[0] === '') {
       originalSplitted[0] = NEWLINE_MAGIC_TOKEN
     }
 
     const multiLineSplit = chunkParagraphs(originalSplitted)
-
-    console.log(
-      'porumai ... INCOMING NEW LINE ',
-      multiLineSplit,
-      originalSplitted
-    )
 
     multiLineSplit.forEach(splitted => {
       // track ignore count
@@ -88,17 +81,6 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
       if (onlyEmptyLines) {
         EMPTY_LINES_IGNORE_COUNT = 1
       }
-      /* else {
-        // edge case
-        // if it is a line with first element as non empty
-        // and rest of the lines are empty
-        const first = head(splitted) || ''
-        const rest = tail(splitted)
-
-        if (first.endsWith(' ') && isEmpty(compact(rest))) {
-          NON_EMPTY_LINES_IGNORE_COUNT = 1
-        }
-      } */
 
       const hasEmptySpaces = onlyEmptyLines && compact(splitted).length > 0
 
@@ -227,10 +209,30 @@ type ChunkInput = Array<string>
 type ChunkOutput = Array<ChunkInput>
 
 export function chunkParagraphs(input: ChunkInput): ChunkOutput {
-  const cleaned = compact(input)
-  const indexes = cleaned.map(x => {
-    return findIndex(input, i => i === x)
+  // scan the input; identify empty/non empty words along with indexes
+  const scan = input.map((word, index) => {
+    return {
+      empty: word === '',
+      index,
+    }
   })
+
+  let indexes: Array<number> = []
+
+  scan.forEach(word => {
+    if (word.empty) {
+      return
+    }
+
+    // for non empty word mark the indexes
+    indexes.push(word.index)
+  })
+
+  // edge case
+  // we should always take the first word (0 index)
+  if (indexes[0] !== 0) {
+    indexes = [0, ...indexes]
+  }
 
   const chunked: ChunkOutput = indexes.map((index, i, arr) => {
     const nextIndex = i + 1
