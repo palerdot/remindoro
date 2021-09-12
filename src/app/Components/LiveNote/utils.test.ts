@@ -45,7 +45,7 @@ describe('New line transformation is working fine', () => {
   })
 })
 
-describe('paragraph chunking is working fine', () => {
+describe.only('paragraph chunking is working fine', () => {
   test('multiple paragraphs are chunked fine', () => {
     const sample_input = [
       'porumai  ',
@@ -59,9 +59,9 @@ describe('paragraph chunking is working fine', () => {
       '',
     ]
     const EXPECTED = [
-      ['porumai  ', '', ''],
-      ['amaidhi ', '', ''],
-      ['patience ', '', ''],
+      ['porumai  ', '', '', ''],
+      ['amaidhi ', '', '', ''],
+      ['patience ', '', '', ''],
     ]
 
     expect(chunkParagraphs(sample_input)).toMatchObject(EXPECTED)
@@ -69,7 +69,7 @@ describe('paragraph chunking is working fine', () => {
 
   test('single paragraphs are chunked fine', () => {
     const sample_input = ['porumai  ', '', '']
-    const EXPECTED = [['porumai  ', '', '']]
+    const EXPECTED = [['porumai  ', '', '', '']]
 
     expect(chunkParagraphs(sample_input)).toMatchObject(EXPECTED)
   })
@@ -93,10 +93,10 @@ describe('paragraph chunking is working fine', () => {
 
     const EXPECTED = [
       ['{{porumai-wait-and-hope}}', ''],
+      ['patience ', '', '', ''],
+      ['patience2 ', '', '', ''],
+      ['patience3 ', '', ''],
       ['patience ', '', ''],
-      ['patience2 ', '', ''],
-      ['patience3 ', ''],
-      ['patience ', ''],
       ['{{porumai-wait-and-hope}}'],
     ]
 
@@ -119,9 +119,27 @@ describe('paragraph chunking is working fine', () => {
 
     const EXPECTED = [
       ['', ''],
-      ['patience ', '', ''],
-      ['patience2 ', '', ''],
+      ['patience ', '', '', ''],
+      ['patience2 ', '', '', ''],
       ['patience3 '],
+      ['{{porumai-wait-and-hope}}'],
+    ]
+
+    expect(chunkParagraphs(sample_input)).toMatchObject(EXPECTED)
+  })
+
+  test.only('Paragraph ending is working fine ', () => {
+    const sample_input = [
+      '  normal text   ',
+      '',
+      '',
+      'new line porumai                           ',
+      '{{porumai-wait-and-hope}}',
+    ]
+
+    const EXPECTED = [
+      ['  normal text   ', '', '', ''],
+      ['new line porumai                           '],
       ['{{porumai-wait-and-hope}}'],
     ]
 

@@ -16,7 +16,7 @@ export const LiveNoteStyles = css`
   h5,
   h6 {
     margin: 0;
-    color: ${props => props.theme.textHighlightColor};
+    color: ${props => props.theme.greyOne};
   }
 `
 
@@ -51,21 +51,38 @@ export const NEWLINE_MAGIC_TOKEN = '{{porumai-wait-and-hope}}'
 export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
   const transformed: Array<PNode> = []
 
+  // IMPORTANT: we need to calculate if incoming node has newline
+  // if it has newline we need to insert next text as a new paragraph
+  // if not we need to insert as existing children
+  let insertNextAsNewNode = true
+
   children.forEach((mark, index, origChildren) => {
     let originalSplitted = mark.text.split(`${NEWLINE_MAGIC_TOKEN}\n`)
 
     // trim last space
-    if (isEmpty(last(originalSplitted))) {
-      originalSplitted = originalSplitted.slice(0, -1)
+    if (isEmpty(last(originalSplitted)?.replaceAll(NEWLINE_MAGIC_TOKEN, ''))) {
+      // edge case
+      // do not trim the last space if
+      if (mark.text !== `${NEWLINE_MAGIC_TOKEN}\n${NEWLINE_MAGIC_TOKEN}`) {
+        originalSplitted = originalSplitted.slice(0, -1)
+      }
     }
 
     // we will replace first empty new line with magic token
     // works fine for certain only empty lines
     if (originalSplitted[0] === '') {
-      originalSplitted[0] = NEWLINE_MAGIC_TOKEN
+      // originalSplitted[0] = NEWLINE_MAGIC_TOKEN
     }
 
     const multiLineSplit = chunkParagraphs(originalSplitted)
+
+    console.log(
+      'porumai ... INCOMING NEW LINE ',
+      children,
+      originalSplitted,
+      multiLineSplit,
+      mark
+    )
 
     multiLineSplit.forEach(splitted => {
       // track ignore count
@@ -100,6 +117,7 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
 
           if (isPrevLineMark) {
             EMPTY_LINES_IGNORE_COUNT = 1
+            // EMPTY_LINES_IGNORE_COUNT = 0
           }
         }
       }
@@ -115,7 +133,7 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
         ? EMPTY_LINES_IGNORE_COUNT
         : // : 1
           NON_EMPTY_LINES_IGNORE_COUNT // 0
-      let ENDING_NEWLINE_IGNORED = 0
+      // let ENDING_NEWLINE_IGNORED = 0
 
       console.log(
         'porumai ... new line handling ',
@@ -128,25 +146,22 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
 
       splitted.forEach(s => {
         const text = s.replaceAll(NEWLINE_MAGIC_TOKEN, '')
+        // const text = s
 
         // if empty we will push empty p tag
-        const isEmpty = text.trim() === ''
-        if (isEmpty) {
-          // we will ignore empty spaces ??? ' '
-          /* if (text !== '') {
-            return
-          } */
-
+        // const isTextEmpty = text.trim() === ''
+        const isTextEmpty = text === ''
+        if (isTextEmpty) {
           // but before that
           // we will ignore the ending new line
-          if (ENDING_NEWLINE_IGNORED < TOTAL_NEWLINES_TO_IGNORE) {
+          /* if (ENDING_NEWLINE_IGNORED < TOTAL_NEWLINES_TO_IGNORE) {
             // ignore ending new line
             ENDING_NEWLINE_IGNORED = ENDING_NEWLINE_IGNORED + 1
             // do not proceed to enter an empty p tag
             return
-          }
+          } */
 
-          console.log('porumai ... NEW LINE INSERT !!!')
+          console.log('porumai ... NEW LINE INSERT !!!', s, text)
 
           transformed.push({
             type: 'p',
@@ -155,18 +170,37 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
         } else {
           // we will push the text with marks (bold, italic etc)
           // let us replace our new line token
-          transformed.push({
-            type: 'p',
-            children: [
-              {
-                ...mark,
-                text,
-              },
-            ],
-          })
+
+          const toInsert = {
+            ...mark,
+            text,
+          }
+
+          if (insertNextAsNewNode) {
+            // insert next node
+            transformed.push({
+              type: 'p',
+              children: [toInsert],
+            })
+          } else {
+            const lastItem = last(transformed)
+            if (!isEmpty(lastItem)) {
+              lastItem?.children.push(toInsert)
+            } else {
+              transformed.push({
+                type: 'p',
+                children: [toInsert],
+              })
+            }
+          }
         }
       })
     })
+
+    // update if we need to insert next node as new 'p'
+    insertNextAsNewNode =
+      mark.text.endsWith(`${NEWLINE_MAGIC_TOKEN}\n`) ||
+      mark.text.endsWith(`${NEWLINE_MAGIC_TOKEN}`)
   })
 
   return transformed
@@ -234,12 +268,27 @@ export function chunkParagraphs(input: ChunkInput): ChunkOutput {
     indexes = [0, ...indexes]
   }
 
-  const chunked: ChunkOutput = indexes.map((index, i, arr) => {
+  let chunked: ChunkOutput = indexes.map((index, i, arr) => {
     const nextIndex = i + 1
     const nextChunkIndex =
       nextIndex < arr.length ? indexes[nextIndex] : input.length
 
     return slice(input, index, nextChunkIndex)
+  })
+
+  // insert paragraph break if we have a new paragraph
+  chunked = chunked.map(c => {
+    const isStartNotEmpty = c[0] !== ''
+    const isEndingNewLine = c[c.length - 1] === ''
+
+    const isParagraphBreak = isStartNotEmpty && isEndingNewLine
+
+    if (isParagraphBreak) {
+      // insert an extra new line
+      c.push('')
+    }
+
+    return c
   })
 
   return chunked

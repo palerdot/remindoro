@@ -1,5 +1,5 @@
-import { every, isBoolean } from '@lodash'
-import { isLeaf } from 'slate-mark'
+import { every, isBoolean, drop, isEmpty } from '@lodash'
+import { isLeaf, plateToMarkdown } from 'slate-mark'
 import {
   TNode,
   SPEditor,
@@ -89,41 +89,59 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
         return
       }
 
-      // new line parsing edge case
-      // if we have new lines after action item, it would be suffixed with last item
-      // for eg: 'last item \n \n \n'
-      // here the three newlines following action item is stuck at the end of action item
-      const ENDING_NEWLINES: Array<{
-        type: 'p'
-        children: Array<{ text: string }>
-      }> = []
+      // trailing paragraph items tracking
+      let trailingParaAst: TNode = []
 
-      const actionItems = t.children.map(x => {
+      const actionItems = t.children.map((x, index, orig) => {
         const parsedActionItems = deserialize(x.children[0], { nodeTypes })
 
-        const children = parsedActionItems.children?.map((x, index, orig) => {
-          const isLast = index === orig.length - 1
+        const isLast = index === orig.length - 1
 
+        let lastText = ''
+
+        // EDGE CASE
+        // IMPORTANT: handle anomlay where subsequent text/paragraphs
+        // is clubbed with last item of action item
+        if (isLast) {
+          lastText = plateToMarkdown([parsedActionItems])
+          const splitted = lastText.split(`${NEWLINE_MAGIC_TOKEN}\n`)
+          // split with first new line
+          lastText = splitted[0]
+
+          let trailingParagraph = drop(splitted, 1)
+            .join(`${NEWLINE_MAGIC_TOKEN}\n`)
+            .replaceAll(NEWLINE_MAGIC_TOKEN, '')
+
+          trailingParaAst = fromMarkdown(trailingParagraph).children.map(x =>
+            deserialize(x)
+          )
+
+          // lastText is raw markdown; we need to parse again to MDAST -> SLATE
+          const lastMdast = deserialize(fromMarkdown(lastText).children[0])
+
+          const lastReturn = {
+            type: 'action_item',
+            checked: x.checked,
+            children: lastMdast.children,
+          }
+
+          console.log(
+            'porumai ... LAST ACTION ITEM ',
+            lastMdast,
+            trailingParagraph,
+            trailingParaAst
+          )
+
+          return lastReturn
+        }
+
+        const children = parsedActionItems.children?.map(x => {
           // replace our unique token
           const text = (x.text || '').replaceAll(NEWLINE_MAGIC_TOKEN, '')
 
-          if (isLast) {
-            // if new lines is present at the end of action item
-            // keep track of it so that it can be inserted
-            const splitted = text.split('\n')
-            const newlines = splitted.filter(s => s.trim() === '')
-
-            newlines.forEach(() => {
-              ENDING_NEWLINES.push({
-                type: 'p',
-                children: [{ text: '' }],
-              })
-            })
-          }
-
           return {
             ...x,
-            text: isLast ? text.trim() : text,
+            text,
           }
         })
 
@@ -139,10 +157,16 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
         parsed.push(item)
       })
 
-      // if there are ending new lines; insert that also
-      ENDING_NEWLINES.forEach(item => {
-        parsed.push(item)
-      })
+      // if we have trailing para; we have to insert with a new line
+      if (!isEmpty(trailingParaAst)) {
+        // first let us push an empty line
+        parsed.push({
+          type: 'p',
+          children: [{ text: '' }],
+        })
+
+        parsed.push(...trailingParaAst)
+      }
 
       // do not proceed
       return
