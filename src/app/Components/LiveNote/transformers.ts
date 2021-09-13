@@ -104,17 +104,20 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
         // is clubbed with last item of action item
         if (isLast) {
           lastText = plateToMarkdown([parsedActionItems])
-          const splitted = lastText.split(`${NEWLINE_MAGIC_TOKEN}\n`)
+          const splitted = lastText.split(`\n`)
           // split with first new line
-          lastText = splitted[0]
+          lastText = splitted[0].replaceAll(NEWLINE_MAGIC_TOKEN, '')
 
-          let trailingParagraph = drop(splitted, 1)
-            .join(`${NEWLINE_MAGIC_TOKEN}\n`)
-            .replaceAll(NEWLINE_MAGIC_TOKEN, '')
-
-          trailingParaAst = fromMarkdown(trailingParagraph).children.map(x =>
-            deserialize(x)
+          let trailingParagraph = drop(splitted, 1).join(
+            `${NEWLINE_MAGIC_TOKEN}\n`
           )
+          // .join(`${NEWLINE_MAGIC_TOKEN}\n`)
+          // .replaceAll(NEWLINE_MAGIC_TOKEN, '')
+
+          /* trailingParaAst = fromMarkdown(trailingParagraph).children.map(x =>
+            deserialize(x)
+          ) */
+          trailingParaAst = porumaiMd(trailingParagraph, nodeTypes)
 
           // lastText is raw markdown; we need to parse again to MDAST -> SLATE
           const lastMdast = deserialize(fromMarkdown(lastText).children[0])
@@ -159,12 +162,6 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
 
       // if we have trailing para; we have to insert with a new line
       if (!isEmpty(trailingParaAst)) {
-        // first let us push an empty line
-        parsed.push({
-          type: 'p',
-          children: [{ text: '' }],
-        })
-
         parsed.push(...trailingParaAst)
       }
 

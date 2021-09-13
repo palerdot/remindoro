@@ -57,15 +57,25 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
   let insertNextAsNewNode = true
 
   children.forEach((mark, index, origChildren) => {
-    let originalSplitted = mark.text.split(`${NEWLINE_MAGIC_TOKEN}\n`)
+    let markText = mark.text
+
+    if (markText.endsWith(` ${NEWLINE_MAGIC_TOKEN}`)) {
+      // markText += '\n'
+    }
+
+    let originalSplitted = markText.split(`${NEWLINE_MAGIC_TOKEN}\n`)
 
     // trim last space
     if (isEmpty(last(originalSplitted)?.replaceAll(NEWLINE_MAGIC_TOKEN, ''))) {
       // edge case
       // do not trim the last space if
-      if (mark.text !== `${NEWLINE_MAGIC_TOKEN}\n${NEWLINE_MAGIC_TOKEN}`) {
-        originalSplitted = originalSplitted.slice(0, -1)
+      if (
+        // !markText.endsWith(`${NEWLINE_MAGIC_TOKEN}\n${NEWLINE_MAGIC_TOKEN}`)
+        markText !== `${NEWLINE_MAGIC_TOKEN}\n${NEWLINE_MAGIC_TOKEN}`
+      ) {
+        // originalSplitted = originalSplitted.slice(0, -1)
       }
+      originalSplitted = originalSplitted.slice(0, -1)
     }
 
     // we will replace first empty new line with magic token
