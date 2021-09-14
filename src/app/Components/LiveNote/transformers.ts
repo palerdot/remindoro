@@ -92,18 +92,32 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
       // trailing paragraph items tracking
       let trailingParaAst: TNode = []
 
-      const actionItems = t.children.map((x, index, orig) => {
+      t.children.forEach(x => {
         const parsedActionItems = deserialize(x.children[0], { nodeTypes })
 
-        const isLast = index === orig.length - 1
+        /*
+         * IMPORTANT: tricky edge case
+         *
+         * If we have paragraphs and subsequent action items following an action item
+         * we will have an messed up AST
+         *
+         * To address this, we will consider an action item as last if includes \n (newline)
+         * If an item includes a newline, we have to parse the rest of the items from scratch
+         */
 
-        let lastText = ''
+        // const isLast = index === orig.length - 1
+        const hasNewLine =
+          parsedActionItems.children &&
+          (parsedActionItems.children[0].text || '').includes('\n')
 
         // EDGE CASE
         // IMPORTANT: handle anomlay where subsequent text/paragraphs
         // is clubbed with last item of action item
-        if (isLast) {
+        if (hasNewLine) {
+          let lastText = ''
+
           lastText = plateToMarkdown([parsedActionItems])
+          // lastText = plateToMarkdown(remainingItems)
           const splitted = lastText.split(`\n`)
           // split with first new line
           lastText = splitted[0].replaceAll(NEWLINE_MAGIC_TOKEN, '')
@@ -117,6 +131,7 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
           /* trailingParaAst = fromMarkdown(trailingParagraph).children.map(x =>
             deserialize(x)
           ) */
+
           trailingParaAst = porumaiMd(trailingParagraph, nodeTypes)
 
           // lastText is raw markdown; we need to parse again to MDAST -> SLATE
@@ -130,45 +145,46 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
 
           console.log(
             'porumai ... LAST ACTION ITEM ',
-            lastMdast,
             trailingParagraph,
-            trailingParaAst
+            trailingParaAst,
+            lastText
           )
 
-          return lastReturn
-        }
+          // insert last item
+          parsed.push(lastReturn)
 
-        const children = parsedActionItems.children?.map(x => {
-          // replace our unique token
-          const text = (x.text || '').replaceAll(NEWLINE_MAGIC_TOKEN, '')
-
-          return {
-            ...x,
-            text,
+          // insert rest of the tree
+          if (!isEmpty(trailingParaAst)) {
+            parsed.push(...trailingParaAst)
           }
-        })
 
-        return {
-          type: 'action_item',
-          checked: x.checked,
-          children,
+          // IMPORTANT do not proceed further
+          // return
+        } else {
+          const children = parsedActionItems.children?.map(x => {
+            // replace our unique token
+            const text = (x.text || '').replaceAll(NEWLINE_MAGIC_TOKEN, '')
+
+            return {
+              ...x,
+              text,
+            }
+          })
+
+          parsed.push({
+            type: 'action_item',
+            checked: x.checked,
+            children,
+          })
         }
       })
 
-      // insert action items
-      actionItems.forEach(item => {
-        parsed.push(item)
-      })
-
-      // if we have trailing para; we have to insert with a new line
-      if (!isEmpty(trailingParaAst)) {
-        parsed.push(...trailingParaAst)
-      }
-
-      // do not proceed
+      // IMPORTANT: parsed action item
+      // do not proceed further
       return
     }
 
+    // Normal MD parsing (which are not action items)
     const output = deserialize(t, {
       nodeTypes,
     })
