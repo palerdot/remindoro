@@ -93,7 +93,9 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
       let trailingParaAst: TNode = []
 
       t.children.forEach(x => {
-        const parsedActionItems = deserialize(x.children[0], { nodeTypes })
+        const parsedActionItems = deserialize(x.children[0] as any, {
+          nodeTypes,
+        })
 
         /*
          * IMPORTANT: tricky edge case
@@ -135,7 +137,9 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
           trailingParaAst = porumaiMd(trailingParagraph, nodeTypes)
 
           // lastText is raw markdown; we need to parse again to MDAST -> SLATE
-          const lastMdast = deserialize(fromMarkdown(lastText).children[0])
+          const lastMdast = deserialize(
+            fromMarkdown(lastText).children[0] as any
+          )
 
           const lastReturn = {
             type: 'action_item',
@@ -185,7 +189,7 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
     }
 
     // Normal MD parsing (which are not action items)
-    const output = deserialize(t, {
+    const output = deserialize(t as any, {
       nodeTypes,
     })
 

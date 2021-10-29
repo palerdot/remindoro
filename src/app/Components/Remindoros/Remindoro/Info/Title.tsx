@@ -11,7 +11,7 @@ type Props = {
   title: string
 }
 
-const StyledTextField = styled(TextField)(({ theme }) => ({
+const StyledTextField: typeof TextField = styled(TextField)(({ theme }) => ({
   '& .MuiFilledInput-root': {
     '&:hover:not(.Mui-disabled)::before': {
       borderBottom: `thin solid ${theme.palette.primary.main}`,

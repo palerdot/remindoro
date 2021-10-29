@@ -34,8 +34,7 @@ function initialize_install_events() {
   const welcome_message = {
     id: 'welcome-message',
     title: `Hello from Remindoro - ${version} !`,
-    note:
-      'Welcome to new refreshed Remindoro! You can now set one-time/repeatable reminders (with markdown support) for stuffs that matter to you ...',
+    note: 'Welcome to new refreshed Remindoro! You can now set one-time/repeatable reminders (with markdown support) for stuffs that matter to you ...',
   }
 
   notify(welcome_message)
