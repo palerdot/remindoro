@@ -27,6 +27,7 @@ const InfoText = styled.div`
 
   & .fix-error {
     margin-left: 4px;
+    padding: 2px;
   }
 `
 

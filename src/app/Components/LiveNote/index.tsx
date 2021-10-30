@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { isEmpty, debounce, isEqual } from '@lodash'
+import { isEmpty, debounce, isEqual, DebouncedFunc } from '@lodash'
 import { useSelector, useDispatch } from 'react-redux'
 import { plateToMarkdownAsync } from 'slate-mark'
 import {
@@ -85,23 +85,14 @@ function LiveNote({ id, note, readOnly }: Props) {
   )
 }
 
-const ResilientLiveNote = ({ id, note, readOnly }: Props) => {
-  const dispatch = useDispatch()
+interface WrapperProps extends Props {
+  lazyUpdate: DebouncedFunc<(updatedNote: string) => void>
+}
+
+const NoteWrapper = ({ id, note, readOnly, lazyUpdate }: WrapperProps) => {
   const liveNoteEnabled = useSelector((state: RootState) => {
     return state.settings.liveNoteEnabled
   })
-  const lazyUpdate = useMemo(
-    () =>
-      debounce((updatedNote: string) => {
-        dispatch(
-          updateNote({
-            id,
-            value: updatedNote,
-          })
-        )
-      }, 314),
-    [id, dispatch]
-  )
 
   return (
     <BackupEditor id={id} readOnly={readOnly} note={note} onChange={lazyUpdate}>
@@ -118,6 +109,33 @@ const ResilientLiveNote = ({ id, note, readOnly }: Props) => {
           />
         )}
       </div>
+    </BackupEditor>
+  )
+}
+
+const ResilientLiveNote = ({ id, readOnly, note }: Props) => {
+  const dispatch = useDispatch()
+  const lazyUpdate = useMemo(
+    () =>
+      debounce((updatedNote: string) => {
+        dispatch(
+          updateNote({
+            id,
+            value: updatedNote,
+          })
+        )
+      }, 314),
+    [id, dispatch]
+  )
+
+  return (
+    <BackupEditor id={id} readOnly={readOnly} note={note} onChange={lazyUpdate}>
+      <NoteWrapper
+        id={id}
+        readOnly={readOnly}
+        note={note}
+        lazyUpdate={lazyUpdate}
+      />
     </BackupEditor>
   )
 }
