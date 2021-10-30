@@ -60,7 +60,6 @@ function Switch({ checked, setChecked, onText, offText, ariaLabel }: Props) {
               }}
               checked={checked}
               onChange={e => {
-                console.log('porumai ... switch changing ', e.target.checked)
                 setChecked(e.target.checked)
               }}
               name="repeat"

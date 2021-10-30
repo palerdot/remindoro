@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { isEmpty, debounce, isEqual } from '@lodash'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { plateToMarkdownAsync } from 'slate-mark'
 import {
   Plate,
@@ -9,11 +9,14 @@ import {
   SPEditor,
 } from '@udecode/plate'
 
-import Toolbar from './Toolbar'
+import type { RootState } from '@app/Store/'
+
+import ActionBar from './ActionBar'
 import { plugins, options, components } from './options'
 import { parseMd } from './transformers'
 import { updateNote } from '@app/Store/Slices/Remindoros'
 import BackupEditor from './BackupEditor'
+import PlainTextEditor from '@app/Components/LiveNote/PlainTextEditor'
 import { EditorHolder } from './utils'
 
 const editableProps = {
@@ -38,7 +41,6 @@ function LiveNote({ id, note, readOnly }: Props) {
       return [{ type: 'paragraph', children: [{ text: '' }] }]
     }
 
-    console.log('porumai ... parsing md ??? ', parseMd(editor, note), note)
     return parseMd(editor, note)
   }, [editor, note])
 
@@ -50,12 +52,6 @@ function LiveNote({ id, note, readOnly }: Props) {
       debounce(updatedPlateNote => {
         plateToMarkdownAsync(updatedPlateNote).then(updatedNote => {
           if (!isEqual(note, updatedNote)) {
-            console.log(
-              'porumai ... dispatching update ',
-              updatedPlateNote,
-              updatedNote
-            )
-
             dispatch(
               updateNote({
                 id,
@@ -64,36 +60,36 @@ function LiveNote({ id, note, readOnly }: Props) {
             )
           }
         })
-      }, 2500),
+      }, 314),
     [id, dispatch, note]
   )
 
   return (
-    <div>
-      {!readOnly && <Toolbar />}
-      <EditorHolder className={'editor'}>
-        <Plate
-          id={id}
-          plugins={plugins}
-          components={components}
-          options={options}
-          editableProps={{
-            ...editableProps,
-            readOnly,
-            placeholder: readOnly ? '' : editableProps.placeholder,
-          }}
-          initialValue={initialValue}
-          onChange={updatedNote => {
-            lazyUpdate(updatedNote)
-          }}
-        />
-      </EditorHolder>
-    </div>
+    <EditorHolder className={'editor'}>
+      <Plate
+        id={id}
+        plugins={plugins}
+        components={components}
+        options={options}
+        editableProps={{
+          ...editableProps,
+          readOnly,
+          placeholder: readOnly ? '' : editableProps.placeholder,
+        }}
+        initialValue={initialValue}
+        onChange={updatedNote => {
+          lazyUpdate(updatedNote)
+        }}
+      />
+    </EditorHolder>
   )
 }
 
 const ResilientLiveNote = ({ id, note, readOnly }: Props) => {
   const dispatch = useDispatch()
+  const liveNoteEnabled = useSelector((state: RootState) => {
+    return state.settings.liveNoteEnabled
+  })
   const lazyUpdate = useMemo(
     () =>
       debounce((updatedNote: string) => {
@@ -103,13 +99,25 @@ const ResilientLiveNote = ({ id, note, readOnly }: Props) => {
             value: updatedNote,
           })
         )
-      }, 750),
+      }, 314),
     [id, dispatch]
   )
 
   return (
     <BackupEditor id={id} readOnly={readOnly} note={note} onChange={lazyUpdate}>
-      <LiveNote id={id} note={note} readOnly={readOnly} />
+      {!readOnly && <ActionBar liveNoteEnabled={liveNoteEnabled} />}
+      <div>
+        {liveNoteEnabled ? (
+          <LiveNote id={id} note={note} readOnly={readOnly} />
+        ) : (
+          <PlainTextEditor
+            id={id}
+            note={note}
+            readOnly={readOnly}
+            onChange={lazyUpdate}
+          />
+        )}
+      </div>
     </BackupEditor>
   )
 }

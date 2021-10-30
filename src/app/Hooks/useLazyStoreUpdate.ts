@@ -4,7 +4,7 @@ import { debounce } from '@lodash'
 
 import type { ActionCreatorWithPayload } from '@reduxjs/toolkit'
 
-const STORE_UPDATE_DELAY = 3140
+const STORE_UPDATE_DELAY = 314
 
 type Props<T> = {
   id: string

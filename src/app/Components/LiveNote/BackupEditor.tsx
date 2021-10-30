@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { DebouncedFunc } from '@lodash'
 // ref: https://reactjs.org/docs/error-boundaries.html
 
+import PlainTextEditor from '@app/Components/LiveNote/PlainTextEditor'
+
 type Props = {
   id: string
   note?: string
@@ -15,13 +17,16 @@ type State = {
   hasError: boolean
 }
 
-const Holder = styled.div`
-  background: red;
+const Holder = styled.div``
+
+const InfoText = styled.div`
+  background: tomato;
+  padding: 4px;
+
   color: white;
 
-  textarea {
-    width: 100%;
-    height: 314px;
+  & .fix-error {
+    margin-left: 4px;
   }
 `
 
@@ -36,28 +41,39 @@ class BackupEditor extends Component<Props, State> {
     return { hasError: true }
   }
 
+  fixError = () => {
+    this.setState({
+      hasError: false,
+    })
+  }
+
   // ref: https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/error_boundaries/
   componentDidCatch(_error: Error, _info: ErrorInfo) {}
 
   render() {
-    const { note, readOnly, onChange } = this.props
+    const { id, note, readOnly, onChange } = this.props
 
     if (this.state.hasError) {
       // You can render any custom fallback UI
       return (
         <Holder>
-          <div>
-            {
-              'Problem showing Rich Text Editor. Please report this issue if you encounter this frequently.'
-            }
-          </div>
-          <textarea
-            disabled={readOnly}
-            defaultValue={note || ''}
-            onChange={e => {
-              onChange(e.target.value)
-            }}
-          ></textarea>
+          <InfoText>
+            {'Unexpected problem with rich text editor.'}
+            <button
+              className={'fix-error'}
+              onClick={() => {
+                this.fixError()
+              }}
+            >
+              {'Click here to rectify.'}
+            </button>
+          </InfoText>
+          <PlainTextEditor
+            id={id}
+            note={note}
+            readOnly={readOnly}
+            onChange={onChange}
+          />
         </Holder>
       )
     }
