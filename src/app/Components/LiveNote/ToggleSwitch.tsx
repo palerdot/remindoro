@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import HelpIcon from '@app/Components/LiveNote/Help/Icon'
 import Switch from '@app/Components/Switch'
 import { setLiveNoteStatus } from '@app/Store/Slices/Settings'
 import { useLazyStoreUpdate } from '@app/Hooks/'
@@ -38,11 +39,12 @@ function ToggleSwitch({ checked }: Props) {
   return (
     <Holder className={'live-note-switch'}>
       {checked ? (
-        <EnabledText>{'Rich Text: '}</EnabledText>
+        <>
+          <HelpIcon />
+          <EnabledText>{'Rich Text (beta)'}</EnabledText>
+        </>
       ) : (
-        <DisabledText>
-          {'Enable Rich Text formatting (experimental/beta): '}
-        </DisabledText>
+        <DisabledText>{'Enable Rich Text formatting (beta)'}</DisabledText>
       )}
       <Switch
         onText={''}

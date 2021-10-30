@@ -11,10 +11,10 @@ import {
 
 import type { RootState } from '@app/Store/'
 
-import ActionBar from './ActionBar'
 import { plugins, options, components } from './options'
 import { parseMd } from './transformers'
 import { updateNote } from '@app/Store/Slices/Remindoros'
+import ActionBar from './ActionBar'
 import BackupEditor from './BackupEditor'
 import PlainTextEditor from '@app/Components/LiveNote/PlainTextEditor'
 import { EditorHolder } from './utils'

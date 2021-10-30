@@ -20,8 +20,6 @@ const PREFIX = 'Header'
 
 const classes = {
   actionHolder: `${PREFIX}-actionHolder`,
-  listIcon: `${PREFIX}-listIcon`,
-  divider: `${PREFIX}-divider`,
 }
 
 const Holder = styled.div`
@@ -38,14 +36,6 @@ const Holder = styled.div`
   & .${classes.actionHolder} {
     display: flex;
     margin-left: auto;
-  }
-
-  & .${classes.listIcon} {
-    color: white;
-  }
-
-  & .${classes.divider} {
-    background: ${props => props.theme.primaryDark};
   }
 `
 
@@ -84,11 +74,7 @@ function Header() {
           <IconButtonHolder onClick={() => setMenuStatus(true)}>
             <MenuIcon fontSize={'large'} />
           </IconButtonHolder>
-          <Sidebar
-            isMenuOpen={isMenuOpen}
-            setMenuStatus={setMenuStatus}
-            classes={classes}
-          />
+          <Sidebar isMenuOpen={isMenuOpen} setMenuStatus={setMenuStatus} />
         </div>
         <div className={classes.actionHolder}>
           <Link to={Screens.Home}>
