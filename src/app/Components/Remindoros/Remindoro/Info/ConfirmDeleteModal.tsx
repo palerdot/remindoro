@@ -1,4 +1,5 @@
 import React from 'react'
+import { styled } from '@mui/material/styles'
 import {
   Button,
   Dialog,
@@ -7,50 +8,49 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material'
-import makeStyles from '@mui/styles/makeStyles'
 import { Delete as DeleteIcon } from '@mui/icons-material'
 
-import type { ThemeInterface } from '@app/Util/colors'
+const PREFIX = 'ConfirmDelete'
 
-import { useTheme } from '@app/Hooks/'
+const classes = {
+  paper: `${PREFIX}-paper`,
+  deleteButton: `${PREFIX}-deleteButton`,
+  cancelButton: `${PREFIX}-cancelButton`,
+}
 
-const useStyles = makeStyles(theme => ({
-  paper: (props: { theme: ThemeInterface }) => ({
-    // background: '#AAAAAA',
-    background: props.theme.primaryDark,
-    color: props.theme.textColor,
+const StyledDialog = styled('div')(({ theme }) => ({
+  background: theme.colors.primaryDark,
+  color: theme.colors.textColor,
 
-    '& .delete-dialog-description p': {
-      color: props.theme.textColor,
-    },
+  '& .delete-dialog-description p': {
+    color: theme.colors.textColor,
+  },
 
-    '& .action-holder': {
-      display: 'flex',
-      justifyContent: 'space-between',
-      margin: '0 16px',
-    },
-  }),
+  '& .action-holder': {
+    display: 'flex',
+    justifyContent: 'space-between',
+    margin: '0 16px',
+  },
 
-  deleteButton: {
+  [`& .${classes.deleteButton}`]: {
     margin: theme.spacing(0),
-    background: (props: { theme: ThemeInterface }) => props.theme.danger,
-    color: (props: { theme: ThemeInterface }) => props.theme.textColor,
+    background: theme.colors.danger,
+    color: theme.colors.textColor,
 
     '&:hover': {
-      background: (props: { theme: ThemeInterface }) => props.theme.danger,
-      color: (props: { theme: ThemeInterface }) => props.theme.textColor,
+      background: theme.colors.danger,
+      color: theme.colors.textColor,
       opacity: 0.89,
     },
   },
 
-  cancelButton: {
+  [`& .${classes.cancelButton}`]: {
     margin: theme.spacing(0),
-    background: (props: { theme: ThemeInterface }) =>
-      props.theme.backgroundLight,
-    color: (props: { theme: ThemeInterface }) => props.theme.textColor,
-    borderColor: (props: { theme: ThemeInterface }) => props.theme.border,
+    background: theme.colors.backgroundLight,
+    color: theme.colors.textColor,
+    borderColor: theme.colors.border,
     '&:hover': {
-      background: (props: { theme: ThemeInterface }) => props.theme.background,
+      background: theme.colors.background,
     },
   },
 }))
@@ -63,43 +63,43 @@ type Props = {
 }
 
 function ConfirmDelete({ isOpen, closeModal, onDelete }: Props) {
-  const theme = useTheme()
-  const classes = useStyles({ theme })
-
   return (
     <Dialog
       className={'delete-dialog'}
-      classes={{
-        paper: classes.paper,
-      }}
       open={isOpen}
       onClose={closeModal}
       aria-labelledby="delete-dialog-title"
       aria-describedby="delete-dialog-description"
     >
-      <DialogTitle id="delete-dialog-title">{'Confirm Delete'}</DialogTitle>
-      <DialogContent className={'delete-dialog-description'}>
-        <DialogContentText id="alert-dialog-description">
-          {`Are you sure you want to delete this note?`}
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions className={'action-holder'}>
-        <Button
-          variant="contained"
-          className={classes.deleteButton}
-          startIcon={<DeleteIcon />}
-          onClick={() => {
-            onDelete()
-          }}
-          autoFocus
-        >
-          Delete
-        </Button>
+      <StyledDialog
+        classes={{
+          paper: classes.paper,
+        }}
+      >
+        <DialogTitle id="delete-dialog-title">{'Confirm Delete'}</DialogTitle>
+        <DialogContent className={'delete-dialog-description'}>
+          <DialogContentText id="alert-dialog-description">
+            {`Are you sure you want to delete this note?`}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions className={'action-holder'}>
+          <Button
+            variant="contained"
+            className={classes.deleteButton}
+            startIcon={<DeleteIcon />}
+            onClick={() => {
+              onDelete()
+            }}
+            autoFocus
+          >
+            Delete
+          </Button>
 
-        <Button onClick={closeModal} className={classes.cancelButton}>
-          Cancel
-        </Button>
-      </DialogActions>
+          <Button onClick={closeModal} className={classes.cancelButton}>
+            Cancel
+          </Button>
+        </DialogActions>
+      </StyledDialog>
     </Dialog>
   )
 }

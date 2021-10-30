@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
 import { Link, useLocation } from 'react-router-dom'
-import makeStyles from '@mui/styles/makeStyles'
 import { IconButton } from '@mui/material'
 import {
   Close as CloseIcon,
@@ -10,28 +9,20 @@ import {
   Event as EventIcon,
 } from '@mui/icons-material/'
 
-import type { ThemeInterface } from '@app/Util/colors'
-
 import { Screens } from '@app/Routes/'
-import { useTheme } from '@app/Hooks/'
 import Sidebar from './Sidebar'
-
-const useStyles = makeStyles({
-  actionHolder: {
-    display: 'flex',
-    marginLeft: 'auto',
-  },
-  listIcon: {
-    color: 'white',
-  },
-  divider: (props: { theme: ThemeInterface }) => ({
-    background: props.theme.primaryDark,
-  }),
-})
 
 const normalFlex = css`
   display: flex;
 `
+
+const PREFIX = 'Header'
+
+const classes = {
+  actionHolder: `${PREFIX}-actionHolder`,
+  listIcon: `${PREFIX}-listIcon`,
+  divider: `${PREFIX}-divider`,
+}
 
 const Holder = styled.div`
   ${normalFlex};
@@ -42,6 +33,19 @@ const Holder = styled.div`
   & .nav-crumb {
     padding: 0 8px;
     font-size: 15px;
+  }
+
+  & .${classes.actionHolder} {
+    display: flex;
+    margin-left: auto;
+  }
+
+  & .${classes.listIcon} {
+    color: white;
+  }
+
+  & .${classes.divider} {
+    background: ${props => props.theme.primaryDark};
   }
 `
 
@@ -68,8 +72,6 @@ const IconButtonHolder = styled(IconButton)`
 
 function Header() {
   const location = useLocation()
-  const theme = useTheme()
-  const classes = useStyles({ theme })
 
   const [isMenuOpen, setMenuStatus] = useState(false)
 

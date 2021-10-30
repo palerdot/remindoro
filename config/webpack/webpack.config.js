@@ -95,10 +95,6 @@ module.exports = function (webpackEnv = 'development') {
       alias: {
         // https://next.material-ui.com/guides/styled-engine/
         '@mui/styled-engine': '@mui/styled-engine-sc',
-        // @material/core => @mui/material
-        // notistack is using '@material/core' as peer dependency
-        // ref: https://github.com/iamhosseindhv/notistack/pull/418/files#diff-7ae45ad102eab3b6d7e7896acd08c427a9b25b346470d7bc6507b6481575d519R31
-        '@material-ui/core': '@mui/material',
       },
     },
     resolveLoader: {

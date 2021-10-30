@@ -1,56 +1,56 @@
 import React, { useState } from 'react'
+import { styled as muiStyled } from '@mui/material/styles'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 import { Drawer, Button } from '@mui/material'
-import makeStyles from '@mui/styles/makeStyles'
-import createStyles from '@mui/styles/createStyles'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useSnackbar } from 'notistack'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
-import type { ThemeInterface } from '@app/Util/colors'
 
-import { useTheme } from '@app/Hooks/'
 import { Screens } from '@app/Routes/'
 import { deleteRemindoro } from '@app/Store/Slices/Remindoros'
 import ConfirmDeleteModal from './ConfirmDeleteModal'
 import Reminder from './Reminder/'
 
-const useStyles = makeStyles(theme =>
-  createStyles({
-    deleteButton: {
-      margin: theme.spacing(0),
-      background: (props: { theme: ThemeInterface }) => props.theme.danger,
-      color: (props: { theme: ThemeInterface }) => props.theme.textColor,
+const PREFIX = 'SettingsModal'
 
-      '&:hover': {
-        background: (props: { theme: ThemeInterface }) => props.theme.danger,
-        color: (props: { theme: ThemeInterface }) => props.theme.textColor,
-        opacity: 0.89,
-      },
+const classes = {
+  deleteButton: `${PREFIX}-deleteButton`,
+  closeButton: `${PREFIX}-closeButton`,
+}
+
+const Root = styled.div``
+
+const Holder = muiStyled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '314px',
+  background: theme.colors.background,
+  color: theme.colors.textColor,
+
+  [`& .${classes.deleteButton}`]: {
+    margin: theme.spacing(0),
+    background: theme.colors.danger,
+    color: theme.colors.textColor,
+
+    '&:hover': {
+      background: theme.colors.danger,
+      color: theme.colors.textColor,
+      opacity: 0.89,
     },
+  },
 
-    closeButton: {
-      background: (props: { theme: ThemeInterface }) => props.theme.primaryDark,
-      color: (props: { theme: ThemeInterface }) => props.theme.textColor,
-      borderColor: (props: { theme: ThemeInterface }) => props.theme.border,
-      '&:hover': {
-        background: (props: { theme: ThemeInterface }) =>
-          props.theme.backgroundLight,
-      },
+  [`& .${classes.closeButton}`]: {
+    background: theme.colors.primaryDark,
+    color: theme.colors.textColor,
+    borderColor: theme.colors.border,
+    '&:hover': {
+      background: theme.colors.backgroundLight,
     },
-  })
-)
-
-const Holder = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  height: 314px;
-  background: ${props => props.theme.background};
-  color: ${props => props.theme.textColor};
-`
+  },
+}))
 
 const ActionBar = styled.div`
   display: flex;
@@ -69,8 +69,6 @@ type Props = {
 }
 
 function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
-  const theme = useTheme()
-  const classes = useStyles({ theme })
   const dispatch = useDispatch()
   const history = useHistory()
   const { enqueueSnackbar } = useSnackbar()
@@ -79,7 +77,7 @@ function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
   const [isDeleteModalOpen, setDeleteModalStatus] = useState(false)
 
   return (
-    <div role="presentation">
+    <Root role="presentation">
       {/* Setting Drawer */}
       <Drawer
         open={isModalOpen}
@@ -136,7 +134,7 @@ function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
           setDeleteModalStatus(false)
         }}
       />
-    </div>
+    </Root>
   )
 }
 

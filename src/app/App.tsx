@@ -2,7 +2,6 @@ import React, { createRef } from 'react'
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
 import {
   StyledEngineProvider,
-  Theme,
   ThemeProvider as MUIThemeProvider,
   createTheme,
 } from '@mui/material/styles'
@@ -25,10 +24,11 @@ import Footer from '@app/Components/Footer/'
 
 // main app css
 import './css/index.css'
+import { ThemeInterface } from './Util/colors'
 
-declare module '@mui/styles/defaultTheme' {
-  interface DefaultTheme extends Theme {}
-}
+// declare module '@mui/styles/defaultTheme' {
+//   interface DefaultTheme extends Theme {}
+// }
 
 // configure dayjs to use relative time comparison
 // ref: https://day.js.org/docs/en/plugin/relative-time
@@ -195,6 +195,17 @@ const Container = styled.div`
   overflow-x: hidden;
 `
 
+// ref: https://mui.com/customization/theming/
+declare module '@mui/material/styles' {
+  interface Theme {
+    colors: ThemeInterface
+  }
+  // allow configuration using `createTheme`
+  interface ThemeOptions {
+    colors: ThemeInterface
+  }
+}
+
 function App() {
   const theme = useTheme()
   // mui v5 default theme
@@ -219,6 +230,9 @@ function App() {
         secondary: theme.highlight,
         disabled: theme.primaryDark,
       },
+    },
+    colors: {
+      ...theme,
     },
   })
 
