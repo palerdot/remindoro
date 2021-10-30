@@ -59,10 +59,6 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
   children.forEach((mark, index, origChildren) => {
     let markText = mark.text
 
-    if (markText.endsWith(` ${NEWLINE_MAGIC_TOKEN}`)) {
-      // markText += '\n'
-    }
-
     let originalSplitted = markText.split(`${NEWLINE_MAGIC_TOKEN}\n`)
 
     // trim last space
@@ -76,6 +72,12 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
         // originalSplitted = originalSplitted.slice(0, -1)
       }
       originalSplitted = originalSplitted.slice(0, -1)
+    }
+
+    if (markText.endsWith(` ${NEWLINE_MAGIC_TOKEN}\n${NEWLINE_MAGIC_TOKEN}`)) {
+      // markText += '\n'
+      // this is for inserting a new paragraph (by 'chunkParagraphs')
+      originalSplitted.push(`${NEWLINE_MAGIC_TOKEN}`)
     }
 
     // we will replace first empty new line with magic token
