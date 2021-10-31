@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { IconButton } from '@mui/material'
-import { NotificationsActive, NotificationsOff } from '@mui/icons-material'
+
+import ToggleNotifications from '@app/Components/Settings/ToggleNotifications'
 
 const Holder = styled.div`
   display: flex;
@@ -25,56 +25,11 @@ const Holder = styled.div`
   }
 `
 
-const IconHolder = styled.div`
-  & button {
-    border: thin solid transparent;
-    padding: 6px;
-
-    &:hover {
-      background: grey;
-    }
-  }
-
-  & .notifications-off {
-    color: red;
-
-    /* &:hover {
-      border: thin solid lightgreen;
-    } */
-  }
-
-  & .notifications-on {
-    color: lightgreen;
-
-    /* &:hover {
-      border: thin solid red;
-    } */
-  }
-`
-
 function Footer() {
   return (
     <Holder>
       <div className={'icon-holder'}>
-        <IconHolder>
-          <IconButton
-            aria-label="Turn on notifications"
-            className={'notifications-on'}
-            size="large"
-          >
-            <NotificationsActive />
-          </IconButton>
-        </IconHolder>
-
-        <IconHolder>
-          <IconButton
-            aria-label="Turn off notifications"
-            className={'notifications-off'}
-            size="large"
-          >
-            <NotificationsOff />
-          </IconButton>
-        </IconHolder>
+        <ToggleNotifications />
       </div>
       <div className={'message-section'}>
         {'porumai ... wait and hope !!! amaidhi ... '}

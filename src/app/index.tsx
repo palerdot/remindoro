@@ -41,6 +41,7 @@ const defaultState: RootState = {
   settings: {
     theme: Theme.Main,
     liveNoteEnabled: true,
+    notificationsEnabled: true,
   },
   version: '0.0.0',
 }

@@ -66,8 +66,6 @@ export class Notification {
    * - adds remindoros 'toNotify' (if it has to be notified)
    */
   scan = () => {
-    if (this.showNotification) {
-    }
     return this.remindoros.map(this.check)
   }
 

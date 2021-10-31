@@ -79,8 +79,20 @@ function init_alarms() {
       // NOTE: here we can fetch 'settings.showNotification' and use it to
       // decide whether to show alarm or not
       const remindoroData = data[STORAGE_KEY] as RootState
+
+      let showNotification: boolean | undefined =
+        remindoroData.settings.notificationsEnabled
+
+      // edge case: if we don't have the config defined by default we will show notification
+      if (showNotification === undefined) {
+        showNotification = true
+      }
+
       // handle notifications
-      const notification = new Notification(remindoroData.remindoros, true)
+      const notification = new Notification(
+        remindoroData.remindoros,
+        showNotification
+      )
       const updatedRemindoros = notification.scan()
       // let us notify
       notification.notify()
