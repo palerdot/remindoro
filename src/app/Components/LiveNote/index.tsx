@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { isEmpty, debounce, isEqual, DebouncedFunc } from '@lodash'
 import { useSelector, useDispatch } from 'react-redux'
 import { plateToMarkdownAsync } from 'slate-mark'
@@ -7,17 +7,19 @@ import {
   useStoreEditorRef,
   useEventEditorId,
   SPEditor,
+  TNode,
 } from '@udecode/plate'
 
 import type { RootState } from '@app/Store/'
 
 import { plugins, options, components } from './options'
-import { parseMd } from './transformers'
+import { asyncParseMd } from './transformers'
 import { updateNote } from '@app/Store/Slices/Remindoros'
 import ActionBar from './ActionBar'
 import BackupEditor from './BackupEditor'
 import PlainTextEditor from '@app/Components/LiveNote/PlainTextEditor'
 import { EditorHolder } from './utils'
+import { cancellablePromise } from '@app/Hooks/useCancellablePromise'
 
 const editableProps = {
   placeholder: 'Enter some rich text…',
@@ -35,13 +37,27 @@ function LiveNote({ id, note, readOnly }: Props) {
   const dispatch = useDispatch()
   const editor = useStoreEditorRef(useEventEditorId('focus')) as SPEditor
 
-  const initialValue = useMemo(() => {
+  const [initialValue, setInitialValue] = useState<TNode | undefined>(undefined)
+
+  useEffect(() => {
     if (isEmpty(note.trim())) {
       // ref: https://github.com/ianstormtaylor/slate/issues/713
-      return [{ type: 'paragraph', children: [{ text: '' }] }]
+      const emptyValue = [{ type: 'paragraph', children: [{ text: '' }] }]
+      setInitialValue(emptyValue)
+
+      // do not proceed
+      return
     }
 
-    return parseMd(editor, note)
+    const { promise, cancel } = cancellablePromise(asyncParseMd(editor, note))
+
+    // we will parse md async
+    promise.then(parsedInitialValue => {
+      setInitialValue(parsedInitialValue)
+    })
+
+    // cancel the promise when unmounting
+    return cancel
   }, [editor, note])
 
   const lazyUpdate = useMemo(
@@ -63,6 +79,10 @@ function LiveNote({ id, note, readOnly }: Props) {
       }, 314),
     [id, dispatch, note]
   )
+
+  if (initialValue === undefined) {
+    return null
+  }
 
   return (
     <EditorHolder className={'editor'}>

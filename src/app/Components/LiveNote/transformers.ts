@@ -262,3 +262,10 @@ function deserializeMD(editor: SPEditor, note: string): TNode {
 export function parseMd(editor: SPEditor, note: string): TNode {
   return deserializeMD(editor, note)
 }
+
+/* async/promise based md parsing */
+export function asyncParseMd(editor: SPEditor, note: string): Promise<TNode> {
+  return new Promise(resolve => {
+    resolve(parseMd(editor, note))
+  })
+}
