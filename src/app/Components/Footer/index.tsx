@@ -9,7 +9,8 @@ const Holder = styled.div`
   justify-content: center;
   margin-top: auto;
 
-  border-top: thin solid red;
+  border-top: ${props => `thin solid ${props.theme.borderDark}`};
+  background: ${props => props.theme.borderDark};
 
   & .message-section {
     display: flex;
@@ -31,9 +32,7 @@ function Footer() {
       <div className={'icon-holder'}>
         <ToggleNotifications />
       </div>
-      <div className={'message-section'}>
-        {'porumai ... wait and hope !!! amaidhi ... '}
-      </div>
+      <div className={'message-section'}>{''}</div>
     </Holder>
   )
 }
