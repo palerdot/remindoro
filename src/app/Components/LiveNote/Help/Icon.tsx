@@ -36,11 +36,11 @@ function Icon() {
         scroll={'paper'}
       >
         <DialogTitle>{'Rich Text Editor'}</DialogTitle>
-        <DialogContent>
+        <DialogContent dividers={true}>
           <DialogContentText>
             {'porumai ... wait and hope ...'}
-            <Feedback />
           </DialogContentText>
+          <Feedback />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setStatus(false)}>{'Close'}</Button>
