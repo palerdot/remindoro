@@ -1,20 +1,25 @@
-import React, { useMemo } from 'react'
-import { isEmpty, debounce, isEqual } from '@lodash'
-import { useDispatch } from 'react-redux'
+import React, { useState, useEffect, useMemo } from 'react'
+import { isEmpty, debounce, isEqual, DebouncedFunc } from '@lodash'
+import { useSelector, useDispatch } from 'react-redux'
 import { plateToMarkdownAsync } from 'slate-mark'
 import {
   Plate,
   useStoreEditorRef,
   useEventEditorId,
   SPEditor,
+  TNode,
 } from '@udecode/plate'
 
-import Toolbar from './Toolbar'
+import type { RootState } from '@app/Store/'
+
 import { plugins, options, components } from './options'
-import { parseMd } from './transformers'
+import { asyncParseMd } from './transformers'
 import { updateNote } from '@app/Store/Slices/Remindoros'
+import ActionBar from './ActionBar'
 import BackupEditor from './BackupEditor'
+import PlainTextEditor from '@app/Components/LiveNote/PlainTextEditor'
 import { EditorHolder } from './utils'
+import { cancellablePromise } from '@app/Hooks/useCancellablePromise'
 
 const editableProps = {
   placeholder: 'Enter some rich text…',
@@ -32,14 +37,27 @@ function LiveNote({ id, note, readOnly }: Props) {
   const dispatch = useDispatch()
   const editor = useStoreEditorRef(useEventEditorId('focus')) as SPEditor
 
-  const initialValue = useMemo(() => {
+  const [initialValue, setInitialValue] = useState<TNode | undefined>(undefined)
+
+  useEffect(() => {
     if (isEmpty(note.trim())) {
       // ref: https://github.com/ianstormtaylor/slate/issues/713
-      return [{ type: 'paragraph', children: [{ text: '' }] }]
+      const emptyValue = [{ type: 'paragraph', children: [{ text: '' }] }]
+      setInitialValue(emptyValue)
+
+      // do not proceed
+      return
     }
 
-    console.log('porumai ... parsing md ??? ', parseMd(editor, note), note)
-    return parseMd(editor, note)
+    const { promise, cancel } = cancellablePromise(asyncParseMd(editor, note))
+
+    // we will parse md async
+    promise.then(parsedInitialValue => {
+      setInitialValue(parsedInitialValue)
+    })
+
+    // cancel the promise when unmounting
+    return cancel
   }, [editor, note])
 
   const lazyUpdate = useMemo(
@@ -50,12 +68,6 @@ function LiveNote({ id, note, readOnly }: Props) {
       debounce(updatedPlateNote => {
         plateToMarkdownAsync(updatedPlateNote).then(updatedNote => {
           if (!isEqual(note, updatedNote)) {
-            console.log(
-              'porumai ... dispatching update ',
-              updatedPlateNote,
-              updatedNote
-            )
-
             dispatch(
               updateNote({
                 id,
@@ -64,35 +76,64 @@ function LiveNote({ id, note, readOnly }: Props) {
             )
           }
         })
-      }, 2500),
+      }, 314),
     [id, dispatch, note]
   )
 
+  if (initialValue === undefined) {
+    return null
+  }
+
   return (
-    <div>
-      {!readOnly && <Toolbar />}
-      <EditorHolder className={'editor'}>
-        <Plate
-          id={id}
-          plugins={plugins}
-          components={components}
-          options={options}
-          editableProps={{
-            ...editableProps,
-            readOnly,
-            placeholder: readOnly ? '' : editableProps.placeholder,
-          }}
-          initialValue={initialValue}
-          onChange={updatedNote => {
-            lazyUpdate(updatedNote)
-          }}
-        />
-      </EditorHolder>
-    </div>
+    <EditorHolder className={'editor'}>
+      <Plate
+        id={id}
+        plugins={plugins}
+        components={components}
+        options={options}
+        editableProps={{
+          ...editableProps,
+          readOnly,
+          placeholder: readOnly ? '' : editableProps.placeholder,
+        }}
+        initialValue={initialValue}
+        onChange={updatedNote => {
+          lazyUpdate(updatedNote)
+        }}
+      />
+    </EditorHolder>
   )
 }
 
-const ResilientLiveNote = ({ id, note, readOnly }: Props) => {
+interface WrapperProps extends Props {
+  lazyUpdate: DebouncedFunc<(updatedNote: string) => void>
+}
+
+const NoteWrapper = ({ id, note, readOnly, lazyUpdate }: WrapperProps) => {
+  const liveNoteEnabled = useSelector((state: RootState) => {
+    return state.settings.liveNoteEnabled
+  })
+
+  return (
+    <BackupEditor id={id} readOnly={readOnly} note={note} onChange={lazyUpdate}>
+      {!readOnly && <ActionBar liveNoteEnabled={liveNoteEnabled} />}
+      <div>
+        {liveNoteEnabled ? (
+          <LiveNote id={id} note={note} readOnly={readOnly} />
+        ) : (
+          <PlainTextEditor
+            id={id}
+            note={note}
+            readOnly={readOnly}
+            onChange={lazyUpdate}
+          />
+        )}
+      </div>
+    </BackupEditor>
+  )
+}
+
+const ResilientLiveNote = ({ id, readOnly, note }: Props) => {
   const dispatch = useDispatch()
   const lazyUpdate = useMemo(
     () =>
@@ -103,13 +144,18 @@ const ResilientLiveNote = ({ id, note, readOnly }: Props) => {
             value: updatedNote,
           })
         )
-      }, 750),
+      }, 314),
     [id, dispatch]
   )
 
   return (
     <BackupEditor id={id} readOnly={readOnly} note={note} onChange={lazyUpdate}>
-      <LiveNote id={id} note={note} readOnly={readOnly} />
+      <NoteWrapper
+        id={id}
+        readOnly={readOnly}
+        note={note}
+        lazyUpdate={lazyUpdate}
+      />
     </BackupEditor>
   )
 }

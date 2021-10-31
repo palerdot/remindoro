@@ -1,5 +1,7 @@
 import React from 'react'
 import { isEqual } from '@lodash'
+import { TextField } from '@mui/material'
+import { styled } from '@mui/material/styles'
 
 import { updateTitle } from '@app/Store/Slices/Remindoros'
 import { useLazyStoreUpdate } from '@app/Hooks/'
@@ -9,6 +11,14 @@ type Props = {
   title: string
 }
 
+const StyledTextField: typeof TextField = styled(TextField)(({ theme }) => ({
+  '& .MuiFilledInput-root': {
+    '&:hover:not(.Mui-disabled)::before': {
+      borderBottom: `thin solid ${theme.palette.primary.main}`,
+    },
+  },
+}))
+
 function Title({ id, title }: Props) {
   const { value, setValue } = useLazyStoreUpdate<string>({
     id,
@@ -17,7 +27,11 @@ function Title({ id, title }: Props) {
   })
 
   return (
-    <input
+    <StyledTextField
+      variant={'filled'}
+      // focused
+      color={'primary'}
+      fullWidth
       type="text"
       placeholder={'Add Title'}
       value={value}

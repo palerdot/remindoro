@@ -1,22 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Switch as SwitchInput, Grid, Typography } from '@material-ui/core'
+import { Switch as SwitchInput, Grid, Typography } from '@mui/material'
 
 const SwitchHolder = styled.div`
   & .switch-base {
-    /* color: ${props => props.theme.primary}; */
-    color: grey;
+    color: ${props => props.theme.primaryDark};
   }
 
   & .track {
-    background: black;
+    background: ${props => props.theme.background};
   }
 
   & .checked {
-    color: gold !important;
+    color: ${props => props.theme.highlight} !important;
 
     & + .track {
-      background: lightblue !important;
+      background: ${props => props.theme.primaryDark} !important;
     }
   }
 `
@@ -61,7 +60,6 @@ function Switch({ checked, setChecked, onText, offText, ariaLabel }: Props) {
               }}
               checked={checked}
               onChange={e => {
-                console.log('porumai ... switch changing ', e.target.checked)
                 setChecked(e.target.checked)
               }}
               name="repeat"

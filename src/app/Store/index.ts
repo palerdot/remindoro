@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import { version } from '@package-info'
+import packageInfo from '@package-info'
 // reducers
 import remindoroReducer from '@app/Store/Slices/Remindoros/'
 import settingsReducer from '@app/Store/Slices/Settings/'
+
+const { version } = packageInfo
 
 // root reducer
 const reducer = {

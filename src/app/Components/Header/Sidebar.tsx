@@ -7,17 +7,12 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-} from '@material-ui/core'
-import { Inbox as InboxIcon, Mail as MailIcon } from '@material-ui/icons/'
-
-type StyleClasses = 'listIcon' | 'divider'
+} from '@mui/material'
+import { Inbox as InboxIcon, Mail as MailIcon } from '@mui/icons-material/'
 
 type Props = {
   isMenuOpen: boolean
   setMenuStatus: React.Dispatch<React.SetStateAction<boolean>>
-  classes: {
-    [key in StyleClasses]: string
-  }
 }
 
 const DrawerHolder = styled.div`
@@ -31,9 +26,13 @@ const DrawerHolder = styled.div`
       background: ${props => props.theme.primaryDark};
     }
   }
+
+  & .listIcon {
+    color: ${props => props.theme.highlight};
+  }
 `
 
-function Sidebar({ isMenuOpen, setMenuStatus, classes }: Props) {
+function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
   return (
     <Drawer
       anchor={'left'}
@@ -48,18 +47,30 @@ function Sidebar({ isMenuOpen, setMenuStatus, classes }: Props) {
         <List>
           {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
             <ListItem button key={text}>
-              <ListItemIcon className={classes.listIcon}>
+              <ListItemIcon
+                sx={{
+                  color: theme => theme.colors.highlight,
+                }}
+              >
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
           ))}
         </List>
-        <Divider className={classes.divider} />
+        <Divider
+          sx={{
+            background: theme => theme.colors.primaryDark,
+          }}
+        />
         <List>
           {['All mail', 'Trash', 'Spam'].map((text, index) => (
             <ListItem button key={text}>
-              <ListItemIcon className={classes.listIcon}>
+              <ListItemIcon
+                sx={{
+                  color: theme => theme.colors.highlight,
+                }}
+              >
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
               <ListItemText primary={text} />

@@ -14,35 +14,52 @@ import LiveNote from '@app/Components/LiveNote/'
 const Holder = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
   align-self: flex-start;
-  margin: 0 16px;
+
+  height: 100%;
+  overflow-y: hidden;
+
+  background: ${props => props.theme.borderDark};
 
   & .title-holder {
-    height: 40px;
+    height: 55px;
 
-    border: thin solid red;
+    border-bottom: ${props => `thin solid ${props.theme.primaryDark}`};
 
     & input {
       width: 100%;
       height: 100%;
 
       background: transparent;
-      color: white;
-      padding: 4px;
+      padding: 16px;
+      font-size: 18px;
+
+      border: none;
+      color: ${props => props.theme.textColor};
+
+      &:focus {
+        border: none;
+      }
     }
   }
 
   & .note-holder {
+    background: ${props => props.theme.background};
+    padding: 8px;
+
     & .editor {
       height: 400px;
       overflow-y: auto;
+
+      padding: 8px;
     }
   }
 
   & .info-corner {
     display: flex;
+
     height: 30px;
+    padding: 0 16px;
 
     & .info {
       margin-left: auto;

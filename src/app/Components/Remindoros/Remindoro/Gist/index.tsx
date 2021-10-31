@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
+import { Card as MCard } from '@mui/material'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
@@ -9,21 +10,23 @@ import ScheduleInfo from '@app/Components/Remindoros/Remindoro/ScheduleInfo'
 import LiveNote from '@app/Components/LiveNote/'
 
 const Holder = styled.div`
-  margin: 16px;
+  margin: 16px 8px;
 
   cursor: pointer;
   border: ${props => `thin solid ${props.theme.primaryDark}`};
-  background: ${props => props.theme.backgroundLight};
+  box-shadow: ${props =>
+    `0 1px 3px ${props.theme.border}, 0 1px 2px 0 ${props.theme.borderDark}`};
+  // background: ${props => props.theme.backgroundLight};
+  background: ${props => props.theme.borderDark};
 
   &:hover {
-    border: ${props => `thin solid ${props.theme.highlight}`};
+    border: ${props => `thin solid ${props.theme.primaryLight}`};
   }
 
   & .title-holder {
     padding: 8px;
     font-size: 18px;
 
-    background: ${props => props.theme.backgroundLight};
     border-bottom: ${props => `thin solid ${props.theme.primaryDark}`};
   }
 
@@ -42,17 +45,23 @@ function Card(remindoro: Remindoro) {
   const url = getRemindoroUrl(id)
 
   return (
-    <Holder
+    <MCard
       onClick={() => {
         history.push(url)
       }}
+      raised={true}
+      sx={{
+        background: theme => theme.colors.background,
+      }}
     >
-      <ScheduleInfo reminder={reminder} />
-      {title && <div className={'title-holder'}>{title}</div>}
-      <div className={'note-holder'}>
-        <LiveNote id={id} note={note} readOnly={true} />
-      </div>
-    </Holder>
+      <Holder>
+        <ScheduleInfo reminder={reminder} />
+        {title && <div className={'title-holder'}>{title}</div>}
+        <div className={'note-holder'}>
+          <LiveNote id={id} note={note} readOnly={true} />
+        </div>
+      </Holder>
+    </MCard>
   )
 }
 

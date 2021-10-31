@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react'
-import { debounce, isEqual } from '@lodash'
+import React, { useEffect, useCallback, useRef } from 'react'
+import { debounce, isEqual, isUndefined, merge } from '@lodash'
 import { Provider } from 'react-redux'
 
 import type { RootState } from '@app/Store/'
@@ -7,6 +7,7 @@ import type { RootState } from '@app/Store/'
 import App from './App'
 import { getStore } from '@app/Store/'
 import { syncToStorage } from '@app/Util/BrowserStorage/'
+import { Theme } from './Util/colors'
 
 /*
  * AppStore - App + Store !!!
@@ -18,7 +19,6 @@ import { syncToStorage } from '@app/Util/BrowserStorage/'
 
 // debounced store update
 const debouncedStoreUpdate = debounce(currentState => {
-  console.log('porumai ... current store state ', currentState)
   syncToStorage({
     currentState,
     onSuccess: storedState => {
@@ -28,7 +28,7 @@ const debouncedStoreUpdate = debounce(currentState => {
       console.log('porumai ... error storing store state ')
     },
   })
-}, 1314)
+}, 314)
 
 type InitialState = RootState | undefined
 
@@ -36,8 +36,24 @@ type Props = {
   initialState: InitialState
 }
 
+const defaultState: RootState = {
+  remindoros: [],
+  settings: {
+    theme: Theme.Main,
+    liveNoteEnabled: true,
+  },
+  version: '0.0.0',
+}
+
 const AppStore = ({ initialState }: Props) => {
-  const store = getStore(initialState)
+  let preLoadedState: RootState | undefined = initialState
+
+  if (!isUndefined(initialState)) {
+    // we are providing sensible defaults if we are adding new state in the middle
+    preLoadedState = merge(defaultState, initialState)
+  }
+
+  const store = getStore(preLoadedState)
   // saving previous state (to compare before updating)
   let previousState = useRef(initialState)
 
@@ -53,7 +69,7 @@ const AppStore = ({ initialState }: Props) => {
     previousState.current = currentState
   })
 
-  const onAppClose = () => {
+  const onAppClose = useCallback(() => {
     const currentState = store.getState()
     // save current state to browser storage before exiting
     syncToStorage({
@@ -63,12 +79,12 @@ const AppStore = ({ initialState }: Props) => {
     })
     // and unsubscribe events
     unsubscribeStore()
-  }
+  }, [store, unsubscribeStore])
 
   useEffect(() => {
     window.addEventListener('unload', onAppClose)
     return onAppClose
-  })
+  }, [onAppClose])
 
   return (
     <Provider store={store}>

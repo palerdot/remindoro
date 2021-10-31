@@ -1,38 +1,26 @@
 import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
 import { Link, useLocation } from 'react-router-dom'
-import { makeStyles } from '@material-ui/core/styles'
-import { IconButton } from '@material-ui/core'
+import { IconButton } from '@mui/material'
 import {
   Close as CloseIcon,
   Menu as MenuIcon,
   Home as HomeIcon,
   Event as EventIcon,
-} from '@material-ui/icons/'
-
-import type { ThemeInterface } from '@app/Util/colors'
+} from '@mui/icons-material/'
 
 import { Screens } from '@app/Routes/'
-import { useTheme } from '@app/Hooks/'
 import Sidebar from './Sidebar'
-
-const useStyles = makeStyles({
-  actionHolder: {
-    display: 'flex',
-    marginLeft: 'auto',
-  },
-  listIcon: {
-    color: 'white',
-  },
-  divider: (props: { theme: ThemeInterface }) => ({
-    // background: '#AAAAAA',
-    background: props.theme.primaryDark,
-  }),
-})
 
 const normalFlex = css`
   display: flex;
 `
+
+const PREFIX = 'Header'
+
+const classes = {
+  actionHolder: `${PREFIX}-actionHolder`,
+}
 
 const Holder = styled.div`
   ${normalFlex};
@@ -43,6 +31,11 @@ const Holder = styled.div`
   & .nav-crumb {
     padding: 0 8px;
     font-size: 15px;
+  }
+
+  & .${classes.actionHolder} {
+    display: flex;
+    margin-left: auto;
   }
 `
 
@@ -69,12 +62,10 @@ const IconButtonHolder = styled(IconButton)`
 
 function Header() {
   const location = useLocation()
-  const theme = useTheme()
-  const classes = useStyles({ theme })
 
   const [isMenuOpen, setMenuStatus] = useState(false)
 
-  const isHomePage = location.pathname === Screens.Home
+  // const isHomePage = location.pathname === Screens.Home
 
   return (
     <Holder>
@@ -83,11 +74,7 @@ function Header() {
           <IconButtonHolder onClick={() => setMenuStatus(true)}>
             <MenuIcon fontSize={'large'} />
           </IconButtonHolder>
-          <Sidebar
-            isMenuOpen={isMenuOpen}
-            setMenuStatus={setMenuStatus}
-            classes={classes}
-          />
+          <Sidebar isMenuOpen={isMenuOpen} setMenuStatus={setMenuStatus} />
         </div>
         <div className={classes.actionHolder}>
           <Link to={Screens.Home}>
@@ -117,11 +104,6 @@ function Header() {
           </IconButtonHolder>
         </div>
       </NavHolder>
-      {!isHomePage && (
-        <div className={'nav-crumb'}>
-          <Link to={Screens.Home}>{'Home'}</Link>
-        </div>
-      )}
     </Holder>
   )
 }

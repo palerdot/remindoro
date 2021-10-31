@@ -1,5 +1,5 @@
-import { every, isBoolean } from '@lodash'
-import { isLeaf } from 'slate-mark'
+import { every, isBoolean, drop, isEmpty } from '@lodash'
+import { isLeaf, plateToMarkdown } from 'slate-mark'
 import {
   TNode,
   SPEditor,
@@ -89,38 +89,107 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
         return
       }
 
-      const actionItems = t.children.map(x => {
-        const parsedActionItems = deserialize(x.children[0], { nodeTypes })
+      // trailing paragraph items tracking
+      let trailingParaAst: TNode = []
 
-        const children = parsedActionItems.children?.map((x, index, orig) => {
-          const isLast = index === orig.length - 1
-
-          // replace our unique token
-          const text = (x.text || '').replaceAll(NEWLINE_MAGIC_TOKEN, '')
-
-          return {
-            ...x,
-            text: isLast ? text.trim() : text,
-          }
+      t.children.forEach(x => {
+        const parsedActionItems = deserialize(x.children[0] as any, {
+          nodeTypes,
         })
 
-        return {
-          type: 'action_item',
-          checked: x.checked,
-          children,
+        /*
+         * IMPORTANT: tricky edge case
+         *
+         * If we have paragraphs and subsequent action items following an action item
+         * we will have an messed up AST
+         *
+         * To address this, we will consider an action item as last if includes \n (newline)
+         * If an item includes a newline, we have to parse the rest of the items from scratch
+         */
+
+        // const isLast = index === orig.length - 1
+        const hasNewLine =
+          parsedActionItems.children &&
+          (parsedActionItems.children[0].text || '').includes('\n')
+
+        // EDGE CASE
+        // IMPORTANT: handle anomlay where subsequent text/paragraphs
+        // is clubbed with last item of action item
+        if (hasNewLine) {
+          let lastText = ''
+
+          lastText = plateToMarkdown([parsedActionItems])
+          // lastText = plateToMarkdown(remainingItems)
+          const splitted = lastText.split(`\n`)
+          // split with first new line
+          lastText = splitted[0].replaceAll(NEWLINE_MAGIC_TOKEN, '')
+
+          let trailingParagraph = drop(splitted, 1).join(
+            `${NEWLINE_MAGIC_TOKEN}\n`
+          )
+          // .join(`${NEWLINE_MAGIC_TOKEN}\n`)
+          // .replaceAll(NEWLINE_MAGIC_TOKEN, '')
+
+          /* trailingParaAst = fromMarkdown(trailingParagraph).children.map(x =>
+            deserialize(x)
+          ) */
+
+          trailingParaAst = porumaiMd(trailingParagraph, nodeTypes)
+
+          // lastText is raw markdown; we need to parse again to MDAST -> SLATE
+          const lastMdast = deserialize(
+            fromMarkdown(lastText).children[0] as any
+          )
+
+          const lastReturn = {
+            type: 'action_item',
+            checked: x.checked,
+            children: lastMdast.children,
+          }
+
+          console.log(
+            'porumai ... LAST ACTION ITEM ',
+            trailingParagraph,
+            trailingParaAst,
+            lastText
+          )
+
+          // insert last item
+          parsed.push(lastReturn)
+
+          // insert rest of the tree
+          if (!isEmpty(trailingParaAst)) {
+            parsed.push(...trailingParaAst)
+          }
+
+          // IMPORTANT do not proceed further
+          // return
+        } else {
+          const children = parsedActionItems.children?.map(x => {
+            // replace our unique token
+            const text = (x.text || '').replaceAll(NEWLINE_MAGIC_TOKEN, '')
+
+            return {
+              ...x,
+              text,
+            }
+          })
+
+          parsed.push({
+            type: 'action_item',
+            checked: x.checked,
+            children,
+          })
         }
       })
 
-      // insert action items
-      actionItems.forEach(item => {
-        parsed.push(item)
-      })
-
-      // do not proceed
+      // IMPORTANT: parsed action item
+      // do not proceed further
       return
     }
 
-    const output = deserialize(t, {
+    // Normal MD parsing (which are not action items)
+    const output = deserialize(t as any, {
       nodeTypes,
     })
 
@@ -192,4 +261,11 @@ function deserializeMD(editor: SPEditor, note: string): TNode {
  */
 export function parseMd(editor: SPEditor, note: string): TNode {
   return deserializeMD(editor, note)
+}
+
+/* async/promise based md parsing */
+export function asyncParseMd(editor: SPEditor, note: string): Promise<TNode> {
+  return new Promise(resolve => {
+    resolve(parseMd(editor, note))
+  })
 }

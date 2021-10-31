@@ -1,11 +1,12 @@
 import React, { useState, useRef } from 'react'
+import styled from 'styled-components'
 import {
   Typography,
   Slider,
   FormControl,
   Select,
   MenuItem,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import type { Repeat } from '@app/Store/Slices/Remindoros/'
 
@@ -17,6 +18,16 @@ type Props = {
   onRepeatDurationChange: (duration: Repeat['time']) => void
   onRepeatIntervalChange: (interval: Repeat['interval']) => void
 }
+
+const DurationSlider = styled.div`
+  & .slider-text {
+    color: ${props => props.theme.textColor};
+
+    &.disabled {
+      color: ${props => props.theme.primaryDark};
+    }
+  }
+`
 
 function RepeatConfig({
   disabled,
@@ -30,14 +41,16 @@ function RepeatConfig({
   const sliderInitialValue = duration || 45
   // storing it in a ref for slider uncontrolled component
   const sliderDefaultValue = useRef(sliderInitialValue)
-  const [localSliderValue, setLocalSliderValue] = useState<number>(
-    sliderInitialValue
-  )
+  const [localSliderValue, setLocalSliderValue] =
+    useState<number>(sliderInitialValue)
 
   return (
     <div className={'second-col'}>
-      <div className={'duration-slider'}>
-        <Typography id="duration-slider" gutterBottom>
+      <DurationSlider className={'duration-slider'}>
+        <Typography
+          className={`slider-text ${disabled ? 'disabled' : ''}`}
+          gutterBottom
+        >
           {'Repeat every'}
         </Typography>
         <Slider
@@ -59,7 +72,8 @@ function RepeatConfig({
             onRepeatDurationChange(value as number)
           }}
         />
-      </div>
+      </DurationSlider>
+
       <div className={'interval-select'}>
         <FormControl className={'select-form'}>
           <Select

@@ -5,6 +5,7 @@ import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_UL,
   ELEMENT_OL,
+  ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_TODO_LI,
@@ -31,9 +32,9 @@ import {
   FormatListBulleted,
   FormatListNumbered,
   PlaylistAddCheck,
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 
-import { LooksOne, LooksTwo } from '@app/Util/Icons/'
+import { LooksOne, LooksTwo, LooksThree } from '@app/Util/Icons/'
 
 const Holder = styled.div`
   display: flex;
@@ -90,12 +91,16 @@ function Toolbar() {
         icon={<FormatListNumbered />}
       />
       <ToolbarElement
-        type={getPlatePluginType(editor, ELEMENT_H2)}
+        type={getPlatePluginType(editor, ELEMENT_H1)}
         icon={<LooksOne />}
       />
       <ToolbarElement
-        type={getPlatePluginType(editor, ELEMENT_H3)}
+        type={getPlatePluginType(editor, ELEMENT_H2)}
         icon={<LooksTwo />}
+      />
+      <ToolbarElement
+        type={getPlatePluginType(editor, ELEMENT_H3)}
+        icon={<LooksThree />}
       />
       <ToolbarElement
         type={getPlatePluginType(editor, ELEMENT_TODO_LI)}

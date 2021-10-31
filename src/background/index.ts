@@ -2,11 +2,13 @@ import { browser } from 'webextension-polyfill-ts'
 
 import type { RootState } from '@app/Store/'
 
-import { version } from '@package-info'
+import packageInfo from '@package-info'
 import { ALARM_KEY, STORAGE_KEY, ContextMenuKeys } from '@app/Constants'
 import { migrate_v0_data_to_v1 } from './utils/'
 import { notify, Notification } from './utils/notification'
 import { handle_context_menu } from './utils/context-menu'
+
+const { version } = packageInfo
 
 /*
  * ref: https://github.com/Lusito/webextension-polyfill-ts
@@ -32,8 +34,7 @@ function initialize_install_events() {
   const welcome_message = {
     id: 'welcome-message',
     title: `Hello from Remindoro - ${version} !`,
-    note:
-      'Welcome to new refreshed Remindoro! You can now set one-time/repeatable reminders (with markdown support) for stuffs that matter to you ...',
+    note: 'Welcome to new refreshed Remindoro! You can now set one-time/repeatable reminders (with markdown support) for stuffs that matter to you ...',
   }
 
   notify(welcome_message)

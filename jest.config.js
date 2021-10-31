@@ -30,5 +30,6 @@ const moduleNameMapper = {
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  setupFilesAfterEnv: ['<rootDir>/jestSetup.js'], // for shimming string.replaceAll()
   moduleNameMapper,
 }

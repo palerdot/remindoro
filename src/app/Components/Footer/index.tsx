@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { IconButton } from '@material-ui/core'
-import { NotificationsActive, NotificationsOff } from '@material-ui/icons'
+import { IconButton } from '@mui/material'
+import { NotificationsActive, NotificationsOff } from '@mui/icons-material'
 
 const Holder = styled.div`
   display: flex;
@@ -60,6 +60,7 @@ function Footer() {
           <IconButton
             aria-label="Turn on notifications"
             className={'notifications-on'}
+            size="large"
           >
             <NotificationsActive />
           </IconButton>
@@ -69,6 +70,7 @@ function Footer() {
           <IconButton
             aria-label="Turn off notifications"
             className={'notifications-off'}
+            size="large"
           >
             <NotificationsOff />
           </IconButton>
