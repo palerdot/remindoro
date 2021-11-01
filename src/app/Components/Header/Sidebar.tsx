@@ -10,11 +10,11 @@ import {
   ListItemText,
 } from '@mui/material'
 import {
-  Inbox as InboxIcon,
-  Mail as MailIcon,
   Home as HomeIcon,
   Event as EventIcon,
   Settings as SettingsIcon,
+  Help as HelpIcon,
+  Star as StarIcon,
 } from '@mui/icons-material/'
 
 import { Screens } from '@app/Routes/'
@@ -101,18 +101,21 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
           }}
         />
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon
-                sx={{
-                  color: theme => theme.colors.highlight,
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+          {/* Help Menu */}
+          <Link to={Screens.Settings} exact activeClassName={'selected-screen'}>
+            <ListItem button>
+              <ListItemIcon className={'listIcon'}>{<HelpIcon />}</ListItemIcon>
+              <ListItemText primary={'Help'} />
             </ListItem>
-          ))}
+          </Link>
+
+          {/* Rating Menu */}
+          <Link to={Screens.Settings} exact activeClassName={'selected-screen'}>
+            <ListItem button>
+              <ListItemIcon className={'listIcon'}>{<StarIcon />}</ListItemIcon>
+              <ListItemText primary={'Rate'} />
+            </ListItem>
+          </Link>
         </List>
       </DrawerHolder>
     </Drawer>

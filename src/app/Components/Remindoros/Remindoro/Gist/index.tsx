@@ -10,7 +10,7 @@ import ScheduleInfo from '@app/Components/Remindoros/Remindoro/ScheduleInfo'
 import LiveNote from '@app/Components/LiveNote/'
 
 const Holder = styled.div`
-  margin: 16px;
+  margin: 0 16px;
 
   cursor: pointer;
   border: ${props => `thin solid ${props.theme.borderDark}`};
@@ -52,6 +52,7 @@ function Card(remindoro: Remindoro) {
       raised={true}
       sx={{
         background: theme => theme.colors.background,
+        marginBottom: theme => theme.spacing(2),
       }}
     >
       <Holder>

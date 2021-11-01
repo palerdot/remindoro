@@ -22,7 +22,7 @@ const Holder = styled.div`
     display: flex;
     align-self: flex-start;
 
-    padding: 0 4px;
+    padding: 0 6px;
   }
 `
 
