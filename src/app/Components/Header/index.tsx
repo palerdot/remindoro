@@ -6,7 +6,7 @@ import {
   Close as CloseIcon,
   Menu as MenuIcon,
   Home as HomeIcon,
-  Event as EventIcon,
+  // Event as EventIcon,
 } from '@mui/icons-material/'
 
 import { Screens } from '@app/Routes/'
@@ -87,7 +87,7 @@ function Header() {
             </IconButtonHolder>
           </Link>
 
-          <Link to={Screens.Scheduled}>
+          {/* <Link to={Screens.Scheduled}>
             <IconButtonHolder
               className={
                 location.pathname === Screens.Scheduled
@@ -97,7 +97,7 @@ function Header() {
             >
               <EventIcon fontSize={'large'} />
             </IconButtonHolder>
-          </Link>
+          </Link> */}
 
           <IconButtonHolder onClick={() => window.close()}>
             <CloseIcon fontSize={'large'} />

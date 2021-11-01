@@ -36,6 +36,13 @@ function useLazyStoreUpdate<T>({ id, payload, updater }: Props<T>) {
     [id, dispatch, updater]
   )
 
+  // eventual update of value
+  useEffect(() => {
+    setValue(currentValue => {
+      return payload === currentValue ? currentValue : payload
+    })
+  }, [payload])
+
   useEffect(() => {
     // update store(lazily)
     lazyUpdate(value)
