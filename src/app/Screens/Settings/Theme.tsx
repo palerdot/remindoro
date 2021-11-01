@@ -29,7 +29,7 @@ function ThemeSetting() {
               id="repeat-interval"
               value={value}
               onChange={event => {
-                console.log('porumai ... theme changed ', event.target.value)
+                setValue(event.target.value as Theme)
               }}
             >
               {Object.values(Theme).map(theme => (

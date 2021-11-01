@@ -1,5 +1,6 @@
 export enum Theme {
   Classic = 'Classic',
+  Neon = 'Neon',
 }
 
 export interface ThemeInterface {
@@ -27,6 +28,29 @@ type Themes = {
 
 export const themes: Themes = {
   [Theme.Classic]: {
+    // background: '#3C0078',
+    background: '#263238',
+    // border: '#5A5A5A',
+    // borderDark: '#344750', // middle of background/backgroundLight
+    borderDark: '#3f535c', // middle of background/backgroundLight
+    backgroundLight: '#1F333C',
+    // backgroundLight: '#546e7a',
+    border: '#314651', // middle of backgroundLight/primary
+    primary: '#4A5F69',
+    primaryDark: '#546e7a',
+    primaryLight: '#00ceea',
+    highlight: '#18ffff',
+    textColor: '#ffffff',
+
+    /* grey: text color -> contrast color */
+    greyOne: '#DEDEDE',
+
+    contrastTextColor: '#000000',
+    success: 'lightgreen',
+    danger: '#FF5050',
+  },
+
+  [Theme.Neon]: {
     // background: '#3C0078',
     background: '#271332',
     // border: '#5A5A5A',
