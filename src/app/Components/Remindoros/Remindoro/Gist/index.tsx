@@ -13,7 +13,7 @@ const Holder = styled.div`
   margin: 16px 8px;
 
   cursor: pointer;
-  border: ${props => `thin solid ${props.theme.primaryDark}`};
+  border: ${props => `thin solid ${props.theme.borderDark}`};
   box-shadow: ${props =>
     `0 1px 3px ${props.theme.border}, 0 1px 2px 0 ${props.theme.borderDark}`};
   // background: ${props => props.theme.backgroundLight};
@@ -27,7 +27,7 @@ const Holder = styled.div`
     padding: 8px;
     font-size: 18px;
 
-    border-bottom: ${props => `thin solid ${props.theme.primaryDark}`};
+    border-bottom: ${props => `thin solid ${props.theme.borderDark}`};
   }
 
   & .note-holder {

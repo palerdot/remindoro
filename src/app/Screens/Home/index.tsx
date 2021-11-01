@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { orderBy } from '@lodash'
 
 import type { RootState } from '@app/Store/'
 
@@ -9,9 +10,12 @@ import Remindoros from '@app/Components/Remindoros/'
 function Home() {
   const remindoros = useSelector((state: RootState) => state.remindoros)
 
+  // sort remindoros
+  const sortedRemindoros = orderBy(remindoros, 'updated', 'desc')
+
   return (
     <div>
-      <Remindoros remindoros={remindoros} />
+      <Remindoros remindoros={sortedRemindoros} />
       <AddRemindoro />
     </div>
   )

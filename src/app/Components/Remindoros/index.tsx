@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { orderBy } from '@lodash'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
@@ -19,12 +18,9 @@ function Remindoros({ remindoros }: Props) {
     return <div>{'No remindoros'}</div>
   }
 
-  // sort remindoros
-  const sortedRemindoros = orderBy(remindoros, 'updated', 'desc')
-
   return (
     <Holder>
-      {sortedRemindoros.map(ro => (
+      {remindoros.map(ro => (
         <Gist key={ro.id} {...ro} />
       ))}
     </Holder>

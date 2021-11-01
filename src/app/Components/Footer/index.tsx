@@ -9,7 +9,7 @@ const Holder = styled.div`
   justify-content: center;
   margin-top: auto;
 
-  border-top: ${props => `thin solid ${props.theme.borderDark}`};
+  border-top: ${props => `thin solid ${props.theme.border}`};
   background: ${props => props.theme.borderDark};
 
   & .message-section {
