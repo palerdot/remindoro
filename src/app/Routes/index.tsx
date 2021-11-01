@@ -6,12 +6,14 @@ import Home from '@app/Screens/Home/'
 import Scheduled from '@app/Screens/Scheduled/'
 import RemindoroInfo from '@app/Screens/RemindoroInfo/'
 import Settings from '@app/Screens/Settings/'
+import Help from '@app/Screens/Help/'
 
 export enum Screens {
   Home = '/',
   Scheduled = '/scheduled',
   RemindoroInfo = '/remindoro-info/:id',
   Settings = '/settings',
+  Help = '/help',
 }
 
 const PATHS = [
@@ -30,6 +32,10 @@ const PATHS = [
   {
     path: Screens.Settings,
     Screen: Settings,
+  },
+  {
+    path: Screens.Help,
+    Screen: Help,
   },
 ]
 

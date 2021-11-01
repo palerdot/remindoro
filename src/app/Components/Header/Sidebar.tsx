@@ -102,7 +102,7 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
         />
         <List>
           {/* Help Menu */}
-          <Link to={Screens.Settings} exact activeClassName={'selected-screen'}>
+          <Link to={Screens.Help} exact activeClassName={'selected-screen'}>
             <ListItem button>
               <ListItemIcon className={'listIcon'}>{<HelpIcon />}</ListItemIcon>
               <ListItemText primary={'Help'} />
