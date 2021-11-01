@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { NavLink } from 'react-router-dom'
 import {
   Drawer,
   Divider,
@@ -8,7 +9,15 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material'
-import { Inbox as InboxIcon, Mail as MailIcon } from '@mui/icons-material/'
+import {
+  Inbox as InboxIcon,
+  Mail as MailIcon,
+  Home as HomeIcon,
+  Event as EventIcon,
+  Settings as SettingsIcon,
+} from '@mui/icons-material/'
+
+import { Screens } from '@app/Routes/'
 
 type Props = {
   isMenuOpen: boolean
@@ -20,11 +29,20 @@ const DrawerHolder = styled.div`
   color: white;
   width: 250px;
   height: 100%;
+`
 
-  & > ul > div.MuiListItem-root {
-    &:hover {
-      background: ${props => props.theme.primaryDark};
-    }
+const Link = styled(NavLink)`
+  display: flex;
+  text-decoration: none;
+  color: ${props => props.theme.textColor};
+  margin: 2px 0;
+
+  &:hover {
+    background: ${props => props.theme.borderDark};
+  }
+
+  &.selected-screen {
+    background: ${props => props.theme.primaryDark};
   }
 
   & .listIcon {
@@ -45,18 +63,37 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
         onKeyDown={() => setMenuStatus(false)}
       >
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon
-                sx={{
-                  color: theme => theme.colors.highlight,
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+          {/* Home Menu */}
+          <Link to={Screens.Home} exact activeClassName={'selected-screen'}>
+            <ListItem button>
+              <ListItemIcon className={'listIcon'}>{<HomeIcon />}</ListItemIcon>
+              <ListItemText primary={'Home'} />
             </ListItem>
-          ))}
+          </Link>
+
+          {/* Scheduled Menu */}
+          <Link
+            to={Screens.Scheduled}
+            exact
+            activeClassName={'selected-screen'}
+          >
+            <ListItem button>
+              <ListItemIcon className={'listIcon'}>
+                {<EventIcon />}
+              </ListItemIcon>
+              <ListItemText primary={'Scheduled'} />
+            </ListItem>
+          </Link>
+
+          {/* Settings Menu */}
+          <Link to={Screens.Settings} exact activeClassName={'selected-screen'}>
+            <ListItem button>
+              <ListItemIcon className={'listIcon'}>
+                {<SettingsIcon />}
+              </ListItemIcon>
+              <ListItemText primary={'Settings'} />
+            </ListItem>
+          </Link>
         </List>
         <Divider
           sx={{

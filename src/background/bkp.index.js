@@ -415,11 +415,11 @@ to remove (check before cleaning)
 [] inside src - 'Components/Styles/common/lib/config.json/popup/sidebar'
 
 mui v5
-[] https://next.material-ui.com/guides/migration-v4/
-[] https://next.material-ui.com/guides/styled-engine/
-[] https://next.material-ui.com/getting-started/installation/#npm
-[] https://next.material-ui.com/guides/pickers-migration/
-[] https://next.material-ui.com/guides/minimizing-bundle-size/#option-2
+[x] https://next.material-ui.com/guides/migration-v4/
+[x] https://next.material-ui.com/guides/styled-engine/
+[x] https://next.material-ui.com/getting-started/installation/#npm
+[x] https://next.material-ui.com/guides/pickers-migration/
+[x] https://next.material-ui.com/guides/minimizing-bundle-size/#option-2
 // bugs to watch out for
 // https://github.com/mui-org/material-ui/issues/25422
 
@@ -429,6 +429,6 @@ Roboto fonts
 [] add the css file in html
 [] add roboto as font in body tag
 
-[] self heal backup editor (click here to fix this issue, setState: false to hide error)
+[x] self heal backup editor (click here to fix this issue, setState: false to hide error)
 
 */

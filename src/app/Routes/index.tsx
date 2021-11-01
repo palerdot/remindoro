@@ -5,11 +5,13 @@ import styled from 'styled-components'
 import Home from '@app/Screens/Home/'
 import Scheduled from '@app/Screens/Scheduled/'
 import RemindoroInfo from '@app/Screens/RemindoroInfo/'
+import Settings from '@app/Screens/Settings/'
 
 export enum Screens {
   Home = '/',
   Scheduled = '/scheduled',
   RemindoroInfo = '/remindoro-info/:id',
+  Settings = '/settings',
 }
 
 const PATHS = [
@@ -24,6 +26,10 @@ const PATHS = [
   {
     path: Screens.RemindoroInfo,
     Screen: RemindoroInfo,
+  },
+  {
+    path: Screens.Settings,
+    Screen: Settings,
   },
 ]
 
