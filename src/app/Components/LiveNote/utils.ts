@@ -18,6 +18,12 @@ export const LiveNoteStyles = css`
     margin: 0;
     color: ${props => props.theme.greyOne};
   }
+
+  .slate-CodeBlockElement,
+  .slate-code {
+    background: ${props => props.theme.primaryDark};
+    color: ${props => props.theme.textColor};
+  }
 `
 
 export const EditorHolder = styled.div`
