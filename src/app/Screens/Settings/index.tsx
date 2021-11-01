@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Notifications from './Notifications'
+import Theme from './Theme'
 import LiveNote from './LiveNote'
 
 const Wrapper = styled.div`
@@ -42,6 +43,7 @@ function Settings() {
     <Wrapper>
       <div className={'page-heading'}>{'Settings'}</div>
       <Notifications />
+      <Theme />
       <LiveNote />
     </Wrapper>
   )

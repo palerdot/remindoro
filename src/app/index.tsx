@@ -39,7 +39,7 @@ type Props = {
 const defaultState: RootState = {
   remindoros: [],
   settings: {
-    theme: Theme.Main,
+    theme: Theme.Classic,
     liveNoteEnabled: true,
     notificationsEnabled: true,
   },

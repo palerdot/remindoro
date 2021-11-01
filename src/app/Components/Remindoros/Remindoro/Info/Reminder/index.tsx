@@ -160,7 +160,7 @@ function Reminder({ id, reminder }: Props) {
         </div>
       </Row>
       <Row>
-        {/* Turn on/off Repat */}
+        {/* Turn on/off Repeat */}
         <div className={'first-col'}>
           <Switch
             checked={isRepeat}

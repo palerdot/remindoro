@@ -9,7 +9,7 @@ export interface SettingsState {
 }
 
 const initialState: SettingsState = {
-  theme: Theme.Main,
+  theme: Theme.Classic,
   liveNoteEnabled: true,
   notificationsEnabled: true,
 }
@@ -18,8 +18,8 @@ export const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    setTheme: (state, action: PayloadAction<Theme>) => {
-      const selectedTheme = action.payload
+    setTheme: (state, action: PayloadAction<{ id: string; value: Theme }>) => {
+      const { value: selectedTheme } = action.payload
       // update theme
       state.theme = selectedTheme
     },

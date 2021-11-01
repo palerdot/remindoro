@@ -1,5 +1,5 @@
 export enum Theme {
-  Main = 'main',
+  Classic = 'Classic',
 }
 
 export interface ThemeInterface {
@@ -26,7 +26,7 @@ type Themes = {
 }
 
 export const themes: Themes = {
-  [Theme.Main]: {
+  [Theme.Classic]: {
     // background: '#3C0078',
     background: '#271332',
     // border: '#5A5A5A',
@@ -48,7 +48,7 @@ export const themes: Themes = {
   },
 }
 
-export const defaultTheme = themes[Theme.Main]
+export const defaultTheme = themes[Theme.Classic]
 
 export const colors: ThemeInterface = defaultTheme
 
