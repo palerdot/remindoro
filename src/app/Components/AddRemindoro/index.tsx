@@ -10,8 +10,7 @@ import { addNewRemindoro } from '@app/Store/Slices/Remindoros/'
 import { FabHolder } from '@app/Styles'
 
 function AddRemindoro() {
-  const dispatch = useDispatch()
-  const history = useHistory()
+  const addRemindoro = useAddRemindoro()
 
   return (
     <FabHolder>
@@ -28,12 +27,7 @@ function AddRemindoro() {
           aria-label="add"
           className={'fab'}
           onClick={() => {
-            const id = uuid()
-            const url = getRemindoroUrl(id)
-            // first redirect to info page
-            history.push(url)
-            // now add to our store
-            dispatch(addNewRemindoro(id))
+            addRemindoro()
           }}
         >
           <PlaylistAdd fontSize={'large'} />
@@ -44,3 +38,20 @@ function AddRemindoro() {
 }
 
 export default AddRemindoro
+
+// helper hook to add new remindoro
+export function useAddRemindoro() {
+  const dispatch = useDispatch()
+  const history = useHistory()
+
+  const addRemindoro = () => {
+    const id = uuid()
+    const url = getRemindoroUrl(id)
+    // first redirect to info page
+    history.push(url)
+    // now add to our store
+    dispatch(addNewRemindoro(id))
+  }
+
+  return addRemindoro
+}
