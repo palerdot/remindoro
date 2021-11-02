@@ -1,5 +1,5 @@
 import { LeafNode, SlateNode, isLeafNode } from 'slate-mark'
-import { compact, last, isEmpty, slice, trimEnd } from '@lodash'
+import { compact, last, isEmpty, slice } from '@lodash'
 import styled, { css } from 'styled-components'
 
 export const LiveNoteStyles = css`
@@ -84,12 +84,6 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
       originalSplitted.push(`${NEWLINE_MAGIC_TOKEN}`)
     }
 
-    // we will replace first empty new line with magic token
-    // works fine for certain only empty lines
-    if (originalSplitted[0] === '') {
-      // originalSplitted[0] = NEWLINE_MAGIC_TOKEN
-    }
-
     const multiLineSplit = chunkParagraphs(originalSplitted)
 
     console.log(
@@ -133,7 +127,6 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
 
           if (isPrevLineMark) {
             EMPTY_LINES_IGNORE_COUNT = 1
-            // EMPTY_LINES_IGNORE_COUNT = 0
           }
         }
       }
@@ -147,9 +140,7 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
 
       const TOTAL_NEWLINES_TO_IGNORE = onlyEmptyLines
         ? EMPTY_LINES_IGNORE_COUNT
-        : // : 1
-          NON_EMPTY_LINES_IGNORE_COUNT // 0
-      // let ENDING_NEWLINE_IGNORED = 0
+        : NON_EMPTY_LINES_IGNORE_COUNT // 0
 
       console.log(
         'porumai ... new line handling ',
@@ -168,17 +159,6 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
         // const isTextEmpty = text.trim() === ''
         const isTextEmpty = text === ''
         if (isTextEmpty) {
-          // but before that
-          // we will ignore the ending new line
-          /* if (ENDING_NEWLINE_IGNORED < TOTAL_NEWLINES_TO_IGNORE) {
-            // ignore ending new line
-            ENDING_NEWLINE_IGNORED = ENDING_NEWLINE_IGNORED + 1
-            // do not proceed to enter an empty p tag
-            return
-          } */
-
-          console.log('porumai ... NEW LINE INSERT !!!', s, text)
-
           transformed.push({
             type: 'p',
             children: [{ text: '' }],
