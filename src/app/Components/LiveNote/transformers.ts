@@ -147,13 +147,6 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
             children: lastMdast.children,
           }
 
-          console.log(
-            'porumai ... LAST ACTION ITEM ',
-            trailingParagraph,
-            trailingParaAst,
-            lastText
-          )
-
           // insert last item
           parsed.push(lastReturn)
 
@@ -207,7 +200,6 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
     }
   })
 
-  console.log('porumai ... parsed ', tree, parsed)
   // before passing the final tree
   // let us make sure we are removing our magic token
   return parsed.map(drillTillLeaf)

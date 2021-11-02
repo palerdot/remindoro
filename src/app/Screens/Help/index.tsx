@@ -14,9 +14,9 @@ const Subtitle = styled.div`
 function Help() {
   return (
     <Wrapper>
-      <RichTextHelp />
       <h3>FAQ</h3>
       <Subtitle>{'This section covers some FAQs.'}</Subtitle>
+      <RichTextHelp />
     </Wrapper>
   )
 }

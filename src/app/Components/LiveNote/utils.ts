@@ -1,5 +1,5 @@
 import { LeafNode, SlateNode, isLeafNode } from 'slate-mark'
-import { compact, last, isEmpty, slice } from '@lodash'
+import { last, isEmpty, slice } from '@lodash'
 import styled, { css } from 'styled-components'
 
 export const LiveNoteStyles = css`
@@ -62,7 +62,7 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
   // if not we need to insert as existing children
   let insertNextAsNewNode = true
 
-  children.forEach((mark, index, origChildren) => {
+  children.forEach(mark => {
     let markText = mark.text
 
     if (markText.endsWith(`${NEWLINE_MAGIC_TOKEN}\n${NEWLINE_MAGIC_TOKEN}\n`)) {
@@ -86,71 +86,7 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
 
     const multiLineSplit = chunkParagraphs(originalSplitted)
 
-    console.log(
-      'porumai ... INCOMING NEW LINE ',
-      children,
-      originalSplitted,
-      multiLineSplit,
-      mark
-    )
-
     multiLineSplit.forEach(splitted => {
-      // track ignore count
-      let EMPTY_LINES_IGNORE_COUNT = 1
-      let NON_EMPTY_LINES_IGNORE_COUNT = 0
-
-      // edge case:
-      // we may deal with only empty lines or content + empty lines
-      // if content + empty lines; we may have to ignore new lines (see below)
-      const onlyEmptyLines =
-        splitted.join('').replaceAll(NEWLINE_MAGIC_TOKEN, '').trim() === ''
-
-      if (onlyEmptyLines) {
-        EMPTY_LINES_IGNORE_COUNT = 1
-      }
-
-      const hasEmptySpaces = onlyEmptyLines && compact(splitted).length > 0
-
-      if (hasEmptySpaces) {
-        EMPTY_LINES_IGNORE_COUNT = 0
-
-        // one more edge case; we need to check if previous line is a mark
-        const prevLine = origChildren[index - 1]
-
-        if (prevLine) {
-          const isBold = prevLine.bold === true
-          const isItalic = prevLine.italic === true
-          const isStrikeThrough = prevLine.strikethrough === true
-          const isInlineCode = prevLine.code === true
-          const isPrevLineMark =
-            isBold || isItalic || isStrikeThrough || isInlineCode
-
-          if (isPrevLineMark) {
-            EMPTY_LINES_IGNORE_COUNT = 1
-          }
-        }
-      }
-
-      // IMPORTANT
-      // Interesting edge case
-      // Each p/paragraph already has a \n (newline) ending
-      // we cannot be splitting that and making again a new p tag
-      // that will cyclically increase the new lines
-      // so we need to deliberatly ignore the ending newline
-
-      const TOTAL_NEWLINES_TO_IGNORE = onlyEmptyLines
-        ? EMPTY_LINES_IGNORE_COUNT
-        : NON_EMPTY_LINES_IGNORE_COUNT // 0
-
-      console.log(
-        'porumai ... new line handling ',
-        multiLineSplit,
-        splitted,
-        TOTAL_NEWLINES_TO_IGNORE,
-        onlyEmptyLines,
-        originalSplitted
-      )
-
       splitted.forEach(s => {
         const text = s.replaceAll(NEWLINE_MAGIC_TOKEN, '')
         // const text = s
