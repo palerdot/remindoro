@@ -1,5 +1,7 @@
 import { isNil, isEqual } from '@lodash'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { v4 as uuid } from 'uuid'
+import dayjs from 'dayjs'
 
 type Maybe<T> = T | undefined
 
@@ -47,6 +49,34 @@ export const remindoroSlice = createSlice({
   name: 'remindoros',
   initialState,
   reducers: {
+    // default remindoro ('Take a walk')
+    // created as soon as all remindoros are deleted
+    // will be used by 'NoRemindoros' component
+    addDefaultRemindoro: state => {
+      const newRemindoro: Remindoro = {
+        id: uuid(),
+        title: 'Take a Walk',
+        note: `
+Taking a walk for every **45 minutes** is good for your health. Avoid continous sitting for long hours. Remember, \`Sitting is the new Smoking\`.  
+
+> NOTE: This is a default sample note shown if no notes are saved. You can edit, save, delete and do whatever you want with this note. Enjoy! 
+        `,
+        type: RemindoroType.Note,
+        reminder: {
+          time: dayjs().add(45, 'minutes').valueOf(),
+          repeat: {
+            time: 45,
+            interval: 'minutes',
+          },
+        },
+        created: Date.now(),
+        updated: Date.now(),
+      }
+
+      // update existing state with new remindoro
+      state.push(newRemindoro)
+    },
+
     addNewRemindoro: (state, action: PayloadAction<string>) => {
       const id = action.payload
       const newRemindoro = {
@@ -147,6 +177,7 @@ export const remindoroSlice = createSlice({
 })
 
 export const {
+  addDefaultRemindoro,
   addNewRemindoro,
   updateTitle,
   updateNote,

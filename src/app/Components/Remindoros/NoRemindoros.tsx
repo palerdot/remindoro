@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Button } from '@mui/material'
 import { PlaylistAdd } from '@mui/icons-material'
 
-import { useAddRemindoro } from '@app/Components/AddRemindoro/'
+import {
+  useAddRemindoro,
+  useDefaultRemindoro,
+} from '@app/Components/AddRemindoro/'
 
 const EmptyMessageHolder = styled.div`
   display: flex;
@@ -31,6 +34,11 @@ const EmptyMessage = styled.div`
 
 function NoRemindoros() {
   const addRemindoro = useAddRemindoro()
+  const addDefaultRemindoro = useDefaultRemindoro()
+
+  useEffect(() => {
+    addDefaultRemindoro()
+  }, [addDefaultRemindoro])
 
   return (
     <EmptyMessageHolder>

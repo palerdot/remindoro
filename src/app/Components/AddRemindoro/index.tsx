@@ -6,7 +6,10 @@ import { Fab, Zoom } from '@mui/material/'
 import { PlaylistAdd } from '@mui/icons-material'
 
 import { getRemindoroUrl } from '@app/Util/'
-import { addNewRemindoro } from '@app/Store/Slices/Remindoros/'
+import {
+  addNewRemindoro,
+  addDefaultRemindoro,
+} from '@app/Store/Slices/Remindoros/'
 import { FabHolder } from '@app/Styles'
 
 function AddRemindoro() {
@@ -54,4 +57,15 @@ export function useAddRemindoro() {
   }
 
   return addRemindoro
+}
+
+// helper hook to add default remindoro
+export function useDefaultRemindoro() {
+  const dispatch = useDispatch()
+
+  const defaultRemindoro = () => {
+    dispatch(addDefaultRemindoro())
+  }
+
+  return defaultRemindoro
 }
