@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import { Help } from '@mui/icons-material'
 
+import HelpInfo from './HelpInfo'
 import Feedback from './FeedbackInfo'
 
 function Icon() {
@@ -38,7 +39,7 @@ function Icon() {
         <DialogTitle>{'Rich Text Editor'}</DialogTitle>
         <DialogContent dividers={true}>
           <DialogContentText>
-            {'porumai ... wait and hope ...'}
+            <HelpInfo />
           </DialogContentText>
           <Feedback />
         </DialogContent>

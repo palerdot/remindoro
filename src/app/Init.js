@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { isEmpty, merge } from 'lodash-es'
+import { isEmpty } from 'lodash-es'
 
 import App from './'
 import { loadFromStorage } from './Util/BrowserStorage/'
