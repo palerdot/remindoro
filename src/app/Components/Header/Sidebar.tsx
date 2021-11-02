@@ -19,6 +19,15 @@ import {
 
 import { Screens } from '@app/Routes/'
 
+const rateUrl =
+  process.env.REACT_APP_RATE_URL || 'https://palerdot.in/remindoro'
+
+console.log(
+  'porumai ... rate url ??? ',
+  rateUrl,
+  process.env.REACT_APP_RATE_URL
+)
+
 type Props = {
   isMenuOpen: boolean
   setMenuStatus: React.Dispatch<React.SetStateAction<boolean>>
@@ -43,6 +52,21 @@ const Link = styled(NavLink)`
 
   &.selected-screen {
     background: ${props => props.theme.primaryDark};
+  }
+
+  & .listIcon {
+    color: ${props => props.theme.highlight};
+  }
+`
+
+const RateLink = styled.a`
+  display: flex;
+  text-decoration: none;
+  color: ${props => props.theme.textColor};
+  margin: 2px 0;
+
+  &:hover {
+    background: ${props => props.theme.borderDark};
   }
 
   & .listIcon {
@@ -110,12 +134,19 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
           </Link>
 
           {/* Rating Menu */}
-          <Link to={Screens.Settings} exact activeClassName={'selected-screen'}>
+          <RateLink
+            href={rateUrl}
+            target={'_blank'}
+            onClick={() => {
+              // window.open(rateUrl)
+              // window.close()
+            }}
+          >
             <ListItem button>
               <ListItemIcon className={'listIcon'}>{<StarIcon />}</ListItemIcon>
               <ListItemText primary={'Rate'} />
             </ListItem>
-          </Link>
+          </RateLink>
         </List>
       </DrawerHolder>
     </Drawer>

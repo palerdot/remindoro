@@ -4,7 +4,12 @@ const path = require('path')
 const paths = require('../paths')
 const initLoaders = require('./loaders')
 const initPlugins = require('./plugins')
+
+// this file will load '.env.chrome' or '.env.firefox'
 require('../env')
+
+const argv = require('yargs').argv
+const Dotenv = require('dotenv-webpack')
 
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
 const useTypeScript = fs.existsSync(paths.appTsConfig)
@@ -144,6 +149,12 @@ module.exports = function (webpackEnv = 'development') {
 
       // typescript compile type checking plugin
       plugins.tsCompileTimeCheckPlugin,
+      // ref: https://webpack.js.org/plugins/define-plugin/
+      // ref: https://www.npmjs.com/package/dotenv-webpack
+      // '.env.firefox/.env.chrome'
+      new Dotenv({
+        path: `./.env.${argv.browser}`,
+      }),
     ].filter(Boolean),
     node: {
       // dgram: 'empty',
