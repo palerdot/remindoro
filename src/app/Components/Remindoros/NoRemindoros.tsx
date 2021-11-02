@@ -36,6 +36,7 @@ function NoRemindoros() {
   const addRemindoro = useAddRemindoro()
   const addDefaultRemindoro = useDefaultRemindoro()
 
+  // when component is mounted, adds default 'Take a Walk' remindoro
   useEffect(() => {
     addDefaultRemindoro()
   }, [addDefaultRemindoro])

@@ -1,5 +1,5 @@
 import { LeafNode, SlateNode, isLeafNode } from 'slate-mark'
-import { compact, last, isEmpty, slice } from '@lodash'
+import { compact, last, isEmpty, slice, trimEnd } from '@lodash'
 import styled, { css } from 'styled-components'
 
 export const LiveNoteStyles = css`
@@ -65,18 +65,16 @@ export function transformNewLines(children: Array<LeafNode>): Array<PNode> {
   children.forEach((mark, index, origChildren) => {
     let markText = mark.text
 
+    if (markText.endsWith(`${NEWLINE_MAGIC_TOKEN}\n${NEWLINE_MAGIC_TOKEN}\n`)) {
+      // remove trailing \n
+      // handles one edge case where we have MARK \n MARK \n
+      markText = markText.slice(0, -1)
+    }
+
     let originalSplitted = markText.split(`${NEWLINE_MAGIC_TOKEN}\n`)
 
     // trim last space
     if (isEmpty(last(originalSplitted)?.replaceAll(NEWLINE_MAGIC_TOKEN, ''))) {
-      // edge case
-      // do not trim the last space if
-      if (
-        // !markText.endsWith(`${NEWLINE_MAGIC_TOKEN}\n${NEWLINE_MAGIC_TOKEN}`)
-        markText !== `${NEWLINE_MAGIC_TOKEN}\n${NEWLINE_MAGIC_TOKEN}`
-      ) {
-        // originalSplitted = originalSplitted.slice(0, -1)
-      }
       originalSplitted = originalSplitted.slice(0, -1)
     }
 
