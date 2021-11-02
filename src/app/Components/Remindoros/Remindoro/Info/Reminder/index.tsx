@@ -34,7 +34,7 @@ const Holder = styled.div`
   flex-direction: column;
 
   height: 100%;
-  padding: 16px;
+  padding: 16px 24px;
 `
 
 const Row = styled.div`
@@ -51,7 +51,7 @@ const Row = styled.div`
   & .second-col {
     display: flex;
     flex: 3;
-    margin: 0 32px;
+    margin: 0 24px;
 
     & .date-picker {
       ${colStyles};

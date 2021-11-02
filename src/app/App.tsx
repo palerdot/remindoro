@@ -132,6 +132,7 @@ const GlobalStyle = createGlobalStyle`
 
       & .MuiSlider-valueLabelOpen {
         background: ${props => props.theme.primaryLight};
+        font-weight: 800;
       }
     }
 

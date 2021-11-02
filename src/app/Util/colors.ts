@@ -38,7 +38,8 @@ export const themes: Themes = {
     border: '#314651', // middle of backgroundLight/primary
     primary: '#4A5F69',
     primaryDark: '#546e7a',
-    primaryLight: '#00ceea',
+    // primaryLight: '#00ceea',
+    primaryLight: '#00b0ff',
     highlight: '#18ffff',
     textColor: '#ffffff',
 

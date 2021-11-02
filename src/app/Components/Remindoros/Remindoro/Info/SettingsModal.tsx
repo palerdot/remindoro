@@ -46,8 +46,10 @@ const Holder = muiStyled('div')(({ theme }) => ({
     background: theme.colors.primaryDark,
     color: theme.colors.textColor,
     borderColor: theme.colors.border,
+
     '&:hover': {
-      background: theme.colors.backgroundLight,
+      // background: theme.colors.backgroundLight,
+      opacity: 0.89,
     },
   },
 }))
@@ -58,7 +60,8 @@ const ActionBar = styled.div`
   border-top: ${props => `thin solid ${props.theme.border}`};
 
   margin-top: auto;
-  padding: 16px;
+  margin-right: 20px;
+  padding: 16px 24px;
 `
 
 type Props = {

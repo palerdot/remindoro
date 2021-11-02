@@ -27,12 +27,12 @@ const Holder = styled.div`
     padding: 8px;
     font-size: 18px;
 
-    border-bottom: ${props => `thin solid ${props.theme.borderDark}`};
+    border-bottom: ${props => `thin solid ${props.theme.border}`};
   }
 
   & .note-holder {
     padding: 8px;
-    max-height: 123px;
+    height: 123px;
     pointer-events: none;
     overflow-y: auto;
   }
@@ -52,7 +52,7 @@ function Card(remindoro: Remindoro) {
       raised={true}
       sx={{
         background: theme => theme.colors.background,
-        marginBottom: theme => theme.spacing(2),
+        marginBottom: theme => theme.spacing(3),
       }}
     >
       <Holder>

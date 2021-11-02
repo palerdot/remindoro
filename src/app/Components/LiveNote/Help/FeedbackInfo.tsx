@@ -1,17 +1,17 @@
 import React from 'react'
 import { Paper } from '@mui/material'
-import { yellow, blueGrey, deepOrange } from '@mui/material/colors'
 
 function Feedback() {
   return (
     <Paper
       sx={{
-        background: yellow[100],
-        color: blueGrey[900],
+        background: theme => theme.colors.primaryLight,
+        color: theme => theme.colors.textColor,
         padding: theme => theme.spacing(2),
 
         '& .highlight': {
-          color: deepOrange[800],
+          color: theme => theme.colors.textColor,
+          fontWeight: '700',
         },
       }}
     >
