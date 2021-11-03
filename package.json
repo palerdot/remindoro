@@ -1,14 +1,14 @@
 {
   "name": "remindoro",
   "version": "1.0.0",
-  "description": "Recurring Reminders in browser",
+  "description": "Better Reminders in browser",
   "scripts": {
     "test": "jest",
     "start:chrome": "npm run chrome-launch",
     "start:firefox": "npm run firefox-launch",
     "start:views": "node scripts/start.js",
     "dev": "node scripts/dev.js",
-    "build": "node scripts/build.js",
+    "build:chrome": "node scripts/build.js --browser=chrome",
     "build:firefox": "node scripts/build.js --browser=firefox",
     "compress": "node scripts/compress",
     "compress-keygen": "crx keygen",
@@ -28,7 +28,7 @@
     "redux",
     "hot reload",
     "webpack",
-    "boilerplate"
+    "reminders"
   ],
   "repository": {
     "type": "git",
