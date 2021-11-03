@@ -12,7 +12,7 @@ export interface Repeat {
   time: number
 }
 
-interface Reminder {
+export interface Reminder {
   time: number // unix timestamp
   // we are removing 'is_repeat' in favour of typescript repeat? assertion
   repeat?: Repeat

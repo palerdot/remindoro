@@ -1,7 +1,11 @@
 import { isEqual, omit, flow } from '@lodash'
 
 import type { RootState } from '@app/Store/'
-import { Remindoro, RemindoroType } from '@app/Store/Slices/Remindoros/'
+import {
+  Remindoro,
+  RemindoroType,
+  Reminder as ReminderType,
+} from '@app/Store/Slices/Remindoros/'
 
 /*
  * Data cleaning modules
@@ -112,15 +116,21 @@ export function clean_v0_data(remindoro: OldRemindoro): Remindoro {
 
   // we will create new remindoro from old remindoro
   // NOTE: compiler error is going away only with 'Object.assign'
-  const cleanedRemindoro: Remindoro = Object.assign({
-    id: String(remindoro.id),
-    title: clean_html(remindoro.title), // strip html
-    note: clean_html(remindoro.note), // strip html
-    type: RemindoroType.Note,
-    created: remindoro.created,
-    updated: remindoro.updated,
-    reminder: remindoro.reminder,
-  })
+  const cleanedRemindoro: Remindoro = Object.assign(
+    {
+      id: String(remindoro.id),
+      title: clean_html(remindoro.title), // strip html
+      note: clean_html(remindoro.note), // strip html
+      type: RemindoroType.Note,
+      created: remindoro.created,
+      updated: remindoro.updated,
+    },
+    !isEmptyReminder
+      ? {
+          reminder: remindoro.reminder as ReminderType,
+        }
+      : {}
+  )
 
   return cleanedRemindoro
 }
