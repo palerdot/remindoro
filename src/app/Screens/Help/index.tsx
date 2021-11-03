@@ -29,6 +29,16 @@ const Subtitle = styled.div`
   border-bottom: thin solid ${props => props.theme.borderDark};
 `
 
+const Disclaimer = styled.div`
+  display: flex;
+  align-items: center;
+
+  background: ${props => props.theme.primaryLight};
+  color: ${props => props.theme.textColor};
+
+  padding: 16px;
+`
+
 const FAQS = [
   {
     question: 'How to edit a note?',
@@ -55,7 +65,12 @@ const FAQS = [
 function Help() {
   return (
     <Wrapper>
-      <h3>FAQ</h3>
+      <Disclaimer>
+        {'If you face any problems using new updated Remindoro'}
+        {', please let me know via '}
+        <strong className={'highlight'}>{'palerdot@gmail.com'}</strong>
+      </Disclaimer>
+      <h2>FAQ</h2>
       <Subtitle>{'This section covers some FAQs.'}</Subtitle>
       <div>
         {FAQS.map(({ question, answer }, index) => (
