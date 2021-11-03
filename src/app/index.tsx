@@ -22,8 +22,8 @@ import { Theme } from './Util/colors'
 const debouncedStoreUpdate = debounce(currentState => {
   syncToStorage({
     currentState,
-    onSuccess: storedState => {
-      console.log('porumai ... store sync success ', storedState)
+    onSuccess: _storedState => {
+      // console.log('porumai ... store sync success ', storedState)
     },
     onError: () => {
       console.log('porumai ... error storing store state ')
