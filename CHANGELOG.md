@@ -11,6 +11,10 @@ and more ...
 
 -----------------------------------------------------------------------------------
 
+### 0.3.0
+- `Firefox/Chrome`: fix overflow issue
+- Better instructions for setting up old dev environment
+
 ### 0.2.3
 
 ##### Firefox:
