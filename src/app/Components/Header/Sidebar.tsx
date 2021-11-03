@@ -17,7 +17,10 @@ import {
   Star as StarIcon,
 } from '@mui/icons-material/'
 
+import packageInfo from '@package-info'
 import { Screens } from '@app/Routes/'
+
+const { version } = packageInfo
 
 const rateUrl =
   process.env.REACT_APP_RATE_URL || 'https://palerdot.in/remindoro'
@@ -51,6 +54,18 @@ const Link = styled(NavLink)`
   & .listIcon {
     color: ${props => props.theme.highlight};
   }
+`
+
+const VersionInfo = styled.div`
+  position: absolute;
+  bottom: 1px;
+  left: 1px;
+  padding: 4px;
+
+  font-style: italic;
+  font-size: 0.75rem;
+
+  color: ${props => props.theme.highlight};
 `
 
 const RateLink = styled.a`
@@ -142,6 +157,7 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
             </ListItem>
           </RateLink>
         </List>
+        <VersionInfo>{`v${version} (beta)`}</VersionInfo>
       </DrawerHolder>
     </Drawer>
   )

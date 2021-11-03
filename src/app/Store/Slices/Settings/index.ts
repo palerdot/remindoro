@@ -10,7 +10,7 @@ export interface SettingsState {
 
 const initialState: SettingsState = {
   theme: Theme.Classic,
-  liveNoteEnabled: true,
+  liveNoteEnabled: false,
   notificationsEnabled: true,
 }
 

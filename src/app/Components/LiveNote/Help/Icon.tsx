@@ -38,9 +38,8 @@ function Icon() {
       >
         <DialogTitle>{'Rich Text Editor'}</DialogTitle>
         <DialogContent dividers={true}>
-          <DialogContentText>
-            <HelpInfo />
-          </DialogContentText>
+          <DialogContentText></DialogContentText>
+          <HelpInfo />
           <Feedback />
         </DialogContent>
         <DialogActions>

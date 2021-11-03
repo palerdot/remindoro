@@ -41,7 +41,7 @@ const defaultState: RootState = {
   remindoros: [],
   settings: {
     theme: Theme.Classic,
-    liveNoteEnabled: true,
+    liveNoteEnabled: false,
     notificationsEnabled: true,
   },
   version: '0.0.0',
