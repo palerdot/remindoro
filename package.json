@@ -149,7 +149,7 @@
     "slate": "^0.63.0",
     "slate-history": "^0.62.0",
     "slate-hyperscript": "^0.62.0",
-    "slate-mark": "^0.0.3",
+    "slate-mark": "^0.0.6",
     "slate-react": "^0.65.2",
     "styled-components": "^5.2.0",
     "uuid": "^8.3.2"
