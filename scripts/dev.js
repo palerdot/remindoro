@@ -103,7 +103,7 @@ compiler.watch({}, (err, stats) => {
     execa('web-ext', [
       'run',
       '--source-dir',
-      'dev',
+      'dev-server',
       '--pref',
       'startup.homepage_welcome_url=https://www.youtube.com',
     ])

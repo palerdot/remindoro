@@ -4,7 +4,7 @@ old-extension
 dist
 extension
 release
-dev
+dev-server
 .vscode
 temp
 .tmp

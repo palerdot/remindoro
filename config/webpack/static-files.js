@@ -15,10 +15,10 @@ const copyPatterns = [
     transform: transformManifestVersion,
   },
   { from: 'src/img', to: 'img' },
-  {
-    from: 'src/lib',
-    to: 'lib/',
-  },
+  // {
+  //   from: 'src/lib',
+  //   to: 'lib/',
+  // },
   {
     from: 'node_modules/webextension-polyfill/dist/browser-polyfill.js',
     to: 'lib/js/',
@@ -33,15 +33,15 @@ const copyPatterns = [
   },
   // START: Fonts
   // material fonts
-  {
-    from: 'src/app/css/fonts/material-fonts.woff2',
-    to: 'fonts/',
-  },
-  // Roboto fonts
-  {
-    from: 'src/app/css/fonts/Roboto/',
-    to: 'fonts/Roboto/',
-  },
+  // {
+  //   from: 'src/app/css/fonts/material-fonts.woff2',
+  //   to: 'fonts/',
+  // },
+  // // Roboto fonts
+  // {
+  //   from: 'src/app/css/fonts/Roboto/',
+  //   to: 'fonts/Roboto/',
+  // },
   // {
   //   from: '**/*',
   //   // [ext] => .ext (no need to add .)

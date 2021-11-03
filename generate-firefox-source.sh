@@ -1,3 +1,5 @@
+#! /bin/sh
+
 # Installation Steps:
 #  - `yarn` (or `yarn install`). This step will install all necessary dependencies
 # 
@@ -11,4 +13,4 @@
 #   - npm `v6.4.1`
 #   - OS `Mac OS 10.14.2`
 
-tar --exclude='./node_modules' --exclude='./build' --exclude='./dist' --exclude='./docs' --exclude='.git' -cvzf ~/Desktop/remindoro-firefox-source.tar.gz .
+tar --exclude='./node_modules' --exclude='./release' --exclude='./dev-server'  --exclude='./build' --exclude='./dist' --exclude='./docs' --exclude='.git' -cvzf ~/Desktop/remindoro-firefox-source.tar.gz .
