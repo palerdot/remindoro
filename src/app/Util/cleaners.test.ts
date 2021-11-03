@@ -43,7 +43,8 @@ const OLD_EMPTY_REPEAT_REMINDORO = {
   created: 1627482379252,
   updated: 1627482379252,
   reminder: {
-    time: 165431234512345,
+    // time: 165431234512345,
+    time: '2021-11-03T15:06:11+05:30',
     is_repeat: false,
     repeat: {
       interval: false,
@@ -59,7 +60,7 @@ const EXPECTED_NEW_EMPTY_REPEAT_REMINDORO = {
   created: 1627482379252,
   updated: 1627482379252,
   reminder: {
-    time: 165431234512345,
+    time: 1635932171000,
   },
 }
 
@@ -73,7 +74,8 @@ const OLD_NORMAL_REMINDORO = {
   created: 1627482377767,
   updated: 1627482377767,
   reminder: {
-    time: 1627485077767,
+    // time: 1627485077767,
+    time: '2021-11-03T15:06:11+05:30',
     is_repeat: true,
     repeat: {
       interval: 'minutes',
@@ -92,7 +94,8 @@ const EXPECTED_NORMAL_REMINDORO = {
   created: 1627482377767,
   updated: 1627482377767,
   reminder: {
-    time: 1627485077767,
+    // time: 1627485077767,
+    time: 1635932171000,
     repeat: {
       interval: 'minutes',
       time: 45, // should be converted to number

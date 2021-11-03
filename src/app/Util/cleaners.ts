@@ -1,4 +1,5 @@
 import { isEqual, omit, flow } from '@lodash'
+import dayjs from 'dayjs'
 
 import type { RootState } from '@app/Store/'
 import {
@@ -63,7 +64,7 @@ interface OldRemindoro {
   created: number
   updated: number
   reminder?: {
-    time: boolean | number
+    time: boolean | string
     is_repeat?: boolean
     repeat?: {
       interval: boolean | number | string
@@ -88,7 +89,6 @@ export function clean_v0_data(remindoro: OldRemindoro): Remindoro {
     // This is more inline with new TS type 'reminder?'
     remindoro = omit(remindoro, 'reminder')
   }
-
   // case 2: empty repeat
   const EMPTY_REPEAT = {
     interval: false,
@@ -127,7 +127,10 @@ export function clean_v0_data(remindoro: OldRemindoro): Remindoro {
     },
     !isEmptyReminder
       ? {
-          reminder: remindoro.reminder as ReminderType,
+          reminder: {
+            time: dayjs(remindoro.reminder.time as string).valueOf(),
+            repeat: remindoro.reminder.repeat,
+          } as ReminderType,
         }
       : {}
   )
@@ -164,7 +167,8 @@ interface NewStoreData extends OptionalNewStoreKeys {
 // input can be oldstoredata or migrated data
 // so return type should be flexible enough to accomodate both
 export function migrate_v0_data(
-  oldStoreData: OldStoreData | RootState
+  // oldStoreData: OldStoreData | RootState
+  oldStoreData: OldStoreData
 ): NewStoreData {
   return {
     ...oldStoreData,
