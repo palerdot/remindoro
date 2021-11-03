@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 
 import type { RootState } from '@app/Store/'
 
+import ErrorBoundary from '@app/Components/ErrorBoundary'
 import App from './App'
 import { getStore } from '@app/Store/'
 import { syncToStorage } from '@app/Util/BrowserStorage/'
@@ -88,9 +89,11 @@ const AppStore = ({ initialState }: Props) => {
   }, [onAppClose])
 
   return (
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ErrorBoundary>
   )
 }
 

@@ -403,10 +403,10 @@ misc
 [] new build script !!!
 
 Live Note
-[] Try out plate/slate
+[x] Try out plate/slate
 
 Error handling 
-[] Naked textarea with error boundary around Live Note
+[x] Naked textarea with error boundary around Live Note
 [] General App Error boundary 
 
 clean old files

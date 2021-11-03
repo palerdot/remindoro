@@ -22,12 +22,6 @@ import { Screens } from '@app/Routes/'
 const rateUrl =
   process.env.REACT_APP_RATE_URL || 'https://palerdot.in/remindoro'
 
-console.log(
-  'porumai ... rate url ??? ',
-  rateUrl,
-  process.env.REACT_APP_RATE_URL
-)
-
 type Props = {
   isMenuOpen: boolean
   setMenuStatus: React.Dispatch<React.SetStateAction<boolean>>
