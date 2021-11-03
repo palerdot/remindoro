@@ -1,5 +1,16 @@
 ## Changelog
 
+### `1.0.0` (Firefox Beta)
+
+- New revamped `v1.x` codebase for `Firefox`. Rebuilt with `React 17.x (hooks)`, `Typescript`, `styled-components`, `MUI`, `redux toolkit` and friends
+- Experimental `Rich Text Editor` (similar to slack) for note.
+- Improved UX with dedicated settings. 
+- Pause/resume notifications. 
+
+and more ...
+
+-----------------------------------------------------------------------------------
+
 ### 0.2.3
 
 ##### Firefox:
