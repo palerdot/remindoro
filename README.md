@@ -17,8 +17,8 @@ This extension is build with
 
 ## Download for Firefox and Chrome browsers by clicking on the following links
 
-- [Chrome Extension](https://addons.mozilla.org/en-GB/firefox/addon/remindoro/)
-- [Firefox Extension](https://chrome.google.com/webstore/detail/remindoro/njmniggbfobokemdjebnhmbldimkofkc/)
+- [Chrome Extension](https://chrome.google.com/webstore/detail/remindoro/njmniggbfobokemdjebnhmbldimkofkc/)
+- [Firefox Extension](https://addons.mozilla.org/en-GB/firefox/addon/remindoro/)
 
 
 More information about the extension can be found at the [Remindoro website](https://palerdot.in/remindoro). 
