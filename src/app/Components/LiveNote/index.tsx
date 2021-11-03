@@ -43,17 +43,20 @@ function LiveNote({ id, note, readOnly }: Props) {
     if (isEmpty(note.trim())) {
       // ref: https://github.com/ianstormtaylor/slate/issues/713
       const emptyValue = [{ type: 'paragraph', children: [{ text: '' }] }]
+      // @ts-ignore
       setInitialValue(emptyValue)
 
       // do not proceed
       return
     }
 
-    const { promise, cancel } = cancellablePromise(asyncParseMd(editor, note))
+    const { promise, cancel } = cancellablePromise<TNode>(
+      asyncParseMd(editor, note)
+    )
 
     // we will parse md async
     promise.then(parsedInitialValue => {
-      setInitialValue(parsedInitialValue)
+      setInitialValue(parsedInitialValue as TNode)
     })
 
     // cancel the promise when unmounting
@@ -96,7 +99,7 @@ function LiveNote({ id, note, readOnly }: Props) {
           readOnly,
           placeholder: readOnly ? '' : editableProps.placeholder,
         }}
-        initialValue={initialValue}
+        initialValue={initialValue as any}
         onChange={updatedNote => {
           lazyUpdate(updatedNote)
         }}

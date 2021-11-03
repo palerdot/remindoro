@@ -16,6 +16,7 @@
     "lint:es": "eslint '*/**/*.{ts,tsx}'",
     "lint": "prettier -l **/src/**/*.{js,jsx,ts,tsx}",
     "lint:fix": "prettier --write **/src/**/*.{js,jsx,ts,tsx}",
+    "typecheck": "node_modules/typescript/bin/tsc --noEmit",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "chrome-launch": "node scripts/dev.js --browser=chrome",

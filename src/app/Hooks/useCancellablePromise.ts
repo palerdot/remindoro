@@ -1,6 +1,6 @@
 // ref: https://dev.to/praveenkumarrr/cancellable-promises-in-react-and-why-is-it-required-5ghf
 
-export const cancellablePromise = (promise: Promise<any | void>) => {
+export const cancellablePromise = <T>(promise: Promise<T | void>) => {
   const isCancelled = { value: false }
   const wrappedPromise = new Promise((resolve, reject) => {
     promise

@@ -72,6 +72,7 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
     }
   )
 
+  // @ts-ignore
   const parsed: TNode = []
 
   tree.children.forEach(t => {
@@ -90,7 +91,7 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
       }
 
       // trailing paragraph items tracking
-      let trailingParaAst: TNode = []
+      let trailingParaAst: any[] = []
 
       t.children.forEach(x => {
         const parsedActionItems = deserialize(x.children[0] as any, {
@@ -118,6 +119,7 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
         if (hasNewLine) {
           let lastText = ''
 
+          // @ts-ignore
           lastText = plateToMarkdown([parsedActionItems])
           // lastText = plateToMarkdown(remainingItems)
           const splitted = lastText.split(`\n`)
@@ -134,7 +136,7 @@ function porumaiMd(doc: string, nodeTypes: NodeTypes): TNode {
             deserialize(x)
           ) */
 
-          trailingParaAst = porumaiMd(trailingParagraph, nodeTypes)
+          trailingParaAst = porumaiMd(trailingParagraph, nodeTypes) as any
 
           // lastText is raw markdown; we need to parse again to MDAST -> SLATE
           const lastMdast = deserialize(
