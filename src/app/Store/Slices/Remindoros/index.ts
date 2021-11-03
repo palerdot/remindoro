@@ -110,7 +110,6 @@ Taking a walk for every **45 minutes** is good for your health. Avoid continous 
         return state
       }
 
-      console.log('porumai ... store title update ', value)
       // we will update the title
       toUpdate.title = value
       // update 'updated' time
@@ -135,7 +134,6 @@ Taking a walk for every **45 minutes** is good for your health. Avoid continous 
         return state
       }
 
-      console.log('porumai ... store note update ', value)
       // we will update the title
       toUpdate.note = value
       // update 'updated' time
@@ -160,8 +158,6 @@ Taking a walk for every **45 minutes** is good for your health. Avoid continous 
         // return current state
         return state
       }
-
-      console.log('porumai ... store reminder update ', value)
 
       // we will update the reminder
       toUpdate.reminder = value

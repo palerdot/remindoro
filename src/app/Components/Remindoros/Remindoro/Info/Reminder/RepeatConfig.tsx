@@ -65,10 +65,6 @@ function RepeatConfig({
             setLocalSliderValue(value as number)
           }}
           onChangeCommitted={(_, value) => {
-            console.log(
-              'porumai ... slider value changed ... amaidhi !!!',
-              value
-            )
             onRepeatDurationChange(value as number)
           }}
         />
@@ -84,7 +80,6 @@ function RepeatConfig({
             onChange={event => {
               const value: Repeat['interval'] = event.target
                 .value as Repeat['interval']
-              console.log('porumai ... duration changed ', value)
               onRepeatIntervalChange(value)
             }}
           >

@@ -74,8 +74,7 @@ const OLD_NORMAL_REMINDORO = {
   id: 1,
   title: 'Take a Walk',
   type: 'note',
-  note:
-    "Taking a walk for every 45 minutes is good for your health. Avoid continous sitting for long hours. Remember, 'Sitting is the new Smoking'. &nbsp;<div><br></div><div>NOTE: This is a default sample remindoro shown if no entries are saved. You can edit, save, delete and do whatever you want with this note. Enjoy!</div>",
+  note: "Taking a walk for every 45 minutes is good for your health. Avoid continous sitting for long hours. Remember, 'Sitting is the new Smoking'. &nbsp;<div><br></div><div>NOTE: This is a default sample remindoro shown if no entries are saved. You can edit, save, delete and do whatever you want with this note. Enjoy!</div>",
   list: [],
   created: 1627482377767,
   updated: 1627482377767,
@@ -153,7 +152,6 @@ describe('strip html tags', () => {
     const expected = `porumai
 wait and hope
 patience`
-    console.log('porumai ... stripped ', clean_html(input))
     expect(clean_html(input)).toEqual(expected)
   })
 })

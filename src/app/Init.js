@@ -26,7 +26,7 @@ const Remindoro = {
 loadFromStorage({
   onSuccess: browserState => {
     console.log(
-      'porumai ... updating state from browser storage ',
+      'porumai ... updating state from browser storage for app load',
       browserState
     )
     const initialState = isEmpty(browserState) ? undefined : browserState
