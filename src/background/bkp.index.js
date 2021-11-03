@@ -407,12 +407,12 @@ Live Note
 
 Error handling 
 [x] Naked textarea with error boundary around Live Note
-[] General App Error boundary 
+[x] General App Error boundary 
 
 clean old files
-[] inside src - 'app/background/typings/manifests'
+[x] inside src - 'app/background/typings/manifests'
 to remove (check before cleaning)
-[] inside src - 'Components/Styles/common/lib/config.json/popup/sidebar'
+[x] inside src - 'Components/Styles/common/lib/config.json/popup/sidebar'
 
 mui v5
 [x] https://next.material-ui.com/guides/migration-v4/
