@@ -374,33 +374,33 @@ function check_remindoro_link(menu_details, tab_details, remindoros) {
 [x] save to browser storage on window close
 
 cleanup
-[] data cleanup - 'reminder' + 'repeat' keys cleanup - 'list' key
-[] data cleanup to be run on on install event
+[x] data cleanup - 'reminder' + 'repeat' keys cleanup - 'list' key
+[x] data cleanup to be run on on install event
 
 background task
-[] init watch task with key
-[] retrieve remindoros
-[] calculate next notification time
-[] update time
+[x] init watch task with key
+[x] retrieve remindoros
+[x] calculate next notification time
+[x] update time
 
 context menus
-[] add context menu hooks
-[] save to browser storage and notify
+[x] add context menu hooks
+[x] save to browser storage and notify
 
 misc
-[] better debounce timing
-[] better lazy update timing
-[] browser specific manifest.json parsing
-[] proper icon image parsing (popup menu/notification)
-[] strip br tags for title (migration)
-[] convert markdown to plain string before notification
-[] button logic for chrome/firefox
-[] default remindoro (with markdown)
+[x] better debounce timing
+[x] better lazy update timing
+[x] browser specific manifest.json parsing
+[x] proper icon image parsing (popup menu/notification)
+[x] strip br tags for title (migration)
+[x] convert markdown to plain string before notification
+[x] button logic for chrome/firefox
+[x] default remindoro (with markdown)
 [] handle old 'chrome_error' and hook it to all error handlers?
-[] readonly/compose mode switching for note
+[x] readonly/compose mode switching for note
 [] roboto font (src/fonts)
 
-[] new build script !!!
+[x] new build script !!!
 
 Live Note
 [x] Try out plate/slate
