@@ -1,6 +1,6 @@
 ## Changelog
 
-### `1.0.0` (Firefox Beta)
+### `1.0.0` (`Diwali Special`, Firefox Beta)
 
 - New revamped `v1.x` codebase for `Firefox`. Rebuilt with `React 17.x (hooks)`, `Typescript`, `styled-components`, `MUI`, `redux toolkit` and friends
 - Experimental `Rich Text Editor` (similar to slack) for note.
