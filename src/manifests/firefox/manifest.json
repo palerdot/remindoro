@@ -1,0 +1,64 @@
+/*  
+ * JSONC (JSON with Comments)
+ * we are using comments because we will be skippint comments before building
+ */
+{
+    
+    "version": "0.0.0", // version number will be replaced from package.json
+    "manifest_version": 2,
+    "name": "remindoro",
+    "description": "Reminders in your browser",
+    "content_scripts": [
+      {
+        "matches": [
+          "<all_urls>"
+        ],
+        "js": [
+          "lib/js/browser-polyfill.js",
+          "content.js"
+        ]
+      }
+    ],
+    "background": {
+      "scripts": [
+        "lib/js/browser-polyfill.js",
+        "background.js"
+      ]
+    },
+    "browser_action": {
+      "default_icon": "img/remindoro-icon.png",
+      "default_title": "Remindoro",
+      "default_popup": "popup.html"
+    },
+    "permissions": [
+      "alarms",
+      "activeTab",
+      "clipboardRead",
+      "clipboardWrite",
+      "contextMenus",
+      "notifications",
+      "storage"
+    ],
+    "icons": {
+      "128": "img/remindoro-icon.png"
+    },
+    /* "web_accessible_resources": [
+      "sidebar.html"
+    ], */
+    /* "sidebar_action": {
+      "default_icon": "img/icon.png",
+      "default_title" : "Sidebar",
+      "default_panel": "sidebar.html"
+    },
+    "options_ui": {
+      "page": "./options.html",
+      "open_in_tab": true
+    }, */
+    "browser_specific_settings": {
+      "gecko": {
+        "id": "remindoro@palerdot.in",
+        "strict_min_version": "57.0"
+      }
+    }
+  }
+  

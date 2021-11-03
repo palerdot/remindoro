@@ -1,5 +1,16 @@
 ## Changelog
 
+### `1.0.0` (`Diwali Special`, Firefox Beta)
+
+- New revamped `v1.x` codebase for `Firefox`. Rebuilt with `React 17.x (hooks)`, `Typescript`, `styled-components`, `MUI`, `redux toolkit` and friends
+- Experimental `Rich Text Editor` (similar to slack) for note.
+- Improved UX with dedicated settings. 
+- Pause/resume notifications. 
+
+and more ...
+
+-----------------------------------------------------------------------------------
+
 ### 0.3.0
 - `Firefox/Chrome`: fix overflow issue
 - Better instructions for setting up old dev environment

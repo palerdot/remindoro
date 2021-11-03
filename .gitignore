@@ -1,6 +1,17 @@
 node_modules
+try.js
+old-extension
+dist
+extension
+release
+dev-server
+.vscode
 temp
 .tmp
+yarn-error.log
+*.code-*
+
+# NOTE: to be cleaned up
 dist
 build
 .sass-cache
@@ -10,3 +21,5 @@ package
 app/scripts
 app/styles
 .DS_Store
+
+*.tsbuildinfo
