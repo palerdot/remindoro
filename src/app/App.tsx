@@ -54,19 +54,21 @@ const GlobalStyle = createGlobalStyle`
 
     /* Scroll bar customisations */
     & ::-webkit-scrollbar {
-      background: ${props => props.theme.primaryDark};
-    }
-    & ::-webkit-scrollbar-thumb {
-      background: ${props => props.theme.primaryLight};
-    }
-
-    & ::-webkit-scrollbar {
-      display: none;
+      background: transparent;
       width: 0.25rem;
       height: 0.25rem;
+      -webkit-box-shadow: none !important;
     }
+    & ::-webkit-scrollbar-thumb {
+      background: transparent;
+      -webkit-box-shadow: none !important;
+    }
+
     & :hover::-webkit-scrollbar {
-      display: block;
+      background: ${props => props.theme.primaryDark};
+    }
+    & :hover::-webkit-scrollbar-thumb {
+      background: ${props => props.theme.primaryLight};
     }
 
     /* 
