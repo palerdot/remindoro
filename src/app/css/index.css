@@ -26,9 +26,14 @@
 /* Roboto font */
 @font-face {
   font-family: 'Roboto';
-  font-weight: 400;
   font-style: normal;
-  src: url(./fonts/Roboto/Roboto-Regular.ttf) format('truetype');
+  font-weight: 400;
+  src: url('./fonts/roboto/roboto-v29-latin-regular.eot'); /* IE9 Compat Modes */
+  src: local(''),
+       url('./fonts/roboto/roboto-v29-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('./fonts/roboto/roboto-v29-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('./fonts/roboto/roboto-v29-latin-regular.woff') format('woff'), /* Modern Browsers */
+       url('./fonts/roboto/roboto-v29-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
 }
 
 body {
@@ -40,7 +45,8 @@ body {
   color: white !important;
 
   /* font-family: 'Roboto', sans-serif; */
-  font-family: "Roboto", BlinkMacSystemFont,"Segoe UI","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+  /* font-family: "Roboto", BlinkMacSystemFont,"Segoe UI","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif; */
+  font-family: 'Roboto';
 }
 
 body ::-webkit-scrollbar {
