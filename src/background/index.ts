@@ -1,4 +1,4 @@
-import { browser } from 'webextension-polyfill-ts'
+import browser from 'webextension-polyfill'
 
 import type { RootState } from '@app/Store/'
 
@@ -11,7 +11,6 @@ import { handle_context_menu } from './utils/context-menu'
 const { version } = packageInfo
 
 /*
- * ref: https://github.com/Lusito/webextension-polyfill-ts
  * ref: https://github.com/mozilla/webextension-polyfill
  */
 

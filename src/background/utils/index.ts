@@ -1,4 +1,4 @@
-import { browser } from 'webextension-polyfill-ts'
+import browser from 'webextension-polyfill'
 import { get } from 'lodash'
 
 import type { RootState } from '@app/Store/'

@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid'
 
-import type { Menus, Tabs } from 'webextension-polyfill-ts'
+import type { Menus, Tabs } from 'webextension-polyfill'
 
 import { RemindoroType } from '@app/Store/Slices/Remindoros'
 import { ContextMenuKeys } from '@app/Constants'

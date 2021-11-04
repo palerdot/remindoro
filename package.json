@@ -60,6 +60,7 @@
     "@types/react-router-dom": "^5.1.8",
     "@types/styled-components": "^5.1.4",
     "@types/uuid": "^8.3.1",
+    "@types/webextension-polyfill": "^0.8.1",
     "@typescript-eslint/parser": "^4.28.5",
     "@webcomponents/webcomponentsjs": "^2.2.6",
     "babel-loader": "^8.0.5",
@@ -119,8 +120,6 @@
     "typescript": "^4.4.4",
     "url-loader": "^4.1.1",
     "web-ext": "^5.2.0",
-    "webextension-polyfill": "^0.3.1",
-    "webextension-polyfill-ts": "^0.20.0",
     "webpack": "^5.45.1",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^4.0.0-beta.3",
@@ -157,7 +156,8 @@
     "slate-mark": "^0.0.6",
     "slate-react": "^0.65.2",
     "styled-components": "^5.2.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "webextension-polyfill": "^0.8.0"
   },
   "browserslist": [
     ">0.2%",

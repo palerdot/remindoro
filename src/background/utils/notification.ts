@@ -1,4 +1,4 @@
-import { browser } from 'webextension-polyfill-ts'
+import browser from 'webextension-polyfill'
 import { omit, isEmpty } from 'lodash'
 import dayjs from 'dayjs'
 
