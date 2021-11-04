@@ -1,6 +1,7 @@
 /*  
  * JSONC (JSON with Comments)
- * we are using comments because we will be skippint comments before building
+ * we are using comments because we will be skipping/removing comments before building 
+ * This file will be parsed, replaced with package.json version and copied to final build folder
  */
 {
     
@@ -21,7 +22,7 @@
     ],
     "background": {
       "scripts": [
-        "lib/js/browser-polyfill.js",
+        // "lib/js/browser-polyfill.js",
         "background.js"
       ]
     },

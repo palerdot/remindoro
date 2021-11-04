@@ -1,6 +1,7 @@
-/*
+/*  
  * JSONC (JSON with Comments)
- * we are using comments because we will be skippint comments before building
+ * we are using comments because we will be skipping/removing comments before building 
+ * This file will be parsed, replaced with package.json version and copied to final build folder
  */
 {
     "name": "remindoro",
@@ -21,14 +22,12 @@
         "clipboardRead",
         "contextMenus",
         "notifications",
-        "storage"
+        "storage",
+        "unlimitedStorage"
     ],
     "host_permissions": [
         "http://*/*",
         "https://*/*"
-    ],
-    "optional_permissions": [
-        "unlimitedStorage"
     ],
     "action": {
         "default_icon": {
