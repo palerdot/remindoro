@@ -11,7 +11,7 @@
     "16": "img/remindoro-icon-16.png",
     "128": "img/remindoro-icon.png"
   },
-  "default_locale": "en",
+  // "default_locale": "en",
   "background": {
     "scripts": ["lib/js/browser-polyfill.js", "background.js"],
     "persistent": false

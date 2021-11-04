@@ -51,6 +51,24 @@ dayjs.extend(DayjsRelativeTime, { thresholds })
 // global style
 const GlobalStyle = createGlobalStyle`
   body {
+
+    /* Scroll bar customisations */
+    & ::-webkit-scrollbar {
+      background: ${props => props.theme.primaryDark};
+    }
+    & ::-webkit-scrollbar-thumb {
+      background: ${props => props.theme.primaryLight};
+    }
+
+    & ::-webkit-scrollbar {
+      display: none;
+      width: 0.25rem;
+      height: 0.25rem;
+    }
+    & :hover::-webkit-scrollbar {
+      display: block;
+    }
+
     /* 
      * hide the manual input toggle button;  
      *
