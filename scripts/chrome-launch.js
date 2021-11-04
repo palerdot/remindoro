@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-const path = require('path');
-const chromeLaunch = require('chrome-launch'); // eslint-disable-line import/no-extraneous-dependencies
+const path = require('path')
+const chromeLaunch = require('chrome-launch') // eslint-disable-line import/no-extraneous-dependencies
 
-require('colors');
+require('colors')
 
-const url = 'https://google.com';
-const dev = path.resolve(__dirname, '..', 'dev');
-const args = [`--load-extension=${dev}`];
+const url = 'https://youtube.com'
+const dev = path.resolve(__dirname, '..', 'dev-server')
+const args = [`--load-extension=${dev}`]
 
-chromeLaunch(url, { args });
+chromeLaunch(url, { args })

@@ -1,0 +1,51 @@
+/*
+ * JSONC (JSON with Comments)
+ * we are using comments because we will be skippint comments before building
+ */
+{
+  "name": "remindoro",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "description": "Reminders in your browser",
+  "icons": {
+    "16": "img/remindoro-icon-16.png",
+    "128": "img/remindoro-icon.png"
+  },
+  "default_locale": "en",
+  "background": {
+    "scripts": ["lib/js/browser-polyfill.js", "background.js"],
+    "persistent": false
+  },
+  "permissions": [
+    "alarms",
+    "tabs",
+    "http://*/*",
+    "https://*/*",
+    "background",
+    "clipboardRead",
+    "contextMenus",
+    "notifications",
+    "storage"
+  ],
+  "omnibox": {
+    "keyword": "OMNIBOX-KEYWORD"
+  },
+  "browser_action": {
+    "default_icon": {
+      "19": "img/remindoro-icon-19.png",
+      "38": "img/remindoro-icon-38.png"
+    },
+    "default_title": "Remindoro",
+    "default_popup": "popup.html"
+  },
+  "web_accessible_resources": ["img/remindoro-icon.png"],
+  "tts_engine": {
+    "voices": [
+      {
+        "voice_name": "Alice",
+        "lang": "en-US",
+        "event_types": ["start", "marker", "end"]
+      }
+    ]
+  }
+}
