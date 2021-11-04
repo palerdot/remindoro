@@ -38,7 +38,7 @@ export function notify({ title, note, reminder }: Notify) {
     .then(() => {
       // notification success callback
     })
-    .catch(err => {
+    .catch(() => {
       // error showing notification
     })
 }
