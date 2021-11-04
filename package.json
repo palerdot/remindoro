@@ -17,10 +17,13 @@
     "lint": "prettier -l **/src/**/*.{js,jsx,ts,tsx}",
     "lint:fix": "prettier --write **/src/**/*.{js,jsx,ts,tsx}",
     "typecheck": "node_modules/typescript/bin/tsc --noEmit",
+    "dedupe-pkg": "yarn yarn-deduplicate; yarn install;",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "chrome-launch": "node scripts/dev.js --browser=chrome",
-    "firefox-launch": "node scripts/dev.js --browser=firefox"
+    "firefox-launch": "node scripts/dev.js --browser=firefox",
+    "chrome-build": "node scripts/build.js --browser=chrome",
+    "firefox-build": "node scripts/build.js --browser=firefox"
   },
   "keywords": [
     "chrome",
@@ -123,6 +126,7 @@
     "webpack-dev-server": "^4.0.0-beta.3",
     "webpack-manifest-plugin": "^3.1.1",
     "yargs": "^12.0.5",
+    "yarn-deduplicate": "^3.1.0",
     "zip-a-folder": "^1.1.0"
   },
   "dependencies": {
