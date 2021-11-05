@@ -15,14 +15,12 @@
           "<all_urls>"
         ],
         "js": [
-          "lib/js/browser-polyfill.js",
           "content.js"
         ]
       }
     ],
     "background": {
       "scripts": [
-        // "lib/js/browser-polyfill.js",
         "background.js"
       ]
     },
