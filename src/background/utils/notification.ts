@@ -26,7 +26,7 @@ type Notify = {
 
 export function notify({ title, note, reminder }: Notify) {
   // IMPORTANT: Chrome bug
-  // Chrome does not repeated notification for same id
+  // Chrome does not repeat notification for same id
   // so we are creating unique id for each notification to make Chrome Happy!!
   const id = uuid()
 
