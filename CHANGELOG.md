@@ -1,5 +1,12 @@
 ## Changelog
 
+### `1.0.1` (Chrome Beta)
+
+- `Chrome v1.x`. `Manifest v3`
+- `webextension-polyfill` upgrade to `0.8.0` (and `@types/webextension-polyfill`)
+- Chrome notification fix: unique uuid for every notification
+- Font fixes.
+
 ### `1.0.0` (`Diwali Special`, Firefox Beta)
 
 - New revamped `v1.x` codebase for `Firefox`. Rebuilt with `React 17.x (hooks)`, `Typescript`, `styled-components`, `MUI`, `redux toolkit` and friends
