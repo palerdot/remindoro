@@ -19,18 +19,18 @@ const copyPatterns = [
   //   from: 'src/lib',
   //   to: 'lib/',
   // },
-  {
-    from: 'node_modules/webextension-polyfill/dist/browser-polyfill.js',
-    to: 'lib/js/',
-  },
-  {
-    from: 'node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js',
-    to: 'lib/js/',
-  },
-  {
-    from: 'node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js',
-    to: 'lib/js/',
-  },
+  // {
+  //   from: 'node_modules/webextension-polyfill/dist/browser-polyfill.js',
+  //   to: 'lib/js/',
+  // },
+  // {
+  //   from: 'node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js',
+  //   to: 'lib/js/',
+  // },
+  // {
+  //   from: 'node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js',
+  //   to: 'lib/js/',
+  // },
   // START: Fonts
   // material fonts
   // {
@@ -62,10 +62,9 @@ const copyPatterns = [
 const htmlAssets = [
   // ref: https://github.com/mozilla/webextension-polyfill
   // mozilla's compatibility layer
-  'lib/js/browser-polyfill.js',
-
-  'lib/js/webcomponents-bundle.js',
-  'lib/js/custom-elements-es5-adapter.js',
+  // 'lib/js/browser-polyfill.js',
+  // 'lib/js/webcomponents-bundle.js',
+  // 'lib/js/custom-elements-es5-adapter.js',
 ]
 
 module.exports = {

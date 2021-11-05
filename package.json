@@ -1,15 +1,15 @@
 {
   "name": "remindoro",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Better Reminders in browser",
   "scripts": {
     "test": "jest",
-    "start:chrome": "npm run chrome-launch",
-    "start:firefox": "npm run firefox-launch",
+    "start:chrome": "yarn dedupe-pkg; npm run chrome-launch",
+    "start:firefox": "yarn dedupe-pkg; npm run firefox-launch",
     "start:views": "node scripts/start.js",
     "dev": "node scripts/dev.js",
-    "build:chrome": "node scripts/build.js --browser=chrome",
-    "build:firefox": "node scripts/build.js --browser=firefox",
+    "build:chrome": "yarn dedupe-pkg; npm run chrome-build",
+    "build:firefox": "yarn dedupe-pkg; npm run firefox-build",
     "compress": "node scripts/compress",
     "compress-keygen": "crx keygen",
     "clean": "rimraf build/ dev/ dist/ extension/ *.zip *.crx",
@@ -17,10 +17,13 @@
     "lint": "prettier -l **/src/**/*.{js,jsx,ts,tsx}",
     "lint:fix": "prettier --write **/src/**/*.{js,jsx,ts,tsx}",
     "typecheck": "node_modules/typescript/bin/tsc --noEmit",
+    "dedupe-pkg": "yarn yarn-deduplicate; yarn install;",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "chrome-launch": "node scripts/dev.js --browser=chrome",
-    "firefox-launch": "node scripts/dev.js --browser=firefox"
+    "firefox-launch": "node scripts/dev.js --browser=firefox",
+    "chrome-build": "node scripts/build.js --browser=chrome",
+    "firefox-build": "node scripts/build.js --browser=firefox"
   },
   "keywords": [
     "chrome",
@@ -57,6 +60,7 @@
     "@types/react-router-dom": "^5.1.8",
     "@types/styled-components": "^5.1.4",
     "@types/uuid": "^8.3.1",
+    "@types/webextension-polyfill": "^0.8.1",
     "@typescript-eslint/parser": "^4.28.5",
     "@webcomponents/webcomponentsjs": "^2.2.6",
     "babel-loader": "^8.0.5",
@@ -116,13 +120,12 @@
     "typescript": "^4.4.4",
     "url-loader": "^4.1.1",
     "web-ext": "^5.2.0",
-    "webextension-polyfill": "^0.3.1",
-    "webextension-polyfill-ts": "^0.20.0",
     "webpack": "^5.45.1",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^4.0.0-beta.3",
     "webpack-manifest-plugin": "^3.1.1",
     "yargs": "^12.0.5",
+    "yarn-deduplicate": "^3.1.0",
     "zip-a-folder": "^1.1.0"
   },
   "dependencies": {
@@ -153,7 +156,8 @@
     "slate-mark": "^0.0.6",
     "slate-react": "^0.65.2",
     "styled-components": "^5.2.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "webextension-polyfill": "^0.8.0"
   },
   "browserslist": [
     ">0.2%",

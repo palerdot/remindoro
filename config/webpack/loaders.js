@@ -74,6 +74,8 @@ const getLoaders = (
     return styleLoaders
   }
 
+  const FONT_PATTERN = /\.(woff|woff2|eot|ttf|otf)$/i
+
   const urlLoader = {
     test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
     loader: require.resolve('url-loader'),
@@ -81,6 +83,12 @@ const getLoaders = (
       limit: 10000,
       name: 'static/media/[name].[hash:8].[ext]',
     },
+  }
+
+  // ref: https://webpack.js.org/guides/asset-modules/
+  const fontLoader = {
+    test: [FONT_PATTERN],
+    type: 'asset',
   }
 
   // TS transpilation
@@ -205,7 +213,7 @@ const getLoaders = (
 
   const fileLoader = {
     loader: require.resolve('file-loader'),
-    exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
+    exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/, FONT_PATTERN],
     options: {
       name: 'static/media/[name].[hash:8].[ext]',
     },
@@ -218,6 +226,7 @@ const getLoaders = (
     outsideBabelLoader,
     styleLoader,
     cssModuleLoader,
+    fontLoader,
     fileLoader,
   }
 }

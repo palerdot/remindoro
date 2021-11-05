@@ -1,29 +1,33 @@
+<p align="center">
+    <img src="./src/app/../img/remindoro-icon.png" alt="Remindoro" width="64" height="64" />
+</p>
+
+<p align="center">Better reminders in your favorite browser.</p>
+
+<br/>
+
 # Remindoro
 
-Browser Extension (Firefox/Chrome) to set one-time/repeatable reminders in Chrome Browser.
-
-> Note: This branch has revamped remindoro extension that is currently in beta only for Firefox. Chrome codebase is in `master-v0.x` branch. Chrome extension will be updated with newer codebase once beta works fine in Firefox.
+Browser Extension (Chrome/Firefox) to set one-time/repeatable reminders in your favorite browser.
 
 [![Build Status](https://travis-ci.org/palerdot/remindoro.svg?branch=master)](https://travis-ci.org/palerdot/remindoro)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 This extension is build with
 
-* [ReactJS](https://facebook.github.io/react/)
-* [Typescript](https://www.typescriptlang.org/)
-* [Redux Toolkit](https://redux-toolkit.js.org/)
-* [Material UI](https://mui.com/)
-* [Styled Components](https://styled-components.com/)
+- [React](https://facebook.github.io/react/)
+- [Typescript](https://www.typescriptlang.org/)
+- [Redux Toolkit](https://redux-toolkit.js.org/)
+- [Material UI](https://mui.com/)
+- [Styled Components](https://styled-components.com/)
 
 ## Download for Firefox and Chrome browsers by clicking on the following links
 
 - [Chrome Extension](https://chrome.google.com/webstore/detail/remindoro/njmniggbfobokemdjebnhmbldimkofkc/)
 - [Firefox Extension](https://addons.mozilla.org/en-GB/firefox/addon/remindoro/)
 
+More information about the extension can be found at the [Remindoro website](https://palerdot.in/remindoro).
 
-More information about the extension can be found at the [Remindoro website](https://palerdot.in/remindoro). 
-
-**************
+---
 
 [Changelog](./CHANGELOG.md)
-

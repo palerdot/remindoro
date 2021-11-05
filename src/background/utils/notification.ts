@@ -1,8 +1,9 @@
-import { browser } from 'webextension-polyfill-ts'
+import browser from 'webextension-polyfill'
+import { v4 as uuid } from 'uuid'
 import { omit, isEmpty } from 'lodash'
 import dayjs from 'dayjs'
 
-import type { Remindoro } from '@app/Store/Slices/Remindoros'
+import type { Remindoro, Reminder } from '@app/Store/Slices/Remindoros'
 
 import { syncToStorage, loadFromStorage } from '@app/Util/BrowserStorage'
 
@@ -20,15 +21,22 @@ type Notify = {
   id: string
   title?: string
   note?: string
+  reminder?: Reminder
 }
 
-export function notify({ id, title, note }: Notify) {
+export function notify({ title, note, reminder }: Notify) {
+  // IMPORTANT: Chrome bug
+  // Chrome does not repeat notification for same id
+  // so we are creating unique id for each notification to make Chrome Happy!!
+  const id = uuid()
+
   browser.notifications
     .create(id, {
       type: 'basic',
       iconUrl: '/img/remindoro-icon.png',
       title: title || '',
       message: note || '',
+      eventTime: reminder?.time,
     })
     .then(() => {
       // notification success callback

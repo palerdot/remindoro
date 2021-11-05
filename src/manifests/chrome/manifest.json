@@ -1,0 +1,40 @@
+/*  
+ * JSONC (JSON with Comments)
+ * we are using comments because we will be skipping/removing comments before building 
+ * This file will be parsed, replaced with package.json version and copied to final build folder
+ */
+{
+    "name": "remindoro",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "description": "Reminders in your browser",
+    "icons": {
+        "16": "img/remindoro-icon-16.png",
+        "128": "img/remindoro-icon.png"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": [
+        "alarms",
+        "tabs",
+        "background",
+        "clipboardRead",
+        "contextMenus",
+        "notifications",
+        "storage",
+        "unlimitedStorage"
+    ],
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*"
+    ],
+    "action": {
+        "default_icon": {
+            "19": "img/remindoro-icon-19.png",
+            "38": "img/remindoro-icon-38.png"
+        },
+        "default_title": "Remindoro",
+        "default_popup": "popup.html"
+    }
+}
