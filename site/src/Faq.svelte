@@ -1,4 +1,6 @@
 <script>
+  import GithubIcon from './Icons/Github.svelte'
+
   const FAQS = [
     {
       question: 'How to edit a note/reminder?',
@@ -91,6 +93,22 @@ If the repeatable reminder is scheduled to repeat in minutes or hours, the alrea
       <span>Firefox Extension Page</span>
     </a>
   </div>
+  <div class={'github-section'}>
+    <div class={'heading'}>{'Open Source'}</div>
+    <div class={'subheading'}>
+      {'The source code of this extension can be found at the following github page'}
+    </div>
+    <a
+      href={'https://github.com/palerdot/remindoro'}
+      target="_blank"
+      class={'button'}
+    >
+      <span class={'icon'}>
+        <GithubIcon />
+      </span>
+      <span>{'View on Github'}</span>
+    </a>
+  </div>
 </section>
 
 <style>
@@ -129,5 +147,16 @@ If the repeatable reminder is scheduled to repeat in minutes or hours, the alrea
 
   .link {
     color: #c55ffc;
+  }
+
+  .github-section {
+    margin: 3.14rem 0;
+    padding: 3.14rem 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-top: thin solid #c55ffc;
   }
 </style>
