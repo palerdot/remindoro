@@ -52,11 +52,6 @@ if (!['firefox', 'chrome'].includes(browser)) {
   process.exit(1)
 }
 
-// Warn and crash if required files are missing
-if (!checkRequiredFiles([paths.appHtml])) {
-  process.exit(1)
-}
-
 // Process CLI arguments
 // const argv = process.argv.slice(2)
 // const writeStatsJson = argv.indexOf('--stats') !== -1
@@ -229,11 +224,3 @@ function build(previousFileSizes) {
     })
   })
 }
-/*
-function copyPublicFolder() {
-  fs.copySync(paths.appPublic, paths.appBuild, {
-    dereference: true,
-    filter: file => file !== paths.appHtml,
-  });
-}
-*/

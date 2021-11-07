@@ -78,8 +78,10 @@ module.exports = {
   appExtension: resolveApp(`${RELEASE_FOLDER}/${argv.browser}`),
 
   appDev: resolveApp('dev-server'),
-  appPublic: resolveApp('public'),
-  appHtml: resolveApp('public/index.html'),
+
+  // appPublic: resolveApp('public'),
+  // appHtml: resolveApp('public/index.html'),
+
   appTemplate: resolveApp('config/template.html'),
   optionsTemplate: resolveApp('src/options/template.html'),
   sidebarTemplate: resolveApp('src/sidebar/template.html'),
