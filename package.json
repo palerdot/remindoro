@@ -51,6 +51,7 @@
     "@nuxt/friendly-errors-webpack-plugin": "^2.5.1",
     "@polymer/paper-button": "^3.0.1",
     "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "@storybook/addon-actions": "^4.1.7",
     "@storybook/addon-links": "^4.1.7",

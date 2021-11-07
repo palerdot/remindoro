@@ -1,12 +1,12 @@
 <script>
+  import pkg from '../../package.json'
 </script>
 
 <footer>
   <div class={'footer-wrapper content'}>
     <div class={'about'}>
-      <h3>{'About'}</h3>
       <div class={'about-text'}>
-        {`As a person who spend most of the time in a desktop Browser (currently Firefox, previously Chrome), I wanted a way to remind myself to take scheduled breaks instead of sitting continously in front of a computer screen. Also, when I come across some important web pages/articles, I needed a way to read it later. This browser Extension is created to solve both of these problems. There will be more improvements/features for this extension in the future. If you are a regular user of this extension, please give your feedbacks in the Firefox or Chrome extensions page.`}
+        {`v${pkg.version}`}
       </div>
     </div>
     <div class={'links'}>
@@ -48,6 +48,7 @@
     display: flex;
     flex: 2;
     flex-direction: column;
+    justify-content: flex-end;
 
     padding-right: 2rem;
   }
@@ -60,6 +61,7 @@
     margin-left: auto;
 
     display: flex;
+    align-items: flex-end;
     flex: 1;
     flex-direction: column;
   }
