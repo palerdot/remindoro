@@ -9,16 +9,16 @@
     "manifest_version": 2,
     "name": "remindoro",
     "description": "Reminders in your browser",
-    "content_scripts": [
-      {
-        "matches": [
-          "<all_urls>"
-        ],
-        "js": [
-          "content.js"
-        ]
-      }
-    ],
+    // "content_scripts": [
+    //   {
+    //     "matches": [
+    //       "<all_urls>"
+    //     ],
+    //     "js": [
+    //       "content.js"
+    //     ]
+    //   }
+    // ],
     "background": {
       "scripts": [
         "background.js"
@@ -32,8 +32,8 @@
     "permissions": [
       "alarms",
       "activeTab",
-      "clipboardRead",
-      "clipboardWrite",
+      // "clipboardRead",
+      // "clipboardWrite",
       "contextMenus",
       "notifications",
       "storage"

@@ -1,5 +1,12 @@
 ## Changelog
 
+### `1.0.2` (Manifest fix)
+
+-  Removed `clipboard` related permissions
+-  Splash screen
+-  Help text fix
+
+
 ### `1.0.1` (Chrome Beta)
 
 - `Chrome v1.x`. `Manifest v3`
