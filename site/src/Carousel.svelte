@@ -5,32 +5,32 @@
 
   const FEATURES = [
     {
-      src: '/img/screenshot-1.png',
+      src: './img/screenshot-1.png',
       description: 'Beter Reminders and Notes in your favorite browser',
       alt: 'Better reminders',
     },
     {
-      src: '/img/screenshot-2.png',
+      src: './img/screenshot-2.png',
       description: 'Save text/selection from webpages as notes/reminders.',
       alt: 'save text from webpages',
     },
     {
-      src: '/img/screenshot-3.png',
+      src: './img/screenshot-3.png',
       description: 'Set One-time/repeat reminders',
       alt: 'set one-time/repeat reminders',
     },
     {
-      src: '/img/screenshot-4.png',
+      src: './img/screenshot-4.png',
       description: 'Configure Date for your reminders',
       alt: 'configure date for reminders.',
     },
     {
-      src: '/img/screenshot-5.png',
+      src: './img/screenshot-5.png',
       description: 'Configure Time for your reminders',
       alt: 'configure time for reminders.',
     },
     {
-      src: '/img/screenshot-6.png',
+      src: './img/screenshot-6.png',
       description: 'Tweak settings that suit your preference',
       alt: 'customizable settings',
     },
