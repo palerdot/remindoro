@@ -53,7 +53,7 @@ const FAQS = [
   {
     question: 'How to go to home screen after editing a note?',
     answer:
-      'You can click on the home icon in the header (top right part of the screen) to get back to the ome screen.',
+      'You can click on the home icon in the header (top right part of the screen) to get back to the home screen.',
   },
   {
     question: 'What is Rich Text Editor?',
