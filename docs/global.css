@@ -1,0 +1,97 @@
+html,
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #271332;
+  color: #eee;
+}
+
+body {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.sc-carousel-dot__dot,
+.sc-carousel-progress__indicator {
+  background-color: #c55ffc !important;
+}
+
+.sc-carousel-progress__container,
+.sc-carousel-arrow__circle {
+  background-color: #360e4e !important;
+}
+
+.sc-carousel-arrow__arrow {
+  border-color: #c55ffc !important;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 340px;
+  height: 64px;
+  margin: 16px;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+
+  background: #360e4e;
+  color: #c55ffc;
+
+  border: thin solid transparent;
+}
+
+.button:hover {
+  opacity: 0.95;
+  border: thin solid #c55ffc;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  margin-right: 16px;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .content {
+    width: 600px;
+    margin: auto;
+  }
+}
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .content {
+    width: 600px;
+    margin: auto;
+  }
+}
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .content {
+    width: 720px;
+    margin: auto;
+  }
+}
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .content {
+    width: 720px;
+    margin: auto;
+  }
+}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .content {
+    width: 1000px;
+    margin: auto;
+  }
+}
