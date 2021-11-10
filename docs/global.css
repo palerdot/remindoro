@@ -61,19 +61,23 @@ a {
 }
 
 /* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
+
+/* Media Query for Mobile Devices */
+@media (max-width: 480px) {
   .content {
-    width: 600px;
+    width: 320px;
     margin: auto;
   }
 }
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {
+
+/* Media Query for low resolution  Tablets, Ipads */
+@media (min-width: 481px) and (max-width: 767px) {
   .content {
-    width: 600px;
+    width: 480px;
     margin: auto;
   }
 }
+
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
   .content {

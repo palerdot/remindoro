@@ -63,6 +63,12 @@
     border-bottom: thin solid #c55ffc;
   }
 
+  @media (max-width: 767px) {
+    .container {
+      display: none;
+    }
+  }
+
   .holder {
     display: flex;
     flex-direction: column;
