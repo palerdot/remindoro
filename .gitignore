@@ -14,6 +14,7 @@ yarn-error.log
 # NOTE: to be cleaned up
 dist
 build
+!docs/build
 .sass-cache
 app/bower_components
 test/bower_components
