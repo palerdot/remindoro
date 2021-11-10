@@ -1,7 +1,7 @@
 <header>
   <div class={'header-wrapper content'}>
     <a id="logo-container" href="/" class="brand-logo">
-      <img src="/favicon.png" alt={'Remindoro'} />
+      <img src="./favicon.png" alt={'Remindoro'} />
       Remindoro
     </a>
     <div class={'links'}>
