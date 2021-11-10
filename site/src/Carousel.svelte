@@ -7,7 +7,7 @@
     {
       src: './img/screenshot-1.png',
       description: 'Beter Reminders and Notes in your favorite browser',
-      alt: 'Better reminders',
+      alt: 'Better reminders and notes',
     },
     {
       src: './img/screenshot-2.png',
