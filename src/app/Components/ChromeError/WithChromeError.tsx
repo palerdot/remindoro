@@ -118,7 +118,9 @@ export function isOldRemindoro(
   remindoro: OldRemindoro | Remindoro
 ): remindoro is OldRemindoro {
   const isBadRepeat = isBoolean(get(remindoro, 'reminder.is_repeat'))
-  const isBadTime = !isNumber(get(remindoro, 'reminder.time'))
+  const reminderPresent = get(remindoro, 'reminder', false)
+  const isBadTime =
+    reminderPresent && !isNumber(get(remindoro, 'reminder.time'))
 
   return isBadRepeat || isBadTime
 }
