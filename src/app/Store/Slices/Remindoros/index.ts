@@ -1,7 +1,10 @@
-import { isNil, isEqual } from '@lodash'
+import { isNil, isEqual, cloneDeep } from '@lodash'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { v4 as uuid } from 'uuid'
 import dayjs from 'dayjs'
+
+import { clean_v0_data } from '@app/Util/cleaners'
+import { isOldRemindoro } from '@app/Components/ChromeError/WithChromeError'
 
 type Maybe<T> = T | undefined
 
@@ -169,6 +172,21 @@ Taking a walk for every **45 minutes** is good for your health. Avoid continous 
       const toDelete = action.payload
       return state.filter(remindoro => remindoro.id !== toDelete)
     },
+
+    // IMPORTANT: helper action that migrates v0.x to v1.0x data
+    // This is mainly because of Chrome weird behaviour that failed to apply migration for 1.x
+    migrateV1Remindoros: state => {
+      const toMigrate = cloneDeep(state)
+
+      return toMigrate.map(remindoro => {
+        // if we have an old remindoro we will do the cleaning
+        if (isOldRemindoro(remindoro)) {
+          return clean_v0_data(remindoro)
+        }
+
+        return remindoro
+      })
+    },
   },
 })
 
@@ -179,6 +197,7 @@ export const {
   updateNote,
   updateReminder,
   deleteRemindoro,
+  migrateV1Remindoros,
 } = remindoroSlice.actions
 
 export default remindoroSlice.reducer

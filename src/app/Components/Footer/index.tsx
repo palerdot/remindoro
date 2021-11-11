@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import ToggleNotifications from '@app/Components/Settings/ToggleNotifications'
+import MigrateChromeData from '@app/Components/ChromeError/FooterItem'
 
 const Holder = styled.div`
   display: flex;
@@ -32,7 +33,9 @@ function Footer() {
       <div className={'icon-holder'}>
         <ToggleNotifications />
       </div>
-      <div className={'message-section'}>{''}</div>
+      <div className={'message-section'}>
+        <MigrateChromeData />
+      </div>
     </Holder>
   )
 }

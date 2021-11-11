@@ -55,7 +55,7 @@ import {
  */
 
 // defining old Remindoro type
-interface OldRemindoro {
+export interface OldRemindoro {
   id: number | string
   title: string
   type: string

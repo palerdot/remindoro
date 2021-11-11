@@ -1,5 +1,9 @@
 ## Changelog
 
+### `1.0.3`  (Chrome/ Migration fix)
+- Option for user to fix the data in chrome (since chrome bug prevented data migration). The option is shown in the footer where the user can fix the data. Once the data is fixed the option will not be shown again.
+
+
 ### `1.0.2` (Manifest fix)
 
 -  Removed `clipboard` related permissions
