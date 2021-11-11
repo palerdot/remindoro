@@ -94,7 +94,7 @@ function ConfirmMigrate({ isOpen, closeModal }: Props) {
         </DialogTitle>
         <DialogContent className={'migrate-dialog-description'}>
           <DialogContentText id="migrate-dialog-description">
-            {`After upgrading to new 1.x remindoro, if you find any anomalies with your reminders (or notes), please click 'Fix Reminder data' to fix data issues. This is mainly because of an anomaly in Chrome browser during the update process.`}
+            {`After upgrading to new 1.x remindoro, if you find any anomalies with your reminders (or notes), please click 'Fix Reminder data' to fix data issues. This is because of an anomaly in Chrome browser during the update process.`}
           </DialogContentText>
           <p className={'highlight'}>
             {`Please note this data fix will remove html tags (like <div></div>) from your notes for better security. In case your don't want this behaviour and not choose to fix the reminder data, you can fix you reminders by rescheduling them (by turning off reminder and then turning on again). For better experience, you can also create a new reminder/note with old content and delete the old reminder.`}
