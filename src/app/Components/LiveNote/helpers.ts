@@ -1,7 +1,9 @@
-import slate, { serialize } from 'remark-slate'
+import slate, { serialize, deserialize } from 'remark-slate'
 import { unified } from 'unified'
 import markdown from 'remark-parse'
 import styled, { css } from 'styled-components'
+import { fromMarkdown } from 'mdast-util-from-markdown'
+import { get } from '@lodash'
 
 import type { Descendant } from 'react-slite'
 
@@ -20,6 +22,10 @@ export const LiveNoteStyles = css`
   h6 {
     margin: 0;
     color: ${props => props.theme.greyOne};
+  }
+
+  ul li p {
+    margin: 0;
   }
 
   .slate-CodeBlockElement,
@@ -83,8 +89,41 @@ export function mdToSlate(
 
 export function slateToMd(nodes: Descendant[]): Promise<string> {
   return new Promise(resolve => {
-    const output = nodes.map(v => serialize(v)).join('')
+    const output = nodes
+      .map(v => {
+        // list item handling
+        // wrap children inside paragraphs
+        const isList = get(v, 'type') === 'ul_list'
+        if (isList) {
+          const listChildren = get(v, 'children', []).map((x: any) => {
+            return {
+              ...x,
+              children: [
+                {
+                  type: 'paragraph',
+                  children: get(x, 'children', []),
+                },
+              ],
+            }
+          })
+          return serialize({
+            type: 'ul_list',
+            children: listChildren,
+          })
+        }
+
+        const output = serialize(v)
+        return output || ''
+      })
+      .join('')
 
     return resolve(output)
   })
+}
+
+export function porumaiMd(doc: string) {
+  const parsed = fromMarkdown(doc)
+  const output = parsed.children.map(v => deserialize(v as any))
+
+  console.log('porumai ... porumai md ', output, doc)
 }
