@@ -36,7 +36,7 @@ function LiveNote({ id, note, readOnly }: Props) {
       return
     }
 
-    mdToSlate(note.trim(), parsed => {
+    mdToSlate(note.trim()).then(parsed => {
       setInitialValue(parsed)
     })
   }, [note])

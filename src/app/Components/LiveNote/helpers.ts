@@ -68,23 +68,13 @@ export const EditorHolder = styled.div`
   ${LiveNoteStyles}
 `
 
-export function mdToSlate(
-  md: string,
-  callback: (value: Descendant[] | undefined) => void
-) {
-  unified()
-    .use(markdown)
-    .use(slate)
-    .process(md, (err, parsed) => {
-      if (err) {
-        callback([])
+export function mdToSlate(md: string): Promise<any> {
+  const parsed = fromMarkdown(md)
+  const output = parsed.children.map(v => deserialize(v as any))
 
-        return
-      }
-
-      // TS compiler hacks
-      callback(parsed?.result as any)
-    })
+  return new Promise(resolve => {
+    resolve(output)
+  })
 }
 
 export function slateToMd(nodes: Descendant[]): Promise<string> {
