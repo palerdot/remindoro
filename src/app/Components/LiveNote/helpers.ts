@@ -33,19 +33,21 @@ export const LiveNoteStyles = css`
     margin-left: 0;
     margin-right: 0;
     padding-left: 10px;
-    color: #aaa;
+    color: ${props => props.theme.greyOne};
     font-style: italic;
   }
 
-  :not(pre) > code {
+  span[data-slate-leaf='true'] > code {
     font-family: monospace;
-    background-color: #eee;
+    background-color: ${props => props.theme.primaryDark};
+    color: ${props => props.theme.textColor};
     padding: 3px;
   }
 
   pre.codeblock {
     font-family: monospace;
     background-color: ${props => props.theme.primaryDark};
+    color: ${props => props.theme.textColor};
     margin: 0;
     padding: 3px;
     font-size: 0.89rem;

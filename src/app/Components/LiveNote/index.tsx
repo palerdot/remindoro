@@ -71,7 +71,9 @@ function LiveNote({ id, note, readOnly }: Props) {
         }}
       >
         {!readOnly && <ActionBar liveNoteEnabled={true} />}
-        <Editor />
+        <div className={'react-slite'}>
+          <Editor />
+        </div>
       </Slite>
     </EditorHolder>
   )
