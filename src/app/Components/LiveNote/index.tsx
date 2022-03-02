@@ -1,43 +1,25 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { isEmpty, debounce, isEqual, DebouncedFunc } from '@lodash'
 import { useSelector, useDispatch } from 'react-redux'
-import { plateToMarkdownAsync } from 'slate-mark'
-import {
-  Plate,
-  useStoreEditorRef,
-  useEventEditorId,
-  SPEditor,
-  TNode,
-} from '@udecode/plate'
 
 import type { RootState } from '@app/Store/'
 import type { Descendant } from 'react-slite'
 
-import { plugins, options, components } from './options'
-import { asyncParseMd } from './transformers'
 import { updateNote } from '@app/Store/Slices/Remindoros'
 import ActionBar from './ActionBar'
 import BackupEditor from './BackupEditor'
 import PlainTextEditor from '@app/Components/LiveNote/PlainTextEditor'
 import { EditorHolder } from './helpers'
-import { cancellablePromise } from '@app/Hooks/useCancellablePromise'
-import Slite, { Toolbars, Editor } from 'react-slite'
+import Slite, { Editor } from 'react-slite'
 import { mdToSlate, slateToMd } from './helpers'
-
-const editableProps = {
-  placeholder: 'Enter some rich text…',
-  spellCheck: false,
-  padding: '0 30px',
-}
 
 type Props = {
   id: string
   note: string
   readOnly?: boolean
-  liveNoteEnabled: boolean
 }
 
-function LiveNote({ id, note, readOnly, liveNoteEnabled }: Props) {
+function LiveNote({ id, note, readOnly }: Props) {
   const dispatch = useDispatch()
   const [initialValue, setInitialValue] = useState<Descendant[] | undefined>(
     undefined
@@ -81,21 +63,21 @@ function LiveNote({ id, note, readOnly, liveNoteEnabled }: Props) {
   }
 
   return (
-    <EditorHolder className={'editor'}>
+    <EditorHolder className={`editor ${readOnly ? 'readonly' : ''}`}>
       <Slite
         initialValue={initialValue}
         onChange={updatedNote => {
           lazyUpdate(updatedNote)
         }}
       >
-        {!readOnly && <ActionBar liveNoteEnabled={liveNoteEnabled} />}
+        {!readOnly && <ActionBar liveNoteEnabled={true} />}
         <Editor />
       </Slite>
     </EditorHolder>
   )
 }
 
-interface WrapperProps extends Omit<Props, 'liveNoteEnabled'> {
+interface WrapperProps extends Props {
   lazyUpdate: DebouncedFunc<(updatedNote: string) => void>
 }
 
@@ -108,12 +90,7 @@ const NoteWrapper = ({ id, note, readOnly, lazyUpdate }: WrapperProps) => {
     <BackupEditor id={id} readOnly={readOnly} note={note} onChange={lazyUpdate}>
       <div>
         {liveNoteEnabled ? (
-          <LiveNote
-            id={id}
-            note={note}
-            readOnly={readOnly}
-            liveNoteEnabled={liveNoteEnabled}
-          />
+          <LiveNote id={id} note={note} readOnly={readOnly} />
         ) : (
           <PlainTextEditor
             id={id}

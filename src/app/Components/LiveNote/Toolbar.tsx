@@ -2,37 +2,12 @@ import React, { MouseEvent } from 'react'
 import styled from 'styled-components'
 import { Toolbars } from 'react-slite'
 import {
-  ELEMENT_CODE_BLOCK,
-  ELEMENT_BLOCKQUOTE,
-  ELEMENT_UL,
-  ELEMENT_OL,
-  ELEMENT_H1,
-  ELEMENT_H2,
-  ELEMENT_H3,
-  ELEMENT_TODO_LI,
-  MARK_BOLD,
-  MARK_ITALIC,
-  MARK_CODE,
-  MARK_STRIKETHROUGH,
-  useStoreEditorRef,
-  useEventEditorId,
-  getPlatePluginType,
-  ToolbarElement,
-  ToolbarMark,
-  ToolbarCodeBlock,
-  ToolbarList,
-  SPEditor,
-} from '@udecode/plate'
-import {
   FormatBold,
   FormatItalic,
-  FormatStrikethrough,
   Code,
   DeveloperMode,
   FormatQuote,
   FormatListBulleted,
-  FormatListNumbered,
-  PlaylistAddCheck,
 } from '@mui/icons-material'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'

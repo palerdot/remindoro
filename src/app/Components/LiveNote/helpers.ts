@@ -50,6 +50,10 @@ export const LiveNoteStyles = css`
     padding: 3px;
     font-size: 0.89rem;
   }
+
+  &.readonly {
+    pointer-events: none;
+  }
 `
 
 export const EditorHolder = styled.div`
