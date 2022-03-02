@@ -14111,10 +14111,10 @@ react-router@5.2.1:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-react-slite@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/react-slite/-/react-slite-0.0.4.tgz#26c94f11e06ae2b3457d79407a42e401a7604182"
-  integrity sha512-KWDf94Ru3hCVNORHwNAlpbPsp2V86cfDZHRTW6XbxA8O0G7fzKs3F5hFGD4pM6bUMNKB97zRahnxeNaSEjGUIA==
+react-slite@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/react-slite/-/react-slite-0.0.5.tgz#65197205550ffa47ae15651b16f19d8e49a85fc0"
+  integrity sha512-EejgDtaxMZLc9dZqpoP0W8J0yEtN4vIT6FF2xaaEQhT227tgRdFrBP9OjrD+acbknRqlXMiOLV/+9Vt2EMnjVA==
   dependencies:
     is-hotkey "^0.2.0"
     slate "^0.73.0"
