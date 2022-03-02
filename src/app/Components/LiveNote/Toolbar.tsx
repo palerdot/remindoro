@@ -10,7 +10,6 @@ import {
   FormatListBulleted,
 } from '@mui/icons-material'
 import IconButton from '@mui/material/IconButton'
-import Stack from '@mui/material/Stack'
 
 import { LooksOne, LooksTwo, LooksThree } from '@app/Util/Icons/'
 
@@ -20,6 +19,10 @@ const Holder = styled.div`
 
   & .active {
     color: ${props => props.theme.highlight};
+  }
+
+  & button {
+    padding: 0 6px;
   }
 
   & .disabled {
@@ -49,71 +52,69 @@ function Button({ isActive, children, onMouseDown, ariaLabel }: ButtonProps) {
 function Toolbar() {
   return (
     <Holder>
-      <Stack direction="row" spacing={1}>
-        <Toolbars.Bold>
-          {({ isActive, onMouseDown }) => (
-            <Button isActive={isActive} onMouseDown={onMouseDown}>
-              <FormatBold />
-            </Button>
-          )}
-        </Toolbars.Bold>
-        <Toolbars.Italic>
-          {({ isActive, onMouseDown }) => (
-            <Button isActive={isActive} onMouseDown={onMouseDown}>
-              <FormatItalic />
-            </Button>
-          )}
-        </Toolbars.Italic>
-        <Toolbars.Code>
-          {({ isActive, onMouseDown }) => (
-            <Button isActive={isActive} onMouseDown={onMouseDown}>
-              <Code />
-            </Button>
-          )}
-        </Toolbars.Code>
-        <Toolbars.CodeBlock>
-          {({ isActive, onMouseDown }) => (
-            <Button isActive={isActive} onMouseDown={onMouseDown}>
-              <DeveloperMode />
-            </Button>
-          )}
-        </Toolbars.CodeBlock>
-        <Toolbars.HeadingOne>
-          {({ isActive, onMouseDown }) => (
-            <Button isActive={isActive} onMouseDown={onMouseDown}>
-              <LooksOne />
-            </Button>
-          )}
-        </Toolbars.HeadingOne>
-        <Toolbars.HeadingTwo>
-          {({ isActive, onMouseDown }) => (
-            <Button isActive={isActive} onMouseDown={onMouseDown}>
-              <LooksTwo />
-            </Button>
-          )}
-        </Toolbars.HeadingTwo>
-        <Toolbars.HeadingThree>
-          {({ isActive, onMouseDown }) => (
-            <Button isActive={isActive} onMouseDown={onMouseDown}>
-              <LooksThree />
-            </Button>
-          )}
-        </Toolbars.HeadingThree>
-        <Toolbars.BlockQuote>
-          {({ isActive, onMouseDown }) => (
-            <Button isActive={isActive} onMouseDown={onMouseDown}>
-              <FormatQuote />
-            </Button>
-          )}
-        </Toolbars.BlockQuote>
-        <Toolbars.BulletedList>
-          {({ isActive, onMouseDown }) => (
-            <Button isActive={isActive} onMouseDown={onMouseDown}>
-              <FormatListBulleted />
-            </Button>
-          )}
-        </Toolbars.BulletedList>
-      </Stack>
+      <Toolbars.Bold>
+        {({ isActive, onMouseDown }) => (
+          <Button isActive={isActive} onMouseDown={onMouseDown}>
+            <FormatBold />
+          </Button>
+        )}
+      </Toolbars.Bold>
+      <Toolbars.Italic>
+        {({ isActive, onMouseDown }) => (
+          <Button isActive={isActive} onMouseDown={onMouseDown}>
+            <FormatItalic />
+          </Button>
+        )}
+      </Toolbars.Italic>
+      <Toolbars.Code>
+        {({ isActive, onMouseDown }) => (
+          <Button isActive={isActive} onMouseDown={onMouseDown}>
+            <Code />
+          </Button>
+        )}
+      </Toolbars.Code>
+      <Toolbars.CodeBlock>
+        {({ isActive, onMouseDown }) => (
+          <Button isActive={isActive} onMouseDown={onMouseDown}>
+            <DeveloperMode />
+          </Button>
+        )}
+      </Toolbars.CodeBlock>
+      <Toolbars.HeadingOne>
+        {({ isActive, onMouseDown }) => (
+          <Button isActive={isActive} onMouseDown={onMouseDown}>
+            <LooksOne />
+          </Button>
+        )}
+      </Toolbars.HeadingOne>
+      <Toolbars.HeadingTwo>
+        {({ isActive, onMouseDown }) => (
+          <Button isActive={isActive} onMouseDown={onMouseDown}>
+            <LooksTwo />
+          </Button>
+        )}
+      </Toolbars.HeadingTwo>
+      <Toolbars.HeadingThree>
+        {({ isActive, onMouseDown }) => (
+          <Button isActive={isActive} onMouseDown={onMouseDown}>
+            <LooksThree />
+          </Button>
+        )}
+      </Toolbars.HeadingThree>
+      <Toolbars.BlockQuote>
+        {({ isActive, onMouseDown }) => (
+          <Button isActive={isActive} onMouseDown={onMouseDown}>
+            <FormatQuote />
+          </Button>
+        )}
+      </Toolbars.BlockQuote>
+      <Toolbars.BulletedList>
+        {({ isActive, onMouseDown }) => (
+          <Button isActive={isActive} onMouseDown={onMouseDown}>
+            <FormatListBulleted />
+          </Button>
+        )}
+      </Toolbars.BulletedList>
     </Holder>
   )
 }

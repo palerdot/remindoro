@@ -88,6 +88,7 @@ const NoteWrapper = ({ id, note, readOnly, lazyUpdate }: WrapperProps) => {
 
   return (
     <BackupEditor id={id} readOnly={readOnly} note={note} onChange={lazyUpdate}>
+      {!readOnly && !liveNoteEnabled && <ActionBar liveNoteEnabled={false} />}
       <div>
         {liveNoteEnabled ? (
           <LiveNote id={id} note={note} readOnly={readOnly} />

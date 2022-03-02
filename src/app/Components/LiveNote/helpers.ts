@@ -75,7 +75,7 @@ export function mdToSlate(
       }
 
       // TS compiler hacks
-      callback(parsed as any)
+      callback(parsed?.result as any)
     })
 }
 
