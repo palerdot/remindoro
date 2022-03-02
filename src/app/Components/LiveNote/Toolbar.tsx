@@ -15,7 +15,6 @@ import { LooksOne, LooksTwo, LooksThree } from '@app/Util/Icons/'
 
 const Holder = styled.div`
   display: flex;
-  color: ${props => props.theme.primaryDark};
 
   & .active {
     color: ${props => props.theme.highlight};
@@ -23,6 +22,7 @@ const Holder = styled.div`
 
   & button {
     padding: 0 6px;
+    color: ${props => props.theme.primaryDark};
   }
 
   & .disabled {
