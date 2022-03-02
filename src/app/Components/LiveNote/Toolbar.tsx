@@ -1,5 +1,6 @@
-import React, { useRef } from 'react'
+import React, { MouseEvent } from 'react'
 import styled from 'styled-components'
+import { Toolbars } from 'react-slite'
 import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_BLOCKQUOTE,
@@ -33,6 +34,8 @@ import {
   FormatListNumbered,
   PlaylistAddCheck,
 } from '@mui/icons-material'
+import IconButton from '@mui/material/IconButton'
+import Stack from '@mui/material/Stack'
 
 import { LooksOne, LooksTwo, LooksThree } from '@app/Util/Icons/'
 
@@ -40,7 +43,7 @@ const Holder = styled.div`
   display: flex;
   color: ${props => props.theme.primaryDark};
 
-  & .slate-ToolbarButton-active {
+  & .active {
     color: ${props => props.theme.highlight};
   }
 
@@ -49,63 +52,93 @@ const Holder = styled.div`
   }
 `
 
-function Toolbar() {
-  const editor: SPEditor | undefined = useStoreEditorRef(
-    useEventEditorId('focus')
-  )
-  const $holder = useRef(null)
+type ButtonProps = {
+  isActive?: boolean
+  children: React.ReactNode
+  ariaLabel?: string
+  onMouseDown: (event: MouseEvent) => void
+}
 
+function Button({ isActive, children, onMouseDown, ariaLabel }: ButtonProps) {
   return (
-    <Holder ref={$holder}>
-      <ToolbarMark
-        type={getPlatePluginType(editor, MARK_BOLD)}
-        icon={<FormatBold />}
-      />
+    <IconButton
+      className={`${isActive ? 'active' : ''}`}
+      aria-label={ariaLabel || 'toolbar'}
+      onMouseDown={onMouseDown}
+    >
+      {children}
+    </IconButton>
+  )
+}
 
-      <ToolbarMark
-        type={getPlatePluginType(editor, MARK_ITALIC)}
-        icon={<FormatItalic />}
-      />
-      <ToolbarMark
-        type={getPlatePluginType(editor, MARK_STRIKETHROUGH)}
-        icon={<FormatStrikethrough />}
-      />
-      <ToolbarMark
-        type={getPlatePluginType(editor, MARK_CODE)}
-        icon={<Code />}
-      />
-      <ToolbarCodeBlock
-        type={getPlatePluginType(editor, ELEMENT_CODE_BLOCK)}
-        icon={<DeveloperMode />}
-      />
-      <ToolbarElement
-        type={getPlatePluginType(editor, ELEMENT_BLOCKQUOTE)}
-        icon={<FormatQuote />}
-      />
-      <ToolbarList
-        type={getPlatePluginType(editor, ELEMENT_UL)}
-        icon={<FormatListBulleted />}
-      />
-      <ToolbarList
-        type={getPlatePluginType(editor, ELEMENT_OL)}
-        icon={<FormatListNumbered />}
-      />
-      <ToolbarElement
-        type={getPlatePluginType(editor, ELEMENT_H1)}
-        icon={<LooksOne />}
-      />
-      <ToolbarElement
-        type={getPlatePluginType(editor, ELEMENT_H2)}
-        icon={<LooksTwo />}
-      />
-      <ToolbarElement
-        type={getPlatePluginType(editor, ELEMENT_H3)}
-        icon={<LooksThree />}
-      />
-      <ToolbarElement
-        type={getPlatePluginType(editor, ELEMENT_TODO_LI)}
-        icon={<PlaylistAddCheck />}
-      />
+function Toolbar() {
+  return (
+    <Holder>
+      <Stack direction="row" spacing={1}>
+        <Toolbars.Bold>
+          {({ isActive, onMouseDown }) => (
+            <Button isActive={isActive} onMouseDown={onMouseDown}>
+              <FormatBold />
+            </Button>
+          )}
+        </Toolbars.Bold>
+        <Toolbars.Italic>
+          {({ isActive, onMouseDown }) => (
+            <Button isActive={isActive} onMouseDown={onMouseDown}>
+              <FormatItalic />
+            </Button>
+          )}
+        </Toolbars.Italic>
+        <Toolbars.Code>
+          {({ isActive, onMouseDown }) => (
+            <Button isActive={isActive} onMouseDown={onMouseDown}>
+              <Code />
+            </Button>
+          )}
+        </Toolbars.Code>
+        <Toolbars.CodeBlock>
+          {({ isActive, onMouseDown }) => (
+            <Button isActive={isActive} onMouseDown={onMouseDown}>
+              <DeveloperMode />
+            </Button>
+          )}
+        </Toolbars.CodeBlock>
+        <Toolbars.HeadingOne>
+          {({ isActive, onMouseDown }) => (
+            <Button isActive={isActive} onMouseDown={onMouseDown}>
+              <LooksOne />
+            </Button>
+          )}
+        </Toolbars.HeadingOne>
+        <Toolbars.HeadingTwo>
+          {({ isActive, onMouseDown }) => (
+            <Button isActive={isActive} onMouseDown={onMouseDown}>
+              <LooksTwo />
+            </Button>
+          )}
+        </Toolbars.HeadingTwo>
+        <Toolbars.HeadingThree>
+          {({ isActive, onMouseDown }) => (
+            <Button isActive={isActive} onMouseDown={onMouseDown}>
+              <LooksThree />
+            </Button>
+          )}
+        </Toolbars.HeadingThree>
+        <Toolbars.BlockQuote>
+          {({ isActive, onMouseDown }) => (
+            <Button isActive={isActive} onMouseDown={onMouseDown}>
+              <FormatQuote />
+            </Button>
+          )}
+        </Toolbars.BlockQuote>
+        <Toolbars.BulletedList>
+          {({ isActive, onMouseDown }) => (
+            <Button isActive={isActive} onMouseDown={onMouseDown}>
+              <FormatListBulleted />
+            </Button>
+          )}
+        </Toolbars.BulletedList>
+      </Stack>
     </Holder>
   )
 }

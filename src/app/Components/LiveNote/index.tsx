@@ -11,6 +11,7 @@ import {
 } from '@udecode/plate'
 
 import type { RootState } from '@app/Store/'
+import type { Descendant } from 'react-slite'
 
 import { plugins, options, components } from './options'
 import { asyncParseMd } from './transformers'
@@ -18,8 +19,10 @@ import { updateNote } from '@app/Store/Slices/Remindoros'
 import ActionBar from './ActionBar'
 import BackupEditor from './BackupEditor'
 import PlainTextEditor from '@app/Components/LiveNote/PlainTextEditor'
-import { EditorHolder } from './utils'
+import { EditorHolder } from './helpers'
 import { cancellablePromise } from '@app/Hooks/useCancellablePromise'
+import Slite, { Toolbars, Editor } from 'react-slite'
+import { mdToSlate, slateToMd } from './helpers'
 
 const editableProps = {
   placeholder: 'Enter some rich text…',
@@ -31,13 +34,14 @@ type Props = {
   id: string
   note: string
   readOnly?: boolean
+  liveNoteEnabled: boolean
 }
 
-function LiveNote({ id, note, readOnly }: Props) {
+function LiveNote({ id, note, readOnly, liveNoteEnabled }: Props) {
   const dispatch = useDispatch()
-  const editor = useStoreEditorRef(useEventEditorId('focus')) as SPEditor
-
-  const [initialValue, setInitialValue] = useState<TNode | undefined>(undefined)
+  const [initialValue, setInitialValue] = useState<Descendant[] | undefined>(
+    undefined
+  )
 
   useEffect(() => {
     if (isEmpty(note.trim())) {
@@ -50,26 +54,15 @@ function LiveNote({ id, note, readOnly }: Props) {
       return
     }
 
-    const { promise, cancel } = cancellablePromise<TNode>(
-      asyncParseMd(editor, note)
-    )
-
-    // we will parse md async
-    promise.then(parsedInitialValue => {
-      setInitialValue(parsedInitialValue as TNode)
+    mdToSlate(note.trim(), parsed => {
+      setInitialValue(parsed)
     })
-
-    // cancel the promise when unmounting
-    return cancel
-  }, [editor, note])
+  }, [note])
 
   const lazyUpdate = useMemo(
     () =>
-      // IMPORTANT: `remark-slate` has imperfect types
-      // ref: https://github.com/hanford/remark-slate/issues/25
-      // once we have correct types, we can type this properly
-      debounce(updatedPlateNote => {
-        plateToMarkdownAsync(updatedPlateNote).then(updatedNote => {
+      debounce(updatedSlateNodes => {
+        slateToMd(updatedSlateNodes).then(updatedNote => {
           if (!isEqual(note, updatedNote)) {
             dispatch(
               updateNote({
@@ -89,26 +82,20 @@ function LiveNote({ id, note, readOnly }: Props) {
 
   return (
     <EditorHolder className={'editor'}>
-      <Plate
-        id={id}
-        plugins={plugins}
-        components={components}
-        options={options}
-        editableProps={{
-          ...editableProps,
-          readOnly,
-          placeholder: readOnly ? '' : editableProps.placeholder,
-        }}
-        initialValue={initialValue as any}
+      <Slite
+        initialValue={initialValue}
         onChange={updatedNote => {
           lazyUpdate(updatedNote)
         }}
-      />
+      >
+        {!readOnly && <ActionBar liveNoteEnabled={liveNoteEnabled} />}
+        <Editor />
+      </Slite>
     </EditorHolder>
   )
 }
 
-interface WrapperProps extends Props {
+interface WrapperProps extends Omit<Props, 'liveNoteEnabled'> {
   lazyUpdate: DebouncedFunc<(updatedNote: string) => void>
 }
 
@@ -119,10 +106,14 @@ const NoteWrapper = ({ id, note, readOnly, lazyUpdate }: WrapperProps) => {
 
   return (
     <BackupEditor id={id} readOnly={readOnly} note={note} onChange={lazyUpdate}>
-      {!readOnly && <ActionBar liveNoteEnabled={liveNoteEnabled} />}
       <div>
         {liveNoteEnabled ? (
-          <LiveNote id={id} note={note} readOnly={readOnly} />
+          <LiveNote
+            id={id}
+            note={note}
+            readOnly={readOnly}
+            liveNoteEnabled={liveNoteEnabled}
+          />
         ) : (
           <PlainTextEditor
             id={id}
