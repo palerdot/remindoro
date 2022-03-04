@@ -26,7 +26,7 @@ function LiveNote({ id, note, readOnly }: Props) {
   )
 
   useEffect(() => {
-    if (isEmpty(note.trim())) {
+    if (isEmpty(note)) {
       // ref: https://github.com/ianstormtaylor/slate/issues/713
       const emptyValue = [{ type: 'paragraph', children: [{ text: '' }] }]
       // @ts-ignore
@@ -36,7 +36,7 @@ function LiveNote({ id, note, readOnly }: Props) {
       return
     }
 
-    mdToSlate(note.trim()).then(parsed => {
+    mdToSlate(note).then(parsed => {
       setInitialValue(parsed)
     })
   }, [note])
@@ -72,7 +72,7 @@ function LiveNote({ id, note, readOnly }: Props) {
       >
         {!readOnly && <ActionBar liveNoteEnabled={true} />}
         <div className={'react-slite'}>
-          <Editor />
+          <Editor readOnly={readOnly} />
         </div>
       </Slite>
     </EditorHolder>
