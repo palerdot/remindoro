@@ -21,7 +21,11 @@ const Holder = styled.div`
 const Spacer = styled.span`
   font-size: 0.75rem;
   font-style: italic;
-  content: '<space>';
+  margin: 0 4px;
+
+  &::after {
+    content: '<space>';
+  }
 `
 
 function HelpInfo() {
