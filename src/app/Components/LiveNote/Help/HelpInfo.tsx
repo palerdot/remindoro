@@ -4,15 +4,27 @@ import styled from 'styled-components'
 const Holder = styled.div`
   & .shortcut {
     display: flex;
-    margin: 8px 0;
+    padding: 8px;
+    border: ${props => `thin solid ${props.theme.borderDark}`};
 
     .left {
       flex: 1;
+      font-size: 0.89rem;
     }
 
     .right {
       flex: 2;
     }
+  }
+`
+
+const Spacer = styled.span`
+  font-size: 0.75rem;
+  font-style: italic;
+  margin: 0 4px;
+
+  &::after {
+    content: '<space>';
   }
 `
 
@@ -26,58 +38,69 @@ function HelpInfo() {
       <p>
         {`Markdown shortcuts you can use for rich text formattings as you type.`}
       </p>
+      {/* Bold */}
       <div className={'shortcut'}>
-        <div className={'left'}>{`**<TEXT>**`}</div>
+        <div className={'left'}>{`Ctrl/Cmd + b`}</div>
         <div className={'right'}>{'Bold'}</div>
       </div>
+      {/* Italic */}
       <div className={'shortcut'}>
-        <div className={'left'}>{'*<TEXT>*'}</div>
+        <div className={'left'}>{`Ctrl/Cmd + i`}</div>
         <div className={'right'}>{'Italic'}</div>
       </div>
-
+      {/* Inline code */}
       <div className={'shortcut'}>
-        <div className={'left'}>{'~~<TEXT>~~'}</div>
-        <div className={'right'}>{'Strikethrough'}</div>
-      </div>
-      <div className={'shortcut'}>
-        <div className={'left'}>{'><SPACE>'}</div>
-        <div className={'right'}>{'Blockquote text'}</div>
-      </div>
-      <div className={'shortcut'}>
-        <div className={'left'}>{'`<TEXT>`'}</div>
+        <div className={'left'}>{'Ctrl + `(backtick)'}</div>
         <div className={'right'}>{'Inline code block'}</div>
       </div>
       <div className={'shortcut'}>
+        <div className={'left'}>{'``'}</div>
+        <div className={'right'}>
+          {'Starts Inline code block (2 backticks)'}
+        </div>
+      </div>
+      {/* Code block */}
+      <div className={'shortcut'}>
         <div className={'left'}>{'```'}</div>
-        <div className={'right'}>{'Starts a code block'}</div>
+        <div className={'right'}>{'Starts a code block (3 backticks)'}</div>
       </div>
+      {/* Headings */}
       <div className={'shortcut'}>
-        <div className={'left'}>{'1.<SPACE>'}</div>
-        <div className={'right'}>{'Numbered/Ordered List'}</div>
-      </div>
-      <div className={'shortcut'}>
-        <div className={'left'}>{'-<SPACE>'}</div>
-        <div className={'right'}>{'Unordered List'}</div>
-      </div>
-      <div className={'shortcut'}>
-        <div className={'left'}>{'[]<SPACE>'}</div>
-        <div className={'right'}>{'Check List Item'}</div>
-      </div>
-      <div className={'shortcut'}>
-        <div className={'left'}>{'[x]<SPACE>'}</div>
-        <div className={'right'}>{'Check List Item (with checked item)'}</div>
-      </div>
-      <div className={'shortcut'}>
-        <div className={'left'}>{'#'}</div>
+        <div className={'left'}>
+          {'#'}
+          <Spacer />
+        </div>
         <div className={'right'}>{'Level 1 Heading'}</div>
       </div>
       <div className={'shortcut'}>
-        <div className={'left'}>{'##'}</div>
+        <div className={'left'}>
+          {'##'}
+          <Spacer />
+        </div>
         <div className={'right'}>{'Level 2 Heading'}</div>
       </div>
       <div className={'shortcut'}>
-        <div className={'left'}>{'###'}</div>
+        <div className={'left'}>
+          {'###'}
+          <Spacer />
+        </div>
         <div className={'right'}>{'Level 3 Heading'}</div>
+      </div>
+      {/* Blockquote */}
+      <div className={'shortcut'}>
+        <div className={'left'}>
+          {'>'}
+          <Spacer />
+        </div>
+        <div className={'right'}>{'Blockquote text'}</div>
+      </div>
+      {/* Unordered list */}
+      <div className={'shortcut'}>
+        <div className={'left'}>
+          {'-'}
+          <Spacer />
+        </div>
+        <div className={'right'}>{'Unordered List'}</div>
       </div>
       <p>{'Please note this rich text editor is experimental/beta.'}</p>
     </Holder>

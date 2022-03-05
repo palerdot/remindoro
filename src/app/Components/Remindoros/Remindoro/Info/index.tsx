@@ -49,9 +49,13 @@ const Holder = styled.div`
 
     & .editor {
       height: 400px;
-      overflow-y: auto;
+      overflow-y: hidden;
 
-      padding: 8px;
+      & .react-slite {
+        height: 380px;
+        overflow-y: auto;
+        padding: 10px;
+      }
     }
   }
 
