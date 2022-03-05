@@ -1,5 +1,8 @@
 ## Changelog
 
+### `1.0.4` (React Slite/Better markdown editing `No War/Save Ukraine version`)
+- `react-slite` for better markdown editing
+
 ### `1.0.3`  (Chrome/ Migration fix)
 - Option for user to fix the data in chrome (since chrome bug prevented data migration). The option is shown in the footer where the user can fix the data. Once the data is fixed the option will not be shown again. Commits (in case we don't want this anymore we can revert these commits) - `d05637e65dcaec9a0feeed001b3b2ef4426b6c2d`, `a4a9ba7fceb43412c1d9621c502f59658a41015d`, `10ec030e4ae0da8827fe963b9d12ce468d2299c2`, `d36eec7719bf9db64944bc69f3ff0b4911d4649c`.
 
