@@ -30,4 +30,11 @@ More information about the extension can be found at the [Remindoro website](htt
 
 ---
 
+### License
+
+[AGPL](./LICENSE)
+
+Please note, the source code is open source mainly for security audit purposes and security fixes. Any PR that is not related to security fix will not be accepted.
+
+
 [Changelog](./CHANGELOG.md)
