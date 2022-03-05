@@ -1,6 +1,4 @@
 import { serialize, deserialize } from 'remark-slate'
-import { unified } from 'unified'
-import markdown from 'remark-parse'
 import styled, { css } from 'styled-components'
 import { fromMarkdown } from 'mdast-util-from-markdown'
 import { get } from '@lodash'
