@@ -48,6 +48,10 @@ export const LiveNoteStyles = css`
     padding: 3px;
   }
 
+  span[data-slate-string='true'] {
+    line-height: 2rem;
+  }
+
   pre.codeblock {
     font-family: monospace;
     background-color: ${props => props.theme.primaryDark};
