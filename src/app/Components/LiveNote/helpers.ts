@@ -48,8 +48,16 @@ export const LiveNoteStyles = css`
     padding: 3px;
   }
 
-  span[data-slate-string='true'] {
+  p[data-slate-node='element']:first-child span[data-slate-string='true'] {
     line-height: 2rem;
+  }
+
+  p[data-slate-node='element']:first-child {
+    margin-bottom: 0.5rem;
+  }
+
+  p[data-slate-node='element']:not(:first-child) {
+    margin-top: 0;
   }
 
   pre.codeblock {
