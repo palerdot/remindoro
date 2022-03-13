@@ -10,8 +10,7 @@ import ActionBar from './ActionBar'
 import BackupEditor from './BackupEditor'
 import PlainTextEditor from '@app/Components/LiveNote/PlainTextEditor'
 import { EditorHolder } from './helpers'
-import Slite, { Editor } from 'react-slite'
-import { mdToSlate, slateToMd } from './helpers'
+import Slite, { Editor, mdToSlate, slateToMd } from 'react-slite'
 
 type Props = {
   id: string
