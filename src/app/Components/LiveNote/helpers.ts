@@ -48,7 +48,8 @@ export const LiveNoteStyles = css`
     padding: 3px;
   }
 
-  p[data-slate-node='element']:first-child span[data-slate-string='true'] {
+  // p[data-slate-node='element']:first-child span[data-slate-string='true'] {
+  p[data-slate-node='element'] span[data-slate-string='true'] {
     line-height: 2rem;
   }
 
@@ -58,6 +59,12 @@ export const LiveNoteStyles = css`
 
   p[data-slate-node='element']:not(:first-child) {
     margin-top: 0;
+  }
+
+  .thematic_break {
+    border: none;
+    height: 2px;
+    background-color: ${props => props.theme.primaryLight};
   }
 
   pre.codeblock {
