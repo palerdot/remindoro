@@ -102,7 +102,32 @@ function HelpInfo() {
         </div>
         <div className={'right'}>{'Unordered List'}</div>
       </div>
+      {/* Thematic break */}
+      <div className={'shortcut'}>
+        <div className={'left'}>
+          {'---'}
+          <Spacer />
+        </div>
+        <div className={'right'}>{'Horizontal Rule/Thematic Break'}</div>
+      </div>
       <p>{'Please note this rich text editor is experimental/beta.'}</p>
+      <div>
+        <h3>{'Known Issues'}</h3>
+        <div>
+          {
+            'This section lists down some known issues in current experimental rich text editor.'
+          }
+        </div>
+        <div>
+          <ul>
+            <li>
+              {
+                'Having a blockquote as the last section of the text might cause some difficulties in clearing the blockquote text and adding text after that.'
+              }
+            </li>
+          </ul>
+        </div>
+      </div>
     </Holder>
   )
 }
