@@ -1,4 +1,4 @@
-import { Screens } from '@app/Routes/'
+import { Screens } from '@app/Util/Enums'
 
 // `/remindoro/:id` => '/remindoro/<ID>'
 export function getRemindoroUrl(id: string) {
