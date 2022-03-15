@@ -1,7 +1,6 @@
-// import dayjs from 'dayjs'
+import dayjs from 'dayjs'
 
 import { RemindoroType, RepeatDuration } from '@app/Store/Slices/Remindoros'
-import dayjs from 'dayjs'
 import { Notification, find_future_jump } from './notification'
 
 // ref: https://jestjs.io/docs/expect#expectextendmatchers
@@ -434,29 +433,5 @@ describe('future long jump', () => {
 
   test('3 days in past, 3 days repeat => +2', () => {
     expect(find_future_jump(3, 3)).toEqual(3)
-  })
-})
-
-describe('Reminder jumps is working fine ', () => {
-  test.only('Short jumps work fine ', () => {
-    const sample_remindoro = {
-      id: 'porumai',
-      title: 'porumai',
-      note: 'wait and hope ... ',
-      type: RemindoroType.Note,
-      created: Date.now(),
-      updated: Date.now(),
-      reminder: {
-        time: Date.now(),
-        repeat: {
-          time: 10,
-          interval: 'minutes' as RepeatDuration,
-        },
-      },
-    }
-    const notification = new Notification([sample_remindoro], false)
-    const updated_ros = notification.scan()
-
-    console.log('porumai ... updated ros ', updated_ros)
   })
 })

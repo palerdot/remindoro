@@ -9,6 +9,8 @@ import Settings from '@app/Screens/Settings/'
 import Help from '@app/Screens/Help/'
 import { Screens } from '@app/Util/Enums'
 
+export { Screens }
+
 const PATHS = [
   {
     path: Screens.Home,
