@@ -9,9 +9,9 @@
 #  This yarn task will build the final archive from source. The location of final archive is `release/firefox`. The zip file is the final file uploaded to add-on store. Rest of the files are the contents of the zip file.
 # 
 #  Environment Info:
-#   - node `v14.x`
-#   - npm `v6.4.1`
-#   - OS `Mac OS 10.14.2`
+#   - node `v16.x`
+#   - npm `v8.x`
+#   - OS `Mac OS 12.2.1`
 
 # tar --exclude='./node_modules' --exclude='./screenshots' --exclude='./release' --exclude='./dev-server'  --exclude='./build' --exclude='./dist' --exclude='./docs' --exclude='.git' -cvzf ~/Desktop/remindoro-firefox-source.tar.gz .
 
