@@ -150,6 +150,12 @@ export class Notification {
       const is_past = dayjs().isAfter(ro.reminder.time, 'minute')
       const is_present = dayjs().isSame(ro.reminder.time, 'minute')
 
+      // Browser extension quirk: Browser can trigger timer one minute late
+      // In that case, we need to keep track of it and adjust the timer so that there
+      // are no cascading delays
+      // ref: https://github.com/palerdot/remindoro/issues/36
+      const milliSecondsDiff = Date.now() - new Date(ro.reminder.time).getTime()
+      const isOneMinutePast = milliSecondsDiff > 0 && milliSecondsDiff < 1314
       // CASE 7: short repeat; exactly scheduled at current minute; short repeating remindoro
       // RESULT: WILL NOTIFY
       if (is_present) {
@@ -170,6 +176,7 @@ export class Notification {
       if (is_past) {
         // the next reminder from the current minute
         ro.reminder.time = dayjs()
+          .subtract(isOneMinutePast ? 1 : 0, 'minute')
           .add(ro.reminder.repeat.time, ro.reminder.repeat.interval)
           .valueOf()
         // return remindoro

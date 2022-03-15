@@ -7,14 +7,9 @@ import Scheduled from '@app/Screens/Scheduled/'
 import RemindoroInfo from '@app/Screens/RemindoroInfo/'
 import Settings from '@app/Screens/Settings/'
 import Help from '@app/Screens/Help/'
+import { Screens } from '@app/Util/Enums'
 
-export enum Screens {
-  Home = '/',
-  Scheduled = '/scheduled',
-  RemindoroInfo = '/remindoro-info/:id',
-  Settings = '/settings',
-  Help = '/help',
-}
+export { Screens }
 
 const PATHS = [
   {

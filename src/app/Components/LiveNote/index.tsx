@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { isEmpty, debounce, isEqual, DebouncedFunc } from '@lodash'
 import { useSelector, useDispatch } from 'react-redux'
+import Slite, { Editor, mdToSlate, slateToMd } from 'react-slite'
 
 import type { RootState } from '@app/Store/'
 import type { Descendant } from 'react-slite'
@@ -10,7 +11,6 @@ import ActionBar from './ActionBar'
 import BackupEditor from './BackupEditor'
 import PlainTextEditor from '@app/Components/LiveNote/PlainTextEditor'
 import { EditorHolder } from './helpers'
-import Slite, { Editor, mdToSlate, slateToMd } from 'react-slite'
 
 type Props = {
   id: string

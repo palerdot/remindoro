@@ -1,7 +1,6 @@
-// import dayjs from 'dayjs'
+import dayjs from 'dayjs'
 
 import { RemindoroType, RepeatDuration } from '@app/Store/Slices/Remindoros'
-import dayjs from 'dayjs'
 import { Notification, find_future_jump } from './notification'
 
 // ref: https://jestjs.io/docs/expect#expectextendmatchers

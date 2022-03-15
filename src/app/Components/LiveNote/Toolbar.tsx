@@ -8,6 +8,7 @@ import {
   DeveloperMode,
   FormatQuote,
   FormatListBulleted,
+  Straighten,
 } from '@mui/icons-material'
 import IconButton from '@mui/material/IconButton'
 
@@ -21,7 +22,7 @@ const Holder = styled.div`
   }
 
   & button {
-    padding: 0 6px;
+    padding: 0 4px;
     color: ${props => props.theme.primaryDark};
   }
 
@@ -115,6 +116,13 @@ function Toolbar() {
           </Button>
         )}
       </Toolbars.BulletedList>
+      <Toolbars.ThematicBreakBlock>
+        {({ isActive, onMouseDown }) => (
+          <Button isActive={isActive} onMouseDown={onMouseDown}>
+            <Straighten />
+          </Button>
+        )}
+      </Toolbars.ThematicBreakBlock>
     </Holder>
   )
 }

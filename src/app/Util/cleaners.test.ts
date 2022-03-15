@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { clean_v0_data, migrate_v0_data, clean_html } from './cleaners'
 
 // migration related test cases
@@ -139,8 +135,9 @@ describe('Migration v0.x => v1.x data is working fine', () => {
     current_selected_remindoro: false,
     remindoros: OLD_STORE_DATA.remindoros.map(clean_v0_data),
   }
-
-  expect(migrate_v0_data(OLD_STORE_DATA)).toMatchObject(NEW_STORE_DATA)
+  test('Migration is alright', () => {
+    expect(migrate_v0_data(OLD_STORE_DATA)).toMatchObject(NEW_STORE_DATA)
+  })
 })
 
 describe('strip html tags', () => {

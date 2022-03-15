@@ -102,6 +102,14 @@ function HelpInfo() {
         </div>
         <div className={'right'}>{'Unordered List'}</div>
       </div>
+      {/* Thematic break */}
+      <div className={'shortcut'}>
+        <div className={'left'}>
+          {'---'}
+          <Spacer />
+        </div>
+        <div className={'right'}>{'Horizontal Rule/Thematic Break'}</div>
+      </div>
       <p>{'Please note this rich text editor is experimental/beta.'}</p>
     </Holder>
   )

@@ -1,5 +1,11 @@
 ## Changelog
 
+### `1.0.5`
+- Fixes https://github.com/palerdot/remindoro/issues/36
+- Vitest
+- Thematic break from `react-slite v0.1.x`
+- Rich text improvements from `react-slite v0.1.x`
+
 ### `1.0.4` (React Slite/Better markdown editing `No War/Save Ukraine version`)
 - `react-slite` for better markdown editing
 
