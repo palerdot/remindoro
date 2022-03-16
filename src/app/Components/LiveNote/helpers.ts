@@ -45,7 +45,7 @@ export const LiveNoteStyles = css`
 
   // p[data-slate-node='element']:first-child span[data-slate-string='true'] {
   p[data-slate-node='element'] span[data-slate-string='true'] {
-    line-height: 2rem;
+    line-height: 1.89rem;
   }
 
   p[data-slate-node='element']:first-child {
@@ -57,9 +57,8 @@ export const LiveNoteStyles = css`
   }
 
   .thematic_break {
-    border: none;
-    height: 2px;
-    background-color: ${props => props.theme.primaryLight};
+    border-top: ${props => `thin solid ${props.theme.primaryLight}`};
+    padding-top: 4px;
   }
 
   pre.codeblock {

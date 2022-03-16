@@ -12583,10 +12583,10 @@ react-router@5.2.1:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-react-slite@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/react-slite/-/react-slite-0.1.1.tgz#f9813c29a85d026d0ed3956873fddefc6ff35c20"
-  integrity sha512-V74Ze8w1mF2mAKAGqJYKxy2ddYWTzT8Rs5N2M0Ks2VyDR8ZG/VPU93ivT0oWNCBaL9eCyI0K+lhYx1GvVAfkTQ==
+react-slite@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/react-slite/-/react-slite-0.1.5.tgz#5ccbf444dc9486be5a7ba4547b9536ed740c5db4"
+  integrity sha512-2bvR6h9TQpoiS+eGObfnpeMtyFsOn+UEkHirLDew1dwuBdpr/bmx+E+/4mrZrFvaAv829c+nHn9+y/MdaeVc7g==
   dependencies:
     is-hotkey "^0.2.0"
     lodash-es "^4.17.21"

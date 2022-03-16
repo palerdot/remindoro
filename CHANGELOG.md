@@ -1,6 +1,9 @@
 ## Changelog
 
-### `1.0.5`
+### `1.0.6` 
+- Better Thematic break handling (`react-slate v0.1.5`)
+
+### `1.0.5` (`Firefox only`)
 - Fixes https://github.com/palerdot/remindoro/issues/36
 - Vitest
 - Thematic break from `react-slite v0.1.x`

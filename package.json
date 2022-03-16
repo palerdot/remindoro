@@ -26,7 +26,8 @@
     "firefox-build": "node scripts/build.js --browser=firefox",
     "site:build": "rollup --config site/rollup.config.js",
     "site:dev": "rollup -w --config site/rollup.config.js",
-    "site:start": "sirv docs --no-clear"
+    "site:start": "sirv docs --no-clear",
+    "show:linked": "ls -l node_modules | grep ^l"
   },
   "keywords": [
     "chrome",
@@ -154,7 +155,7 @@
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
-    "react-slite": "^0.1.1",
+    "react-slite": "^0.1.5",
     "redux": "^4.1.0",
     "styled-components": "^5.2.0",
     "uuid": "^8.3.2",
