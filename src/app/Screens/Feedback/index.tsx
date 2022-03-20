@@ -2,7 +2,6 @@ import React, { useState, useCallback, useRef } from 'react'
 import { isEmpty } from '@lodash'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
-import TextareaAutosize from '@mui/material/TextareaAutosize'
 import Button from '@mui/material/Button'
 import SendIcon from '@mui/icons-material/Send'
 
@@ -47,10 +46,9 @@ function Feedback() {
           }
         </div>
       </Header>
-      <TextareaAutosize
+      <textarea
         ref={$textarea}
-        minRows={15}
-        maxRows={15}
+        rows={15}
         aria-label="Feedback"
         placeholder="Please provide your Feedback ... "
       />
