@@ -7,6 +7,7 @@ import Scheduled from '@app/Screens/Scheduled/'
 import RemindoroInfo from '@app/Screens/RemindoroInfo/'
 import Settings from '@app/Screens/Settings/'
 import Help from '@app/Screens/Help/'
+import Feedback from '@app/Screens/Feedback/'
 import { Screens } from '@app/Util/Enums'
 
 export { Screens }
@@ -31,6 +32,10 @@ const PATHS = [
   {
     path: Screens.Help,
     Screen: Help,
+  },
+  {
+    path: Screens.Feedback,
+    Screen: Feedback,
   },
 ]
 

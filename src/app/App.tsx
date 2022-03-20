@@ -178,7 +178,7 @@ const GlobalStyle = createGlobalStyle`
      * Snackbar notification
      */
     .SnackbarContainer-root {
-      
+      /* Success message styling */
       & .SnackbarItem-variantSuccess {
         background: ${props => props.theme.success};
         & .SnackbarItem-message {
@@ -188,6 +188,18 @@ const GlobalStyle = createGlobalStyle`
         & .SnackbarItem-action {
           & button {
             color: ${props => props.theme.contrastTextColor};
+          }
+        }
+      }
+      /* Error message styling */
+      & .SnackbarItem-variantError {
+        & .SnackbarItem-message {
+          color: ${props => props.theme.textColor};
+        }
+
+        & .SnackbarItem-action {
+          & button {
+            color: ${props => props.theme.textColor};
           }
         }
       }
