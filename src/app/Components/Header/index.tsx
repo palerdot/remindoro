@@ -44,14 +44,14 @@ const NavHolder = styled.div`
 `
 
 const IconButtonHolder = styled(IconButton)`
-  color: white !important;
   padding: 4px !important;
   margin: 0 2px !important;
 
   &.highlight,
   &.highlight:hover,
   &.hightlight:focus {
-    background: ${props => props.theme.primaryLight};
+    background: ${props => props.theme.highlight};
+    color: ${props => props.theme.highlightTextColor};
     opacity: 1;
   }
 

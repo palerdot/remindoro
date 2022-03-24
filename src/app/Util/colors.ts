@@ -1,4 +1,5 @@
 export enum Theme {
+  Day = 'Day',
   Classic = 'Classic',
   Neon = 'Neon',
 }
@@ -10,6 +11,7 @@ export interface ThemeInterface {
   primaryDark: string
   primaryLight: string
   highlight: string
+  highlightTextColor: string
   border: string
   borderDark: string
   textColor: string
@@ -27,6 +29,30 @@ type Themes = {
 }
 
 export const themes: Themes = {
+  /* DAY THEME */
+  [Theme.Day]: {
+    background: '#F1F3F6',
+    backgroundLight: '#FFFFFF',
+
+    border: '#D1D3D7',
+    borderDark: '#eceef1',
+    primary: '#494DF3',
+    // primaryDark: '#4b4ff3',
+    primaryDark: '#b9bbfa',
+    primaryLight: '#4e52f2',
+
+    highlight: '#5155f2',
+    highlightTextColor: '#FFFFFF',
+    textColor: '#0C152E',
+    contrastTextColor: '#FFFFFF',
+
+    greyOne: '#686E7E',
+
+    success: 'lightgreen',
+    danger: '#FF5050',
+  },
+
+  /* CLASSIC THEME */
   [Theme.Classic]: {
     // background: '#3C0078',
     background: '#263238',
@@ -41,6 +67,7 @@ export const themes: Themes = {
     // primaryLight: '#00ceea',
     primaryLight: '#00b0ff',
     highlight: '#18ffff',
+    highlightTextColor: '#FFFFFF',
     textColor: '#ffffff',
 
     /* grey: text color -> contrast color */
@@ -51,6 +78,7 @@ export const themes: Themes = {
     danger: '#FF5050',
   },
 
+  /* NEON THEME */
   [Theme.Neon]: {
     // background: '#3C0078',
     background: '#271332',
@@ -62,6 +90,7 @@ export const themes: Themes = {
     primaryDark: '#5F0098',
     primaryLight: '#A33EDA',
     highlight: '#c55ffc',
+    highlightTextColor: '#FFFFFF',
     textColor: '#ffffff',
 
     /* grey: text color -> contrast color */

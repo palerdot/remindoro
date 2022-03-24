@@ -16,6 +16,7 @@ const StyledTextField: typeof TextField = styled(TextField)(({ theme }) => ({
     '&:hover:not(.Mui-disabled)::before': {
       borderBottom: `thin solid ${theme.palette.primary.main}`,
     },
+    background: `${theme.palette.background.paper}`,
   },
 }))
 

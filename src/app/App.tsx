@@ -52,6 +52,9 @@ dayjs.extend(DayjsRelativeTime, { thresholds })
 const GlobalStyle = createGlobalStyle`
   body {
 
+    background: ${props => props.theme.background} !important;
+    color: ${props => props.theme.textColor} !important;
+
     /* Scroll bar customisations */
     & ::-webkit-scrollbar {
       background: transparent;

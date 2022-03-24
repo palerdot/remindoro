@@ -14,6 +14,7 @@ const Holder = styled.div`
 
   border: ${props => `thin solid ${props.theme.primaryDark}`};
   background: ${props => props.theme.background};
+  color: ${props => props.theme.textColor};
 
   & .time-holder {
     display: flex;
