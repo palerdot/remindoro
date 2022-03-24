@@ -60,10 +60,12 @@ const GlobalStyle = createGlobalStyle`
       background: transparent;
       width: 0.25rem;
       height: 0.25rem;
+      box-shadow: none !important;
       -webkit-box-shadow: none !important;
     }
     & ::-webkit-scrollbar-thumb {
       background: transparent;
+      box-shadow: none !important;
       -webkit-box-shadow: none !important;
     }
 
