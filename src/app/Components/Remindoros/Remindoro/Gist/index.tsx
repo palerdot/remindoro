@@ -14,9 +14,7 @@ const Holder = styled.div`
 
   cursor: pointer;
   border: ${props => `thin solid ${props.theme.borderDark}`};
-  box-shadow: ${props =>
-    `0 1px 3px ${props.theme.border}, 0 1px 2px 0 ${props.theme.borderDark}`};
-  // background: ${props => props.theme.backgroundLight};
+  box-shadow: ${props => `0 1px 1px ${props.theme.border}`};
   background: ${props => props.theme.borderDark};
 
   &:hover {
@@ -53,6 +51,7 @@ function Card(remindoro: Remindoro) {
       sx={{
         background: theme => theme.colors.background,
         marginBottom: theme => theme.spacing(3),
+        boxShadow: theme => `0 1px 3px ${theme.colors.border}`,
       }}
     >
       <Holder>
