@@ -26,7 +26,7 @@ export const Holder = styled.div`
 
     & button {
       background-color: ${props => props.theme.primaryLight};
-      color: ${props => props.theme.textColor};
+      color: ${props => props.theme.highlightTextColor};
       margin-left: auto;
     }
   }

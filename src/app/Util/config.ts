@@ -9,7 +9,7 @@ const DEV_CONFIG: Config = {
 }
 
 const PROD_CONFIG: Config = {
-  ApiUrl: 'https://api.remindoro.app',
+  ApiUrl: 'https://remindoro.app',
 }
 
 function getConfig(): Config {
