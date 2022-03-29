@@ -33,11 +33,11 @@ const Holder = muiStyled('div')(({ theme }) => ({
   [`& .${classes.deleteButton}`]: {
     margin: theme.spacing(0),
     background: theme.colors.danger,
-    color: theme.colors.textColor,
+    color: theme.colors.highlightTextColor,
 
     '&:hover': {
       background: theme.colors.danger,
-      color: theme.colors.textColor,
+      color: theme.colors.highlightTextColor,
       opacity: 0.89,
     },
   },

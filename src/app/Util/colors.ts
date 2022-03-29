@@ -49,7 +49,7 @@ export const themes: Themes = {
 
     greyOne: '#686E7E',
 
-    success: 'lightgreen',
+    success: '#00CC00',
     danger: '#FF5050',
   },
 

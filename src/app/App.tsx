@@ -199,12 +199,12 @@ const GlobalStyle = createGlobalStyle`
       /* Error message styling */
       & .SnackbarItem-variantError {
         & .SnackbarItem-message {
-          color: ${props => props.theme.textColor};
+          color: ${props => props.theme.highlightTextColor};
         }
 
         & .SnackbarItem-action {
           & button {
-            color: ${props => props.theme.textColor};
+            color: ${props => props.theme.highlightTextColor};
           }
         }
       }
