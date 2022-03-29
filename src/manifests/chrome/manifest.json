@@ -27,7 +27,7 @@
     "host_permissions": [
         "http://*/*",
         "https://*/*",
-        "https://api.remindoro.app/*"
+        "https://remindoro.app/*"
     ],
     "action": {
         "default_icon": {
