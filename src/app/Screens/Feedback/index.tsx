@@ -8,6 +8,7 @@ import SendIcon from '@mui/icons-material/Send'
 import { Screens } from '@app/Util/Enums'
 import { postData } from '@app/Util/config'
 import { Holder, Header } from './Styles'
+import WhatsNew from './WhatsNew'
 
 function Feedback() {
   const history = useHistory()
@@ -105,6 +106,7 @@ function Feedback() {
           Send Feedback
         </Button>
       </div>
+      <WhatsNew />
     </Holder>
   )
 }
