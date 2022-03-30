@@ -1,5 +1,10 @@
 ## Changelog
 
+### `1.1.0`
+- Day Theme
+- In-Extension Feedback
+- New public site (https://remindoro.app)
+
 ### `1.0.6` 
 - Better Thematic break handling (`react-slate v0.1.5`)
 
