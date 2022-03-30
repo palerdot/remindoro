@@ -10,6 +10,9 @@ import { handle_context_menu } from './utils/context-menu'
 
 const { version } = packageInfo
 
+export const WHATS_NEW = ['Day Theme 😎', 'Rich Text Editor Improvements']
+export const WHATS_UP = ['Folder Support', 'Sync Support']
+
 /*
  * ref: https://github.com/mozilla/webextension-polyfill
  */
@@ -33,7 +36,7 @@ function initialize_install_events() {
   const welcome_message = {
     id: 'welcome-message',
     title: `Hello from Remindoro - ${version} !`,
-    note: 'Welcome to new refreshed Remindoro! You can now set one-time/repeatable reminders (with markdown support) for stuffs that matter to you ...',
+    note: `What's New: ${WHATS_NEW[0]}. Welcome to new refreshed Remindoro! You can now set one-time/repeatable reminders (with markdown support) for stuffs that matter to you ...`,
   }
 
   notify(welcome_message)

@@ -52,15 +52,20 @@ dayjs.extend(DayjsRelativeTime, { thresholds })
 const GlobalStyle = createGlobalStyle`
   body {
 
+    background: ${props => props.theme.background} !important;
+    color: ${props => props.theme.textColor} !important;
+
     /* Scroll bar customisations */
     & ::-webkit-scrollbar {
       background: transparent;
       width: 0.25rem;
       height: 0.25rem;
+      box-shadow: none !important;
       -webkit-box-shadow: none !important;
     }
     & ::-webkit-scrollbar-thumb {
       background: transparent;
+      box-shadow: none !important;
       -webkit-box-shadow: none !important;
     }
 
@@ -178,7 +183,7 @@ const GlobalStyle = createGlobalStyle`
      * Snackbar notification
      */
     .SnackbarContainer-root {
-      
+      /* Success message styling */
       & .SnackbarItem-variantSuccess {
         background: ${props => props.theme.success};
         & .SnackbarItem-message {
@@ -188,6 +193,18 @@ const GlobalStyle = createGlobalStyle`
         & .SnackbarItem-action {
           & button {
             color: ${props => props.theme.contrastTextColor};
+          }
+        }
+      }
+      /* Error message styling */
+      & .SnackbarItem-variantError {
+        & .SnackbarItem-message {
+          color: ${props => props.theme.highlightTextColor};
+        }
+
+        & .SnackbarItem-action {
+          & button {
+            color: ${props => props.theme.highlightTextColor};
           }
         }
       }

@@ -4,4 +4,5 @@ export enum Screens {
   RemindoroInfo = '/remindoro-info/:id',
   Settings = '/settings',
   Help = '/help',
+  Feedback = '/feedback',
 }

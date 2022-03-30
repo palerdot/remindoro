@@ -15,6 +15,7 @@ import {
   Settings as SettingsIcon,
   Help as HelpIcon,
   Star as StarIcon,
+  Comment as MessageIcon,
 } from '@mui/icons-material/'
 
 import packageInfo from '@package-info'
@@ -139,6 +140,16 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
             <ListItem button>
               <ListItemIcon className={'listIcon'}>{<HelpIcon />}</ListItemIcon>
               <ListItemText primary={'Help'} />
+            </ListItem>
+          </Link>
+
+          {/* Feedback Menu */}
+          <Link to={Screens.Feedback} exact activeClassName={'selected-screen'}>
+            <ListItem button>
+              <ListItemIcon className={'listIcon'}>
+                {<MessageIcon />}
+              </ListItemIcon>
+              <ListItemText primary={'Feedback'} />
             </ListItem>
           </Link>
 

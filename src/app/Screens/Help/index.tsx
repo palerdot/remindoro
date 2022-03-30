@@ -33,8 +33,8 @@ const Disclaimer = styled.div`
   display: flex;
   align-items: center;
 
-  background: ${props => props.theme.primaryLight};
-  color: ${props => props.theme.textColor};
+  background: ${props => props.theme.highlight};
+  color: ${props => props.theme.highlightTextColor};
 
   padding: 16px;
 `

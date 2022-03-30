@@ -38,9 +38,9 @@ body {
   width: 600px;
   height: 600px;
   /* overflow: hidden; */
-  font-size: 16px !important;
-  background: #271332 !important;
-  color: white !important;
+  font-size: 16px;
+  background: #F1F3F6;
+  color: #0C152E;
 
   font-family: "Roboto","Helvetica","Arial",sans-serif;
 }
