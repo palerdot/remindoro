@@ -1,5 +1,11 @@
 ## Changelog
 
+### `1.1.1` (Chrome only)
+
+- Remove `tabs` permission from Chrome Manifest. Google sent an email notice that tabs permission
+is not used and had to be removed.
+
+
 ### `1.1.0`
 - Day Theme
 - In-Extension Feedback
