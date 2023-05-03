@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill'
-import { get } from 'lodash'
+import { get } from '@lodash'
 
 import type { RootState } from '@app/Store/'
 

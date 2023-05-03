@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill'
 import { v4 as uuid } from 'uuid'
-import { omit, isEmpty } from 'lodash'
+import { omit, isEmpty } from '@lodash'
 import dayjs from 'dayjs'
 
 import type { Remindoro, Reminder } from '@app/Store/Slices/Remindoros'
