@@ -6,8 +6,8 @@ import {
   createTheme,
 } from '@mui/material/styles'
 import { MemoryRouter as Router } from 'react-router-dom'
-import AdapterDateFns from '@mui/lab/AdapterDayjs'
-import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { Button, CssBaseline } from '@mui/material'
 import { SnackbarProvider } from 'notistack'
 import dayjs from 'dayjs'
@@ -88,11 +88,11 @@ const GlobalStyle = createGlobalStyle`
     /*  
      * hide scroll in datepicker
      */
-    .MuiCalendarPicker-root > div {
+    .MuiPickersLayout-root > div {
       margin-bottom: 0;
     }
 
-    .MuiCalendarPicker-root {
+    .MuiPickersLayout-root {
       & .MuiIconButton-edgeStart, .MuiIconButton-edgeEnd {
         color: ${props => props.theme.primary}; 
       }
@@ -102,15 +102,9 @@ const GlobalStyle = createGlobalStyle`
       }
     }
 
-    /*  
-     * AM / PM button customization
-     */
-    & .MuiDialogContent-root {
-      & button.MuiIconButton-root.MuiIconButton-sizeMedium {
-        color: ${props => props.theme.textColor};
-        /* hack to fix - https://github.com/mui-org/material-ui/issues/25422#issuecomment-916304719 */
-        bottom: 4rem;
-      }
+    /* Color of AM/PM button */
+    & .MuiClock-amButton, .MuiClock-pmButton {
+      color: ${props => props.theme.textColor};
     }
 
     /*  
@@ -296,7 +290,7 @@ function App() {
               <Button onClick={onClickDismiss(key)}>{'Dismiss'}</Button>
             )}
           >
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
               <Router>
                 <Holder>
                   <CssBaseline />

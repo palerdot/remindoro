@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
 import styled, { css } from 'styled-components'
+import dayjs from 'dayjs'
 
 import type { Remindoro, Repeat } from '@app/Store/Slices/Remindoros/'
 
@@ -145,7 +146,7 @@ function Reminder({ id, reminder }: Props) {
             disabled={!isScheduled}
             className={`reminder-datepicker ${!isScheduled ? 'disabled' : ''}`}
             label="Reminder time"
-            value={value?.time ? new Date(value.time) : new Date()}
+            value={value?.time ? dayjs(value.time) : dayjs()}
             onChange={date => {
               const reminderTime = date?.valueOf() as number
 
