@@ -52,7 +52,7 @@ function DatePicker(props: Props) {
         ),
       }}
       ampm={true}
-      ampmInClock={true}
+      // ampmInClock={true}
       // showToolbar={true}
       minDateTime={dayjs()}
     />
