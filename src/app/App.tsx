@@ -176,34 +176,25 @@ const GlobalStyle = createGlobalStyle`
     /*  
      * Snackbar notification
      */
-    .SnackbarContainer-root {
-      /* Success message styling */
-      & .SnackbarItem-variantSuccess {
-        background: ${props => props.theme.success};
-        & .SnackbarItem-message {
-          color: ${props => props.theme.contrastTextColor};
-        }
 
-        & .SnackbarItem-action {
-          & button {
-            color: ${props => props.theme.contrastTextColor};
-          }
-        }
-      }
-      /* Error message styling */
-      & .SnackbarItem-variantError {
-        & .SnackbarItem-message {
-          color: ${props => props.theme.highlightTextColor};
-        }
+    /* success message styling */
+    .notistack-MuiContent-success {
+      background: ${props => props.theme.success};
+      color: ${props => props.theme.contrastTextColor};
 
-        & .SnackbarItem-action {
-          & button {
-            color: ${props => props.theme.highlightTextColor};
-          }
-        }
+      & button {
+        color: ${props => props.theme.contrastTextColor};
       }
     }
-    
+
+    /* Error message styling */
+    .notistack-MuiContent-error {
+      color: ${props => props.theme.highlightTextColor};
+
+      & button {
+        color: ${props => props.theme.highlightTextColor};
+      }
+    }
   }
 `
 
