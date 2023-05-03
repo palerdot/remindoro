@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { isEmpty } from 'lodash-es'
 
 import App from './'
@@ -13,12 +13,9 @@ import { loadFromStorage } from './Util/BrowserStorage/'
 
 const Remindoro = {
   init: initialState => {
-    ReactDOM.render(
-      <React.StrictMode>
-        <App initialState={initialState} />
-      </React.StrictMode>,
-      document.getElementById('remindoro-app')
-    )
+    const container = document.getElementById('remindoro-app')
+    const root = createRoot(container)
+    root.render(<App initialState={initialState} />)
   },
 }
 
