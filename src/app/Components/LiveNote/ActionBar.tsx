@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-// import Toolbar from './Toolbar'
+import Toolbar from './Toolbar'
 import ToggleSwitch from './ToggleSwitch'
 
 type Props = {
@@ -20,7 +20,7 @@ const Wrapper = styled.div`
 function ActionBar({ liveNoteEnabled }: Props) {
   return (
     <Wrapper>
-      {/* <div>{liveNoteEnabled && <Toolbar />}</div> */}
+      <div>{liveNoteEnabled && <Toolbar />}</div>
       <ToggleSwitch checked={liveNoteEnabled} />
     </Wrapper>
   )
