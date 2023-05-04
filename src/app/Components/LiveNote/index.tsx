@@ -45,7 +45,9 @@ function LiveNote({ id, note, readOnly }: Props) {
         readOnly={readOnly}
       >
         {!readOnly && <ActionBar liveNoteEnabled={true} />}
-        <Editor />
+        <div className="react-slite">
+          <Editor />
+        </div>
       </Slite>
     </EditorHolder>
   )
@@ -63,18 +65,16 @@ const NoteWrapper = ({ id, note, readOnly, lazyUpdate }: WrapperProps) => {
   return (
     <BackupEditor id={id} readOnly={readOnly} note={note} onChange={lazyUpdate}>
       {!readOnly && !liveNoteEnabled && <ActionBar liveNoteEnabled={false} />}
-      <div>
-        {liveNoteEnabled ? (
-          <LiveNote id={id} note={note} readOnly={readOnly} />
-        ) : (
-          <PlainTextEditor
-            id={id}
-            note={note}
-            readOnly={readOnly}
-            onChange={lazyUpdate}
-          />
-        )}
-      </div>
+      {liveNoteEnabled ? (
+        <LiveNote id={id} note={note} readOnly={readOnly} />
+      ) : (
+        <PlainTextEditor
+          id={id}
+          note={note}
+          readOnly={readOnly}
+          onChange={lazyUpdate}
+        />
+      )}
     </BackupEditor>
   )
 }

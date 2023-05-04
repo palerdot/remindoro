@@ -22,9 +22,13 @@ const Holder = styled.div`
   background: ${props => props.theme.borderDark};
 
   & .title-holder {
-    height: 55px;
+    height: 48px;
 
     border-bottom: ${props => `thin solid ${props.theme.primaryDark}`};
+
+    & .MuiInputBase-formControl {
+      height: 48px;
+    }
 
     & input {
       width: 100%;
@@ -45,16 +49,16 @@ const Holder = styled.div`
 
   & .note-holder {
     background: ${props => props.theme.background};
-    padding: 8px;
+    padding: 0 8px;
 
     & .editor {
-      height: 400px;
+      height: 420px;
       overflow-y: hidden;
 
       & .react-slite {
-        height: 380px;
+        height: 375px;
         overflow-y: auto;
-        padding: 10px;
+        padding: 1px;
       }
     }
   }

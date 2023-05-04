@@ -1,6 +1,12 @@
 import styled, { css } from 'styled-components'
+import { SLITE_EDITOR_CONTAINER_CLASS } from 'react-slite'
 
 export const LiveNoteStyles = css`
+  .${SLITE_EDITOR_CONTAINER_CLASS} {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
   .slate-li {
     & .slate-p {
       padding: 0;
