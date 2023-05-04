@@ -88,6 +88,12 @@ const GlobalStyle = createGlobalStyle`
     /*  
      * hide scroll in datepicker
      */
+
+    .MuiPickersLayout-toolbar {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
     .MuiPickersLayout-root > div {
       margin-bottom: 0;
     }
