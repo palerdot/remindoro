@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import { isEmpty, debounce, isEqual, DebouncedFunc } from '@lodash'
+import React, { useMemo } from 'react'
+import { debounce, isEqual, DebouncedFunc } from '@lodash'
 import { useSelector, useDispatch } from 'react-redux'
-import Slite, { Editor, mdToSlate, slateToMd } from 'react-slite'
+import Slite, { Editor } from 'react-slite'
 
 import type { RootState } from '@app/Store/'
-import type { Descendant } from 'react-slite'
 
 import { updateNote } from '@app/Store/Slices/Remindoros'
 import ActionBar from './ActionBar'
@@ -20,59 +19,33 @@ type Props = {
 
 function LiveNote({ id, note, readOnly }: Props) {
   const dispatch = useDispatch()
-  const [initialValue, setInitialValue] = useState<Descendant[] | undefined>(
-    undefined
-  )
-
-  useEffect(() => {
-    if (isEmpty(note)) {
-      // ref: https://github.com/ianstormtaylor/slate/issues/713
-      const emptyValue = [{ type: 'paragraph', children: [{ text: '' }] }]
-      // @ts-ignore
-      setInitialValue(emptyValue)
-
-      // do not proceed
-      return
-    }
-
-    mdToSlate(note).then(parsed => {
-      setInitialValue(parsed)
-    })
-  }, [note])
 
   const lazyUpdate = useMemo(
     () =>
-      debounce(updatedSlateNodes => {
-        slateToMd(updatedSlateNodes).then(updatedNote => {
-          if (!isEqual(note, updatedNote)) {
-            dispatch(
-              updateNote({
-                id,
-                value: updatedNote,
-              })
-            )
-          }
-        })
+      debounce(updatedNote => {
+        if (!isEqual(note, updatedNote)) {
+          dispatch(
+            updateNote({
+              id,
+              value: updatedNote,
+            })
+          )
+        }
       }, 314),
     [id, dispatch, note]
   )
 
-  if (initialValue === undefined) {
-    return null
-  }
-
   return (
     <EditorHolder className={`editor ${readOnly ? 'readonly' : ''}`}>
       <Slite
-        initialValue={initialValue}
+        initialValue={note}
         onChange={updatedNote => {
           lazyUpdate(updatedNote)
         }}
+        readOnly={readOnly}
       >
         {!readOnly && <ActionBar liveNoteEnabled={true} />}
-        <div className={'react-slite'}>
-          <Editor readOnly={readOnly} />
-        </div>
+        <Editor />
       </Slite>
     </EditorHolder>
   )
