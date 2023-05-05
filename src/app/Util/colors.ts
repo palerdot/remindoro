@@ -67,7 +67,8 @@ export const themes: Themes = {
     primaryDark: '#546e7a',
     // primaryLight: '#00ceea',
     primaryLight: '#00b0ff',
-    highlight: '#18ffff',
+    // highlight: '#18ffff',
+    highlight: '#14d9ff',
     highlightTextColor: '#FFFFFF',
     textColor: '#ffffff',
 
