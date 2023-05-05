@@ -5,6 +5,22 @@ export const LiveNoteStyles = css`
   .${SLITE_EDITOR_CONTAINER_CLASS} {
     margin-top: 0;
     margin-bottom: 0;
+
+    & .toolbar {
+      padding: 4px;
+    }
+
+    .toolbar button.toolbar-item {
+      padding: 4px;
+    }
+
+    .toolbar i.chevron-down.inside {
+      margin-top: 6px;
+    }
+
+    .toolbar select.toolbar-item {
+      padding: 4px;
+    }
   }
 
   .slate-li {
