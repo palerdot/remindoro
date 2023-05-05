@@ -39,7 +39,8 @@ export const themes: Themes = {
     primary: '#494DF3',
     // primaryDark: '#4b4ff3',
     // primaryDark: '#b9bbfa',
-    primaryDark: '#d4d4fc',
+    // primaryDark: '#d4d4fc',
+    primaryDark: '#b8b9fa',
     primaryLight: '#4e52f2',
 
     highlight: '#5155f2',
