@@ -22,7 +22,7 @@ export const LiveNoteStyles = css`
       background: ${props => props.theme.background};
       color: ${props => props.theme.textColor};
 
-      padding: 4px;
+      padding: 4px 8px;
     }
 
     .toolbar button.toolbar-item {
