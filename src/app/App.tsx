@@ -92,6 +92,11 @@ const GlobalStyle = createGlobalStyle`
       color: ${props => props.theme.textColor};
     }
 
+    /* select form down icon tweak */
+    .select-form .MuiSvgIcon-root {
+      color: ${props => props.theme.textColor};
+    }
+
     /* 
      * hide the manual input toggle button;  
      *
