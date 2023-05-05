@@ -76,6 +76,22 @@ const GlobalStyle = createGlobalStyle`
       background: ${props => props.theme.primaryLight};
     }
 
+    /* Slite editor dropdown styles */
+    .slite-dropdown {
+      background-color: ${props => props.theme.primary};
+      color: ${props => props.theme.textColor};
+    }
+
+    .slite-dropdown .item {
+      background-color: ${props => props.theme.primary};
+      color: ${props => props.theme.textColor};
+    }
+
+    .slite-dropdown .item:hover {
+      background-color: ${props => props.theme.primaryLight};
+      color: ${props => props.theme.textColor};
+    }
+
     /* 
      * hide the manual input toggle button;  
      *
