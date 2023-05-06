@@ -9455,10 +9455,10 @@ react-router@5.2.1:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-react-slite@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/react-slite/-/react-slite-0.2.0.tgz#685a42983bb24974afbc16f2dddba0c33bee7c72"
-  integrity sha512-AG8OfTz5Hs2dQ3ZMQywvZ77rVHI168iOi1BCvqDqXmJcHZ1e4E2Nw7oEPuREMAmAyZ+BiSyJ74FgXjq48WRZEw==
+react-slite@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/react-slite/-/react-slite-0.2.1.tgz#e527b9d3ff18d14ab7e9a4253a8c92889b741f09"
+  integrity sha512-4v0iySnkR3kleQRmdoNA7qcxr8rGsb5tMIr3GzFP1IbOYop1MLjW8aAfgLpJoKpbaUAqu9nSJYpVVsW1LY2qeg==
   dependencies:
     "@lexical/code" "^0.10.0"
     "@lexical/link" "^0.10.0"
