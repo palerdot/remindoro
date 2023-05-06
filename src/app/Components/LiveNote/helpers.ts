@@ -90,13 +90,6 @@ export const LiveNoteStyles = css`
       font-size: 89%;
     }
 
-    /* code block */
-    .editor-code {
-      /* normal token color */
-      color: #333;
-      caret-color: #333;
-    }
-
     /* quote block */
     .editor-quote {
       border-left: ${props => `4px solid ${props.theme.primaryLight}`};
