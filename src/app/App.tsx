@@ -12,6 +12,7 @@ import { Button, CssBaseline } from '@mui/material'
 import { SnackbarProvider } from 'notistack'
 import dayjs from 'dayjs'
 import DayjsRelativeTime from 'dayjs/plugin/relativeTime'
+import { SLITE_DROPDOWN_CLASS } from 'react-slite'
 
 // import type { ThemeInterface } from '@app/Util/colors'
 import type { SnackbarKey } from 'notistack'
@@ -77,17 +78,17 @@ const GlobalStyle = createGlobalStyle`
     }
 
     /* Slite editor dropdown styles */
-    .slite-dropdown {
+    .${SLITE_DROPDOWN_CLASS} {
       background-color: ${props => props.theme.primary};
       color: ${props => props.theme.textColor};
     }
 
-    .slite-dropdown .item {
+    .${SLITE_DROPDOWN_CLASS} .item {
       background-color: ${props => props.theme.primary};
       color: ${props => props.theme.textColor};
     }
 
-    .slite-dropdown .item:hover {
+    .${SLITE_DROPDOWN_CLASS} .item:hover {
       background-color: ${props => props.theme.primaryLight};
       color: ${props => props.theme.textColor};
     }
