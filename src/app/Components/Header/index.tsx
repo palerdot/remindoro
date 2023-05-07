@@ -6,6 +6,7 @@ import {
   Close as CloseIcon,
   Menu as MenuIcon,
   Home as HomeIcon,
+  IndeterminateCheckBox as TodoIcon,
   // Event as EventIcon,
 } from '@mui/icons-material/'
 
@@ -79,6 +80,7 @@ function Header() {
           <Sidebar isMenuOpen={isMenuOpen} setMenuStatus={setMenuStatus} />
         </div>
         <div className={classes.actionHolder}>
+          {/* Home Screen */}
           <Link to={Screens.Home}>
             <IconButtonHolder
               className={
@@ -86,6 +88,17 @@ function Header() {
               }
             >
               <HomeIcon fontSize={'large'} />
+            </IconButtonHolder>
+          </Link>
+
+          {/* Todo Screen */}
+          <Link to={Screens.Todo}>
+            <IconButtonHolder
+              className={
+                location.pathname === Screens.Todo ? 'highlight' : 'nohighlight'
+              }
+            >
+              <TodoIcon fontSize={'large'} />
             </IconButtonHolder>
           </Link>
 

@@ -5,12 +5,13 @@ import {
   Drawer,
   Divider,
   List,
-  ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
 } from '@mui/material'
 import {
   Home as HomeIcon,
+  IndeterminateCheckBox as TodoIcon,
   Event as EventIcon,
   Settings as SettingsIcon,
   Help as HelpIcon,
@@ -99,10 +100,18 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
         <List>
           {/* Home Menu */}
           <Link to={Screens.Home} exact activeClassName={'selected-screen'}>
-            <ListItem button>
+            <ListItemButton>
               <ListItemIcon className={'listIcon'}>{<HomeIcon />}</ListItemIcon>
               <ListItemText primary={'Home'} />
-            </ListItem>
+            </ListItemButton>
+          </Link>
+
+          {/* Todo Menu */}
+          <Link to={Screens.Todo} exact activeClassName={'selected-screen'}>
+            <ListItemButton>
+              <ListItemIcon className={'listIcon'}>{<TodoIcon />}</ListItemIcon>
+              <ListItemText primary={'Todo'} />
+            </ListItemButton>
           </Link>
 
           {/* Scheduled Menu */}
@@ -111,22 +120,22 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
             exact
             activeClassName={'selected-screen'}
           >
-            <ListItem button>
+            <ListItemButton>
               <ListItemIcon className={'listIcon'}>
                 {<EventIcon />}
               </ListItemIcon>
               <ListItemText primary={'Scheduled'} />
-            </ListItem>
+            </ListItemButton>
           </Link>
 
           {/* Settings Menu */}
           <Link to={Screens.Settings} exact activeClassName={'selected-screen'}>
-            <ListItem button>
+            <ListItemButton>
               <ListItemIcon className={'listIcon'}>
                 {<SettingsIcon />}
               </ListItemIcon>
               <ListItemText primary={'Settings'} />
-            </ListItem>
+            </ListItemButton>
           </Link>
         </List>
         <Divider
@@ -137,20 +146,20 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
         <List>
           {/* Help Menu */}
           <Link to={Screens.Help} exact activeClassName={'selected-screen'}>
-            <ListItem button>
+            <ListItemButton>
               <ListItemIcon className={'listIcon'}>{<HelpIcon />}</ListItemIcon>
               <ListItemText primary={'Help'} />
-            </ListItem>
+            </ListItemButton>
           </Link>
 
           {/* Feedback Menu */}
           <Link to={Screens.Feedback} exact activeClassName={'selected-screen'}>
-            <ListItem button>
+            <ListItemButton>
               <ListItemIcon className={'listIcon'}>
                 {<MessageIcon />}
               </ListItemIcon>
               <ListItemText primary={'Feedback'} />
-            </ListItem>
+            </ListItemButton>
           </Link>
 
           {/* Rating Menu */}
@@ -162,10 +171,10 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
               // window.close()
             }}
           >
-            <ListItem button>
+            <ListItemButton>
               <ListItemIcon className={'listIcon'}>{<StarIcon />}</ListItemIcon>
               <ListItemText primary={'Rate'} />
-            </ListItem>
+            </ListItemButton>
           </RateLink>
         </List>
         <VersionInfo>{`v${version} (beta)`}</VersionInfo>
