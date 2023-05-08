@@ -106,7 +106,11 @@ function Info({ remindoroId }: Props) {
     <Holder>
       <div className={'status-bar'}>
         <ScheduleInfo reminder={reminder} />
-        {isTodo && <TodoBadge />}
+        {isTodo && (
+          <div className="todo-status">
+            <TodoBadge />
+          </div>
+        )}
       </div>
 
       <div className={'title-holder'}>

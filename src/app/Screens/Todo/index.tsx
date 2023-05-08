@@ -15,17 +15,19 @@ function Todo() {
   const sortedRemindoros = orderBy(useTodoRemindoros(), 'updated', 'desc')
 
   return (
-    <Wrapper>
+    <div>
       {sortedRemindoros.length === 0 ? (
-        <InfoBanner>
-          {
-            'No notes marked as todo. You can mark a note as todo in the settings page. Todo notes count will be shown as a badge on top of extension icon.'
-          }
-        </InfoBanner>
+        <Wrapper>
+          <InfoBanner>
+            {
+              'No notes marked as todo. You can mark a note as todo in the settings screen. Todo notes count will be shown as a badge on top of extension icon.'
+            }
+          </InfoBanner>
+        </Wrapper>
       ) : (
         <Remindoros remindoros={sortedRemindoros} />
       )}
-    </Wrapper>
+    </div>
   )
 }
 
