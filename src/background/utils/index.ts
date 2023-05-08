@@ -22,7 +22,6 @@ export function migrate_v0_data_to_v1() {
       // in that case we will prevent migration
       if (isNewData(oldData)) {
         // do not proceed
-        console.log('porumai ... old data MIGRATION STOPPED ', oldData)
         return
       }
 
@@ -32,7 +31,7 @@ export function migrate_v0_data_to_v1() {
       return browser.storage.local
         .set({ [STORAGE_KEY]: cleanedData })
         .then(() => {
-          console.log('porumai ... migration complete ', cleanedData, oldData)
+          console.log('Migration complete ', cleanedData, oldData)
         })
         .catch(() => {
           // error in migration
@@ -42,4 +41,9 @@ export function migrate_v0_data_to_v1() {
       // failure migrating
     },
   })
+}
+
+// helper function to calculate todo count
+export function getTodoCount(remindoros: RootState['remindoros']) {
+  return remindoros.filter(r => r.isTodo).length
 }

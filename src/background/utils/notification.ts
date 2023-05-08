@@ -260,7 +260,6 @@ export class Notification {
   notify = () => {
     if (!this.showNotification) {
       // do not proceed
-      console.log('porumai ... notifications paused ')
       return
     }
 
@@ -286,9 +285,7 @@ export class Notification {
         // sync updated data to store
         syncToStorage({
           currentState: updatedData,
-          onSuccess: () => {
-            console.log('porumai ... ALARM => updated remindoros to store')
-          },
+          onSuccess: () => {},
           onError: () => {
             // error syncing to store
           },

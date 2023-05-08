@@ -11,7 +11,6 @@ export function handle_context_menu(
   menu_details: Menus.OnClickData,
   tab_details: Tabs.Tab | undefined
 ) {
-  console.log('porumai ... handling context menu ', menu_details, tab_details)
   // we will be handling two types of context menus
   // page/link action => adding the page url as note, title as title
   // highlighted action => title - url as title, highlighted text as body

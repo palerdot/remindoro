@@ -1,9 +1,11 @@
 import React, { useEffect, useCallback, useRef } from 'react'
 import { debounce, isEqual, isUndefined, merge } from '@lodash'
 import { Provider } from 'react-redux'
+import { browserAction } from 'webextension-polyfill'
 
 import type { RootState } from '@app/Store/'
 
+import { getTodoCount } from 'background/utils/'
 import ErrorBoundary from '@app/Components/ErrorBoundary'
 import App from './App'
 import { getStore } from '@app/Store/'
@@ -22,14 +24,20 @@ import { Theme } from './Util/colors'
 const debouncedStoreUpdate = debounce(currentState => {
   syncToStorage({
     currentState,
-    onSuccess: _storedState => {
-      // console.log('porumai ... store sync success ', storedState)
-    },
+    onSuccess: _storedState => {},
     onError: () => {
-      console.log('porumai ... error storing store state ')
+      console.error('Error storing store state ')
     },
   })
 }, 314)
+
+// debounced todo badge updated
+const debouncedTodoBadgeUpdate = debounce((status: number) => {
+  const text = status >= 1 ? `${status}` : ''
+  browserAction.setBadgeText({
+    text,
+  })
+}, 515)
 
 type InitialState = RootState | undefined
 
@@ -67,6 +75,17 @@ const AppStore = ({ initialState }: Props) => {
       return
     }
     debouncedStoreUpdate(currentState)
+
+    // check if todo count has changed
+    const currentTodoCount = getTodoCount(currentState.remindoros)
+    if (
+      previousState.current &&
+      currentTodoCount !== getTodoCount(previousState.current.remindoros)
+    ) {
+      // update todo count badge
+      debouncedTodoBadgeUpdate(currentTodoCount)
+    }
+
     // update previous state
     previousState.current = currentState
   })

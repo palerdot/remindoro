@@ -46,9 +46,7 @@ const browser = argv.browser
 const release_zip_name = `remindoro-${browser}-v${npm_version}.zip`
 
 if (!['firefox', 'chrome'].includes(browser)) {
-  console.log(
-    'porumai ... firefox/chrome browser not specified for prod build'.red.bold
-  )
+  console.log('firefox/chrome browser not specified for prod build'.red.bold)
   process.exit(1)
 }
 
