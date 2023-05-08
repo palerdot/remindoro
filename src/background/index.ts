@@ -23,7 +23,18 @@ export const WHATS_UP = ['Folder Support', 'Sync Support']
 
 browser.runtime.onInstalled.addListener(initialize_install_events)
 
-function initialize_install_events() {
+function initialize_install_events(
+  details: browser.Runtime.OnInstalledDetailsType
+) {
+  // ref: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onInstalled
+  // ref: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/OnInstalledReason
+  // run only if extension is installed or updated
+  const BROWSER_UPDATE_REASONS = ['browser_update', 'chrome_update']
+  if (BROWSER_UPDATE_REASONS.includes(details.reason)) {
+    // do not run init events
+    return
+  }
+
   console.log('initing install events ', version)
   // migrating v0.x => v1.x data
   // mostly harmless migration - removing unwanted keys
