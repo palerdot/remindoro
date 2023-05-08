@@ -6,6 +6,7 @@ import type { RootState } from '@app/Store/'
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
 import ScheduleInfo from '@app/Components/Remindoros/Remindoro/ScheduleInfo'
+import TodoBadge from '@app/Components/TodoBadge'
 import SettingsModal from '@app/Components/Remindoros/Remindoro/Info/SettingsModal'
 import Edit from '@app/Components/Remindoros/Remindoro/EditFab'
 import Title from './Title'
@@ -63,13 +64,15 @@ const Holder = styled.div`
     }
   }
 
-  & .info-corner {
+  & .status-bar {
     display: flex;
+    flex-direction: row;
+    align-items: center;
 
     height: 30px;
     padding: 0 16px;
 
-    & .info {
+    & .todo-status {
       margin-left: auto;
     }
   }
@@ -97,12 +100,13 @@ function Info({ remindoroId }: Props) {
     return <div>{'Loading ... '}</div>
   }
 
-  const { id, title, note, reminder } = remindoro
+  const { id, title, note, reminder, isTodo } = remindoro
 
   return (
     <Holder>
-      <div className={'info-corner'}>
+      <div className={'status-bar'}>
         <ScheduleInfo reminder={reminder} />
+        {isTodo && <TodoBadge />}
       </div>
 
       <div className={'title-holder'}>
