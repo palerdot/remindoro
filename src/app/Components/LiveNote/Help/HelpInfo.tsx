@@ -101,7 +101,7 @@ function HelpInfo() {
       </div>
       <p>
         {
-          'Press double enter inside codeblock to exit codeblock. Press Shift + Enter, inside codeblock to insert new lines.'
+          'Press double enter inside codeblock to exit codeblock. Press Shift + Enter, inside codeblock/quote block to insert new lines.'
         }
       </p>
       <p>{'Please note this rich text editor is experimental/beta.'}</p>
