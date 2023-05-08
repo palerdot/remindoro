@@ -58,6 +58,7 @@ function initialize_install_events(
  */
 
 init_extension_events()
+init_context_menus()
 
 async function getLocalStorageData() {
   const data = await browser.storage.local.get(STORAGE_KEY)
@@ -67,15 +68,14 @@ async function getLocalStorageData() {
 
 async function init_extension_events() {
   const remindoroData: RootState = await getLocalStorageData()
-  init_alarms(remindoroData)
-  init_context_menus()
-  init_todo_badge(remindoroData.remindoros)
+  show_alarms(remindoroData)
+  show_todo_badge(remindoroData.remindoros)
 }
 
 /*
- * Init Todo bage
+ * Show Todo Badge
  */
-function init_todo_badge(remindoros: RootState['remindoros']) {
+function show_todo_badge(remindoros: RootState['remindoros']) {
   const status = getTodoCount(remindoros)
   const text = status >= 1 ? `${status}` : ''
   browserAction.setBadgeText({
@@ -84,10 +84,10 @@ function init_todo_badge(remindoros: RootState['remindoros']) {
 }
 
 /*
- * Init alarms
+ * Show alarms
  */
 
-function init_alarms(remindoroData: RootState) {
+function show_alarms(remindoroData: RootState) {
   // CREATE an alarm
   browser.alarms.create(ALARM_KEY, {
     delayInMinutes: 0.1,
