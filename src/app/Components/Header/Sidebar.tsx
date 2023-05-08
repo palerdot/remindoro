@@ -18,6 +18,7 @@ import {
   Star as StarIcon,
   Comment as MessageIcon,
 } from '@mui/icons-material/'
+import { useTodoCount } from '@app/Store/Slices/Remindoros'
 
 import packageInfo from '@package-info'
 import { Screens } from '@app/Routes/'
@@ -85,6 +86,16 @@ const RateLink = styled.a`
   }
 `
 
+function TodoMenu() {
+  const count = useTodoCount()
+  return (
+    <ListItemButton>
+      <ListItemIcon className={'listIcon'}>{<TodoIcon />}</ListItemIcon>
+      <ListItemText primary={`Todo ${count > 0 ? `(${count})` : ''}`} />
+    </ListItemButton>
+  )
+}
+
 function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
   return (
     <Drawer
@@ -108,10 +119,7 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
 
           {/* Todo Menu */}
           <Link to={Screens.Todo} exact activeClassName={'selected-screen'}>
-            <ListItemButton>
-              <ListItemIcon className={'listIcon'}>{<TodoIcon />}</ListItemIcon>
-              <ListItemText primary={'Todo'} />
-            </ListItemButton>
+            <TodoMenu />
           </Link>
 
           {/* Scheduled Menu */}
