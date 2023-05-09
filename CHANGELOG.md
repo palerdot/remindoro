@@ -1,5 +1,9 @@
 ## Changelog
 
+### `1.2.0` (`Lexical/Todo notes`)
+- Todo notes
+- Lexical powered `react-slite` `v0.2.x`
+
 ### `1.1.1` (Chrome only)
 
 - Remove `tabs` permission from Chrome Manifest. Google sent an email notice that tabs permission
