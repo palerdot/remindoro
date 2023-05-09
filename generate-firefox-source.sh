@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # Installation Steps:
-#  - `yarn` (or `yarn install`). This step will install all necessary dependencies
+#  - `yarn` (or `yarn install`). This step will install all necessary dependencies. Yarn v1 is used for this project.
 # 
 # Build steps:
 #  - `yarn build:firefox`. 
@@ -10,9 +10,7 @@
 # 
 #  Environment Info:
 #   - node `v16.x`
-#   - npm `v8.x` / pnpm `v8.x`
+#   - npm `v8.x` / yarn `v1.22.x`
 #   - OS `Mac OS 12.6.3`
-
-# tar --exclude='./node_modules' --exclude='./screenshots' --exclude='./release' --exclude='./dev-server'  --exclude='./build' --exclude='./dist' --exclude='./docs' --exclude='.git' -cvzf ~/Desktop/remindoro-firefox-source.tar.gz .
 
 tar -cvzf ~/Desktop/remindoro-firefox-source.tar.gz package.json tsconfig.json yarn.lock src/
