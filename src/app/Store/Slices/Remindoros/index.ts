@@ -65,14 +65,13 @@ export const remindoroSlice = createSlice({
         id: uuid(),
         title: 'Take a Walk',
         note: `
-Taking a walk for every **45 minutes** is good for your health. Avoid continous sitting for long hours. Remember, \`Sitting is the new Smoking\`.  
-\n
-> NOTE: This is a default sample note shown if no notes are saved. 
-\n
+Taking a walk for every **45 minutes** is good for your health. Avoid continous sitting for long hours. Remember, \`Sitting is the new Smoking\`.
+
+> NOTE: This is a default sample note shown if no notes are saved.
+
 You can edit, save, delete and do whatever you want with this note. Enjoy!
-\n
+
 Have a nice day!
-\n
 `,
         type: RemindoroType.Note,
         reminder: {

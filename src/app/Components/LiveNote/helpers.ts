@@ -74,12 +74,6 @@ export const LiveNoteStyles = css`
       margin: 0 4px;
     }
 
-    /* paragraph */
-    .editor-paragraph {
-      margin-top: 1px;
-      margin-bottom: 1px;
-    }
-
     /* inline code */
     .editor-text-code {
       font-family: monospace;

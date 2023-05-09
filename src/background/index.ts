@@ -10,7 +10,7 @@ import { handle_context_menu } from './utils/context-menu'
 
 const { version } = packageInfo
 
-export const WHATS_NEW = ['Day Theme 😎', 'Rich Text Editor Improvements']
+export const WHATS_NEW = ['Todo Notes', 'Rich Text Editor Improvements']
 export const WHATS_UP = ['Folder Support', 'Sync Support']
 
 /*
