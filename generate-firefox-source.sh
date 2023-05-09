@@ -10,8 +10,8 @@
 # 
 #  Environment Info:
 #   - node `v16.x`
-#   - npm `v8.x`
-#   - OS `Mac OS 12.2.1`
+#   - npm `v8.x` / pnpm `v8.x`
+#   - OS `Mac OS 12.6.3`
 
 # tar --exclude='./node_modules' --exclude='./screenshots' --exclude='./release' --exclude='./dev-server'  --exclude='./build' --exclude='./dist' --exclude='./docs' --exclude='.git' -cvzf ~/Desktop/remindoro-firefox-source.tar.gz .
 
