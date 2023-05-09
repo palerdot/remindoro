@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { isEmpty } from 'lodash-es'
 
 import App from './'
@@ -13,22 +13,15 @@ import { loadFromStorage } from './Util/BrowserStorage/'
 
 const Remindoro = {
   init: initialState => {
-    ReactDOM.render(
-      <React.StrictMode>
-        <App initialState={initialState} />
-      </React.StrictMode>,
-      document.getElementById('remindoro-app')
-    )
+    const container = document.getElementById('remindoro-app')
+    const root = createRoot(container)
+    root.render(<App initialState={initialState} />)
   },
 }
 
 // load current state from browser storage
 loadFromStorage({
   onSuccess: browserState => {
-    console.log(
-      'porumai ... updating state from browser storage for app load',
-      browserState
-    )
     const initialState = isEmpty(browserState) ? undefined : browserState
     // init the app once we get the current state
     Remindoro.init(initialState)

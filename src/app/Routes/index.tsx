@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import styled from 'styled-components'
 
 import Home from '@app/Screens/Home/'
+import Todo from '@app/Screens/Todo/'
 import Scheduled from '@app/Screens/Scheduled/'
 import RemindoroInfo from '@app/Screens/RemindoroInfo/'
 import Settings from '@app/Screens/Settings/'
@@ -16,6 +17,10 @@ const PATHS = [
   {
     path: Screens.Home,
     Screen: Home,
+  },
+  {
+    path: Screens.Todo,
+    Screen: Todo,
   },
   {
     path: Screens.Scheduled,

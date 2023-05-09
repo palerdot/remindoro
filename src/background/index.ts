@@ -1,16 +1,16 @@
-import browser from 'webextension-polyfill'
+import browser, { browserAction } from 'webextension-polyfill'
 
 import type { RootState } from '@app/Store/'
 
 import packageInfo from '@package-info'
 import { ALARM_KEY, STORAGE_KEY, ContextMenuKeys } from '@app/Constants'
-import { migrate_v0_data_to_v1 } from './utils/'
+import { migrate_v0_data_to_v1, getTodoCount } from './utils/'
 import { notify, Notification } from './utils/notification'
 import { handle_context_menu } from './utils/context-menu'
 
 const { version } = packageInfo
 
-export const WHATS_NEW = ['Day Theme 😎', 'Rich Text Editor Improvements']
+export const WHATS_NEW = ['Todo Notes ✅', 'Rich Text Editor Improvements']
 export const WHATS_UP = ['Folder Support', 'Sync Support']
 
 /*
@@ -23,8 +23,19 @@ export const WHATS_UP = ['Folder Support', 'Sync Support']
 
 browser.runtime.onInstalled.addListener(initialize_install_events)
 
-function initialize_install_events() {
-  console.log('porumai ... initing install events ', version)
+function initialize_install_events(
+  details: browser.Runtime.OnInstalledDetailsType
+) {
+  // ref: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onInstalled
+  // ref: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/OnInstalledReason
+  // run only if extension is installed or updated
+  const BROWSER_UPDATE_REASONS = ['browser_update', 'chrome_update']
+  if (BROWSER_UPDATE_REASONS.includes(details.reason)) {
+    // do not run init events
+    return
+  }
+
+  console.log('initing install events ', version)
   // migrating v0.x => v1.x data
   // mostly harmless migration - removing unwanted keys
   // we don't have to wait for migration - fire and forget!!!
@@ -47,19 +58,36 @@ function initialize_install_events() {
  */
 
 init_extension_events()
+init_context_menus()
 
-function init_extension_events() {
-  init_alarms()
-  init_context_menus()
+async function getLocalStorageData() {
+  const data = await browser.storage.local.get(STORAGE_KEY)
+
+  return data[STORAGE_KEY] as RootState
+}
+
+async function init_extension_events() {
+  const remindoroData: RootState = await getLocalStorageData()
+  show_alarms(remindoroData)
+  show_todo_badge(remindoroData.remindoros)
 }
 
 /*
- * Init alarms
+ * Show Todo Badge
+ */
+function show_todo_badge(remindoros: RootState['remindoros']) {
+  const status = getTodoCount(remindoros)
+  const text = status >= 1 ? `${status}` : ''
+  browserAction.setBadgeText({
+    text,
+  })
+}
+
+/*
+ * Show alarms
  */
 
-function init_alarms() {
-  console.log('porumai .... wait and hope ... TS background logic')
-
+function show_alarms(remindoroData: RootState) {
   // CREATE an alarm
   browser.alarms.create(ALARM_KEY, {
     delayInMinutes: 0.1,
@@ -77,11 +105,6 @@ function init_alarms() {
 
     // here we can handle alarm
     try {
-      const data = await browser.storage.local.get(STORAGE_KEY)
-      // NOTE: here we can fetch 'settings.showNotification' and use it to
-      // decide whether to show alarm or not
-      const remindoroData = data[STORAGE_KEY] as RootState
-
       let showNotification: boolean | undefined =
         remindoroData.settings.notificationsEnabled
 
@@ -103,12 +126,6 @@ function init_alarms() {
       // to indicate that remindoro time are updated in background
       // for now, we are allowing people to focus in the open popup
       notification.updateStore(updatedRemindoros)
-
-      console.log(
-        'porumai ... remindoro data for ALARM',
-        remindoroData,
-        updatedRemindoros
-      )
     } catch (e) {
       // some error fetching remindoro data
     }

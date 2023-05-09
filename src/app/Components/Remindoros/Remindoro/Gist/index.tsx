@@ -7,6 +7,7 @@ import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
 import { getRemindoroUrl } from '@app/Util/'
 import ScheduleInfo from '@app/Components/Remindoros/Remindoro/ScheduleInfo'
+import TodoBadge from '@app/Components/TodoBadge'
 import LiveNote from '@app/Components/LiveNote/'
 
 const Holder = styled.div`
@@ -19,6 +20,16 @@ const Holder = styled.div`
 
   &:hover {
     border: ${props => `thin solid ${props.theme.primaryLight}`};
+  }
+
+  & .status-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    & .todo-status {
+      margin-left: auto;
+    }
   }
 
   & .title-holder {
@@ -39,7 +50,7 @@ const Holder = styled.div`
 function Card(remindoro: Remindoro) {
   const history = useHistory()
 
-  const { id, title, note, reminder } = remindoro
+  const { id, title, note, reminder, isTodo } = remindoro
   const url = getRemindoroUrl(id)
 
   return (
@@ -55,7 +66,14 @@ function Card(remindoro: Remindoro) {
       }}
     >
       <Holder>
-        <ScheduleInfo reminder={reminder} />
+        <div className="status-bar">
+          <ScheduleInfo reminder={reminder} />
+          {isTodo && (
+            <div className="todo-status">
+              <TodoBadge />
+            </div>
+          )}
+        </div>
         {title && <div className={'title-holder'}>{title}</div>}
         <div className={'note-holder'}>
           <LiveNote id={id} note={note} readOnly={true} />

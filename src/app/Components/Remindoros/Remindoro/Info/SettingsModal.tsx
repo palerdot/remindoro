@@ -13,6 +13,7 @@ import { Screens } from '@app/Routes/'
 import { deleteRemindoro } from '@app/Store/Slices/Remindoros'
 import ConfirmDeleteModal from './ConfirmDeleteModal'
 import Reminder from './Reminder/'
+import MarkTodo from './MarkTodo'
 
 const PREFIX = 'SettingsModal'
 
@@ -60,8 +61,8 @@ const ActionBar = styled.div`
   border-top: ${props => `thin solid ${props.theme.border}`};
 
   margin-top: auto;
-  margin-right: 20px;
   padding: 16px 24px;
+  padding-right: 20px;
 `
 
 type Props = {
@@ -91,6 +92,7 @@ function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
       >
         <Holder>
           <Reminder id={remindoro.id} reminder={remindoro.reminder} />
+          <MarkTodo id={remindoro.id} isTodo={remindoro.isTodo} />
           <ActionBar>
             <Button
               variant="contained"

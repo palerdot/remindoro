@@ -60,6 +60,10 @@ const FAQS = [
     answer:
       'Rich Text editor allows you to edit your note content with rich text semantics like checklist items, bold, italic etc. Please refer to next section for more details. Please note this feature is currently experimental/beta. If you face any problems, please give feedback via - palerdot@gmail.com.',
   },
+  {
+    question: 'What is the count/badge shown on top of extension icon?',
+    answer: `This is the count of notes marked as todo. You can mark a note as todo from the note settings screen. You can navigate to todo screen from the header or sidebar menu, where you can see all the notes marked as todo.`,
+  },
 ]
 
 function Help() {

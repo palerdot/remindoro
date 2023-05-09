@@ -1,7 +1,10 @@
 import { isNil, isEqual, cloneDeep } from '@lodash'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { useSelector } from 'react-redux'
 import { v4 as uuid } from 'uuid'
 import dayjs from 'dayjs'
+
+import type { RootState } from '@app/Store/'
 
 import { clean_v0_data } from '@app/Util/cleaners'
 import { isOldRemindoro } from '@app/Components/ChromeError/WithChromeError'
@@ -30,8 +33,10 @@ export interface Remindoro {
   title: string
   note: string
 
-  // NOTE: we have to see the usage of this properties
+  // NOTE: we have to see the usage of this property
   type: RemindoroType.Note
+  // marking note as todo
+  isTodo?: boolean
 
   // unix timestamp
   created: number
@@ -60,9 +65,9 @@ export const remindoroSlice = createSlice({
         id: uuid(),
         title: 'Take a Walk',
         note: `
-Taking a walk for every **45 minutes** is good for your health. Avoid continous sitting for long hours. Remember, \`Sitting is the new Smoking\`.  
+Taking a walk for every **45 minutes** is good for your health. Avoid continous sitting for long hours. Remember, \`Sitting is the new Smoking\`.
 
-> NOTE: This is a default sample note shown if no notes are saved. 
+> NOTE: This is a default sample note shown if no notes are saved.
 
 You can edit, save, delete and do whatever you want with this note. Enjoy!
 
@@ -172,6 +177,28 @@ Have a nice day!
       toUpdate.updated = Date.now()
     },
 
+    // update todo state
+    updateTodo: (state, action: StorePayload<Maybe<boolean>>) => {
+      const { id, value } = action.payload
+
+      // extract remindoro
+      const toUpdate: Maybe<Remindoro> = state.find(ro => ro.id === id)
+
+      // if for some reason, we cannot find remindoro to update,
+      // we will return the state as is
+      if (isNil(toUpdate)) {
+        return state
+      }
+
+      // compare value before update
+      if (isEqual(toUpdate.reminder, value)) {
+        // return current state
+        return state
+      }
+
+      toUpdate.isTodo = value
+    },
+
     deleteRemindoro: (state, action: PayloadAction<string>) => {
       const toDelete = action.payload
       return state.filter(remindoro => remindoro.id !== toDelete)
@@ -200,8 +227,25 @@ export const {
   updateTitle,
   updateNote,
   updateReminder,
+  updateTodo,
   deleteRemindoro,
   migrateV1Remindoros,
 } = remindoroSlice.actions
 
 export default remindoroSlice.reducer
+
+// helper function to get all remindoros from store
+export function useRemindoros() {
+  return useSelector((state: RootState) => state.remindoros)
+}
+
+// helper function to get todo remindoros
+export function useTodoRemindoros() {
+  const remindoros = useRemindoros()
+  return remindoros.filter(r => r.isTodo)
+}
+
+// helper function to get todo remindoros count
+export function useTodoCount() {
+  return useTodoRemindoros().length
+}

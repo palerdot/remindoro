@@ -48,21 +48,10 @@ function HelpInfo() {
         <div className={'left'}>{`Ctrl/Cmd + i`}</div>
         <div className={'right'}>{'Italic'}</div>
       </div>
-      {/* Inline code */}
+      {/* Underscore */}
       <div className={'shortcut'}>
-        <div className={'left'}>{'Ctrl + `(backtick)'}</div>
-        <div className={'right'}>{'Inline code block'}</div>
-      </div>
-      <div className={'shortcut'}>
-        <div className={'left'}>{'``'}</div>
-        <div className={'right'}>
-          {'Starts Inline code block (2 backticks)'}
-        </div>
-      </div>
-      {/* Code block */}
-      <div className={'shortcut'}>
-        <div className={'left'}>{'```'}</div>
-        <div className={'right'}>{'Starts a code block (3 backticks)'}</div>
+        <div className={'left'}>{`Ctrl/Cmd + u`}</div>
+        <div className={'right'}>{'Underline'}</div>
       </div>
       {/* Headings */}
       <div className={'shortcut'}>
@@ -102,14 +91,19 @@ function HelpInfo() {
         </div>
         <div className={'right'}>{'Unordered List'}</div>
       </div>
-      {/* Thematic break */}
+      {/* Numbered list */}
       <div className={'shortcut'}>
         <div className={'left'}>
-          {'---'}
+          {'1.'}
           <Spacer />
         </div>
-        <div className={'right'}>{'Horizontal Rule/Thematic Break'}</div>
+        <div className={'right'}>{'Numbered List'}</div>
       </div>
+      <p>
+        {
+          'Press double enter inside codeblock to exit codeblock. Press Shift + Enter, inside codeblock/quote block to insert new lines.'
+        }
+      </p>
       <p>{'Please note this rich text editor is experimental/beta.'}</p>
     </Holder>
   )

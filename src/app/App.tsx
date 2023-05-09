@@ -6,12 +6,13 @@ import {
   createTheme,
 } from '@mui/material/styles'
 import { MemoryRouter as Router } from 'react-router-dom'
-import AdapterDateFns from '@mui/lab/AdapterDayjs'
-import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { Button, CssBaseline } from '@mui/material'
 import { SnackbarProvider } from 'notistack'
 import dayjs from 'dayjs'
 import DayjsRelativeTime from 'dayjs/plugin/relativeTime'
+import { SLITE_DROPDOWN_CLASS } from 'react-slite'
 
 // import type { ThemeInterface } from '@app/Util/colors'
 import type { SnackbarKey } from 'notistack'
@@ -76,6 +77,27 @@ const GlobalStyle = createGlobalStyle`
       background: ${props => props.theme.primaryLight};
     }
 
+    /* Slite editor dropdown styles */
+    .${SLITE_DROPDOWN_CLASS} {
+      background-color: ${props => props.theme.primary};
+      color: ${props => props.theme.textColor};
+    }
+
+    .${SLITE_DROPDOWN_CLASS} .item {
+      background-color: ${props => props.theme.primary};
+      color: ${props => props.theme.textColor};
+    }
+
+    .${SLITE_DROPDOWN_CLASS} .item:hover {
+      background-color: ${props => props.theme.primaryLight};
+      color: ${props => props.theme.textColor};
+    }
+
+    /* select form down icon tweak */
+    .select-form .MuiSvgIcon-root {
+      color: ${props => props.theme.textColor};
+    }
+
     /* 
      * hide the manual input toggle button;  
      *
@@ -88,11 +110,17 @@ const GlobalStyle = createGlobalStyle`
     /*  
      * hide scroll in datepicker
      */
-    .MuiCalendarPicker-root > div {
+
+    .MuiPickersLayout-toolbar {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .MuiPickersLayout-root > div {
       margin-bottom: 0;
     }
 
-    .MuiCalendarPicker-root {
+    .MuiPickersLayout-root {
       & .MuiIconButton-edgeStart, .MuiIconButton-edgeEnd {
         color: ${props => props.theme.primary}; 
       }
@@ -102,15 +130,9 @@ const GlobalStyle = createGlobalStyle`
       }
     }
 
-    /*  
-     * AM / PM button customization
-     */
-    & .MuiDialogContent-root {
-      & button.MuiIconButton-root.MuiIconButton-sizeMedium {
-        color: ${props => props.theme.textColor};
-        /* hack to fix - https://github.com/mui-org/material-ui/issues/25422#issuecomment-916304719 */
-        bottom: 4rem;
-      }
+    /* Color of AM/PM button */
+    & .MuiClock-amButton, .MuiClock-pmButton {
+      color: ${props => props.theme.textColor};
     }
 
     /*  
@@ -182,34 +204,25 @@ const GlobalStyle = createGlobalStyle`
     /*  
      * Snackbar notification
      */
-    .SnackbarContainer-root {
-      /* Success message styling */
-      & .SnackbarItem-variantSuccess {
-        background: ${props => props.theme.success};
-        & .SnackbarItem-message {
-          color: ${props => props.theme.contrastTextColor};
-        }
 
-        & .SnackbarItem-action {
-          & button {
-            color: ${props => props.theme.contrastTextColor};
-          }
-        }
-      }
-      /* Error message styling */
-      & .SnackbarItem-variantError {
-        & .SnackbarItem-message {
-          color: ${props => props.theme.highlightTextColor};
-        }
+    /* success message styling */
+    .notistack-MuiContent-success {
+      background: ${props => props.theme.success};
+      color: ${props => props.theme.contrastTextColor};
 
-        & .SnackbarItem-action {
-          & button {
-            color: ${props => props.theme.highlightTextColor};
-          }
-        }
+      & button {
+        color: ${props => props.theme.contrastTextColor};
       }
     }
-    
+
+    /* Error message styling */
+    .notistack-MuiContent-error {
+      color: ${props => props.theme.highlightTextColor};
+
+      & button {
+        color: ${props => props.theme.highlightTextColor};
+      }
+    }
   }
 `
 
@@ -296,7 +309,7 @@ function App() {
               <Button onClick={onClickDismiss(key)}>{'Dismiss'}</Button>
             )}
           >
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
               <Router>
                 <Holder>
                   <CssBaseline />

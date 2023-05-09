@@ -6,6 +6,7 @@ import type { RootState } from '@app/Store/'
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
 import ScheduleInfo from '@app/Components/Remindoros/Remindoro/ScheduleInfo'
+import TodoBadge from '@app/Components/TodoBadge'
 import SettingsModal from '@app/Components/Remindoros/Remindoro/Info/SettingsModal'
 import Edit from '@app/Components/Remindoros/Remindoro/EditFab'
 import Title from './Title'
@@ -22,9 +23,13 @@ const Holder = styled.div`
   background: ${props => props.theme.borderDark};
 
   & .title-holder {
-    height: 55px;
+    height: 48px;
 
     border-bottom: ${props => `thin solid ${props.theme.primaryDark}`};
+
+    & .MuiInputBase-formControl {
+      height: 48px;
+    }
 
     & input {
       width: 100%;
@@ -45,27 +50,29 @@ const Holder = styled.div`
 
   & .note-holder {
     background: ${props => props.theme.background};
-    padding: 8px;
+    padding: 0 8px;
 
     & .editor {
-      height: 400px;
+      height: 425px;
       overflow-y: hidden;
 
       & .react-slite {
-        height: 380px;
+        height: 385px;
         overflow-y: auto;
-        padding: 10px;
+        padding: 1px;
       }
     }
   }
 
-  & .info-corner {
+  & .status-bar {
     display: flex;
+    flex-direction: row;
+    align-items: center;
 
     height: 30px;
     padding: 0 16px;
 
-    & .info {
+    & .todo-status {
       margin-left: auto;
     }
   }
@@ -93,12 +100,17 @@ function Info({ remindoroId }: Props) {
     return <div>{'Loading ... '}</div>
   }
 
-  const { id, title, note, reminder } = remindoro
+  const { id, title, note, reminder, isTodo } = remindoro
 
   return (
     <Holder>
-      <div className={'info-corner'}>
+      <div className={'status-bar'}>
         <ScheduleInfo reminder={reminder} />
+        {isTodo && (
+          <div className="todo-status">
+            <TodoBadge />
+          </div>
+        )}
       </div>
 
       <div className={'title-holder'}>

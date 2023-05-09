@@ -1,7 +1,8 @@
 import React from 'react'
-import DateTimePicker, {
+import {
+  MobileDateTimePicker as DateTimePicker,
   MobileDateTimePickerProps,
-} from '@mui/lab/MobileDateTimePicker'
+} from '@mui/x-date-pickers/MobileDateTimePicker'
 import { InputAdornment, IconButton, TextField } from '@mui/material'
 import { AddAlarm } from '@mui/icons-material'
 import dayjs, { Dayjs } from 'dayjs'
@@ -22,35 +23,37 @@ function DatePicker(props: Props) {
   return (
     <DateTimePicker
       {...props}
-      renderInput={params => (
-        <TextField
-          {...params}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                {!props.disabled && (
-                  <IconButton
-                    onClick={event => {
-                      if (params.inputProps?.onClick) {
-                        params.inputProps?.onClick(
-                          event as React.MouseEvent<HTMLInputElement>
-                        )
-                      }
-                    }}
-                  >
-                    <AddAlarm />
-                  </IconButton>
-                )}
-              </InputAdornment>
-            ),
-          }}
-          fullWidth
-          className={`${classNames.datepickerInput}`}
-        />
-      )}
+      slots={{
+        textField: params => (
+          <TextField
+            {...params}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  {!props.disabled && (
+                    <IconButton
+                      onClick={event => {
+                        if (params.inputProps?.onClick) {
+                          params.inputProps?.onClick(
+                            event as React.MouseEvent<HTMLInputElement>
+                          )
+                        }
+                      }}
+                    >
+                      <AddAlarm />
+                    </IconButton>
+                  )}
+                </InputAdornment>
+              ),
+            }}
+            fullWidth
+            className={`${classNames.datepickerInput}`}
+          />
+        ),
+      }}
       ampm={true}
       ampmInClock={true}
-      showToolbar={true}
+      // showToolbar={true}
       minDateTime={dayjs()}
     />
   )

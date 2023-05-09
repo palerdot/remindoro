@@ -40,7 +40,7 @@ compiler.watch({}, (err, stats) => {
       throw new Error(err)
     }
 
-    console.log('porumai ... webpack err message ', err.message, err)
+    console.log('webpack err message ', err.message, err)
 
     messages = formatWebpackMessages({
       errors: [err.message],
