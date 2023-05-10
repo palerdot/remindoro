@@ -4,7 +4,7 @@ import type { RootState } from '@app/Store/'
 
 import packageInfo from '@package-info'
 import { ALARM_KEY, STORAGE_KEY, ContextMenuKeys } from '@app/Constants'
-import { migrate_v0_data_to_v1, getTodoCount } from './utils/'
+import { migrate_v0_data_to_v1, getTodoCount, setBadgeText } from './utils/'
 import { notify, Notification } from './utils/notification'
 import { handle_context_menu } from './utils/context-menu'
 
@@ -91,9 +91,7 @@ async function show_todo_badge() {
 
     const status = getTodoCount(remindoros)
     const text = status >= 1 ? `${status}` : ''
-    browser.action.setBadgeText({
-      text,
-    })
+    setBadgeText(text)
   } catch (e) {
     // probably error fetching local storage data
   }

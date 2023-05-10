@@ -47,3 +47,30 @@ export function migrate_v0_data_to_v1() {
 export function getTodoCount(remindoros: RootState['remindoros']) {
   return remindoros.filter(r => r.isTodo).length
 }
+
+// ref: //stackoverflow.com/a/63964511/1410291
+export const isFirefox = browser.runtime
+  .getURL('')
+  .startsWith('moz-extension://')
+export const isChrome = browser.runtime
+  .getURL('')
+  .startsWith('chrome-extension://')
+
+// helper function to update browser badge text irrespective of the browser
+export const setBadgeText = (text: string) => {
+  const defaultAction = {
+    setBadgeText: () => {
+      console.error('problem detecting browser action')
+    },
+  }
+  // chrome manifest v3 problems
+  const action = isFirefox
+    ? browser.browserAction
+    : isChrome
+    ? browser.action
+    : defaultAction
+
+  action.setBadgeText({
+    text,
+  })
+}

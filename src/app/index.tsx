@@ -1,11 +1,10 @@
 import React, { useEffect, useCallback, useRef } from 'react'
 import { debounce, isEqual, isUndefined, merge } from '@lodash'
 import { Provider } from 'react-redux'
-import browser from 'webextension-polyfill'
 
 import type { RootState } from '@app/Store/'
 
-import { getTodoCount } from 'background/utils/'
+import { getTodoCount, setBadgeText } from 'background/utils/'
 import ErrorBoundary from '@app/Components/ErrorBoundary'
 import App from './App'
 import { getStore } from '@app/Store/'
@@ -34,9 +33,7 @@ const debouncedStoreUpdate = debounce(currentState => {
 // debounced todo badge updated
 const debouncedTodoBadgeUpdate = debounce((status: number) => {
   const text = status >= 1 ? `${status}` : ''
-  browser.action.setBadgeText({
-    text,
-  })
+  setBadgeText(text)
 }, 515)
 
 type InitialState = RootState | undefined
