@@ -3,7 +3,7 @@ import { SLITE_EDITOR_CONTAINER_CLASS } from 'react-slite'
 
 export const LiveNoteStyles = css`
   .${SLITE_EDITOR_CONTAINER_CLASS} {
-    background: ${props => props.theme.background};
+    background: ${props => props.theme.backgroundLight};
     color: ${props => props.theme.textColor};
 
     margin-top: 0;
@@ -64,6 +64,11 @@ export const LiveNoteStyles = css`
     .editor-heading-h1,
     .editor-heading-h2,
     .editor-heading-h3 {
+      color: ${props => props.theme.primaryLight};
+    }
+
+    /* link */
+    .editor-link {
       color: ${props => props.theme.primaryLight};
     }
 
