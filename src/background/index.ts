@@ -1,4 +1,4 @@
-import browser, { browserAction } from 'webextension-polyfill'
+import browser from 'webextension-polyfill'
 
 import type { RootState } from '@app/Store/'
 
@@ -81,7 +81,7 @@ async function show_todo_badge() {
 
     const status = getTodoCount(remindoros)
     const text = status >= 1 ? `${status}` : ''
-    browserAction.setBadgeText({
+    browser.action.setBadgeText({
       text,
     })
   } catch (e) {
