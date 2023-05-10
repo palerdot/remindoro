@@ -55,6 +55,16 @@ function initialize_install_events(
 
 /*
  * Init Background tasks
+ *
+ * Important: this file is called only once during initial load
+ * repeated tasks are set via timer/alarm setup
+ * It is important to fetch fresh data from local storage inside
+ * alarm callbacks like 'browser.alarms.onAlarm.addListener'
+ * passing data via arguments to the parent function will result in
+ * stale closure and will lead to browser storage bugs
+ *
+ * init_extension_events() - called once, sets up alarm which is called every minute. The callback for alarm listener is called every minute and this needs to have fresh data
+ * init_context_menus - called once
  */
 
 init_extension_events()
