@@ -57,7 +57,7 @@ function initialize_install_events(
  * Init Background tasks
  */
 
-await init_extension_events()
+init_extension_events()
 init_context_menus()
 
 async function getLocalStorageData() {
@@ -66,28 +66,34 @@ async function getLocalStorageData() {
   return data[STORAGE_KEY] as RootState
 }
 
-async function init_extension_events() {
-  const remindoroData: RootState = await getLocalStorageData()
-  show_alarms(remindoroData)
-  show_todo_badge(remindoroData.remindoros)
+function init_extension_events() {
+  show_alarms()
+  show_todo_badge()
 }
 
 /*
  * Show Todo Badge
  */
-function show_todo_badge(remindoros: RootState['remindoros']) {
-  const status = getTodoCount(remindoros)
-  const text = status >= 1 ? `${status}` : ''
-  browserAction.setBadgeText({
-    text,
-  })
+async function show_todo_badge() {
+  try {
+    const remindoroData = await getLocalStorageData()
+    const remindoros = remindoroData.remindoros
+
+    const status = getTodoCount(remindoros)
+    const text = status >= 1 ? `${status}` : ''
+    browserAction.setBadgeText({
+      text,
+    })
+  } catch (e) {
+    // probably error fetching local storage data
+  }
 }
 
 /*
  * Show alarms
  */
 
-function show_alarms(remindoroData: RootState) {
+function show_alarms() {
   // CREATE an alarm
   browser.alarms.create(ALARM_KEY, {
     delayInMinutes: 0.1,
@@ -96,6 +102,9 @@ function show_alarms(remindoroData: RootState) {
 
   // listen for the alarm
   // and dig the remindoros from local chrome extension storage and check if we need to show any notifications
+  // IMPORTANT: fetch data FRESH from the local storage on alarm callback
+  // passing data as argument will result in stale closure and will reset the data to initial data
+  // when the browser was opened!!!
   browser.alarms.onAlarm.addListener(async alarmInfo => {
     // let us make sure we are listening for right alarm
     if (alarmInfo.name !== ALARM_KEY) {
@@ -105,6 +114,8 @@ function show_alarms(remindoroData: RootState) {
 
     // here we can handle alarm
     try {
+      const remindoroData = await getLocalStorageData()
+
       let showNotification: boolean | undefined =
         remindoroData.settings.notificationsEnabled
 
