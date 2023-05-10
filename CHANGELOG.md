@@ -1,5 +1,8 @@
 ## Changelog
 
+### `1.2.1`
+- `Bug Fix`: Fix stale local data reset from the closure data passed to alarm callback
+
 ### `1.2.0` (`Lexical/Todo notes`)
 - Todo notes
 - Lexical powered `react-slite` `v0.2.x`
