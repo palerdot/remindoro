@@ -55,6 +55,13 @@ module.exports = function (webpackEnv = 'development') {
   })
 
   return {
+    experiments: {
+      // ref: https://webpack.js.org/configuration/experiments/
+      // we are using target: ES2017 in Typescript compiler for using top level
+      // await in src/background/index.ts
+      topLevelAwait: true,
+    },
+
     mode: isEnvProduction ? 'production' : 'development',
     bail: isEnvProduction, // stop compilation on the very first error itself
     devtool: isEnvProduction

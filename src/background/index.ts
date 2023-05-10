@@ -57,7 +57,7 @@ function initialize_install_events(
  * Init Background tasks
  */
 
-init_extension_events()
+await init_extension_events()
 init_context_menus()
 
 async function getLocalStorageData() {

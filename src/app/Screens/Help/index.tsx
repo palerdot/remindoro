@@ -64,6 +64,11 @@ const FAQS = [
     question: 'What is the count/badge shown on top of extension icon?',
     answer: `This is the count of notes marked as todo. You can mark a note as todo from the note settings screen. You can navigate to todo screen from the header or sidebar menu, where you can see all the notes marked as todo.`,
   },
+  {
+    question: 'What version of browsers are supported?',
+    answer:
+      'Starting v1.2.x, following browsers are supported - Chrome 58+, Firefox 53+, Edge 16+. IE not supported. For more info check ES2017 target here - https://webhint.io/docs/user-guide/hints/hint-typescript-config/target/',
+  },
 ]
 
 function Help() {
