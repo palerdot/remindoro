@@ -1,5 +1,8 @@
 ## Changelog
 
+###  `1.2.2`
+- Style tweaks
+
 ### `1.2.1`
 - `Bug Fix`: Fix stale local data reset from the closure data passed to alarm callback
 
