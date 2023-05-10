@@ -3,13 +3,15 @@ import { SLITE_EDITOR_CONTAINER_CLASS } from 'react-slite'
 
 export const LiveNoteStyles = css`
   .${SLITE_EDITOR_CONTAINER_CLASS} {
-    background: ${props => props.theme.backgroundLight};
+    background: ${props => props.theme.background};
     color: ${props => props.theme.textColor};
 
     margin-top: 0;
     margin-bottom: 0;
 
     & .editor-inner {
+      min-height: 100%;
+
       background: ${props => props.theme.background};
       color: ${props => props.theme.textColor};
 
