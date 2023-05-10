@@ -1,5 +1,10 @@
 ## Changelog
 
+### `1.2.3`
+- Common `setBadgeText` util for chrome(`browser.action (v3 confusions!!!)`)/firefox(`browser.browserAction`)
+- Better chrome/firefox detection
+
+
 ###  `1.2.2`
 - Style tweaks
 
