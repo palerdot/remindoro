@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { IndeterminateCheckBox } from '@mui/icons-material'
 
 const Holder = styled.div`

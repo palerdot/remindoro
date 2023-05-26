@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { IconButton } from '@mui/material'
 import { Close } from '@mui/icons-material'
 

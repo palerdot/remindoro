@@ -1,6 +1,6 @@
 import React from 'react'
 import { isEqual } from '@lodash'
-import { TextField } from '@mui/material'
+import { TextField, TextFieldProps } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 import { updateTitle } from '@app/Store/Slices/Remindoros'
@@ -11,7 +11,7 @@ type Props = {
   title: string
 }
 
-const StyledTextField: typeof TextField = styled(TextField)(({ theme }) => ({
+const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   '& .MuiFilledInput-root': {
     '&:hover:not(.Mui-disabled)::before': {
       borderBottom: `thin solid ${theme.palette.primary.main}`,

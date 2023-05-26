@@ -1,5 +1,6 @@
 import React, { createRef } from 'react'
-import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
+import styled from '@emotion/styled'
+import { css, Global, ThemeProvider } from '@emotion/react'
 import {
   StyledEngineProvider,
   ThemeProvider as MUIThemeProvider,
@@ -50,181 +51,185 @@ const thresholds = [
 dayjs.extend(DayjsRelativeTime, { thresholds })
 
 // global style
-const GlobalStyle = createGlobalStyle`
-  body {
+const GlobalStyle = ({ theme }: { theme: ThemeInterface }) => (
+  <Global
+    styles={css`
+      body {
+        background: ${theme.background} !important;
+        color: ${theme.textColor} !important;
 
-    background: ${props => props.theme.background} !important;
-    color: ${props => props.theme.textColor} !important;
+        /* Scroll bar customisations */
+        & ::-webkit-scrollbar {
+          background: transparent;
+          width: 0.25rem;
+          height: 0.25rem;
+          box-shadow: none !important;
+          -webkit-box-shadow: none !important;
+        }
+        & ::-webkit-scrollbar-thumb {
+          background: transparent;
+          box-shadow: none !important;
+          -webkit-box-shadow: none !important;
+        }
 
-    /* Scroll bar customisations */
-    & ::-webkit-scrollbar {
-      background: transparent;
-      width: 0.25rem;
-      height: 0.25rem;
-      box-shadow: none !important;
-      -webkit-box-shadow: none !important;
-    }
-    & ::-webkit-scrollbar-thumb {
-      background: transparent;
-      box-shadow: none !important;
-      -webkit-box-shadow: none !important;
-    }
+        & :hover::-webkit-scrollbar {
+          background: ${theme.primaryDark};
+        }
+        & :hover::-webkit-scrollbar-thumb {
+          background: ${theme.primaryLight};
+        }
 
-    & :hover::-webkit-scrollbar {
-      background: ${props => props.theme.primaryDark};
-    }
-    & :hover::-webkit-scrollbar-thumb {
-      background: ${props => props.theme.primaryLight};
-    }
+        /* Slite editor dropdown styles */
+        .${SLITE_DROPDOWN_CLASS} {
+          background-color: ${theme.primary};
+          color: ${theme.textColor};
+        }
 
-    /* Slite editor dropdown styles */
-    .${SLITE_DROPDOWN_CLASS} {
-      background-color: ${props => props.theme.primary};
-      color: ${props => props.theme.textColor};
-    }
+        .${SLITE_DROPDOWN_CLASS} .item {
+          background-color: ${theme.primary};
+          color: ${theme.textColor};
+        }
 
-    .${SLITE_DROPDOWN_CLASS} .item {
-      background-color: ${props => props.theme.primary};
-      color: ${props => props.theme.textColor};
-    }
+        .${SLITE_DROPDOWN_CLASS} .item:hover {
+          background-color: ${theme.primaryLight};
+          color: ${theme.textColor};
+        }
 
-    .${SLITE_DROPDOWN_CLASS} .item:hover {
-      background-color: ${props => props.theme.primaryLight};
-      color: ${props => props.theme.textColor};
-    }
+        /* select form down icon tweak */
+        .select-form .MuiSvgIcon-root {
+          color: ${theme.textColor};
+        }
 
-    /* select form down icon tweak */
-    .select-form .MuiSvgIcon-root {
-      color: ${props => props.theme.textColor};
-    }
+        /* 
+        * hide the manual input toggle button;  
+        *
+        * reminder time can be edited only in calender view
+        */
+        button.PrivateDateTimePickerToolbar-penIcon {
+          display: none;
+        }
 
-    /* 
-     * hide the manual input toggle button;  
-     *
-     * reminder time can be edited only in calender view
-     */
-    button.PrivateDateTimePickerToolbar-penIcon {
-      display: none;
-    }
+        /*  
+        * hide scroll in datepicker
+        */
 
-    /*  
-     * hide scroll in datepicker
-     */
+        .MuiPickersLayout-toolbar {
+          padding-top: 0;
+          padding-bottom: 0;
+        }
 
-    .MuiPickersLayout-toolbar {
-      padding-top: 0;
-      padding-bottom: 0;
-    }
+        .MuiPickersLayout-root > div {
+          margin-bottom: 0;
+        }
 
-    .MuiPickersLayout-root > div {
-      margin-bottom: 0;
-    }
+        .MuiPickersLayout-root {
+          & .MuiIconButton-edgeStart,
+          .MuiIconButton-edgeEnd {
+            color: ${theme.primary};
+          }
 
-    .MuiPickersLayout-root {
-      & .MuiIconButton-edgeStart, .MuiIconButton-edgeEnd {
-        color: ${props => props.theme.primary}; 
-      }
+          & .MuiIconButton-sizeSmall {
+            color: ${theme.primary};
+          }
+        }
 
-      & .MuiIconButton-sizeSmall {
-      color: ${props => props.theme.primary}; 
-      }
-    }
+        /* Color of AM/PM button */
+        & .MuiClock-amButton,
+        .MuiClock-pmButton {
+          color: ${theme.textColor};
+        }
 
-    /* Color of AM/PM button */
-    & .MuiClock-amButton, .MuiClock-pmButton {
-      color: ${props => props.theme.textColor};
-    }
+        /*  
+          * Outlined text input border customization
+          */
+        & .MuiOutlinedInput-root:not(.Mui-disabled) {
+          &:hover .MuiOutlinedInput-notchedOutline {
+            border-color: ${theme.highlight};
+          }
+        }
 
-    /*  
-     * Outlined text input border customization
-     */
-    & .MuiOutlinedInput-root:not(.Mui-disabled) {
-      &:hover .MuiOutlinedInput-notchedOutline {
-        border-color: ${props => props.theme.highlight};
-      }
-    }
-    
-    /*  
-     * Select box customization
-     */
-    & .MuiSelect-root:not(.Mui-disabled) {
-      border: ${props => `thin solid ${props.theme.primaryDark}`};
+        /*  
+        * Select box customization
+        */
+        & .MuiSelect-root:not(.Mui-disabled) {
+          border: thin solid ${theme.primaryDark};
 
-      & .MuiSelect-icon {
-        color: ${props => props.theme.highlight};
-      }
-    }
+          & .MuiSelect-icon {
+            color: ${theme.highlight};
+          }
+        }
 
-    /*  
-     * Select menu customization
-     */
-    & .MuiPopover-root {
-      & .MuiPopover-paper {
-        border: ${props => `thin solid ${props.theme.primaryDark}`};
+        /*  
+        * Select menu customization
+        */
+        & .MuiPopover-root {
+          & .MuiPopover-paper {
+            border: thin solid ${theme.primaryDark};
 
-        & ul.MuiMenu-list li:hover {
-          background: ${props => props.theme.primaryDark};
+            & ul.MuiMenu-list li:hover {
+              background: ${theme.primaryDark};
+            }
+          }
+        }
+
+        /*  
+        * Slider customization
+        */
+        & .MuiSlider-root {
+          &.Mui-disabled {
+            color: ${theme.backgroundLight};
+          }
+
+          & .MuiSlider-valueLabelOpen {
+            background: ${theme.primaryLight};
+            font-weight: 800;
+          }
+        }
+
+        & .${classNames.datepickerInput} {
+          & label {
+            color: ${theme.highlight};
+          }
+
+          & label.Mui-disabled {
+            color: ${theme.primaryDark};
+          }
+
+          & input {
+            color: ${theme.textColor};
+          }
+
+          & .MuiInputAdornment-root .MuiIconButton-root {
+            color: ${theme.highlight};
+          }
+        }
+
+        /*  
+        * Snackbar notification
+        */
+
+        /* success message styling */
+        .notistack-MuiContent-success {
+          background: ${theme.success};
+          color: ${theme.contrastTextColor};
+
+          & button {
+            color: ${theme.contrastTextColor};
+          }
+        }
+
+        /* Error message styling */
+        .notistack-MuiContent-error {
+          color: ${theme.highlightTextColor};
+
+          & button {
+            color: ${theme.highlightTextColor};
+          }
         }
       }
-    }
-
-    /*  
-     * Slider customization
-     */
-    & .MuiSlider-root {
-      &.Mui-disabled {
-        color: ${props => props.theme.backgroundLight};
-      }
-      
-
-      & .MuiSlider-valueLabelOpen {
-        background: ${props => props.theme.primaryLight};
-        font-weight: 800;
-      }
-    }
-
-    & .${classNames.datepickerInput} {
-      & label {
-        color: ${props => props.theme.highlight};
-      }
-
-      & label.Mui-disabled {
-        color: ${props => props.theme.primaryDark};
-      }
-
-      & input {
-        color: ${props => props.theme.textColor};
-      }
-
-      & .MuiInputAdornment-root .MuiIconButton-root {
-        color: ${props => props.theme.highlight};
-      }
-    }
-
-    /*  
-     * Snackbar notification
-     */
-
-    /* success message styling */
-    .notistack-MuiContent-success {
-      background: ${props => props.theme.success};
-      color: ${props => props.theme.contrastTextColor};
-
-      & button {
-        color: ${props => props.theme.contrastTextColor};
-      }
-    }
-
-    /* Error message styling */
-    .notistack-MuiContent-error {
-      color: ${props => props.theme.highlightTextColor};
-
-      & button {
-        color: ${props => props.theme.highlightTextColor};
-      }
-    }
-  }
-`
+    `}
+  />
+)
 
 const Holder = styled.div`
   display: flex;
@@ -297,7 +302,7 @@ function App() {
     <StyledEngineProvider injectFirst>
       <MUIThemeProvider theme={muiTheme}>
         <ThemeProvider theme={theme}>
-          <GlobalStyle />
+          <GlobalStyle theme={theme} />
           <SnackbarProvider
             ref={notistackRef}
             anchorOrigin={{

@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { orderBy } from '@lodash'
 
 import { useTodoRemindoros } from '@app/Store/Slices/Remindoros'

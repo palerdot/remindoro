@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import HelpIcon from '@app/Components/LiveNote/Help/Icon'
 import Switch from '@app/Components/Switch'

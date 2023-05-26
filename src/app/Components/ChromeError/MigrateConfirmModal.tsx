@@ -84,11 +84,7 @@ function ConfirmMigrate({ isOpen, closeModal }: Props) {
       aria-labelledby="migrate-dialog-title"
       aria-describedby="migrate-dialog-description"
     >
-      <StyledDialog
-        classes={{
-          paper: classes.paper,
-        }}
-      >
+      <StyledDialog className={classes.paper}>
         <DialogTitle id="migrate-dialog-title">
           {'Fix Reminder Data'}
         </DialogTitle>

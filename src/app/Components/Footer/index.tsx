@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import ToggleNotifications from '@app/Components/Settings/ToggleNotifications'
 import MigrateChromeData from '@app/Components/ChromeError/FooterItem'

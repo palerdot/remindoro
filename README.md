@@ -19,7 +19,6 @@ This extension is build with
 - [Typescript](https://www.typescriptlang.org/)
 - [Redux Toolkit](https://redux-toolkit.js.org/)
 - [Material UI](https://mui.com/)
-- [Styled Components](https://styled-components.com/)
 
 ## Download for Firefox and Chrome browsers by clicking on the following links
 

@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
-import styled, { css } from 'styled-components'
+import styled from '@emotion/styled'
+import { css } from '@emotion/react'
 import dayjs from 'dayjs'
 
 import type { Remindoro, Repeat } from '@app/Store/Slices/Remindoros/'

@@ -104,10 +104,7 @@ module.exports = function (webpackEnv = 'development') {
 
       // aliasing
       // ref: https://preactjs.com/guide/v8/switching-to-preact/
-      alias: {
-        // https://next.material-ui.com/guides/styled-engine/
-        '@mui/styled-engine': '@mui/styled-engine-sc',
-      },
+      alias: {},
     },
     resolveLoader: {
       plugins: [],

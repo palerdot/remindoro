@@ -71,11 +71,7 @@ function ConfirmDelete({ isOpen, closeModal, onDelete }: Props) {
       aria-labelledby="delete-dialog-title"
       aria-describedby="delete-dialog-description"
     >
-      <StyledDialog
-        classes={{
-          paper: classes.paper,
-        }}
-      >
+      <StyledDialog className={classes.paper}>
         <DialogTitle id="delete-dialog-title">{'Confirm Delete'}</DialogTitle>
         <DialogContent className={'delete-dialog-description'}>
           <DialogContentText id="alert-dialog-description">

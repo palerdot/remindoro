@@ -1,7 +1,7 @@
-import styled, { css } from 'styled-components'
+import styled from '@emotion/styled'
 import { SLITE_EDITOR_CONTAINER_CLASS } from 'react-slite'
 
-export const LiveNoteStyles = css`
+export const EditorHolder = styled.div`
   .${SLITE_EDITOR_CONTAINER_CLASS} {
     background: ${props => props.theme.background};
     color: ${props => props.theme.textColor};
@@ -103,8 +103,4 @@ export const LiveNoteStyles = css`
   &.readonly {
     pointer-events: none;
   }
-`
-
-export const EditorHolder = styled.div`
-  ${LiveNoteStyles}
 `

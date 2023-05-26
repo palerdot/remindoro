@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { Repeat as RepeatIcon, Alarm as AlarmIcon } from '@mui/icons-material'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'

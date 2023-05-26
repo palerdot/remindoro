@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { Link, useParams } from 'react-router-dom'
 
 import { Screens } from '@app/Routes/'

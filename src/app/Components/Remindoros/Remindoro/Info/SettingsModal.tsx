@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { styled as muiStyled } from '@mui/material/styles'
 import { useHistory } from 'react-router-dom'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { useDispatch } from 'react-redux'
 import { Drawer, Button } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'

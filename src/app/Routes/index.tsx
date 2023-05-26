@@ -1,6 +1,6 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import Home from '@app/Screens/Home/'
 import Todo from '@app/Screens/Todo/'

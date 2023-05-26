@@ -1,5 +1,5 @@
 import React, { Component, ErrorInfo } from 'react'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 import { DebouncedFunc } from '@lodash'
 // ref: https://reactjs.org/docs/error-boundaries.html
 
