@@ -126,15 +126,9 @@ module.exports = function (webpackEnv = 'development') {
           // When no loader matches it will fall back to the "file" loader at the end of the loader list.
           oneOf: [
             loaders.urlLoader,
-            loaders.insideBabelLoader,
-            loaders.outsideBabelLoader,
             loaders.styleLoader,
             loaders.cssModuleLoader,
             loaders.typescriptLoader,
-
-            // ** STOP ** Are you adding a new loader?
-            // Make sure to add the new loader(s) before the "file" loader.
-            loaders.fileLoader,
           ],
         },
       ],

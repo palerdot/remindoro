@@ -117,8 +117,11 @@ const getLoaders = (
   ]
 
   const typescriptLoader = {
-    test: /\.tsx?$/,
+    // test: /\.tsx?$/,
+    test: /\.(js|mjs|jsx|tsx|ts)$/,
     loader: require.resolve('ts-loader'),
+    // we are transpiling only stuffs within app src
+    include: paths.appSrc,
     exclude: /node_modules/,
     options: {
       // disable type checker - we will use it in fork plugin
@@ -126,63 +129,9 @@ const getLoaders = (
       getCustomTransformers: () => ({
         before: [tsImportPluginFactory(treeShakingLibOptions)],
       }),
-      compilerOptions: {
-        module: 'es2015',
-      },
     },
   }
 
-  // Process application JS with Babel.
-  // The preset includes JSX, Flow, TypeScript, and some ESnext features.
-  // note: we are transpiling only JS (for TS see above)
-  const insideBabelLoaderOnlyJS = {
-    test: /\.(js|mjs|jsx)$/,
-    include: paths.appSrc,
-    loader: require.resolve('babel-loader'),
-    options: {
-      customize: require.resolve('babel-preset-react-app/webpack-overrides'),
-
-      plugins: [
-        [
-          require.resolve('babel-plugin-named-asset-import'),
-          {
-            loaderMap: {
-              svg: {
-                ReactComponent: '@svgr/webpack?-prettier,-svgo![path]',
-              },
-            },
-          },
-        ],
-      ],
-      cacheCompression: isEnvProduction,
-      compact: isEnvProduction,
-    },
-  }
-  // Process any JS outside of the app with Babel.
-  // Unlike the application JS, we only compile the standard ES features.
-  const outsideBabelLoader = {
-    test: /\.(js|mjs)$/,
-    exclude: /@babel(?:\/|\\{1,2})runtime/,
-    resolve: {
-      // ref: https://github.com/webpack/webpack/issues/11467
-      fullySpecified: false,
-    },
-    loader: require.resolve('babel-loader'),
-    options: {
-      babelrc: false,
-      configFile: false,
-      compact: false,
-      presets: [
-        [
-          require.resolve('babel-preset-react-app/dependencies'),
-          { helpers: true },
-        ],
-      ],
-      cacheDirectory: true,
-      cacheCompression: isEnvProduction,
-      sourceMaps: false,
-    },
-  }
   // "postcss" loader applies autoprefixer to our CSS.
   // "css" loader resolves paths in CSS and adds assets as dependencies.
   // "style" loader turns CSS into JS modules that inject <style> tags.
@@ -211,23 +160,12 @@ const getLoaders = (
     }),
   }
 
-  const fileLoader = {
-    loader: require.resolve('file-loader'),
-    exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/, FONT_PATTERN],
-    options: {
-      name: 'static/media/[name].[hash:8].[ext]',
-    },
-  }
-
   return {
     urlLoader,
     typescriptLoader,
-    insideBabelLoader: insideBabelLoaderOnlyJS,
-    outsideBabelLoader,
     styleLoader,
     cssModuleLoader,
     fontLoader,
-    fileLoader,
   }
 }
 
