@@ -15,7 +15,6 @@ import dayjs from 'dayjs'
 import DayjsRelativeTime from 'dayjs/plugin/relativeTime'
 import { SLITE_DROPDOWN_CLASS } from 'react-slite'
 
-// import type { ThemeInterface } from '@app/Util/colors'
 import type { SnackbarKey } from 'notistack'
 
 import { classNames } from '@app/Constants'
