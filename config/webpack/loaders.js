@@ -79,6 +79,8 @@ const getLoaders = (
   const urlLoader = {
     test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
     loader: require.resolve('url-loader'),
+    // we are transpiling only stuffs within app src
+    include: paths.appSrc,
     options: {
       limit: 10000,
       name: 'static/media/[name].[hash:8].[ext]',
@@ -88,6 +90,8 @@ const getLoaders = (
   // ref: https://webpack.js.org/guides/asset-modules/
   const fontLoader = {
     test: [FONT_PATTERN],
+    // we are transpiling only stuffs within app src
+    include: paths.appSrc,
     type: 'asset',
   }
 
@@ -141,6 +145,8 @@ const getLoaders = (
   // By default we support CSS Modules with the extension .module.css
   const styleLoader = {
     test: cssRegex,
+    // we are transpiling only stuffs within app src
+    include: paths.appSrc,
     exclude: cssModuleRegex,
     use: getStyleLoaders({
       importLoaders: 1,
@@ -152,6 +158,8 @@ const getLoaders = (
   // using the extension .module.css
   const cssModuleLoader = {
     test: cssModuleRegex,
+    // we are transpiling only stuffs within app src
+    include: paths.appSrc,
     use: getStyleLoaders({
       importLoaders: 1,
       sourceMap: isEnvProduction && shouldUseSourceMap,
