@@ -1,26 +1,12 @@
 node_modules
-try.js
-old-extension
 dist
-extension
 release
 dev-server
 .vscode
 temp
 .tmp
-yarn-error.log
 *.code-*
 
-# NOTE: to be cleaned up
-dist
-build
-!docs/build
-.sass-cache
-app/bower_components
-test/bower_components
-package
-app/scripts
-app/styles
 .DS_Store
 
 *.tsbuildinfo
