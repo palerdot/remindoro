@@ -23,11 +23,13 @@ module.exports = {
     // react hooks validation
     'plugin:react-hooks/recommended',
     // Enables eslint-plugin-prettier and eslint-config-prettier. This will display prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
-    'plugin:prettier/recommended',
+    // we are autofixing with prettier; this is creating unnecessary problems
+    // 'plugin:prettier/recommended',
   ],
 
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
+    'react/display-name': 'off',
   },
 }
