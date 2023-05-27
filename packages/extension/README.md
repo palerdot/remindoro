@@ -2,7 +2,7 @@
     <img src="./src/app/../img/remindoro-icon.png" alt="Remindoro" width="64" height="64" />
 </p>
 
-<p align="center">Better reminders in your favorite browser.</p>
+<p align="center">Better reminders for notes.</p>
 
 <br/>
 
