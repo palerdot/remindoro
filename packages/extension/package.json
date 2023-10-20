@@ -24,6 +24,9 @@
     "show:linked": "ls -l node_modules | grep ^l"
   },
   "keywords": [
+    "time tracker",
+    "screen time tracker",
+    "social media time tracker",
     "chrome",
     "extension",
     "react",
