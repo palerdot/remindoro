@@ -7,6 +7,7 @@ import { ALARM_KEY, STORAGE_KEY, ContextMenuKeys } from '@app/Constants'
 import { migrate_v0_data_to_v1, getTodoCount, setBadgeText } from './utils/'
 import { notify, Notification } from './utils/notification'
 import { handle_context_menu } from './utils/context-menu'
+import { init_time_tracking } from '@background/time-tracker/'
 
 const { version } = packageInfo
 
@@ -69,6 +70,7 @@ function initialize_install_events(
 
 init_extension_events()
 init_context_menus()
+init_time_tracking()
 
 async function getLocalStorageData() {
   const data = await browser.storage.local.get(STORAGE_KEY)
