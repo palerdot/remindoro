@@ -49,12 +49,21 @@ export async function getStoreContent(): Promise<StoreContent> {
 // Main function that tracks web session - start session/end session
 export async function updateWebSession(current_active_url: string) {
   // get store data
+  const { store, persistor } = await getStore()
   // get active tab url from store
+  const previous_active_tab_url = store.getValue(ACTIVE_TAB_URL)
   // check if current active url is same is existing active tab url
   // if same do not do anything
+  if (previous_active_tab_url === current_active_url) {
+    return
+  }
+  // we have a new active url
   // CASE 0:
   // let previous_active_tab_url = store.get('active_tab_url')
   // update active tab url
+  store.setValue(ACTIVE_TAB_URL, current_active_url)
+  await saveAndExit(persistor)
+
   // if not we have two things to do
   // CASE 1:
   // If current active url has to be tracked, create a new web session entry

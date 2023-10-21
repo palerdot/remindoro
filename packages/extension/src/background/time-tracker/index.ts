@@ -1,5 +1,7 @@
 import browser from 'webextension-polyfill'
 
+import { updateWebSession } from '@background/time-tracker/store'
+
 // START: Init time tracking
 export function init_time_tracking() {
   init_tab_activated()
@@ -25,6 +27,7 @@ function init_tab_updated() {
     console.log('porumai ... tab change ', changeInfo, tabInfo, tabId)
     if (changeInfo.url) {
       console.log(`Tab: ${tabId} URL changed to ${changeInfo.url}`)
+      updateWebSession(changeInfo.url)
     }
   }
 
