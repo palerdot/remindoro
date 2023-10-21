@@ -129,6 +129,7 @@
     "react-router-dom": "^5.2.0",
     "react-slite": "^0.2.5",
     "redux": "^4.1.0",
+    "tinybase": "^4.3.18",
     "uuid": "^8.3.2",
     "webextension-polyfill": "^0.10.0"
   },

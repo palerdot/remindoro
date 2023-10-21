@@ -51,3 +51,10 @@ function init_tab_removed() {
 
   browser.tabs.onRemoved.addListener(handleRemoved)
 }
+
+// helper function to check if url matches tracked site
+export function isSiteTracked({ url, site }: { url: string; site: string }) {
+  const { host } = new URL(url)
+
+  return host.includes(site)
+}

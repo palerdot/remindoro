@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@date-io/dayjs':
     specifier: ^2.11.0
@@ -49,6 +53,9 @@ dependencies:
   redux:
     specifier: ^4.1.0
     version: 4.1.0
+  tinybase:
+    specifier: ^4.3.18
+    version: 4.3.18(prettier@2.1.2)(react-dom@18.2.0)(react@18.2.0)(yjs@13.6.1)
   uuid:
     specifier: ^8.3.2
     version: 8.3.2
@@ -6633,6 +6640,7 @@ packages:
 
   /glob@6.0.4:
     resolution: {integrity: sha512-MKZeRNyYZAVVVG1oZeLaWie1uweH40m9AZwIwxyPbTSX4hHrVYSzLg0Ro5Z5R7XKkIX+Cc6oD1rqeDJnwsB8/A==}
+    requiresBuild: true
     dependencies:
       inflight: 1.0.6
       inherits: 2.0.4
@@ -8414,6 +8422,7 @@ packages:
 
   /nan@2.17.0:
     resolution: {integrity: sha512-2ZTgtl0nJsO0KQCjEpxcIr5D+Yv90plTitZt9JBfQvVJDS5seMl3FOvsh3+9CoYWXf/1l5OaZzzF6nDm4cagaQ==}
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -8430,6 +8439,7 @@ packages:
   /ncp@2.0.0:
     resolution: {integrity: sha512-zIdGUrPRFTUELUvr3Gmc7KZ2Sw/h1PiVM0Af/oHB6zgnV1ikqSfRk+TOufi79aHYCW3NiOXmr1BP5nWbzojLaA==}
     hasBin: true
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -9724,7 +9734,6 @@ packages:
     resolution: {integrity: sha512-16c7K+x4qVlJg9rEbXl7HEGmQyZlG4R9AgP+oHKRMsMsuk8s+ATStlf1NpDqyBI1HpVyfjLOeMhH2LvuNvV5Vg==}
     engines: {node: '>=10.13.0'}
     hasBin: true
-    dev: true
 
   /pretty-error@3.0.4:
     resolution: {integrity: sha512-ytLFLfv1So4AO1UkoBF6GXQgJRaKbiSiGFICaOPNwQ3CMvBvXpLRubeQWyPGnsbV/t9ml9qto6IeCsho0aEvwQ==}
@@ -10405,6 +10414,7 @@ packages:
   /rimraf@2.4.5:
     resolution: {integrity: sha512-J5xnxTyqaiw06JjMftq7L9ouA448dw/E7dKghkP9WpKNuwmARNNg+Gk8/u5ryb9N/Yo2+z3MCwuqFK/+qPOPfQ==}
     hasBin: true
+    requiresBuild: true
     dependencies:
       glob: 6.0.4
     dev: true
@@ -11375,6 +11385,48 @@ packages:
 
   /tiny-warning@1.0.3:
     resolution: {integrity: sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==}
+    dev: false
+
+  /tinybase@4.3.18(prettier@2.1.2)(react-dom@18.2.0)(react@18.2.0)(yjs@13.6.1):
+    resolution: {integrity: sha512-nYj3R9rEXkU7gRc3YTYt4bA0WqfgAYzqtKRLBrULwzGgKfbkIkf/4+qiLwDytKA6d5Bl8vCbAj5zavQVzoIBVA==}
+    hasBin: true
+    peerDependencies:
+      '@sqlite.org/sqlite-wasm': ^3.43.2-build1
+      '@vlcn.io/crsqlite-wasm': ^0.15.2
+      automerge-repo: ^0.1.0
+      partykit: ^0.0.32
+      partysocket: ^0.0.12
+      prettier: ^3.0.3
+      react: ^18.2.0
+      react-dom: ^18.2.0
+      sqlite3: ^5.1.6
+      yjs: ^13.6.7
+    peerDependenciesMeta:
+      '@sqlite.org/sqlite-wasm':
+        optional: true
+      '@vlcn.io/crsqlite-wasm':
+        optional: true
+      automerge-repo:
+        optional: true
+      partykit:
+        optional: true
+      partysocket:
+        optional: true
+      prettier:
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+      sqlite3:
+        optional: true
+      yjs:
+        optional: true
+    dependencies:
+      prettier: 2.1.2
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      yjs: 13.6.1
     dev: false
 
   /tinypool@0.1.3:
