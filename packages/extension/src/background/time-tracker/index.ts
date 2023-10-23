@@ -1,6 +1,12 @@
 import browser from 'webextension-polyfill'
 
-import { updateWebSession } from '@background/time-tracker/store'
+import {
+  updateWebSession,
+  handleActivatedTab,
+  handleClosedTab,
+} from '@background/time-tracker/store'
+
+import type { TabInfo } from '@background/time-tracker/tab-registry'
 
 // START: Init time tracking
 export function init_time_tracking() {
@@ -12,7 +18,7 @@ export function init_time_tracking() {
 
 function init_tab_activated() {
   function handleActivated(activeInfo: browser.Tabs.OnActivatedActiveInfoType) {
-    console.log(`Tab ${activeInfo.tabId} was activated`, activeInfo)
+    handleActivatedTab(activeInfo.tabId)
   }
 
   browser.tabs.onActivated.addListener(handleActivated)
@@ -22,12 +28,18 @@ function init_tab_updated() {
   function handleUpdated(
     tabId: number,
     changeInfo: browser.Tabs.OnUpdatedChangeInfoType,
-    tabInfo: browser.Tabs.Tab
+    _tabInfo: browser.Tabs.Tab
   ) {
-    console.log('porumai ... tab change ', changeInfo, tabInfo, tabId)
     if (changeInfo.url) {
-      console.log(`Tab: ${tabId} URL changed to ${changeInfo.url}`)
-      updateWebSession(changeInfo.url)
+      // update web session whenever there is a change in the url
+      // registry is automatically updated with the tabinfo
+      const tab_info: TabInfo = {
+        tabId,
+        url: changeInfo.url,
+        title: changeInfo.title,
+        isClosed: false,
+      }
+      updateWebSession(tab_info)
     }
   }
 
@@ -37,27 +49,10 @@ function init_tab_updated() {
 function init_tab_removed() {
   function handleRemoved(
     tabId: number,
-    removeInfo: browser.Tabs.OnRemovedRemoveInfoType
+    _removeInfo: browser.Tabs.OnRemovedRemoveInfoType
   ) {
-    console.log(`Tab: ${tabId} is closing`)
-    browser.tabs
-      .get(tabId)
-      .then(tab => {
-        console.log('porumai ... closed tab details ', tab)
-      })
-      .catch(e => {
-        console.log('error getting tab details ', e)
-      })
-    console.log(`Window ID: ${removeInfo.windowId}`, removeInfo)
-    console.log(`Window is closing: ${removeInfo.isWindowClosing}`)
+    handleClosedTab(tabId)
   }
 
   browser.tabs.onRemoved.addListener(handleRemoved)
-}
-
-// helper function to check if url matches tracked site
-export function isSiteTracked({ url, site }: { url: string; site: string }) {
-  const { host } = new URL(url)
-
-  return host.includes(site)
 }
