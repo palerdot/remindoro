@@ -9,7 +9,7 @@ import { TabInfo } from '@background/time-tracker/tab-registry'
 import {
   startActiveSession,
   endActiveSession,
-  prune_old_web_sessions,
+  prune_offline_web_sessions,
   clean_stale_active_sessions,
   update_heart_beat_for_active_session,
   WebSession,
@@ -24,6 +24,7 @@ export const ACTIVE_WINDOW_ID = 'active_window_id'
 // TABLES
 export const TAB_REGISTRY_TABLE = 'tab_registry'
 export const WEB_SESSIONS_TABLE = 'web_sessions'
+export const CONNECTED_ACCOUNT_TABLE = 'connected_account'
 
 type TrackedSite = {
   site: string
@@ -221,7 +222,7 @@ export async function timeTrackerAlarmHandler() {
   const { store, persistor } = await getStore()
 
   try {
-    prune_old_web_sessions(store)
+    prune_offline_web_sessions(store)
     clean_stale_active_sessions(store)
     await update_heart_beat_for_active_session(store)
   } catch (e) {

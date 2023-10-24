@@ -1,14 +1,17 @@
 import browser from 'webextension-polyfill'
 import { createQueries, Store } from 'tinybase'
 import { v4 as uuid } from 'uuid'
-import { head, isNumber, isArray, last } from '@lodash'
+import { head, last, isEmpty, isNumber, isArray } from '@lodash'
 
 import {
   WEB_SESSIONS_TABLE,
+  CONNECTED_ACCOUNT_TABLE,
   ACTIVE_TAB_ID,
   ACTIVE_TAB_URL,
   ACTIVE_WINDOW_ID,
 } from '@background/time-tracker/store'
+
+const KEY_LAST_HEARTBEAT_CHECK = 'last_heartbeat_check'
 
 export type WebSession = {
   session_id: string
@@ -18,7 +21,7 @@ export type WebSession = {
   started_at: number
   ended_at?: number
   has_ended: boolean
-  last_heartbeat_at: number
+  [KEY_LAST_HEARTBEAT_CHECK]: number
   tabId?: number
   windowId?: number
   is_synced: boolean
@@ -62,7 +65,7 @@ export function startActiveSession(store: Store, payload: SessionPayload) {
     windowId: payload.windowId,
 
     started_at: current_timestamp,
-    last_heartbeat_at: current_timestamp,
+    [KEY_LAST_HEARTBEAT_CHECK]: current_timestamp,
     has_ended: false,
     // tinybase call has limitation of storing only primitive values (string, number, boolean)
     focus_events: JSON.stringify(focus_events),
@@ -112,14 +115,96 @@ export function endActiveSession(store: Store, url: string) {
 
 // START: Alarm handlers
 
-export function prune_old_web_sessions(_store: Store) {
+export function prune_offline_web_sessions(store: Store) {
   // For offline web sessions: we are deleting web sessions that are older than 5 hours
-  // For server acknowledged sessions: we will be deleting sessions that are older than an hour
+  // extension events are considreed offline if there are no connected account
+  const connected_account = store.getTable(CONNECTED_ACCOUNT_TABLE)
+  const is_offline_account = isEmpty(connected_account)
+
+  if (!is_offline_account) {
+    // abort if an account is connected in the extension
+    return
+  }
+
+  const SECONDS = 1 * 1000 // millisecond
+  const MINUTES = 60 * SECONDS
+  const HOURS = 60 * MINUTES
+  // 5 hours is the threshold
+  const THRESHOLD = 5 * HOURS
+
+  const OLD_OFFLINE_SESSIONS_QUERY = 'old_offline_sessions_query'
+  const queries = createQueries(store)
+
+  queries.setQueryDefinition(
+    OLD_OFFLINE_SESSIONS_QUERY,
+    WEB_SESSIONS_TABLE,
+    ({ select, where }) => {
+      select('session_id')
+      // only ended sessions
+      where('has_ended', true)
+      where(getCell => {
+        const current_ts = new Date().getTime()
+        const ended_at = getCell('ended_at')
+
+        if (!isNumber(ended_at)) {
+          return false
+        }
+
+        return ended_at !== undefined && current_ts - ended_at > THRESHOLD
+      })
+    }
+  )
+
+  queries.forEachResultRow(OLD_OFFLINE_SESSIONS_QUERY, rowId => {
+    store.delRow(WEB_SESSIONS_TABLE, rowId)
+  })
 }
 
-export function clean_stale_active_sessions(_store: Store) {
+export function clean_stale_active_sessions(store: Store) {
   // stale active sessions may result when the user quits the browser or computer crashes
-  // for web sessions with heart beat older than threshold (e.g. 3 minutes) mark it as ended
+  // new tabs result in new sessions; open active tabs have heartbeat updated.
+  // for web sessions with heart beat older than threshold (e.g. 3 minutes) mark it as ended with threshold time
+
+  const SECONDS = 1 * 1000 // millisecond
+  const MINUTES = 60 * SECONDS
+  // 3.14 minutes
+  const THRESHOLD = 3.14 * MINUTES
+
+  const STALE_ACTIVE_SESSIONS_QUERY = 'stale_active_sessions_query'
+  const queries = createQueries(store)
+
+  queries.setQueryDefinition(
+    STALE_ACTIVE_SESSIONS_QUERY,
+    WEB_SESSIONS_TABLE,
+    ({ select, where }) => {
+      select('session_id')
+      // active sessions
+      where('has_ended', false)
+      where(getCell => {
+        const current_ts = new Date().getTime()
+        const last_heartbeat_check = getCell(KEY_LAST_HEARTBEAT_CHECK)
+
+        if (!isNumber(last_heartbeat_check)) {
+          return false
+        }
+
+        return (
+          last_heartbeat_check !== undefined &&
+          current_ts - last_heartbeat_check > THRESHOLD
+        )
+      })
+    }
+  )
+
+  queries.forEachResultRow(STALE_ACTIVE_SESSIONS_QUERY, rowId => {
+    const info = store.getRow(WEB_SESSIONS_TABLE, rowId)
+    // update row with last_heartbeat_check as ended_at and mark it as ended
+    const ended_at = info[KEY_LAST_HEARTBEAT_CHECK]
+    store.setPartialRow(WEB_SESSIONS_TABLE, rowId, {
+      has_ended: true,
+      ended_at,
+    })
+  })
 }
 
 // for active session - current active tab + window + url
@@ -184,7 +269,7 @@ export async function update_heart_beat_for_active_session(store: Store) {
     // query name
     CURRENT_ACTIVE_SESSION_QUERY,
     // cell id for sorting
-    'last_heartbeat_at',
+    KEY_LAST_HEARTBEAT_CHECK,
     // descending
     true,
     // offset
@@ -207,7 +292,7 @@ export async function update_heart_beat_for_active_session(store: Store) {
 
   const session_payload: Partial<WebSession> = {
     focus_events: latest_focus_events,
-    last_heartbeat_at: new Date().getTime(),
+    [KEY_LAST_HEARTBEAT_CHECK]: new Date().getTime(),
   }
 
   // update session with latest heartbeat and focus events

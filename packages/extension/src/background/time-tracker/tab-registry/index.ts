@@ -1,6 +1,11 @@
 import { omitBy } from '@lodash'
 
-import { TableData } from '@background/time-tracker/store'
+import {
+  TableData,
+  getStore,
+  saveAndExit,
+  TAB_REGISTRY_TABLE,
+} from '@background/time-tracker/store'
 
 export type TabInfo = {
   tabId: number
@@ -8,6 +13,13 @@ export type TabInfo = {
   title?: string
   isClosed: boolean
   windowId?: number
+}
+
+// helper function to reset tab registry when the extensions first loads up (when the browser starts up)
+export async function reset_tab_registry() {
+  const { store, persistor } = await getStore()
+  store.delTable(TAB_REGISTRY_TABLE)
+  await saveAndExit(persistor)
 }
 
 // helper function to remove tabs from registry that are closed

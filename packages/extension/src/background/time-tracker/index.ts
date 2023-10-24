@@ -7,21 +7,24 @@ import {
   timeTrackerAlarmHandler,
   timeTrackerSyncHandler,
 } from '@background/time-tracker/store'
-
-import type { TabInfo } from '@background/time-tracker/tab-registry'
+import {
+  reset_tab_registry,
+  TabInfo,
+} from '@background/time-tracker/tab-registry'
 
 export const TIME_TRACKER_SYNC_ALARM = 'TIME_TRACKER_SYNC_ALARM'
 export { timeTrackerAlarmHandler, timeTrackerSyncHandler }
 
 // START: Init time tracking
-export function init_time_tracking() {
+export async function init_time_tracking() {
+  await reset_tab_registry()
+  init_tab_events()
+}
+
+function init_tab_events() {
   init_tab_activated()
   init_tab_updated()
   init_tab_removed()
-
-  browser.windows.onFocusChanged.addListener(id => {
-    console.log('porumai ... WINDOW focus changed ', id)
-  })
 }
 // END: Init time tracking
 
