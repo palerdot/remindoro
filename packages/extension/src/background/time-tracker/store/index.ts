@@ -9,6 +9,9 @@ import { TabInfo } from '@background/time-tracker/tab-registry'
 import {
   startActiveSession,
   endActiveSession,
+  prune_old_web_sessions,
+  clean_stale_active_sessions,
+  update_heart_beat_for_active_session,
   WebSession,
 } from '@background/time-tracker/web-session'
 
@@ -16,6 +19,8 @@ import {
 const STORE_KEY = 'time_tracker_store'
 // Key/Values
 export const ACTIVE_TAB_URL = 'active_tab_url'
+export const ACTIVE_TAB_ID = 'active_tab_id'
+export const ACTIVE_WINDOW_ID = 'active_window_id'
 // TABLES
 export const TAB_REGISTRY_TABLE = 'tab_registry'
 export const WEB_SESSIONS_TABLE = 'web_sessions'
@@ -90,11 +95,17 @@ export function isURLTracked({
 }
 
 // -------------------------------------------------------------------
+// START: Tab events
 
 // handle activated tab
 // when a tab is activated, we get only the tab id
 // check registry for the tab id and grab the tab info and 'updateWebSession' with the activated tab info
-export async function handleActivatedTab(tabId: number) {
+export async function handleActivatedTab({
+  tabId,
+}: {
+  tabId: number
+  windowId?: number
+}) {
   // get a handle for store
   const { store, persistor } = await getStore()
   const storeContent = store.getContent()
@@ -111,7 +122,12 @@ export async function handleActivatedTab(tabId: number) {
 // handle closed tab
 // when a tab is closed, we get only the tab id
 // check registry for the tab id and grab the tab info and 'endWebSession' with the removed tab info
-export async function handleClosedTab(tabId: number) {
+export async function handleClosedTab({
+  tabId,
+}: {
+  tabId: number
+  windowId?: number
+}) {
   // get a handle for store
   const { store, persistor } = await getStore()
   const storeContent = store.getContent()
@@ -140,6 +156,9 @@ export async function handleClosedTab(tabId: number) {
   await saveAndExit(persistor)
 }
 
+// END: Tab events
+// ------------------------------------------------------------------------------
+
 // START: WEB SESSION
 // Main function that tracks web session - start session/end session
 export async function updateWebSession(tab_info: TabInfo) {
@@ -153,8 +172,12 @@ export async function updateWebSession(tab_info: TabInfo) {
     return
   }
 
-  // CASE 0: update active tab url
+  // CASE 0: update active tab url, active tab id, active window id
   store.setValue(ACTIVE_TAB_URL, current_active_url)
+  store.setValue(ACTIVE_TAB_ID, tab_info.tabId)
+  if (tab_info.windowId) {
+    store.setValue(ACTIVE_WINDOW_ID, tab_info.windowId)
+  }
   // update registry info
   store.setRow(TAB_REGISTRY_TABLE, String(tab_info.tabId), tab_info)
 
@@ -171,6 +194,8 @@ export async function updateWebSession(tab_info: TabInfo) {
     startActiveSession(store, {
       url: current_active_url,
       title: tab_info.title,
+      tabId: tab_info.tabId,
+      windowId: tab_info.windowId,
     })
   }
   // CASE 2 - If previous active url has to be tracked, we have to end the session
@@ -185,3 +210,27 @@ export async function updateWebSession(tab_info: TabInfo) {
 }
 
 // END: WEB SESSION
+// ------------------------------------------------------------------------------
+
+// START: Alarm handler
+
+export async function timeTrackerSyncHandler() {}
+
+// offline events handling
+export async function timeTrackerAlarmHandler() {
+  const { store, persistor } = await getStore()
+
+  try {
+    prune_old_web_sessions(store)
+    clean_stale_active_sessions(store)
+    await update_heart_beat_for_active_session(store)
+  } catch (e) {
+    // nothing much we can do
+  }
+
+  // clean up references
+  await saveAndExit(persistor)
+}
+
+// END: Alarm handler
+// ------------------------------------------------------------------------------

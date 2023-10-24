@@ -7,6 +7,7 @@ export type TabInfo = {
   url: string
   title?: string
   isClosed: boolean
+  windowId?: number
 }
 
 // helper function to remove tabs from registry that are closed
