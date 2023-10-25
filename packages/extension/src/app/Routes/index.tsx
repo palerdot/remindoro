@@ -3,9 +3,14 @@ import { Switch, Route } from 'react-router-dom'
 import styled from '@emotion/styled'
 
 import Home from '@app/Screens/Home/'
+// remindoros
+import Remindoros from '@app/Screens/Remindoros/'
 import Todo from '@app/Screens/Todo/'
 import Scheduled from '@app/Screens/Scheduled/'
 import RemindoroInfo from '@app/Screens/RemindoroInfo/'
+// time tracker
+import TimeTracker from '@app/Screens/TimeTracker/'
+// general
 import Settings from '@app/Screens/Settings/'
 import Help from '@app/Screens/Help/'
 import Feedback from '@app/Screens/Feedback/'
@@ -17,6 +22,11 @@ const PATHS = [
   {
     path: Screens.Home,
     Screen: Home,
+  },
+  // remindoros
+  {
+    path: Screens.Remindoros,
+    Screen: Remindoros,
   },
   {
     path: Screens.Todo,
@@ -30,6 +40,12 @@ const PATHS = [
     path: Screens.RemindoroInfo,
     Screen: RemindoroInfo,
   },
+  // time tracker
+  {
+    path: Screens.TimeTracker,
+    Screen: TimeTracker,
+  },
+  // general
   {
     path: Screens.Settings,
     Screen: Settings,

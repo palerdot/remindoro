@@ -11,6 +11,8 @@ import {
 } from '@mui/material'
 import {
   Home as HomeIcon,
+  Notes as NotesIcon,
+  PendingActions as PendingActionsIcon,
   IndeterminateCheckBox as TodoIcon,
   Event as EventIcon,
   Settings as SettingsIcon,
@@ -114,6 +116,34 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
             <ListItemButton>
               <ListItemIcon className={'listIcon'}>{<HomeIcon />}</ListItemIcon>
               <ListItemText primary={'Home'} />
+            </ListItemButton>
+          </Link>
+
+          {/* Time Tracker Menu */}
+          <Link
+            to={Screens.TimeTracker}
+            exact
+            activeClassName={'selected-screen'}
+          >
+            <ListItemButton>
+              <ListItemIcon className={'listIcon'}>
+                {<PendingActionsIcon />}
+              </ListItemIcon>
+              <ListItemText primary={'Time Tracker'} />
+            </ListItemButton>
+          </Link>
+
+          {/* Remindoros Menu */}
+          <Link
+            to={Screens.Remindoros}
+            exact
+            activeClassName={'selected-screen'}
+          >
+            <ListItemButton>
+              <ListItemIcon className={'listIcon'}>
+                {<NotesIcon />}
+              </ListItemIcon>
+              <ListItemText primary={'Reminders'} />
             </ListItemButton>
           </Link>
 

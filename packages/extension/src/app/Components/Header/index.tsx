@@ -7,7 +7,9 @@ import {
   Close as CloseIcon,
   Menu as MenuIcon,
   Home as HomeIcon,
-  IndeterminateCheckBox as TodoIcon,
+  Notes as NotesIcon,
+  PendingActions as PendingActionsIcon,
+  // IndeterminateCheckBox as TodoIcon,
   // Event as EventIcon,
 } from '@mui/icons-material/'
 
@@ -92,8 +94,34 @@ function Header() {
             </IconButtonHolder>
           </Link>
 
+          {/* Time Tracker */}
+          <Link to={Screens.TimeTracker}>
+            <IconButtonHolder
+              className={
+                location.pathname === Screens.TimeTracker
+                  ? 'highlight'
+                  : 'nohighlight'
+              }
+            >
+              <PendingActionsIcon fontSize={'large'} />
+            </IconButtonHolder>
+          </Link>
+
+          {/* Remindoros */}
+          <Link to={Screens.Remindoros}>
+            <IconButtonHolder
+              className={
+                location.pathname === Screens.Remindoros
+                  ? 'highlight'
+                  : 'nohighlight'
+              }
+            >
+              <NotesIcon fontSize={'large'} />
+            </IconButtonHolder>
+          </Link>
+
           {/* Todo Screen */}
-          <Link to={Screens.Todo}>
+          {/* <Link to={Screens.Todo}>
             <IconButtonHolder
               className={
                 location.pathname === Screens.Todo ? 'highlight' : 'nohighlight'
@@ -101,7 +129,7 @@ function Header() {
             >
               <TodoIcon fontSize={'large'} />
             </IconButtonHolder>
-          </Link>
+          </Link> */}
 
           {/* <Link to={Screens.Scheduled}>
             <IconButtonHolder

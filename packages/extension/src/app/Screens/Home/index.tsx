@@ -1,22 +1,26 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { orderBy } from '@lodash'
+import styled from '@emotion/styled'
 
-import type { RootState } from '@app/Store/'
+import TimeTrackerGist from '@app/Screens/TimeTracker/DashboardGist'
+import { DashboardGist as RemindorosGist } from '@app/Screens/Remindoros'
 
-import AddRemindoro from '@app/Components/AddRemindoro'
-import Remindoros from '@app/Components/Remindoros/'
+const Holder = styled.div`
+  padding: 16px;
+  margin-bottom: 8px;
+
+  & .title {
+    font-size: 1.25rem;
+  }
+`
 
 function Home() {
-  const remindoros = useSelector((state: RootState) => state.remindoros)
-
-  // sort remindoros
-  const sortedRemindoros = orderBy(remindoros, 'updated', 'desc')
-
   return (
     <div>
-      <Remindoros remindoros={sortedRemindoros} />
-      <AddRemindoro />
+      <Holder>
+        <div className="title">{'Dashboard'}</div>
+      </Holder>
+      <TimeTrackerGist />
+      <RemindorosGist />
     </div>
   )
 }
