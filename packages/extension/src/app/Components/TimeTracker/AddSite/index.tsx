@@ -1,7 +1,9 @@
 import React, { useState, useCallback } from 'react'
-import { TextField } from '@mui/material'
+import { Stack, TextField } from '@mui/material'
 
 import { AddSiteButton } from '@app/Components/TimeTracker/AddSite/AddSiteFab'
+import { requestPermissions } from '@app/Components/TimeTracker/host-permissions'
+import HostPermissionStatus from '@app/Components/TimeTracker/HostPermissionStatus'
 
 type Props = {
   onSuccess: () => void
@@ -42,21 +44,32 @@ function isValidURL(
 
 function AddSite({}: Props) {
   const [url, setUrl] = useState('')
-  const [isError, setError] = useState(false)
+  const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
+  const [host, setHost] = useState('')
 
-  const validateURL = useCallback(() => {
+  const addSiteTracking = useCallback(async () => {
     const { isValid, host } = isValidURL(url)
 
     if (!isValid) {
-      setError(true)
+      setError('Please enter a valid site URL.')
       // abort
       return
     }
 
-    // save the url
-    setSaving(true)
-    console.log('porumai ... site url ', host)
+    try {
+      const granted = await requestPermissions(host)
+      if (!granted) {
+        setError(`${host} not granted tab permissions.`)
+        return
+      }
+      console.log('porumai ... we have permission granted for host ', host)
+      // save the url
+      setSaving(true)
+    } catch (e) {
+    } finally {
+      setHost(host)
+    }
   }, [url, setError, setSaving])
 
   return (
@@ -67,33 +80,28 @@ function AddSite({}: Props) {
         justifyContent: 'center',
       }}
     >
-      <TextField
-        error={isError}
-        id="site-url-for-tracking"
-        label={isError ? 'Error' : 'Enter Site URL'}
-        defaultValue={url}
-        helperText={
-          isError
-            ? 'Please enter valid site URL'
-            : 'e.g. https://www.youtube.com'
-        }
-        onChange={e => {
-          setUrl(e.target.value)
-          setError(false)
-        }}
-      />
-      <div
-        style={{
-          margin: '8px auto',
-        }}
-      >
+      <Stack direction={'column'} spacing={2}>
+        <TextField
+          disabled={saving}
+          error={error.length > 0}
+          id="site-url-for-tracking"
+          label={error.length > 0 ? error : 'Enter Site URL'}
+          defaultValue={url}
+          helperText={error.length > 0 ? error : 'e.g. https://www.youtube.com'}
+          onChange={e => {
+            setUrl(e.target.value)
+            setError('')
+            setHost('')
+          }}
+        />
+        {isValidHost(host) && <HostPermissionStatus host={host} />}
         <AddSiteButton
           onClick={() => {
-            validateURL()
+            addSiteTracking()
           }}
           disabled={saving}
         />
-      </div>
+      </Stack>
     </div>
   )
 }
