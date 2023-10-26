@@ -84,7 +84,6 @@ function AddSite({ onSuccess }: Props) {
         setError(`${host} not granted tab permissions.`)
         return
       }
-      console.log('porumai ... we have permission granted for host ', host)
       // save the url
       setHost(host)
       setSaving(true)

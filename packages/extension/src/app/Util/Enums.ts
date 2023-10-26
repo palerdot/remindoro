@@ -9,7 +9,7 @@ export enum Screens {
 
   // time tracker
   TimeTracker = '/time-tracker',
-  // TimeTrackerStats = '/time-tracker-stats/:site',
+  TimeTrackerStats = '/time-tracker-stats/:site',
 
   // general
   Settings = '/settings',

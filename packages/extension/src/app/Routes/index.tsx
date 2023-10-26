@@ -10,6 +10,7 @@ import Scheduled from '@app/Screens/Scheduled/'
 import RemindoroInfo from '@app/Screens/RemindoroInfo/'
 // time tracker
 import TimeTracker from '@app/Screens/TimeTracker/'
+import TimeTrackerStats from '@app/Screens/TimeTracker/Stats'
 // general
 import Settings from '@app/Screens/Settings/'
 import Help from '@app/Screens/Help/'
@@ -44,6 +45,10 @@ const PATHS = [
   {
     path: Screens.TimeTracker,
     Screen: TimeTracker,
+  },
+  {
+    path: Screens.TimeTrackerStats,
+    Screen: TimeTrackerStats,
   },
   // general
   {
