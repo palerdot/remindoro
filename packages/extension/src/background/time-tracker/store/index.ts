@@ -3,7 +3,7 @@ import {
   createIndexedDbPersister,
   IndexedDbPersister,
 } from 'tinybase/persisters/persister-indexed-db'
-import { isString, isEmpty, some } from '@lodash'
+import { isString, isEmpty, some, values } from '@lodash'
 
 import { TabInfo } from '@background/time-tracker/tab-registry'
 import {
@@ -16,20 +16,21 @@ import {
 } from '@background/time-tracker/web-session'
 
 // indexed db key for storing time tracking related key/values and tables
-const STORE_KEY = 'time_tracker_store'
+export const STORE_KEY = 'time_tracker_store'
 // Key/Values
 export const ACTIVE_TAB_URL = 'active_tab_url'
 export const ACTIVE_TAB_ID = 'active_tab_id'
 export const ACTIVE_WINDOW_ID = 'active_window_id'
 // TABLES
+export const TIME_TRACKED_SITES_TABLE = 'time_tracked_sites'
 export const TAB_REGISTRY_TABLE = 'tab_registry'
 export const WEB_SESSIONS_TABLE = 'web_sessions'
 export const CONNECTED_ACCOUNT_TABLE = 'connected_account'
 
-type TrackedSite = {
+export type TrackedSite = {
   site: string
   initiator: 'EXTENSION' | 'WEBAPP'
-  initiated_time?: string
+  initiated_time?: number
 }
 
 export type TableData<T> = {
@@ -37,6 +38,7 @@ export type TableData<T> = {
 }
 
 type TablesData = {
+  [TIME_TRACKED_SITES_TABLE]?: TableData<TrackedSite>
   [TAB_REGISTRY_TABLE]?: TableData<TabInfo>
   [WEB_SESSIONS_TABLE]?: TableData<WebSession>
 }
@@ -80,6 +82,20 @@ function tabInfoFromStoreContent(
   return tabInfo
 }
 
+// get time tracked sites from store content
+function trackedSitesFromStoreContent(
+  content: StoreContent
+): Array<TrackedSite> {
+  const [tablesData] = content
+  const trackedSitesData = tablesData[TIME_TRACKED_SITES_TABLE]
+
+  if (!trackedSitesData) {
+    return []
+  }
+
+  return values(trackedSitesData)
+}
+
 // checks if the url is part of tracked sites
 export function isURLTracked({
   url,
@@ -110,7 +126,7 @@ export async function handleActivatedTab({
   // get a handle for store
   const { store, persistor } = await getStore()
   const storeContent = store.getContent()
-  const tab_info = await tabInfoFromStoreContent(storeContent, tabId)
+  const tab_info = tabInfoFromStoreContent(storeContent, tabId)
   // clean up the exit
   await saveAndExit(persistor)
 
@@ -132,7 +148,7 @@ export async function handleClosedTab({
   // get a handle for store
   const { store, persistor } = await getStore()
   const storeContent = store.getContent()
-  const tab_info = await tabInfoFromStoreContent(storeContent, tabId)
+  const tab_info = tabInfoFromStoreContent(storeContent, tabId)
 
   // mark tab as closed
   store.setRow(TAB_REGISTRY_TABLE, String(tabId), {
@@ -140,13 +156,7 @@ export async function handleClosedTab({
   })
 
   if (tab_info && !isEmpty(tab_info.url)) {
-    // TODO: hardcoding site for now
-    const sites: Array<TrackedSite> = [
-      {
-        site: 'youtube.com',
-        initiator: 'EXTENSION',
-      },
-    ]
+    const sites = trackedSitesFromStoreContent(storeContent)
 
     if (isURLTracked({ sites, url: tab_info.url })) {
       endActiveSession(store, tab_info.url)
@@ -182,13 +192,8 @@ export async function updateWebSession(tab_info: TabInfo) {
   // update registry info
   store.setRow(TAB_REGISTRY_TABLE, String(tab_info.tabId), tab_info)
 
-  // TODO: IMPORTANT: hardcoding site for now
-  const sites: Array<TrackedSite> = [
-    {
-      site: 'youtube.com',
-      initiator: 'EXTENSION',
-    },
-  ]
+  const storeContent = store.getContent()
+  const sites = trackedSitesFromStoreContent(storeContent)
 
   // CASE 1: If current active url has to be tracked, create a new web session entry with last_heartbeat_check set to now
   if (isURLTracked({ sites, url: current_active_url })) {

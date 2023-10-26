@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import { PendingActions as PendingActionsIcon } from '@mui/icons-material'
+import { useTable } from 'tinybase/ui-react'
+import { isEmpty } from '@lodash'
+import { useSnackbar } from 'notistack'
 
+import { TIME_TRACKED_SITES_TABLE } from '@background/time-tracker/store'
 import AddSiteFab, {
   AddSiteButton,
 } from '@app/Components/TimeTracker/AddSite/AddSiteFab'
@@ -9,7 +13,10 @@ import AddSiteModal from '@app/Components/TimeTracker/AddSite/AddSiteModal'
 import { Holder } from './DashboardGist'
 
 function TimeTracker() {
+  const { enqueueSnackbar } = useSnackbar()
+
   const [isModalOpen, setModalStatus] = useState(false)
+  const time_tracked_sites = useTable(TIME_TRACKED_SITES_TABLE)
 
   return (
     <div
@@ -44,14 +51,27 @@ function TimeTracker() {
       <AddSiteModal
         isOpen={isModalOpen}
         closeModal={() => setModalStatus(false)}
-        title={'porumai'}
+        title={
+          isEmpty(time_tracked_sites)
+            ? 'Add site for time tracking'
+            : 'Private Beta Feature'
+        }
       >
-        <AddSite
-          onSuccess={() => {
-            // close the modal
-            setModalStatus(false)
-          }}
-        />
+        {isEmpty(time_tracked_sites) ? (
+          <AddSite
+            onSuccess={host => {
+              // close the modal
+              setModalStatus(false)
+              // show success toast
+              enqueueSnackbar({
+                message: `${host} added for time tracking.`,
+                variant: 'success',
+              })
+            }}
+          />
+        ) : (
+          <div>{'porumai ... feature in private beta'}</div>
+        )}
       </AddSiteModal>
     </div>
   )

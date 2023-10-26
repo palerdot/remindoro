@@ -1,13 +1,32 @@
 import React, { useState, useCallback } from 'react'
 import { Stack, TextField } from '@mui/material'
+import styled from '@emotion/styled'
+import { useStore } from 'tinybase/ui-react'
 
+import {
+  TIME_TRACKED_SITES_TABLE,
+  TrackedSite,
+} from '@background/time-tracker/store'
 import { AddSiteButton } from '@app/Components/TimeTracker/AddSite/AddSiteFab'
 import { requestPermissions } from '@app/Components/TimeTracker/host-permissions'
 import HostPermissionStatus from '@app/Components/TimeTracker/HostPermissionStatus'
 
 type Props = {
-  onSuccess: () => void
+  onSuccess: (host: string) => void
 }
+
+const HelpInfo = styled.div`
+  font-size: 0.75rem;
+  font-style: italic;
+
+  margin: 8px;
+  padding: 8px;
+  border-radius: 5px;
+
+  border: ${props => `thin solid ${props.theme.primaryDark}`};
+  background: ${props => props.theme.background};
+  color: ${props => props.theme.textColor};
+`
 
 function isValidHost(host: string): boolean {
   // youtube.com, instagram.com
@@ -42,7 +61,9 @@ function isValidURL(
   }
 }
 
-function AddSite({}: Props) {
+function AddSite({ onSuccess }: Props) {
+  const store = useStore()
+
   const [url, setUrl] = useState('')
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
@@ -65,12 +86,21 @@ function AddSite({}: Props) {
       }
       console.log('porumai ... we have permission granted for host ', host)
       // save the url
+      setHost(host)
       setSaving(true)
+      // save to store
+      const row: TrackedSite = {
+        site: host,
+        initiator: 'EXTENSION',
+        initiated_time: new Date().getTime(),
+      }
+      store?.setRow(TIME_TRACKED_SITES_TABLE, host, row)
+      // call on success callback
+      onSuccess(host)
     } catch (e) {
-    } finally {
       setHost(host)
     }
-  }, [url, setError, setSaving])
+  }, [store, url, setError, setSaving, onSuccess])
 
   return (
     <div
@@ -101,6 +131,11 @@ function AddSite({}: Props) {
           }}
           disabled={saving}
         />
+        <HelpInfo>
+          {
+            'You will be asked to grant permissions to read tab details for the site (if not already granted). Any open tabs prior to granting permission will not be time tracked.'
+          }
+        </HelpInfo>
       </Stack>
     </div>
   )
