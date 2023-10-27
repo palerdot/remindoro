@@ -48,6 +48,9 @@ function HostPermissionStatus({ host }: Props) {
         color="success"
         icon={<Done />}
         label={`${host} granted tab permissions.`}
+        sx={{
+          width: 'fit-content',
+        }}
       />
     )
   }

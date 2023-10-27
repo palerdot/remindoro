@@ -6,7 +6,7 @@ import { TrackedSite } from '@background/time-tracker/store'
 import HostPermissionStatus from '@app/Components/TimeTracker/HostPermissionStatus'
 import Timeago from '@app/Components/Timeago'
 
-const SitePill = styled.div`
+export const SitePill = styled.div`
   font-size: 0.89rem;
   font-style: italic;
 

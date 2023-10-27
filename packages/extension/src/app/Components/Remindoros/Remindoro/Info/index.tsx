@@ -8,7 +8,7 @@ import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 import ScheduleInfo from '@app/Components/Remindoros/Remindoro/ScheduleInfo'
 import TodoBadge from '@app/Components/TodoBadge'
 import SettingsModal from '@app/Components/Remindoros/Remindoro/Info/SettingsModal'
-import Edit from '@app/Components/Remindoros/Remindoro/EditFab'
+import Edit from '@app/Components/EditFab'
 import Title from './Title'
 import LiveNote from '@app/Components/LiveNote/'
 

@@ -1,10 +1,15 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { useHistory } from 'react-router-dom'
+import { useTable } from 'tinybase/ui-react'
+import { Stack } from '@mui/material'
 import { PendingActions as PendingActionsIcon } from '@mui/icons-material'
+import { keys, isEmpty } from '@lodash'
 
+import { TIME_TRACKED_SITES_TABLE } from '@background/time-tracker/store'
 import CardHolder from '@app/Components/CardHolder'
 import { Screens } from '@app/Util/Enums'
+import { SitePill } from './SiteGist'
 
 export const Holder = styled.div`
   & .title-holder {
@@ -57,6 +62,7 @@ export const Holder = styled.div`
 
 function Gist() {
   const history = useHistory()
+  const tracked_sites = useTable(TIME_TRACKED_SITES_TABLE)
 
   return (
     <CardHolder
@@ -70,7 +76,13 @@ function Gist() {
           <div className="title">{'Browsing Time Tracker'}</div>
           <div className="beta">{'BETA'}</div>
         </div>
-        <div className="content">{'porumai ... time tracker'}</div>
+        <div className="content">
+          {isEmpty(tracked_sites) ? (
+            <div>{'No sites added for time tracking'}</div>
+          ) : (
+            <SitesPreview sites={keys(tracked_sites)} />
+          )}
+        </div>
         <div className="help-info">
           {
             'Time Tracker helps you to track time spent on websites like social media. This helps you to have a healthy digital habits. More features like detailed statistics and tracking more than one site is currently in private beta.'
@@ -85,3 +97,18 @@ function Gist() {
 }
 
 export default Gist
+
+function SitesPreview({ sites }: { sites: Array<string> }) {
+  return (
+    <Stack direction={'column'} spacing={1}>
+      <div>{`${sites.length} ${
+        sites.length === 1 ? 'site' : 'sites'
+      } added for time tracking.`}</div>
+      <Stack direction={'row'} spacing={2}>
+        {sites.map(site => (
+          <SitePill key={site}>{site}</SitePill>
+        ))}
+      </Stack>
+    </Stack>
+  )
+}
