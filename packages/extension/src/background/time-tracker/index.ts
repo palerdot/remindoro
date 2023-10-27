@@ -56,6 +56,16 @@ function init_tab_updated() {
         isClosed: false,
       }
       updateWebSession(tab_info)
+    } else if (changeInfo.status === 'complete' && tabInfo.url) {
+      // another scenarios where tab has finished loading with an url
+      const tab_info: TabInfo = {
+        tabId,
+        windowId: tabInfo.windowId,
+        url: tabInfo.url,
+        title: tabInfo.title,
+        isClosed: false,
+      }
+      updateWebSession(tab_info)
     }
   }
 

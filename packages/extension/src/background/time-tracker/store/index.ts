@@ -3,7 +3,7 @@ import {
   createIndexedDbPersister,
   IndexedDbPersister,
 } from 'tinybase/persisters/persister-indexed-db'
-import { isString, isEmpty, some, values } from '@lodash'
+import { isString, isEmpty, some, values, takeRight } from '@lodash'
 
 import { TabInfo } from '@background/time-tracker/tab-registry'
 import {
@@ -96,6 +96,13 @@ function trackedSitesFromStoreContent(
   return values(trackedSitesData)
 }
 
+// pulls site id from host name
+// www.youtube.com => youtube.com
+// youtube.com => youtube.com
+export function siteIdFromHost(host: string): string {
+  return takeRight(host.split('.'), 2).join('.')
+}
+
 // checks if the url is part of tracked sites
 export function isURLTracked({
   url,
@@ -151,7 +158,7 @@ export async function handleClosedTab({
   const tab_info = tabInfoFromStoreContent(storeContent, tabId)
 
   // mark tab as closed
-  store.setRow(TAB_REGISTRY_TABLE, String(tabId), {
+  store.setPartialRow(TAB_REGISTRY_TABLE, String(tabId), {
     isClosed: true,
   })
 
@@ -178,10 +185,6 @@ export async function updateWebSession(tab_info: TabInfo) {
   const { store, persistor } = await getStore()
   // get active tab url from store
   const previous_active_tab_url = store.getValue(ACTIVE_TAB_URL)
-  // check if current active url is same is existing active tab url. if same do not do anything
-  if (previous_active_tab_url === current_active_url) {
-    return
-  }
 
   // CASE 0: update active tab url, active tab id, active window id
   store.setValue(ACTIVE_TAB_URL, current_active_url)
@@ -190,12 +193,20 @@ export async function updateWebSession(tab_info: TabInfo) {
     store.setValue(ACTIVE_WINDOW_ID, tab_info.windowId)
   }
   // update registry info
-  store.setRow(TAB_REGISTRY_TABLE, String(tab_info.tabId), tab_info)
+  store.setPartialRow(TAB_REGISTRY_TABLE, String(tab_info.tabId), tab_info)
 
   const storeContent = store.getContent()
   const sites = trackedSitesFromStoreContent(storeContent)
 
-  // CASE 1: If current active url has to be tracked, create a new web session entry with last_heartbeat_check set to now
+  // CASE 1 - If previous active url has to be tracked, we have to end the session
+  if (
+    isString(previous_active_tab_url) &&
+    isURLTracked({ sites, url: previous_active_tab_url })
+  ) {
+    endActiveSession(store, previous_active_tab_url)
+  }
+
+  // CASE 2: If current active url has to be tracked, create a new web session entry with last_heartbeat_check set to now
   if (isURLTracked({ sites, url: current_active_url })) {
     startActiveSession(store, {
       url: current_active_url,
@@ -204,14 +215,6 @@ export async function updateWebSession(tab_info: TabInfo) {
       windowId: tab_info.windowId,
     })
   }
-  // CASE 2 - If previous active url has to be tracked, we have to end the session
-  if (
-    isString(previous_active_tab_url) &&
-    isURLTracked({ sites, url: previous_active_tab_url })
-  ) {
-    endActiveSession(store, previous_active_tab_url)
-  }
-
   await saveAndExit(persistor)
 }
 

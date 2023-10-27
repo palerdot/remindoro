@@ -9,6 +9,7 @@ import {
   ACTIVE_TAB_ID,
   ACTIVE_TAB_URL,
   ACTIVE_WINDOW_ID,
+  siteIdFromHost,
 } from '@background/time-tracker/store'
 
 const KEY_LAST_HEARTBEAT_CHECK = 'last_heartbeat_check'
@@ -45,7 +46,8 @@ type SessionPayload = {
 export function startActiveSession(store: Store, payload: SessionPayload) {
   const session_id = uuid()
   const current_timestamp = new Date().getTime()
-  const { host: site } = new URL(payload.url)
+  const { host } = new URL(payload.url)
+  const site = siteIdFromHost(host)
 
   // initing focus in event for the window/tab/session
   const focus_events: Array<FocusEvent> = [

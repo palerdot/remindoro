@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { Stack } from '@mui/material'
 
 import { TrackedSite } from '@background/time-tracker/store'
+import HostPermissionStatus from '@app/Components/TimeTracker/HostPermissionStatus'
 import Timeago from '@app/Components/Timeago'
 
 const SitePill = styled.div`
@@ -24,6 +25,7 @@ function SiteGist({ site, initiated_time }: Props) {
   return (
     <Stack direction={'column'} spacing={1}>
       <SitePill>{site}</SitePill>
+      <HostPermissionStatus host={site} />
       {initiated_time && (
         <Stack direction={'row'} spacing={1}>
           <div>{'Initiated: '}</div>

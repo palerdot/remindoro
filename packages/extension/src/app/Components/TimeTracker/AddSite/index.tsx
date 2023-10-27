@@ -6,6 +6,7 @@ import { useStore } from 'tinybase/ui-react'
 import {
   TIME_TRACKED_SITES_TABLE,
   TrackedSite,
+  siteIdFromHost,
 } from '@background/time-tracker/store'
 import { AddSiteButton } from '@app/Components/TimeTracker/AddSite/AddSiteFab'
 import { requestPermissions } from '@app/Components/TimeTracker/host-permissions'
@@ -43,7 +44,7 @@ function isValidURL(
     const parsed = new URL(url)
     return {
       isValid: true,
-      host: parsed.host,
+      host: siteIdFromHost(parsed.host),
     }
   } catch (e) {
     // check if they directly entered the hostname

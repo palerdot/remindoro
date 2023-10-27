@@ -47,10 +47,7 @@ function HostPermissionStatus({ host }: Props) {
       <Chip
         color="success"
         icon={<Done />}
-        label={`${host} granted tab permissions. Click to refresh status.`}
-        onClick={() => {
-          grantPermission()
-        }}
+        label={`${host} granted tab permissions.`}
       />
     )
   }

@@ -73,7 +73,7 @@ function Gist() {
         <div className="content">{'porumai ... time tracker'}</div>
         <div className="help-info">
           {
-            'Time Tracker helps you to track time spent on websites like social media.'
+            'Time Tracker helps you to track time spent on websites like social media. This helps you to have a healthy digital habits. More features like detailed statistics and tracking more than one site is currently in private beta.'
           }
         </div>
         <div className="subtitle">
