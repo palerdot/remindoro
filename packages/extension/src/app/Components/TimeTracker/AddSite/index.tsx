@@ -133,7 +133,7 @@ function AddSite({ onSuccess }: Props) {
         />
         <HelpInfo>
           {
-            'You will be asked to grant permissions to read tab details for the site (if not already granted). Any open tabs prior to granting permission will not be time tracked.'
+            'You will be asked to grant permissions for the site (if not already granted). Any open tabs prior to granting permission will not be time tracked.'
           }
         </HelpInfo>
       </Stack>

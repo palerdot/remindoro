@@ -36,8 +36,7 @@ function HostPermissionStatus({ host }: Props) {
       .then(granted => {
         setStatus(granted === true ? 'GRANTED' : 'NOT_GRANTED')
       })
-      .catch(e => {
-        console.log('porumai ... not granted ? ', e)
+      .catch(() => {
         setStatus('NOT_GRANTED')
       })
   }, [host, setStatus])
@@ -47,7 +46,7 @@ function HostPermissionStatus({ host }: Props) {
       <Chip
         color="success"
         icon={<Done />}
-        label={`${host} granted tab permissions.`}
+        label={`${host} granted permissions.`}
         sx={{
           width: 'fit-content',
         }}
@@ -60,7 +59,7 @@ function HostPermissionStatus({ host }: Props) {
       <Chip
         color="error"
         icon={<ErrorOutline />}
-        label={`${host} not granted tab permissions. Click to grant permission.`}
+        label={`${host} not granted permissions. Click to grant permission.`}
         onClick={() => {
           grantPermission()
         }}
@@ -72,7 +71,7 @@ function HostPermissionStatus({ host }: Props) {
     <Chip
       color="default"
       icon={<HourglassBottom />}
-      label={`Checking tab permissions for ${host}.`}
+      label={`Checking permissions for ${host}.`}
     />
   )
 }

@@ -19,6 +19,8 @@ type Props = {
 }
 
 const Holder = styled.div`
+  margin-bottom: 34px;
+
   & .section {
     padding: 8px 16px;
   }
@@ -26,12 +28,6 @@ const Holder = styled.div`
   & .subtitle {
     font-size: 0.75rem;
     font-style: italic;
-
-    padding-bottom: 16px;
-    margin-bottom: 8px;
-
-    display: flex;
-    justify-content: center;
   }
 `
 
@@ -51,7 +47,7 @@ function Activity({ site }: Props) {
         })
       }
     )
-  }, [store])
+  }, [store, site])
   const sortedRowIds = useResultSortedRowIds(
     // queryId
     QUERY_WEB_SESSIONS_FOR_SITE,
@@ -68,8 +64,8 @@ function Activity({ site }: Props) {
   )
   return (
     <Holder>
+      <SiteInfo site={site} />
       <div className="section">
-        <SiteInfo site={site} />
         <div>{'Recent Activity'}</div>
         <div className="subtitle">
           {
@@ -79,14 +75,14 @@ function Activity({ site }: Props) {
       </div>
       <Stack
         direction={'column'}
-        spacing={4}
+        spacing={1}
         divider={
           <Divider
             orientation="horizontal"
             flexItem
             sx={{
-              background: theme => theme.colors.highlight,
-              color: theme => theme.colors.highlight,
+              background: theme => theme.colors.border,
+              color: theme => theme.colors.border,
             }}
           />
         }
@@ -114,5 +110,13 @@ function SiteInfo({ site }: { site: string }) {
     site
   ) as TrackedSite
 
-  return <SiteGist {...siteInfo} />
+  return (
+    <div
+      style={{
+        padding: '8px 16px',
+      }}
+    >
+      <SiteGist {...siteInfo} />
+    </div>
+  )
 }

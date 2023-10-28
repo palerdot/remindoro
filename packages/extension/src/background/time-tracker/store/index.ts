@@ -3,7 +3,7 @@ import {
   createIndexedDbPersister,
   IndexedDbPersister,
 } from 'tinybase/persisters/persister-indexed-db'
-import { isString, isEmpty, some, values, takeRight } from '@lodash'
+import { isString, some, values, takeRight } from '@lodash'
 
 import { TabInfo } from '@background/time-tracker/tab-registry'
 import {
@@ -138,7 +138,9 @@ export async function handleActivatedTab({
   await saveAndExit(persistor)
 
   // updateWebSession gets a new handle for store and cleans up after updating web session
-  if (tab_info && !isEmpty(tab_info.url)) {
+  if (tab_info) {
+    // NOTE: we may not have an url if the switched tab is not tracked; this is ok
+    // we will just update active tab url to empty and just end the session for previous tracked url (if applicable)
     await updateWebSession(tab_info)
   }
 }
@@ -162,7 +164,7 @@ export async function handleClosedTab({
     isClosed: true,
   })
 
-  if (tab_info && !isEmpty(tab_info.url)) {
+  if (tab_info) {
     const sites = trackedSitesFromStoreContent(storeContent)
 
     if (isURLTracked({ sites, url: tab_info.url })) {

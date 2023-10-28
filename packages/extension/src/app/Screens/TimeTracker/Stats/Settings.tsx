@@ -63,6 +63,19 @@ const ActionBar = styled.div`
   padding-right: 20px;
 `
 
+const HelpInfo = styled.div`
+  font-size: 0.89rem;
+  font-style: italic;
+
+  margin: 8px;
+  padding: 8px;
+  border-radius: 5px;
+
+  border: ${props => `thin solid ${props.theme.primaryDark}`};
+  background: ${props => props.theme.background};
+  color: ${props => props.theme.textColor};
+`
+
 type Props = {
   isModalOpen: boolean
   setModalStatus: React.Dispatch<React.SetStateAction<boolean>>
@@ -109,6 +122,11 @@ function Settings({ isModalOpen, setModalStatus, site }: Props) {
         }}
       >
         <Holder>
+          <HelpInfo>
+            {
+              'Removing the site will stop tracking for the site. All the existing activity logs for the site will be deleted permanently.'
+            }
+          </HelpInfo>
           <ActionBar>
             <Button
               variant="contained"

@@ -18,6 +18,7 @@ import AddSiteModal from '@app/Components/TimeTracker/AddSite/AddSiteModal'
 import SiteGist from './SiteGist'
 import CardHolder from '@app/Components/CardHolder'
 import { Screens } from '@app/Util/Enums'
+import PrivateBetaEmail from '@app/Components/PrivateBeta/Email'
 
 const Holder = styled.div`
   & .title-holder {
@@ -111,7 +112,27 @@ function TimeTracker() {
               )
             })
           )}
-          <div>{'porumai ... time tracker'}</div>
+
+          <div
+            style={{
+              paddingTop: '16px',
+            }}
+          >
+            <PrivateBetaEmail
+              onSuccess={() => {
+                enqueueSnackbar({
+                  message: 'Thank you for your interest',
+                  variant: 'success',
+                })
+              }}
+              onError={message => {
+                enqueueSnackbar({
+                  message,
+                  variant: 'error',
+                })
+              }}
+            />
+          </div>
         </div>
       </Holder>
       <AddSiteFab onClick={() => {}} />
