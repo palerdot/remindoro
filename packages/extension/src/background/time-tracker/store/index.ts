@@ -1,3 +1,4 @@
+import browser from 'webextension-polyfill'
 import { createStore } from 'tinybase'
 import {
   createIndexedDbPersister,
@@ -5,7 +6,6 @@ import {
 } from 'tinybase/persisters/persister-indexed-db'
 import { isString, some, values, takeRight } from '@lodash'
 
-import { TabInfo } from '@background/time-tracker/tab-registry'
 import {
   startActiveSession,
   endActiveSession,
@@ -23,9 +23,16 @@ export const ACTIVE_TAB_ID = 'active_tab_id'
 export const ACTIVE_WINDOW_ID = 'active_window_id'
 // TABLES
 export const TIME_TRACKED_SITES_TABLE = 'time_tracked_sites'
-export const TAB_REGISTRY_TABLE = 'tab_registry'
 export const WEB_SESSIONS_TABLE = 'web_sessions'
 export const CONNECTED_ACCOUNT_TABLE = 'connected_account'
+
+export type TabInfo = {
+  tabId: number
+  url: string
+  title?: string
+  isClosed: boolean
+  windowId?: number
+}
 
 export type TrackedSite = {
   site: string
@@ -39,7 +46,6 @@ export type TableData<T> = {
 
 type TablesData = {
   [TIME_TRACKED_SITES_TABLE]?: TableData<TrackedSite>
-  [TAB_REGISTRY_TABLE]?: TableData<TabInfo>
   [WEB_SESSIONS_TABLE]?: TableData<WebSession>
 }
 type ValuesData = {
@@ -63,23 +69,6 @@ export async function saveAndExit(persistor: IndexedDbPersister) {
   await persistor.save()
   // destroy instance for garbage collection
   persistor.destroy()
-}
-
-// get tabInfo from store content
-function tabInfoFromStoreContent(
-  content: StoreContent,
-  tabId: number
-): TabInfo | undefined {
-  const [tablesData] = content
-  const tabRegistryData = tablesData[TAB_REGISTRY_TABLE]
-
-  if (!tabRegistryData) {
-    return undefined
-  }
-
-  const tabInfo = tabRegistryData[String(tabId)]
-
-  return tabInfo
 }
 
 // get time tracked sites from store content
@@ -130,18 +119,22 @@ export async function handleActivatedTab({
   tabId: number
   windowId?: number
 }) {
-  // get a handle for store
-  const { store, persistor } = await getStore()
-  const storeContent = store.getContent()
-  const tab_info = tabInfoFromStoreContent(storeContent, tabId)
-  // clean up the exit
-  await saveAndExit(persistor)
-
-  // updateWebSession gets a new handle for store and cleans up after updating web session
-  if (tab_info) {
-    // NOTE: we may not have an url if the switched tab is not tracked; this is ok
-    // we will just update active tab url to empty and just end the session for previous tracked url (if applicable)
-    await updateWebSession(tab_info)
+  try {
+    const tab_data = await browser.tabs.get(tabId)
+    // updateWebSession gets a new handle for store and cleans up after updating web session
+    if (tab_data) {
+      const tab_info: TabInfo = {
+        tabId,
+        url: tab_data.url ? tab_data.url : '',
+        windowId: tab_data.windowId,
+        isClosed: false,
+      }
+      // NOTE: we may not have an url if the switched tab is not tracked; this is ok
+      // we will just update active tab url to empty and just end the session for previous tracked url (if applicable)
+      await updateWebSession(tab_info)
+    }
+  } catch (e) {
+    console.error(e)
   }
 }
 
@@ -154,26 +147,25 @@ export async function handleClosedTab({
   tabId: number
   windowId?: number
 }) {
-  // get a handle for store
-  const { store, persistor } = await getStore()
-  const storeContent = store.getContent()
-  const tab_info = tabInfoFromStoreContent(storeContent, tabId)
+  try {
+    // get a handle for store
+    const { store, persistor } = await getStore()
+    const storeContent = store.getContent()
+    const tab_info = await browser.tabs.get(tabId)
 
-  // mark tab as closed
-  store.setPartialRow(TAB_REGISTRY_TABLE, String(tabId), {
-    isClosed: true,
-  })
+    if (tab_info && tab_info.url) {
+      const sites = trackedSitesFromStoreContent(storeContent)
 
-  if (tab_info) {
-    const sites = trackedSitesFromStoreContent(storeContent)
-
-    if (isURLTracked({ sites, url: tab_info.url })) {
-      endActiveSession(store, tab_info.url)
+      if (isURLTracked({ sites, url: tab_info.url })) {
+        endActiveSession(store, tab_info.url)
+      }
     }
-  }
 
-  // clean up the exit
-  await saveAndExit(persistor)
+    // clean up the exit
+    await saveAndExit(persistor)
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 // END: Tab events
@@ -194,8 +186,6 @@ export async function updateWebSession(tab_info: TabInfo) {
   if (tab_info.windowId) {
     store.setValue(ACTIVE_WINDOW_ID, tab_info.windowId)
   }
-  // update registry info
-  store.setPartialRow(TAB_REGISTRY_TABLE, String(tab_info.tabId), tab_info)
 
   const storeContent = store.getContent()
   const sites = trackedSitesFromStoreContent(storeContent)

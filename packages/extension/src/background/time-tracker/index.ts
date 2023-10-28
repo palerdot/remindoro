@@ -6,18 +6,14 @@ import {
   handleClosedTab,
   timeTrackerAlarmHandler,
   timeTrackerSyncHandler,
-} from '@background/time-tracker/store'
-import {
-  reset_tab_registry,
   TabInfo,
-} from '@background/time-tracker/tab-registry'
+} from '@background/time-tracker/store'
 
 export const TIME_TRACKER_SYNC_ALARM = 'TIME_TRACKER_SYNC_ALARM'
 export { timeTrackerAlarmHandler, timeTrackerSyncHandler }
 
 // START: Init time tracking
-export async function init_time_tracking() {
-  await reset_tab_registry()
+export function init_time_tracking() {
   init_tab_events()
 }
 
