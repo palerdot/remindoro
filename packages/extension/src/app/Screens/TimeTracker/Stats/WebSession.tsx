@@ -7,6 +7,7 @@ import { HourglassTop } from '@mui/icons-material'
 import { WEB_SESSIONS_TABLE } from '@background/time-tracker/store'
 import { WebSession } from '@background/time-tracker/web-session'
 import { formattedWebSessionDuration } from '@app/Util/'
+import FocusEvents from '@app/Components/TimeTracker/FocusEvents'
 
 type Props = {
   rowId: string
@@ -64,7 +65,7 @@ function WebSessionStat({ rowId }: Props) {
             <div>{new Date(stat.ended_at).toString()}</div>
           </Stack>
         )}
-        <div>{stat.focus_events}</div>
+        <FocusEvents stringified={stat.focus_events} />
       </Stack>
     </Box>
   )

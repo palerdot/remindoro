@@ -11,6 +11,7 @@ import {
 } from '@background/time-tracker/store'
 import SiteGist from '@app/Screens/TimeTracker/SiteGist'
 import WebSessionStat from './WebSession'
+import Faq from '@app/Components/TimeTracker/Faq'
 
 const QUERY_WEB_SESSIONS_FOR_SITE = 'query-web-sessions-for-site'
 
@@ -113,10 +114,13 @@ function SiteInfo({ site }: { site: string }) {
   return (
     <div
       style={{
+        display: 'flex',
+        justifyContent: 'space-between',
         padding: '8px 16px',
       }}
     >
       <SiteGist {...siteInfo} />
+      <Faq showIcon={true} text={'FAQ'} />
     </div>
   )
 }

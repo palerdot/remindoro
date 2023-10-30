@@ -30,7 +30,7 @@ export type WebSession = {
   focus_events: string
 }
 
-type FocusEvent = {
+export type FocusEvent = {
   type: 'FOCUS_IN' | 'FOCUS_OUT'
   timestamp: number
 }

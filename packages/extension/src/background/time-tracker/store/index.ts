@@ -101,9 +101,14 @@ export function isURLTracked({
   sites: Array<TrackedSite>
 }) {
   return some(sites, ({ site }: TrackedSite) => {
-    const { host } = new URL(url)
+    // url may or may not be a valid url
+    try {
+      const { host } = new URL(url)
 
-    return host.includes(site)
+      return host.includes(site)
+    } catch (_e) {
+      return false
+    }
   })
 }
 
