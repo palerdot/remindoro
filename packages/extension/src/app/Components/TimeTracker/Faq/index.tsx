@@ -34,9 +34,10 @@ function Faq({ showIcon, text }: Props) {
               '&:hover': {
                 opacity: 0.89,
               },
+              margin: 0,
             }}
           >
-            <Help />
+            <Help fontSize="small" />
           </IconButton>
         )}
         <Box
@@ -60,14 +61,26 @@ function Faq({ showIcon, text }: Props) {
         maxWidth={'md'}
         scroll={'paper'}
       >
-        <DialogTitle>{'Rich Text Editor'}</DialogTitle>
+        <DialogTitle>{'Browsing Time Tracker'}</DialogTitle>
         <DialogContent dividers={true}>
-          <DialogContentText>
-            <Stack direction={'column'} spacing={2}>
+          <DialogContentText component={'div'}>
+            <Stack direction={'column'} spacing={3}>
               {FAQS.map(({ question, answer }, index) => (
                 <Stack key={index} direction={'column'} spacing={1}>
-                  <div>{question}</div>
-                  <div>{answer}</div>
+                  <Box
+                    sx={{
+                      color: theme => theme.colors.highlight,
+                    }}
+                  >
+                    {question}
+                  </Box>
+                  <Box
+                    sx={{
+                      color: theme => theme.colors.textColor,
+                    }}
+                  >
+                    {answer}
+                  </Box>
                 </Stack>
               ))}
             </Stack>

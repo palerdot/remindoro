@@ -23,7 +23,7 @@ const Holder = styled.div`
   margin-bottom: 34px;
 
   & .section {
-    padding: 8px 16px;
+    padding: 16px;
   }
 
   & .subtitle {
@@ -76,14 +76,14 @@ function Activity({ site }: Props) {
       </div>
       <Stack
         direction={'column'}
-        spacing={1}
+        spacing={3}
         divider={
           <Divider
             orientation="horizontal"
             flexItem
             sx={{
-              background: theme => theme.colors.border,
-              color: theme => theme.colors.border,
+              background: theme => theme.colors.primary,
+              // color: theme => theme.colors.primary,
             }}
           />
         }

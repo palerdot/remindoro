@@ -62,6 +62,7 @@ function Email({ onSuccess, onError }: Props) {
       .then(res => {
         // decide if request is success
         if (res.ok) {
+          setEmail('')
           onSuccess(email)
           // do not proceed
           return
@@ -83,7 +84,7 @@ function Email({ onSuccess, onError }: Props) {
         // enable button
         setSaving(false)
       })
-  }, [email, setError, setSaving, onSuccess, onError])
+  }, [email, setEmail, setError, setSaving, onSuccess, onError])
 
   return (
     <Paper elevation={2}>
@@ -111,7 +112,7 @@ function Email({ onSuccess, onError }: Props) {
             error={error.length > 0}
             id="private-beta-email"
             label={error.length > 0 ? error : 'Your email address'}
-            defaultValue={email}
+            value={email}
             helperText={error.length > 0 ? error : 'e.g. hello@gmail.com'}
             onChange={e => {
               setEmail(e.target.value)
@@ -129,9 +130,7 @@ function Email({ onSuccess, onError }: Props) {
           </Button>
         </Stack>
         <div className="help-info">
-          {
-            'Features like detailed statistics, historical comparison and tracking more than one site is currently available for select people as private beta. Sign up if you are interested.'
-          }
+          {`Features like detailed statistics, historical comparison and tracking more than one site is currently available for select people as private beta. Sign up if you are interested. You can also reach out via 'arun@remindoro.app' if you have specific feature requests or want to get ahead of the private beta queue.`}
         </div>
       </Holder>
     </Paper>

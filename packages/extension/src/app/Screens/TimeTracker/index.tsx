@@ -19,6 +19,7 @@ import SiteGist from './SiteGist'
 import CardHolder from '@app/Components/CardHolder'
 import { Screens } from '@app/Util/Enums'
 import PrivateBetaEmail from '@app/Components/PrivateBeta/Email'
+import Faq from '@app/Components/TimeTracker/Faq'
 
 const Holder = styled.div`
   & .title-holder {
@@ -64,10 +65,19 @@ function TimeTracker() {
   return (
     <div>
       <Holder>
-        <div className="title-holder">
-          <PendingActionsIcon fontSize="medium" />
-          <div className="title">{'Browsing Time Tracker'}</div>
-          <div className="beta">{'BETA'}</div>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            padding: '8px 16px',
+          }}
+        >
+          <div className="title-holder">
+            <PendingActionsIcon fontSize="medium" />
+            <div className="title">{'Browsing Time Tracker'}</div>
+            <div className="beta">{'BETA'}</div>
+          </div>
+          <Faq showIcon={true} text={'FAQ'} />
         </div>
         <div className="content">
           {isEmpty(time_tracked_sites) ? (

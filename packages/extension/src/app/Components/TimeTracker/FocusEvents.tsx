@@ -10,17 +10,17 @@ type Props = {
 }
 
 const Holder = styled.div`
-  border: ${props => `thin solid ${props.theme.primaryDark}`};
-  background: ${props => props.theme.background};
+  border: ${props => `thin solid ${props.theme.border}`};
+  background: ${props => props.theme.border};
   color: ${props => props.theme.textColor};
 
   margin: 16px;
   padding: 8px;
-  font-size: 0.89rem;
+  font-size: 0.75rem;
 
   & .title {
     font-weight: 600;
-    margin: 8px auto;
+    margin-bottom: 4px;
   }
 
   & .label {
@@ -33,7 +33,7 @@ const Holder = styled.div`
   }
 
   & .time-info {
-    font-size: 0.75rem;
+    font-size: 0.64rem;
   }
 
   & .inline-holder > div {
