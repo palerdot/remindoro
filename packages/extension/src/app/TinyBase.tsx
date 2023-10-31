@@ -19,6 +19,8 @@ function TinyBase({ children }: Props) {
       .startAutoLoad()
       .then(() => {
         console.log('TinyBase: persistor autoloaded with store data')
+        // set store and proceed to app rendering
+        setStore(store)
       })
       .catch(e => {
         console.error('TinyBase: autoload error ', e)
@@ -40,9 +42,6 @@ function TinyBase({ children }: Props) {
         persistor.destroy()
       }
     })
-
-    // set store and proceed to app rendering
-    setStore(store)
   }, [setStore])
 
   if (!store) {

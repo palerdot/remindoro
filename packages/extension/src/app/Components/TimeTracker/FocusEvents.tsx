@@ -79,11 +79,11 @@ function Summary({
       <div className="label word-spacer">
         {current.type === 'FOCUS_IN'
           ? `Focussed in ${next ? 'for' : ''}`
-          : 'Focussed out for'}
+          : `Focussed out ${next ? 'for' : ''}`}
       </div>
       {next ? (
         <div className="word-spacer">
-          {formattedWebSessionDuration(next?.timestamp, current.timestamp)}
+          {formattedWebSessionDuration(current.timestamp, next?.timestamp)}
         </div>
       ) : (
         <div className="word-spacer">{'till end of session'}</div>

@@ -1,10 +1,6 @@
 import browser from 'webextension-polyfill'
-import { createStore } from 'tinybase'
-import {
-  createIndexedDbPersister,
-  IndexedDbPersister,
-} from 'tinybase/persisters/persister-indexed-db'
-import { isString, some, values, takeRight } from '@lodash'
+import { createStore, createCustomPersister, Store, Persister } from 'tinybase'
+import { isString, isEmpty, some, values, takeRight } from '@lodash'
 
 import {
   startActiveSession,
@@ -55,7 +51,8 @@ type StoreContent = [TablesData, ValuesData]
 
 export function getPersistedStore() {
   const store = createStore()
-  const persistor = createIndexedDbPersister(store, STORE_KEY)
+  // const persistor = createIndexedDbPersister(store, STORE_KEY)
+  const persistor = getExtensionPersistor(store, STORE_KEY)
 
   return { store, persistor }
 }
@@ -69,7 +66,7 @@ export async function getStore() {
 }
 
 // helper function to persist store data to storage(indexeddb) and free up the object
-export async function saveAndExit(persistor: IndexedDbPersister) {
+export async function saveAndExit(persistor: Persister) {
   await persistor.save()
   // destroy instance for garbage collection
   persistor.destroy()
@@ -186,8 +183,21 @@ export async function updateWebSession(tab_info: TabInfo) {
   const current_active_url = tab_info.url
   // get store data
   const { store, persistor } = await getStore()
-  // get active tab url from store
+  // get current active stuufs
   const previous_active_tab_url = store.getValue(ACTIVE_TAB_URL)
+  const previous_active_tab_id = store.getValue(ACTIVE_TAB_ID)
+  const previous_active_window_id = store.getValue(ACTIVE_WINDOW_ID)
+
+  // IMPORTANT: we are comparing existing active data with incoming tab data, and stop unnecessary updates
+  // onUpdated event streams info like title change. checking and preventing unnecessary updates
+  if (
+    current_active_url === previous_active_tab_id &&
+    tab_info.tabId === Number(previous_active_tab_id) &&
+    tab_info.windowId === previous_active_window_id
+  ) {
+    // abort
+    return
+  }
 
   // CASE 0: update active tab url, active tab id, active window id
   store.setValue(ACTIVE_TAB_URL, current_active_url)
@@ -244,3 +254,47 @@ export async function timeTrackerAlarmHandler() {
 
 // END: Alarm handler
 // ------------------------------------------------------------------------------
+
+// START: custom persister
+// ref: https://tinybase.org/api/persisters/functions/creation/createcustompersister/
+
+function getExtensionPersistor(store: Store, key: string) {
+  return createCustomPersister(
+    // store
+    store,
+    // getPersisted
+    async () => {
+      return browser.storage.local.get(key).then(data => {
+        // content if present will be [tables_obj, values_obj]
+        const content = data[key]
+
+        if (isEmpty(content)) {
+          return undefined
+        }
+
+        return content
+      })
+    },
+    // setPersisted
+    async getContent => {
+      const content = getContent()
+
+      return browser.storage.local.set({
+        [key]: content,
+      })
+    },
+    // add persister listener
+    _listener => undefined,
+    // del persister listener
+    _id => undefined,
+    // on ignored error
+    (error: any) => {
+      console.log(
+        'porumai ... tinybase custom extension persistor error ',
+        error
+      )
+    }
+  )
+}
+
+// END: custom persister

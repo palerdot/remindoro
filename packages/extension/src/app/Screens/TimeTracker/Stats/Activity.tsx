@@ -20,7 +20,7 @@ type Props = {
 }
 
 const Holder = styled.div`
-  margin-bottom: 34px;
+  padding-bottom: 34px;
 
   & .section {
     padding: 16px;
@@ -53,9 +53,10 @@ function Activity({ site }: Props) {
     // queryId
     QUERY_WEB_SESSIONS_FOR_SITE,
     // cell to sort
-    'ended_at',
+    // 'ended_at',
+    'started_at',
     // descending
-    true,
+    false,
     // offset
     0,
     // limit

@@ -58,7 +58,6 @@ const ActionBar = styled.div`
   justify-content: space-between;
   border-top: ${props => `thin solid ${props.theme.border}`};
 
-  margin-top: auto;
   padding: 16px 24px;
   padding-right: 20px;
 `
@@ -68,6 +67,7 @@ const HelpInfo = styled.div`
   font-style: italic;
 
   margin: 8px;
+  margin-top: auto;
   padding: 8px;
   border-radius: 5px;
 
