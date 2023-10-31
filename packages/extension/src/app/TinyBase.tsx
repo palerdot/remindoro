@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Provider } from 'tinybase/ui-react'
-import { createStore, Store } from 'tinybase'
-import { createIndexedDbPersister } from 'tinybase/persisters/persister-indexed-db'
+import { Store } from 'tinybase'
 import { Box, CircularProgress } from '@mui/material'
 
-import { STORE_KEY } from '@background/time-tracker/store'
+import { getPersistedStore } from '@background/time-tracker/store'
 
 type Props = {
   children: React.ReactElement
@@ -14,13 +13,12 @@ function TinyBase({ children }: Props) {
   const [store, setStore] = useState<Store>()
 
   useEffect(() => {
-    const store = createStore()
-    const persistor = createIndexedDbPersister(store, STORE_KEY)
+    const { store, persistor } = getPersistedStore()
 
     persistor
       .startAutoLoad()
       .then(() => {
-        console.log('TinyBase: persistor autoloaded with indexed db store')
+        console.log('TinyBase: persistor autoloaded with store data')
       })
       .catch(e => {
         console.error('TinyBase: autoload error ', e)
@@ -29,9 +27,7 @@ function TinyBase({ children }: Props) {
     persistor
       .startAutoSave()
       .then(() => {
-        console.log(
-          'TinyBase: persistor auto save started with indexed db store'
-        )
+        console.log('TinyBase: persistor auto save started with store')
       })
       .catch(e => {
         console.error('TinyBase: autosave error ', e)

@@ -1,11 +1,10 @@
 import browser from 'webextension-polyfill'
 import { createQueries, Store } from 'tinybase'
 import { v4 as uuid } from 'uuid'
-import { head, last, isEmpty, isNumber, isArray } from '@lodash'
+import { head, last, isNumber, isArray } from '@lodash'
 
 import {
   WEB_SESSIONS_TABLE,
-  CONNECTED_ACCOUNT_TABLE,
   ACTIVE_TAB_ID,
   ACTIVE_TAB_URL,
   ACTIVE_WINDOW_ID,
@@ -120,8 +119,7 @@ export function endActiveSession(store: Store, url: string) {
 export function prune_offline_web_sessions(store: Store) {
   // For offline web sessions: we are deleting web sessions that are older than 5 hours
   // extension events are considreed offline if there are no connected account
-  const connected_account = store.getTable(CONNECTED_ACCOUNT_TABLE)
-  const is_offline_account = isEmpty(connected_account)
+  const is_offline_account = true
 
   if (!is_offline_account) {
     // abort if an account is connected in the extension

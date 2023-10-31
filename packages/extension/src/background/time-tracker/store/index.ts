@@ -24,7 +24,6 @@ export const ACTIVE_WINDOW_ID = 'active_window_id'
 // TABLES
 export const TIME_TRACKED_SITES_TABLE = 'time_tracked_sites'
 export const WEB_SESSIONS_TABLE = 'web_sessions'
-export const CONNECTED_ACCOUNT_TABLE = 'connected_account'
 
 export type TabInfo = {
   tabId: number
@@ -54,10 +53,15 @@ type ValuesData = {
 
 type StoreContent = [TablesData, ValuesData]
 
-export async function getStore() {
+export function getPersistedStore() {
   const store = createStore()
   const persistor = createIndexedDbPersister(store, STORE_KEY)
 
+  return { store, persistor }
+}
+
+export async function getStore() {
+  const { store, persistor } = getPersistedStore()
   // loads data from indexeddb storate into store instance
   await persistor.load()
 
