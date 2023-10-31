@@ -27,8 +27,6 @@ const Holder = styled.div`
     flex-direction: row;
     align-items: center;
 
-    padding: 8px 16px;
-
     & .title {
       font-size: 1.25rem;
       font-weight: 500;

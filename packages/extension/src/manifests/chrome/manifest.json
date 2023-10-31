@@ -24,9 +24,12 @@
         "unlimitedStorage"
     ],
     "host_permissions": [
-        "http://*/*",
-        "https://*/*",
         "https://remindoro.app/*"
+    ],
+    "optional_permissions": ["tabs"],
+    "optional_host_permissions": [
+        "http://*/*",
+        "https://*/*"
     ],
     "action": {
         "default_icon": {

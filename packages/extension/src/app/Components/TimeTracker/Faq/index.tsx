@@ -116,6 +116,12 @@ const FAQS: Array<{
       'Tab focus events are best guess effort to show the timeline of tab/window focus state during your browsing session. It is updated atmost once per minute. Focussed out can mean different things like switching to a different applicaton, or viewing a browser developer tool window etc depending on your OS and browser environment.',
   },
   {
+    question:
+      'I have specific feature requests I would like to have like blocking web pages if exceeds configured time. Is it possible?',
+    answer:
+      'Yes. Please sign up for private beta to or email at arun@remindoro.app with your requirements. All the private beta feedback is currently being incorporated.',
+  },
+  {
     question: 'How can I sign up for private beta features?',
     answer:
       'Please use the form in the time tracker screen and sign up with your email to show you interest. I will follow up with you and possibly add you as part of private beta cohort.',
@@ -135,7 +141,7 @@ const FAQS: Array<{
     question:
       'Why the private beta features are part of paid plan and not free?',
     answer:
-      'Features are part of a paid plan to cover the server costs and development time. Also, it helps me to have a viable business model which in turn helps to add features users want to have healthy digital habits.',
+      'Features are not free and part of a paid plan to cover the server costs and development time.',
   },
   {
     question:
