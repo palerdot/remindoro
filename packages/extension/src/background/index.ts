@@ -56,7 +56,7 @@ function initialize_install_events(
   const welcome_message = {
     id: 'welcome-message',
     title: `Hello from Remindoro - ${version} !`,
-    note: `What's New: ${WHATS_NEW[0]}. Welcome to new refreshed Remindoro! You can now set one-time/repeatable reminders (with markdown support) for stuffs that matter to you ...`,
+    note: `What's New: ${WHATS_NEW[0]}. Remindoro helps you to track browsing time and set reminders.`,
   }
 
   notify(welcome_message)
