@@ -2,13 +2,15 @@
     <img src="./src/app/../img/remindoro-icon.png" alt="Remindoro" width="64" height="64" />
 </p>
 
-<p align="center">Better reminders for notes.</p>
+<p align="center">Browsing Time Tracker and better reminders for your browser.</p>
 
 <br/>
 
 # Remindoro
 
-Browser Extension (Chrome/Firefox) to set one-time/repeatable reminders in your favorite browser.
+Remindoro is a browser extension (Chrome/Firefox) that helps you do the following
+- Track time spent on browsing websites (e.g. social media sites)
+- set one-time/repeat reminders in your browser.
 
 [![Build Status](https://travis-ci.org/palerdot/remindoro.svg?branch=master)](https://travis-ci.org/palerdot/remindoro)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
@@ -17,6 +19,7 @@ This extension is build with
 
 - [React](https://facebook.github.io/react/)
 - [Typescript](https://www.typescriptlang.org/)
+= [TinyBase](https://tinybase.org/)
 - [Redux Toolkit](https://redux-toolkit.js.org/)
 - [Material UI](https://mui.com/)
 
@@ -31,9 +34,8 @@ More information about the extension can be found at the [Remindoro website](htt
 
 ### License
 
-[AGPL](./LICENSE)
+[Business Source License](./LICENSE)
 
-Please note, the source code is open source mainly for security audit purposes and security fixes. Any PR that is not related to security fix will not be accepted.
-
+Please note, the source code is **source available** and **not open source**. It is source available mainly for security audit purposes and security fixes. Copying the source code for commercial/non-commercial purposes is prohibited as per the license.
 
 [Changelog](./CHANGELOG.md)
