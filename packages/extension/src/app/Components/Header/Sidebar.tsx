@@ -19,13 +19,11 @@ import {
   Help as HelpIcon,
   Star as StarIcon,
   Comment as MessageIcon,
+  ManageAccounts as AccountIcon,
 } from '@mui/icons-material/'
 import { useTodoCount } from '@app/Store/Slices/Remindoros'
 
-import packageInfo from '@package-info'
 import { Screens } from '@app/Routes/'
-
-const { version } = packageInfo
 
 const rateUrl =
   process.env.REACT_APP_RATE_URL || 'https://palerdot.in/remindoro'
@@ -61,16 +59,12 @@ const Link = styled(NavLink)`
   }
 `
 
-const VersionInfo = styled.div`
+const BottomMenu = styled.div`
   position: absolute;
-  bottom: 1px;
-  left: 1px;
-  padding: 4px;
-
-  font-style: italic;
-  font-size: 0.75rem;
-
-  color: ${props => props.theme.highlight};
+  bottom: 0px;
+  width: 100%;
+  /* left: 1px;
+  padding: 4px; */
 `
 
 const RateLink = styled.a`
@@ -215,7 +209,28 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
             </ListItemButton>
           </RateLink>
         </List>
-        <VersionInfo>{`v${version} (beta)`}</VersionInfo>
+        <Divider
+          sx={{
+            background: theme => theme.colors.primaryDark,
+          }}
+        />
+        <BottomMenu>
+          {/* Account Menu */}
+          <List>
+            <Link
+              to={Screens.Account}
+              exact
+              activeClassName={'selected-screen'}
+            >
+              <ListItemButton>
+                <ListItemIcon className={'listIcon'}>
+                  {<AccountIcon />}
+                </ListItemIcon>
+                <ListItemText primary={'Account'} />
+              </ListItemButton>
+            </Link>
+          </List>
+        </BottomMenu>
       </DrawerHolder>
     </Drawer>
   )

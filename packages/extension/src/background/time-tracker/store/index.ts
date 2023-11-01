@@ -127,6 +127,12 @@ export async function handleActivatedTab({
 }) {
   try {
     const tab_data = await browser.tabs.get(tabId)
+
+    // consider tab activation only if tab is completed
+    if (tab_data.status !== 'complete') {
+      return
+    }
+
     // updateWebSession gets a new handle for store and cleans up after updating web session
     if (tab_data) {
       const tab_info: TabInfo = {
@@ -154,21 +160,20 @@ export async function handleClosedTab({
   windowId?: number
 }) {
   try {
-    // get a handle for store
-    const { store, persistor } = await getStore()
-    const storeContent = store.getContent()
     const tab_info = await browser.tabs.get(tabId)
 
     if (tab_info && tab_info.url) {
+      // get a handle for store
+      const { store, persistor } = await getStore()
+      const storeContent = store.getContent()
       const sites = trackedSitesFromStoreContent(storeContent)
 
       if (isURLTracked({ sites, url: tab_info.url })) {
         endActiveSession(store, tab_info.url)
       }
+      // clean up the exit
+      await saveAndExit(persistor)
     }
-
-    // clean up the exit
-    await saveAndExit(persistor)
   } catch (e) {
     console.error(e)
   }

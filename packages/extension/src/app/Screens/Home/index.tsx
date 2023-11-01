@@ -5,23 +5,28 @@ import TimeTrackerGist from '@app/Screens/TimeTracker/DashboardGist'
 import { DashboardGist as RemindorosGist } from '@app/Screens/Remindoros'
 
 const Holder = styled.div`
-  padding: 16px;
-  margin-bottom: 8px;
+  padding-bottom: 34px;
 
-  & .title {
-    font-size: 1.25rem;
+  & .title-holder {
+    padding: 16px;
+    margin-bottom: 8px;
+
+    & .title {
+      font-size: 1.25rem;
+    }
   }
 `
 
 function Home() {
   return (
-    <div>
-      <Holder>
+    <Holder>
+      <div className="title-holder">
         <div className="title">{'Dashboard'}</div>
-      </Holder>
+      </div>
+
       <TimeTrackerGist />
       <RemindorosGist />
-    </div>
+    </Holder>
   )
 }
 

@@ -1,5 +1,6 @@
 export enum Screens {
   Home = '/',
+  Account = '/account',
 
   // remindoros
   Remindoros = '/remindoros',

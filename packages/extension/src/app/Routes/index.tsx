@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import styled from '@emotion/styled'
 
 import Home from '@app/Screens/Home/'
+import Account from '@app/Screens/Account'
 // remindoros
 import Remindoros from '@app/Screens/Remindoros/'
 import Todo from '@app/Screens/Todo/'
@@ -23,6 +24,10 @@ const PATHS = [
   {
     path: Screens.Home,
     Screen: Home,
+  },
+  {
+    path: Screens.Account,
+    Screen: Account,
   },
   // remindoros
   {
