@@ -130,7 +130,7 @@ function Email({ onSuccess, onError }: Props) {
           </Button>
         </Stack>
         <div className="help-info">
-          {`Features like detailed statistics, historical comparison and tracking more than one site is currently available for select people as private beta. Sign up if you are interested. You can also reach out via 'arun@remindoro.app' if you have specific feature requests or want to get ahead of the private beta queue.`}
+          {`Features like detailed statistics, historical comparison, family controls on multiple extensions and tracking more than one site is currently available for select people as private beta. Sign up if you are interested. You can also reach out via 'arun@remindoro.app' if you have specific feature requests or want to get ahead of the private beta queue.`}
         </div>
       </Holder>
     </Paper>
