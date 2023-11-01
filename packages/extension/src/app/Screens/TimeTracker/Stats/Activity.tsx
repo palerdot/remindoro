@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { Stack, Divider } from '@mui/material'
 import { createQueries, Store } from 'tinybase'
-import { useStore, useRow, useResultSortedRowIds } from 'tinybase/ui-react'
+import { useStore, useRow } from 'tinybase/ui-react'
 import styled from '@emotion/styled'
 
 import {
@@ -12,6 +12,7 @@ import {
 import SiteGist from '@app/Screens/TimeTracker/SiteGist'
 import WebSessionStat from './WebSession'
 import Faq from '@app/Components/TimeTracker/Faq'
+import { WebSession as WebSessionType } from '@background/time-tracker/web-session'
 
 const QUERY_WEB_SESSIONS_FOR_SITE = 'query-web-sessions-for-site'
 
@@ -35,8 +36,9 @@ const Holder = styled.div`
 // IMPORTANT: We are extracting tinybase store hooks related logic into a separate component to prevent rerender issues
 function Activity({ site }: Props) {
   const store: Store = useStore() as Store
-  const queries = useMemo(() => {
-    return createQueries(store).setQueryDefinition(
+  // directly get web session stats
+  const stats = useMemo(() => {
+    const queries = createQueries(store).setQueryDefinition(
       QUERY_WEB_SESSIONS_FOR_SITE,
       WEB_SESSIONS_TABLE,
       ({ select, where }) => {
@@ -48,22 +50,31 @@ function Activity({ site }: Props) {
         })
       }
     )
+
+    const rowIds = queries.getResultSortedRowIds(
+      // queryId
+      QUERY_WEB_SESSIONS_FOR_SITE,
+      // cell to sort
+      // 'ended_at',
+      'started_at',
+      // descending
+      false,
+      // offset
+      0,
+      // limit
+      undefined
+    )
+
+    const rows = rowIds.map(rowId => {
+      return store.getRow(WEB_SESSIONS_TABLE, rowId)
+    }) as Array<WebSessionType>
+
+    // sort the row with ended at descending order
+    return rows.sort((a: WebSessionType, b: WebSessionType) => {
+      return (b.ended_at || 0) - (a.ended_at || 0)
+    })
   }, [store, site])
-  const sortedRowIds = useResultSortedRowIds(
-    // queryId
-    QUERY_WEB_SESSIONS_FOR_SITE,
-    // cell to sort
-    // 'ended_at',
-    'started_at',
-    // descending
-    false,
-    // offset
-    0,
-    // limit
-    undefined,
-    // queries reference
-    queries
-  )
+
   return (
     <Holder>
       <SiteInfo site={site} />
@@ -89,14 +100,14 @@ function Activity({ site }: Props) {
           />
         }
       >
-        {sortedRowIds.map(rowId => (
+        {stats.map(stat => (
           <div
-            key={rowId}
+            key={stat.session_id}
             style={{
               padding: 'auto 16px',
             }}
           >
-            <WebSessionStat rowId={rowId} />
+            <WebSessionStat {...stat} />
           </div>
         ))}
       </Stack>

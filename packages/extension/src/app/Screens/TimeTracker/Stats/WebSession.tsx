@@ -1,17 +1,13 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { useRow } from 'tinybase/ui-react'
 import { Box, Stack } from '@mui/material'
 import { HourglassTop } from '@mui/icons-material'
 
-import { WEB_SESSIONS_TABLE } from '@background/time-tracker/store'
 import { WebSession } from '@background/time-tracker/web-session'
 import { formattedWebSessionDuration } from '@app/Util/'
 import FocusEvents from '@app/Components/TimeTracker/FocusEvents'
 
-type Props = {
-  rowId: string
-}
+interface Props extends WebSession {}
 
 const Ahref = styled.a`
   color: ${props => props.theme.highlight};
@@ -27,9 +23,7 @@ const Label = styled.div`
   font-style: italic;
 `
 
-function WebSessionStat({ rowId }: Props) {
-  const stat = useRow(WEB_SESSIONS_TABLE, rowId) as WebSession
-
+function WebSessionStat(stat: Props) {
   return (
     <Box
       sx={{
