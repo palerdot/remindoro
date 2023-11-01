@@ -12,6 +12,8 @@ import {
 } from '@mui/material'
 import { Help } from '@mui/icons-material'
 
+import { isChrome, isFirefox } from '@background/utils'
+
 type Props = {
   showIcon: boolean
   text: string
@@ -109,6 +111,18 @@ const FAQS: Array<{
     question: 'What can I currently do with Time Tracker feature?',
     answer:
       'You can track browsing time for one website and see the activity for last 5 hours (or less depening on the browser). Please note that this feature is currently in beta, and more features like tracking more than one site and detailed statistics are currently in private beta.',
+  },
+  {
+    question: 'Will I be asked permissions before tracking my browsing time?',
+    answer: `Yes. You will be explicitly asked for permissions to track your tab details for the site. ${
+      isChrome
+        ? 'In chrome, if you see the popup window closing after you grant permission, please try again. Please note, chrome browser automatically closes extension popup window when lost focus which is a bug. For more details on this issue/bug visit https://bugs.chromium.org/p/chromium/issues/detail?id=952645, https://bugs.chromium.org/p/chromium/issues/detail?id=1131592#c4'
+        : ''
+    }${
+      isFirefox
+        ? 'In firefox, the permission popup is shown in the top left corner, which might be sometimes hidden below the extensions popup window. When you close the popup, you might see the permission popup and clicking on it will grant you permission for tracking site activity.'
+        : ''
+    }`,
   },
   {
     question: 'What are tab focus events shown in the summary page?',

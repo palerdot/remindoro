@@ -11,6 +11,7 @@ import {
 import { AddSiteButton } from '@app/Components/TimeTracker/AddSite/AddSiteFab'
 import { requestPermissions } from '@app/Components/TimeTracker/host-permissions'
 import HostPermissionStatus from '@app/Components/TimeTracker/HostPermissionStatus'
+import { isChrome, isFirefox } from '@background/utils'
 
 type Props = {
   onSuccess: (host: string) => void
@@ -132,9 +133,15 @@ function AddSite({ onSuccess }: Props) {
           disabled={saving}
         />
         <HelpInfo>
-          {
-            'You will be asked to grant permissions for the site (if not already granted). Any open tabs prior to granting permission will not be time tracked.'
-          }
+          {`You will be asked to grant permissions for the site (if not already granted). Any open tabs prior to granting permission will not be time tracked. ${
+            isChrome
+              ? 'In chrome, if you see the popup window closing after you grant permission, please try again. Please note this is currently a bug in chrome as it automatically closes extension popup window when lost focus.'
+              : ''
+          }${
+            isFirefox
+              ? 'In firefox, the permission popup is shown in the top left corner, which might be sometimes hidden below the extensions popup window. When you close the popup, you might see the permission popup and clicking on it will grant you permission for tracking site activity.'
+              : ''
+          }`}
         </HelpInfo>
       </Stack>
     </div>
