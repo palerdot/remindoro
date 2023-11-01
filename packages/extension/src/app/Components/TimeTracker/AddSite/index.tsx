@@ -132,15 +132,16 @@ function AddSite({ onSuccess }: Props) {
           }}
           disabled={saving}
         />
+        {isChrome && (
+          <HelpInfo>
+            {`A chrome bug closes the extension popup window when you click on the permission popup dialog. Please enter the site again for time tracking to get around this chrome bug.`}
+          </HelpInfo>
+        )}
         <HelpInfo>
           {`You will be asked to grant permissions for the site (if not already granted). Any open tabs prior to granting permission will not be time tracked. ${
-            isChrome
-              ? 'In chrome, if you see the popup window closing after you grant permission, please try again. Please note this is currently a bug in chrome as it automatically closes extension popup window when lost focus.'
-              : ''
-          }${
             isFirefox
               ? 'In firefox, the permission popup is shown in the top left corner, which might be sometimes hidden below the extensions popup window. When you close the popup, you might see the permission popup and clicking on it will grant you permission for tracking site activity.'
-              : ''
+              : 'Please enter the site again for second time if window closes first time in chrome.'
           }`}
         </HelpInfo>
       </Stack>
