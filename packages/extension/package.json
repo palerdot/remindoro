@@ -1,6 +1,6 @@
 {
   "name": "remindoro",
-  "version": "1.2.3",
+  "version": "1.5.0",
   "description": "Better Reminders in browser",
   "scripts": {
     "test": "vitest",
@@ -24,6 +24,9 @@
     "show:linked": "ls -l node_modules | grep ^l"
   },
   "keywords": [
+    "time tracker",
+    "screen time tracker",
+    "social media time tracker",
     "chrome",
     "extension",
     "react",
@@ -46,7 +49,7 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
     "@types/react-router-dom": "^5.1.8",
-    "@types/uuid": "^8.3.1",
+    "@types/uuid": "^9.0.6",
     "@types/webextension-polyfill": "^0.8.1",
     "@typescript-eslint/parser": "^5.59.2",
     "@webcomponents/webcomponentsjs": "^2.2.6",
@@ -126,7 +129,8 @@
     "react-router-dom": "^5.2.0",
     "react-slite": "^0.2.5",
     "redux": "^4.1.0",
-    "uuid": "^8.3.2",
+    "tinybase": "^4.3.18",
+    "uuid": "^9.0.1",
     "webextension-polyfill": "^0.10.0"
   },
   "browserslist": [

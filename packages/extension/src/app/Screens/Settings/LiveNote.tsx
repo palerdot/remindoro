@@ -36,7 +36,7 @@ function Notifications() {
       </div>
       <div className={'subtitle'}>
         {
-          'Enable/Disable experimental Rich Text Editor. This is currently in Beta. Rich Text Editor allows to edit the note using rich text semantics like bold, italic, ordered/unordered list, checklist items etc.If you face any problems using this feature, please let me know by my email - palerdot@gmail.com'
+          'Enable/Disable experimental Rich Text Editor. This is currently in Beta. Rich Text Editor allows to edit the note using rich text semantics like bold, italic, ordered/unordered list, checklist items etc.If you face any problems using this feature, please let me know by my email - arun@remindoro.app'
         }
       </div>
     </Holder>

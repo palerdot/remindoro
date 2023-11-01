@@ -6,6 +6,7 @@ import type { RootState } from '@app/Store/'
 
 import { getTodoCount, setBadgeText } from 'background/utils/'
 import ErrorBoundary from '@app/Components/ErrorBoundary'
+import TinyBase from './TinyBase'
 import App from './App'
 import { getStore } from '@app/Store/'
 import { syncToStorage } from '@app/Util/BrowserStorage/'
@@ -100,14 +101,23 @@ const AppStore = ({ initialState }: Props) => {
   }, [store, unsubscribeStore])
 
   useEffect(() => {
-    window.addEventListener('unload', onAppClose)
+    document.addEventListener('visibilitychange', () => {
+      // clean up when the extension unloads/closes
+      // ref: https://developer.chrome.com/blog/deprecating-unload/
+      if (document.visibilityState === 'hidden') {
+        onAppClose()
+      }
+    })
+    // cleanup function does not work at all !!!
     return onAppClose
   }, [onAppClose])
 
   return (
     <ErrorBoundary>
       <Provider store={store}>
-        <App />
+        <TinyBase>
+          <App />
+        </TinyBase>
       </Provider>
     </ErrorBoundary>
   )

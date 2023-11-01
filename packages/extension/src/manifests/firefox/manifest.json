@@ -41,6 +41,9 @@
       // ref: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/permissions
       "https://remindoro.app/*"
     ],
+    "optional_permissions": ["https://*/*", "http://*/*"],
+    // This is for chrome only
+    // "optional_host_permissions": ["https://*/*", "http://*/*"],
     "icons": {
       "128": "img/remindoro-icon.png"
     },

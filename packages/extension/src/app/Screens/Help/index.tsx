@@ -58,7 +58,7 @@ const FAQS = [
   {
     question: 'What is Rich Text Editor?',
     answer:
-      'Rich Text editor allows you to edit your note content with rich text semantics like checklist items, bold, italic etc. Please refer to next section for more details. Please note this feature is currently experimental/beta. If you face any problems, please give feedback via - palerdot@gmail.com.',
+      'Rich Text editor allows you to edit your note content with rich text semantics like checklist items, bold, italic etc. Please refer to next section for more details. Please note this feature is currently experimental/beta. If you face any problems, please give feedback via - arun@remindoro.app.',
   },
   {
     question: 'What is the count/badge shown on top of extension icon?',
@@ -77,7 +77,7 @@ function Help() {
       <Disclaimer>
         {'If you face any problems using new updated Remindoro'}
         {', please let me know via '}
-        <strong className={'highlight'}>{'palerdot@gmail.com'}</strong>
+        <strong className={'highlight'}>{'arun@remindoro.app'}</strong>
       </Disclaimer>
       <h2>FAQ</h2>
       <Subtitle>{'This section covers some FAQs.'}</Subtitle>

@@ -7,11 +7,20 @@ import { ALARM_KEY, STORAGE_KEY, ContextMenuKeys } from '@app/Constants'
 import { migrate_v0_data_to_v1, getTodoCount, setBadgeText } from './utils/'
 import { notify, Notification } from './utils/notification'
 import { handle_context_menu } from './utils/context-menu'
+import {
+  init_time_tracking,
+  timeTrackerAlarmHandler,
+  timeTrackerSyncHandler,
+  TIME_TRACKER_SYNC_ALARM,
+} from '@background/time-tracker/'
 
 const { version } = packageInfo
 
-export const WHATS_NEW = ['Todo Notes ✅', 'Rich Text Editor Improvements']
-export const WHATS_UP = ['Folder Support', 'Sync Support']
+export const WHATS_NEW = ['Browsing Time Tracker ⏲️', 'Todo Notes ✅']
+export const WHATS_UP = [
+  'Time Tracker enhancements',
+  'Private Beta with sync support',
+]
 
 /*
  * ref: https://github.com/mozilla/webextension-polyfill
@@ -47,7 +56,7 @@ function initialize_install_events(
   const welcome_message = {
     id: 'welcome-message',
     title: `Hello from Remindoro - ${version} !`,
-    note: `What's New: ${WHATS_NEW[0]}. Welcome to new refreshed Remindoro! You can now set one-time/repeatable reminders (with markdown support) for stuffs that matter to you ...`,
+    note: `What's New: ${WHATS_NEW[0]}. Remindoro helps you to track browsing time and set reminders.`,
   }
 
   notify(welcome_message)
@@ -69,6 +78,7 @@ function initialize_install_events(
 
 init_extension_events()
 init_context_menus()
+init_time_tracking()
 
 async function getLocalStorageData() {
   const data = await browser.storage.local.get(STORAGE_KEY)
@@ -77,7 +87,7 @@ async function getLocalStorageData() {
 }
 
 function init_extension_events() {
-  show_alarms()
+  init_alarms()
   show_todo_badge()
 }
 
@@ -101,54 +111,79 @@ async function show_todo_badge() {
  * Show alarms
  */
 
-function show_alarms() {
-  // CREATE an alarm
+function init_alarms() {
+  // OFFLINE NOTES/Time tracker offline handler ALARM
   browser.alarms.create(ALARM_KEY, {
     delayInMinutes: 0.1,
     periodInMinutes: 1,
   })
 
-  // listen for the alarm
-  // and dig the remindoros from local chrome extension storage and check if we need to show any notifications
-  // IMPORTANT: fetch data FRESH from the local storage on alarm callback
-  // passing data as argument will result in stale closure and will reset the data to initial data
-  // when the browser was opened!!!
+  // Timer tracker sync handler alarm
+  browser.alarms.create(TIME_TRACKER_SYNC_ALARM, {
+    delayInMinutes: 0.5,
+    periodInMinutes: 1,
+  })
+
   browser.alarms.onAlarm.addListener(async alarmInfo => {
-    // let us make sure we are listening for right alarm
-    if (alarmInfo.name !== ALARM_KEY) {
-      // do not proceed
-      return
-    }
+    // For now, we are using the same 1 minute alarm for all background related tasks
+    switch (alarmInfo.name) {
+      case ALARM_KEY: {
+        offlineNotesAlarmHandler()
+        await timeTrackerAlarmHandler()
 
-    // here we can handle alarm
-    try {
-      const remindoroData = await getLocalStorageData()
-
-      let showNotification: boolean | undefined =
-        remindoroData.settings.notificationsEnabled
-
-      // edge case: if we don't have the config defined by default we will show notification
-      if (showNotification === undefined) {
-        showNotification = true
+        return
       }
 
-      // handle notifications
-      const notification = new Notification(
-        remindoroData.remindoros,
-        showNotification
-      )
-      const updatedRemindoros = notification.scan()
-      // let us notify
-      notification.notify()
-      // and update stuffs to store
-      // IMPORTANT: we are not emitting event to the open popup
-      // to indicate that remindoro time are updated in background
-      // for now, we are allowing people to focus in the open popup
-      notification.updateStore(updatedRemindoros)
-    } catch (e) {
-      // some error fetching remindoro data
+      case TIME_TRACKER_SYNC_ALARM: {
+        await timeTrackerSyncHandler()
+
+        return
+      }
+
+      default:
+        return
     }
   })
+}
+
+/*
+ * Alarm handler for remindoros
+ */
+
+// listen for the alarm
+// and dig the remindoros from local chrome extension storage and check if we need to show any notifications
+// IMPORTANT: fetch data FRESH from the local storage on alarm callback
+// passing data as argument will result in stale closure and will reset the data to initial data
+// when the browser was opened!!!
+async function offlineNotesAlarmHandler() {
+  // here we can handle alarm
+  try {
+    const remindoroData = await getLocalStorageData()
+
+    let showNotification: boolean | undefined =
+      remindoroData.settings.notificationsEnabled
+
+    // edge case: if we don't have the config defined by default we will show notification
+    if (showNotification === undefined) {
+      showNotification = true
+    }
+
+    // handle notifications
+    const notification = new Notification(
+      remindoroData.remindoros,
+      showNotification
+    )
+    const updatedRemindoros = notification.scan()
+    // let us notify
+    notification.notify()
+    // and update stuffs to store
+    // IMPORTANT: we are not emitting event to the open popup
+    // to indicate that remindoro time are updated in background
+    // for now, we are allowing people to focus in the open popup
+    notification.updateStore(updatedRemindoros)
+  } catch (e) {
+    // some error fetching remindoro data
+  }
 }
 
 /*
