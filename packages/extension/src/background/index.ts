@@ -16,8 +16,11 @@ import {
 
 const { version } = packageInfo
 
-export const WHATS_NEW = ['Todo Notes ✅', 'Rich Text Editor Improvements']
-export const WHATS_UP = ['Folder Support', 'Sync Support']
+export const WHATS_NEW = ['Browsing Time Tracker ⏲️', 'Todo Notes ✅']
+export const WHATS_UP = [
+  'Time Tracker enhancements',
+  'Private Beta with sync support',
+]
 
 /*
  * ref: https://github.com/mozilla/webextension-polyfill
