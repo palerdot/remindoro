@@ -19,7 +19,7 @@ This extension is build with
 
 - [React](https://facebook.github.io/react/)
 - [Typescript](https://www.typescriptlang.org/)
-= [TinyBase](https://tinybase.org/)
+- [TinyBase](https://tinybase.org/)
 - [Redux Toolkit](https://redux-toolkit.js.org/)
 - [Material UI](https://mui.com/)
 
