@@ -1,13 +1,16 @@
 import browser from 'webextension-polyfill'
 import { createStore, createCustomPersister, Store, Persister } from 'tinybase'
-import { isString, isEmpty, some, values, takeRight } from '@lodash'
+import { isString, isEmpty, values, takeRight } from '@lodash'
 
 import {
   startActiveSession,
   endActiveSession,
+  endActiveSessionsForTab,
+  isActiveBackgroundTab,
   prune_offline_web_sessions,
   clean_stale_active_sessions,
   update_heart_beat_for_active_session,
+  clean_background_sessions,
   WebSession,
 } from '@background/time-tracker/web-session'
 
@@ -17,6 +20,7 @@ export const STORE_KEY = 'time_tracker_store'
 export const ACTIVE_TAB_URL = 'active_tab_url'
 export const ACTIVE_TAB_ID = 'active_tab_id'
 export const ACTIVE_WINDOW_ID = 'active_window_id'
+export const BROWSER_BOOT_TIMESTAMP = 'browser_boot_timestamp'
 // TABLES
 export const TIME_TRACKED_SITES_TABLE = 'time_tracked_sites'
 export const WEB_SESSIONS_TABLE = 'web_sessions'
@@ -33,6 +37,7 @@ export type TrackedSite = {
   site: string
   initiator: 'EXTENSION' | 'WEBAPP'
   initiated_time?: number
+  has_background_activity?: boolean
 }
 
 export type TableData<T> = {
@@ -86,6 +91,24 @@ function trackedSitesFromStoreContent(
   return values(trackedSitesData)
 }
 
+// helper function to decide if url belongs to site
+export function isURLbelongsToSite({
+  url,
+  site,
+}: {
+  url: string
+  site: string
+}): boolean {
+  try {
+    const { host } = new URL(url)
+    const siteId = siteIdFromHost(host)
+
+    return siteId === site
+  } catch (e) {
+    return false
+  }
+}
+
 // pulls site id from host name
 // www.youtube.com => youtube.com
 // youtube.com => youtube.com
@@ -93,24 +116,51 @@ export function siteIdFromHost(host: string): string {
   return takeRight(host.split('.'), 2).join('.')
 }
 
-// checks if the url is part of tracked sites
-export function isURLTracked({
+function siteFromURL(url: string): string {
+  try {
+    const { host } = new URL(url)
+    return siteIdFromHost(host)
+  } catch (e) {
+    return ''
+  }
+}
+
+export function urlTrackingStatus({
   url,
   sites,
 }: {
   url: string
   sites: Array<TrackedSite>
-}) {
-  return some(sites, ({ site }: TrackedSite) => {
-    // url may or may not be a valid url
-    try {
-      const { host } = new URL(url)
+}): {
+  isURLTracked: boolean
+  has_background_activity?: boolean
+} {
+  // we should have a valid url
+  try {
+    // extract host from the url
+    const { host } = new URL(url)
 
-      return host.includes(site)
-    } catch (_e) {
-      return false
+    // from sites, extract site where host matches our site id
+    const siteInfo = sites.find(({ site }) => host.includes(site))
+
+    if (siteInfo) {
+      return {
+        isURLTracked: true,
+        // manually return true for youtue
+        has_background_activity: siteInfo.has_background_activity,
+      }
+    } else {
+      return {
+        isURLTracked: false,
+        has_background_activity: false,
+      }
     }
-  })
+  } catch (e) {
+    return {
+      isURLTracked: false,
+      has_background_activity: false,
+    }
+  }
 }
 
 // -------------------------------------------------------------------
@@ -121,9 +171,11 @@ export function isURLTracked({
 // check registry for the tab id and grab the tab info and 'updateWebSession' with the activated tab info
 export async function handleActivatedTab({
   tabId,
+  previousTabId,
 }: {
   tabId: number
   windowId?: number
+  previousTabId?: number
 }) {
   try {
     const tab_data = await browser.tabs.get(tabId)
@@ -133,7 +185,6 @@ export async function handleActivatedTab({
       return
     }
 
-    // updateWebSession gets a new handle for store and cleans up after updating web session
     if (tab_data) {
       const tab_info: TabInfo = {
         tabId,
@@ -143,40 +194,25 @@ export async function handleActivatedTab({
       }
       // NOTE: we may not have an url if the switched tab is not tracked; this is ok
       // we will just update active tab url to empty and just end the session for previous tracked url (if applicable)
-      await updateWebSession(tab_info)
+      // we are passing previous tab id to see if it has background activity
+      await updateWebSession(tab_info, previousTabId)
     }
   } catch (e) {
     console.error(e)
   }
 }
 
-// handle closed tab
-// when a tab is closed, we get only the tab id
-// check registry for the tab id and grab the tab info and 'endWebSession' with the removed tab info
+// when a tab is closed, we get only the tab id and we cannot query for tab info; just end all sessions for tab id
 export async function handleClosedTab({
   tabId,
 }: {
   tabId: number
   windowId?: number
 }) {
-  try {
-    const tab_info = await browser.tabs.get(tabId)
-
-    if (tab_info && tab_info.url) {
-      // get a handle for store
-      const { store, persistor } = await getStore()
-      const storeContent = store.getContent()
-      const sites = trackedSitesFromStoreContent(storeContent)
-
-      if (isURLTracked({ sites, url: tab_info.url })) {
-        endActiveSession(store, tab_info.url)
-      }
-      // clean up the exit
-      await saveAndExit(persistor)
-    }
-  } catch (e) {
-    console.error(e)
-  }
+  const { store, persistor } = await getStore()
+  endActiveSessionsForTab(store, tabId)
+  // clean up the exit
+  await saveAndExit(persistor)
 }
 
 // END: Tab events
@@ -184,7 +220,10 @@ export async function handleClosedTab({
 
 // START: WEB SESSION
 // Main function that tracks web session - start session/end session
-export async function updateWebSession(tab_info: TabInfo) {
+export async function updateWebSession(
+  tab_info: TabInfo,
+  previousTabId?: number
+) {
   const current_active_url = tab_info.url
   // get store data
   const { store, persistor } = await getStore()
@@ -215,22 +254,65 @@ export async function updateWebSession(tab_info: TabInfo) {
   const sites = trackedSitesFromStoreContent(storeContent)
 
   // CASE 1 - If previous active url has to be tracked, we have to end the session
-  if (
-    isString(previous_active_tab_url) &&
-    isURLTracked({ sites, url: previous_active_tab_url })
-  ) {
-    endActiveSession(store, previous_active_tab_url)
+  if (isString(previous_active_tab_url)) {
+    const { isURLTracked, has_background_activity } = urlTrackingStatus({
+      sites,
+      url: previous_active_tab_url,
+    })
+
+    if (isURLTracked) {
+      // CASE 1A - if previous tab id present, check if it has background activity. This case is coming from tab activated which passes previous tab
+      const backgroundTabId = previousTabId
+      const isBackgroundSession =
+        has_background_activity &&
+        backgroundTabId &&
+        isActiveBackgroundTab(store, backgroundTabId)
+
+      // CASE 1B: changeInfo.url event will not have previous tab id, but it might come from same site with background tracking
+      // youtube.com => youtube.com/watch. Check if previous and current url belongs to same site and don't end active session if that is the case
+      const previous_tab_site = siteFromURL(previous_active_tab_url)
+      const current_tab_site = siteFromURL(current_active_url)
+      const isSameBackgroundSiteTab =
+        !previousTabId &&
+        previous_tab_site !== '' &&
+        current_tab_site != '' &&
+        previous_tab_site === current_tab_site
+
+      // end the session only if it not a background session or if the url change is not from same background site
+      if (!isBackgroundSession && !isSameBackgroundSiteTab) {
+        endActiveSession(store, previous_active_tab_url)
+      }
+    }
   }
 
   // CASE 2: If current active url has to be tracked, create a new web session entry with last_heartbeat_check set to now
-  if (isURLTracked({ sites, url: current_active_url })) {
-    startActiveSession(store, {
+  {
+    const { isURLTracked, has_background_activity } = urlTrackingStatus({
+      sites,
       url: current_active_url,
-      title: tab_info.title,
-      tabId: tab_info.tabId,
-      windowId: tab_info.windowId,
     })
+    if (isURLTracked) {
+      // check if the activated tab already has background activity
+      const backgroundTabId = tab_info.tabId
+      const isBackgroundSession =
+        has_background_activity &&
+        backgroundTabId &&
+        isActiveBackgroundTab(store, backgroundTabId)
+
+      // start a new session only if this tab is not already has background activity
+      if (!isBackgroundSession) {
+        startActiveSession(store, {
+          url: current_active_url,
+          title: tab_info.title,
+          tabId: tab_info.tabId,
+          windowId: tab_info.windowId,
+          // track if the site has background activity configured like youtube.com
+          has_background_activity,
+        })
+      }
+    }
   }
+
   await saveAndExit(persistor)
 }
 
@@ -238,6 +320,25 @@ export async function updateWebSession(tab_info: TabInfo) {
 // ------------------------------------------------------------------------------
 
 // START: Alarm handler
+
+// when the browser starts for the first time init the time tracker store with the following
+// 1 - set BROWSER_BOOT_TIMESTAMP
+// 2 - clean stale background sessions and mark them as completed
+export async function initTimeTrackerStore() {
+  const { store, persistor } = await getStore()
+  // set browser boot timestamp
+  const browser_boot_timestamp = new Date().getTime()
+  store.setValue(BROWSER_BOOT_TIMESTAMP, browser_boot_timestamp)
+
+  try {
+    clean_background_sessions(store)
+  } catch (e) {
+    console.log('error booting time tracker store ', e)
+  }
+
+  // clean up references
+  await saveAndExit(persistor)
+}
 
 export async function timeTrackerSyncHandler() {}
 
