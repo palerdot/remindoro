@@ -348,7 +348,9 @@ export async function timeTrackerAlarmHandler() {
 
   try {
     prune_offline_web_sessions(store)
+    // IMPORTANT: order matters here. First clean stale active sessions
     clean_stale_active_sessions(store)
+    // and then update heart beat for remaining active sessions
     await update_heart_beat_for_active_session(store)
   } catch (e) {
     // nothing much we can do
