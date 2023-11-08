@@ -1,5 +1,10 @@
 ## Changelog
 
+### `1.6.0`
+
+- Experimental: Settings for time tracking streaming site
+- Extension id in account screen
+
 ### `1.5.0`
 
 - `Browser Time Tracker`
