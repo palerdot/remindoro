@@ -9,7 +9,7 @@ const sites = [
     has_background_activity: true,
   },
   {
-    site: 'news.ycombinator.com',
+    site: 'ycombinator.com',
     initiator: 'EXTENSION' as const,
     has_background_activity: false,
   },
