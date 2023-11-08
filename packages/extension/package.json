@@ -84,7 +84,7 @@
     "loader-utils": "^2.0.0",
     "mini-css-extract-plugin": "^2.1.0",
     "ora": "^3.0.0",
-    "postcss": "^8.3.5",
+    "postcss": "^8.4.31",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-loader": "^6.1.1",
     "postcss-preset-env": "^6.7.0",
