@@ -1,19 +1,23 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import styled from '@emotion/styled'
 import { Stack, TextField, Button, Paper } from '@mui/material'
 import { Badge as BadgeIcon } from '@mui/icons-material'
 
+import type { RootState } from '@app/Store/'
+
 import packageInfo from '@package-info'
 const { version } = packageInfo
 
-const VersionInfo = styled.div`
+const BottomHolder = styled.div`
+  margin-top: auto;
+  padding: 4px;
+
+  display: flex;
+  justify-content: space-between;
+
   font-style: italic;
   font-size: 0.75rem;
-
-  position: absolute;
-  bottom: 1px;
-  right: 1px;
-  margin: 4px;
 
   color: ${props => props.theme.highlight};
 `
@@ -46,11 +50,16 @@ const Holder = styled.div`
 `
 
 function Account() {
+  const extension_id = useSelector(
+    (state: RootState) => state.account.extension_id
+  )
   const [error, setError] = useState('')
+
   return (
     <div
       style={{
-        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
         height: '100%',
       }}
     >
@@ -121,7 +130,10 @@ function Account() {
           </div>
         </Holder>
       </Paper>
-      <VersionInfo>{`v${version} (beta)`}</VersionInfo>
+      <BottomHolder>
+        <div>{extension_id}</div>
+        <div>{`v${version} (beta)`}</div>
+      </BottomHolder>
     </div>
   )
 }
