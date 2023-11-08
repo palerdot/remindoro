@@ -26,7 +26,6 @@ function ensureSlash(inputPath, needsSlash) {
 const getPublicUrl = appPackageJson =>
   envPublicUrl || require(appPackageJson).homepage
 
-// TODO: remove this module; this is not
 // We use `PUBLIC_URL` environment variable or "homepage" field to infer
 // "public path" at which the app is served.
 // Webpack needs to know it to put the right <script> hrefs into HTML even in
@@ -71,7 +70,6 @@ const RELEASE_FOLDER = 'release'
 module.exports = {
   dotenv: resolveApp('.env'),
   appPath: resolveApp('.'),
-  appBuild: resolveApp('build'), // TODO: not used; maybe remove?
 
   // final release folder
   appRelease: resolveApp(RELEASE_FOLDER),
