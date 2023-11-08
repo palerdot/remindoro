@@ -18,7 +18,7 @@ const { version } = packageInfo
 
 export const WHATS_NEW = ['Browsing Time Tracker ⏲️', 'Todo Notes ✅']
 export const WHATS_UP = [
-  'Time Tracker enhancements',
+  'Streaming sites time tracking',
   'Private Beta with sync support',
 ]
 
