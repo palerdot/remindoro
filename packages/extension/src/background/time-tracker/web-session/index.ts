@@ -1,17 +1,20 @@
 import browser from 'webextension-polyfill'
 import { createQueries, Store } from 'tinybase'
 import { v4 as uuid } from 'uuid'
-import { head, last, isNumber, isArray } from '@lodash'
+import { head, last, isNumber, isArray, isString } from '@lodash'
 
 import {
   WEB_SESSIONS_TABLE,
   ACTIVE_TAB_ID,
   ACTIVE_TAB_URL,
   ACTIVE_WINDOW_ID,
+  BROWSER_BOOT_TIMESTAMP,
   siteIdFromHost,
+  isURLbelongsToSite,
 } from '@background/time-tracker/store'
 
 const KEY_LAST_HEARTBEAT_CHECK = 'last_heartbeat_check'
+const KEY_HAS_BACKGROUND_ACTIVITY = 'has_background_activity'
 
 export type WebSession = {
   session_id: string
@@ -22,6 +25,7 @@ export type WebSession = {
   ended_at?: number
   has_ended: boolean
   [KEY_LAST_HEARTBEAT_CHECK]: number
+  [KEY_HAS_BACKGROUND_ACTIVITY]?: boolean
   tabId?: number
   windowId?: number
   is_synced: boolean
@@ -39,6 +43,7 @@ type SessionPayload = {
   title?: string
   tabId?: number
   windowId?: number
+  [KEY_HAS_BACKGROUND_ACTIVITY]?: boolean
 }
 
 // START: Web session related events
@@ -64,6 +69,7 @@ export function startActiveSession(store: Store, payload: SessionPayload) {
     title: payload.title,
     tabId: payload.tabId,
     windowId: payload.windowId,
+    has_background_activity: payload[KEY_HAS_BACKGROUND_ACTIVITY],
 
     started_at: current_timestamp,
     [KEY_LAST_HEARTBEAT_CHECK]: current_timestamp,
@@ -78,7 +84,8 @@ export function startActiveSession(store: Store, payload: SessionPayload) {
   store.setRow(WEB_SESSIONS_TABLE, session_id, session)
 }
 
-export function endActiveSession(store: Store, url: string) {
+// ends active session for given url (and tab id if present)
+export function endActiveSession(store: Store, url: string, tabId?: number) {
   // find the active session for previous active url - has_ended not set, ended_at time not set, url has to match previous active url
   // if multiple sessions are present, pick the first one and mark as ended
   const ACTIVE_SESSIONS_QUERY = 'active_sessions_for_url'
@@ -90,7 +97,20 @@ export function endActiveSession(store: Store, url: string) {
     WEB_SESSIONS_TABLE,
     ({ select, where }) => {
       select('session_id')
-      where('url', url)
+      where(getCell => {
+        // note: we are not matching url because for background sites url will change. for e.g. youtube.com/watch => youtube.com
+        // if tab id is given, it fetches session for given url AND tab id; if not it fetches session for given url
+        const site = getCell('site')
+        const isSiteMatch = isURLbelongsToSite({
+          url,
+          site: isString(site) ? site : '',
+        })
+        if (tabId) {
+          return isSiteMatch && getCell('tabId') === tabId
+        }
+
+        return isSiteMatch
+      })
       where('has_ended', false)
       where(getCell => {
         return getCell('ended_at') === undefined
@@ -111,10 +131,111 @@ export function endActiveSession(store: Store, url: string) {
     })
   }
 }
+
+// ends all active sessions for given tab id. When a tab is closed, we get only tab id and we cannot query for tab info
+// we will just close all active session for tab id
+export function endActiveSessionsForTab(store: Store, tabId: number) {
+  // find the active session for previous active url - has_ended not set, ended_at time not set, url has to match previous active url
+  // if multiple sessions are present, pick the first one and mark as ended
+  const ACTIVE_SESSIONS_FOR_TAB_QUERY = 'active_sessions_for_tab'
+  const queries = createQueries(store)
+
+  // grab all the active sessions for a given url
+  queries.setQueryDefinition(
+    ACTIVE_SESSIONS_FOR_TAB_QUERY,
+    WEB_SESSIONS_TABLE,
+    ({ select, where }) => {
+      select('session_id')
+      where('tabId', tabId)
+      where('has_ended', false)
+      where(getCell => {
+        return getCell('ended_at') === undefined
+      })
+    }
+  )
+
+  queries.forEachResultRow(ACTIVE_SESSIONS_FOR_TAB_QUERY, rowId => {
+    store.setPartialRow(WEB_SESSIONS_TABLE, rowId, {
+      has_ended: true,
+      ended_at: new Date().getTime(),
+    })
+  })
+}
+
+// checks the websession if there is an active session for the tab with background activity
+export function isActiveBackgroundTab(store: Store, tabId: number): boolean {
+  const IS_ACTIVE_BACKGROUND_TAB_QUERY = 'is_active_background_tab_query'
+  const queries = createQueries(store)
+  queries.setQueryDefinition(
+    IS_ACTIVE_BACKGROUND_TAB_QUERY,
+    WEB_SESSIONS_TABLE,
+    ({ select, where }) => {
+      select('session_id')
+      where(getCell => {
+        // we should have an exact tab id
+        if (tabId === undefined) {
+          return false
+        }
+
+        return getCell('tabId') === tabId
+      })
+      where(KEY_HAS_BACKGROUND_ACTIVITY, true)
+      where('has_ended', false)
+      where(getCell => {
+        return getCell('ended_at') === undefined
+      })
+    }
+  )
+
+  // we should have a match for background tab query
+  return queries.getResultRowCount(IS_ACTIVE_BACKGROUND_TAB_QUERY) > 0
+}
+
 // END: Web session related events
 // ----------------------------------------------------------------
 
 // START: Alarm handlers
+
+// remove all stale background sessions that has 'has_background_activity' enabled
+// this is done when the browser starts, and if they are present, most likely user has quit the browser earlier
+export function clean_background_sessions(store: Store) {
+  const browser_boot_timestamp = store.getValue(BROWSER_BOOT_TIMESTAMP)
+
+  const CLEAN_BACKGROUND_SESSIONS_QUERY = 'clean_background_sessions'
+  const queries = createQueries(store)
+
+  queries.setQueryDefinition(
+    CLEAN_BACKGROUND_SESSIONS_QUERY,
+    WEB_SESSIONS_TABLE,
+    ({ select, where }) => {
+      select('session_id')
+      // active sessions
+      where('has_ended', false)
+      // which is marked as background activity
+      where(KEY_HAS_BACKGROUND_ACTIVITY, true)
+      // and it should have started after browser boot time
+      where(getCell => {
+        const started_at = getCell('started_at')
+
+        if (started_at && browser_boot_timestamp) {
+          return started_at >= browser_boot_timestamp
+        }
+
+        return false
+      })
+    }
+  )
+
+  queries.forEachResultRow(CLEAN_BACKGROUND_SESSIONS_QUERY, rowId => {
+    const info = store.getRow(WEB_SESSIONS_TABLE, rowId)
+    // update row with last_heartbeat_check as ended_at and mark it as ended
+    const ended_at = info[KEY_LAST_HEARTBEAT_CHECK]
+    store.setPartialRow(WEB_SESSIONS_TABLE, rowId, {
+      has_ended: true,
+      ended_at,
+    })
+  })
+}
 
 export function prune_offline_web_sessions(store: Store) {
   // For offline web sessions: we are deleting web sessions that are older than 5 hours
@@ -210,12 +331,15 @@ export function clean_stale_active_sessions(store: Store) {
 // for active session - current active tab + window + url
 // 1 - update heart beat
 // 2 - update focus events for active session
+
+// update heart beat only for the sessions whose start time >= BROWSER_BOOT_TIMESTAMP
 export async function update_heart_beat_for_active_session(store: Store) {
   // preliminary check: Get the window details for current active window id along with all the tabs
   // and check if active tab id is present with active tab url
   const active_tab_url = store.getValue(ACTIVE_TAB_URL)
   const active_tab_id = store.getValue(ACTIVE_TAB_ID)
   const active_window_id = store.getValue(ACTIVE_WINDOW_ID)
+  const browser_boot_timestamp = store.getValue(BROWSER_BOOT_TIMESTAMP)
 
   let windowInfo = undefined
 
@@ -225,26 +349,10 @@ export async function update_heart_beat_for_active_session(store: Store) {
     })
   }
 
-  // we should have window details by now
-  if (windowInfo === undefined) {
-    return
-  }
-
-  // check if the active window has active tab with our active url
-  const all_fine = windowInfo.tabs?.find(
-    t => t.id === active_tab_id && t.url === active_tab_url
-  )
-
-  // our active tab/window/url details does not line up
-  if (!all_fine) {
-    // abort
-    return
-  }
-
   // all fine!
   const CURRENT_ACTIVE_SESSION_QUERY = 'current_active_session_query'
   const queries = createQueries(store)
-  const is_window_focused = windowInfo.focused
+  const is_window_focused = windowInfo?.focused
 
   // get active session based on - active tab url + tab id + window id
   queries.setQueryDefinition(
@@ -252,51 +360,49 @@ export async function update_heart_beat_for_active_session(store: Store) {
     WEB_SESSIONS_TABLE,
     ({ select, where }) => {
       select('session_id')
-      // should be an active session that has no ended
+      // should be an active session that has not ended
       where('has_ended', false)
+      // and it should have started after browser boot time
       where(getCell => {
-        return (
+        const started_at = getCell('started_at')
+
+        if (started_at && browser_boot_timestamp) {
+          return started_at >= browser_boot_timestamp
+        }
+
+        return false
+      })
+      where(getCell => {
+        // return foreground session or background session
+        const isForegroundSession =
           getCell('url') === active_tab_url &&
           getCell('tabId') === active_tab_id &&
           getCell('windowId') === active_window_id
-        )
+        const isBackgroundSession =
+          getCell(KEY_HAS_BACKGROUND_ACTIVITY) === true
+
+        return isForegroundSession || isBackgroundSession
       })
     }
   )
 
-  // get first active session (sorted by latest 'last_heartbeat_at' timestamp)
-  const [active_session_id] = queries.getResultSortedRowIds(
-    // query name
-    CURRENT_ACTIVE_SESSION_QUERY,
-    // cell id for sorting
-    KEY_LAST_HEARTBEAT_CHECK,
-    // descending
-    true,
-    // offset
-    0,
-    // limit
-    1
-  )
+  // update heartbeat for ALL sessions matching the condition (background sessions, foreground sessions etc)
+  queries.forEachResultRow(CURRENT_ACTIVE_SESSION_QUERY, rowId => {
+    // get session details from store for updating
+    const session_details = store.getRow(WEB_SESSIONS_TABLE, rowId)
+    const latest_focus_events = update_focus_events(
+      session_details['focus_events'] as string,
+      !!is_window_focused
+    )
 
-  // abort if there is no active session
-  if (!active_session_id) {
-    return
-  }
+    const session_payload: Partial<WebSession> = {
+      focus_events: latest_focus_events,
+      [KEY_LAST_HEARTBEAT_CHECK]: new Date().getTime(),
+    }
 
-  // get session details from store for updating
-  const session_details = store.getRow(WEB_SESSIONS_TABLE, active_session_id)
-  const latest_focus_events = update_focus_events(
-    session_details['focus_events'] as string,
-    is_window_focused
-  )
-
-  const session_payload: Partial<WebSession> = {
-    focus_events: latest_focus_events,
-    [KEY_LAST_HEARTBEAT_CHECK]: new Date().getTime(),
-  }
-
-  // update session with latest heartbeat and focus events
-  store.setPartialRow(WEB_SESSIONS_TABLE, active_session_id, session_payload)
+    // update session with latest heartbeat and focus events
+    store.setPartialRow(WEB_SESSIONS_TABLE, rowId, session_payload)
+  })
 }
 
 // END: Alarm handlers

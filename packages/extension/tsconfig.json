@@ -78,9 +78,11 @@
     "node_modules",
     "release",
     "dev-server",
-    // exclude js files
-    // TODO: later include this in compilation pipeline
-    "src/**/*.js", "src/**/*.jsx"
+    // IMPORTANT: exclude popup entry point file (include in config/paths)
+    "src/app/Init.js",
+    // exclude unused sidebar/options elements
+    "src/sidebar/**/*",
+    "src/options/**/*"
   ],
   "include": ["./src/**/*"]
 }

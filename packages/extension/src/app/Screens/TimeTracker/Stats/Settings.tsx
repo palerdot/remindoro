@@ -14,6 +14,7 @@ import {
 } from '@background/time-tracker/store'
 import ConfirmDeleteModal from '@app/Components/GenericConfirmDeleteModal'
 import { Screens } from '@app/Util/Enums'
+import BackgroundTabSetting from './BackgroundTabSetting'
 
 const PREFIX = 'SettingsModal'
 
@@ -60,20 +61,8 @@ const ActionBar = styled.div`
 
   padding: 16px 24px;
   padding-right: 20px;
-`
 
-const HelpInfo = styled.div`
-  font-size: 0.89rem;
-  font-style: italic;
-
-  margin: 8px;
   margin-top: auto;
-  padding: 8px;
-  border-radius: 5px;
-
-  border: ${props => `thin solid ${props.theme.primaryDark}`};
-  background: ${props => props.theme.background};
-  color: ${props => props.theme.textColor};
 `
 
 type Props = {
@@ -122,11 +111,7 @@ function Settings({ isModalOpen, setModalStatus, site }: Props) {
         }}
       >
         <Holder>
-          <HelpInfo>
-            {
-              'Removing the site will stop tracking for the site. All the existing activity logs for the site will be deleted permanently.'
-            }
-          </HelpInfo>
+          <BackgroundTabSetting site={site} />
           <ActionBar>
             <Button
               variant="contained"
@@ -181,7 +166,9 @@ function Settings({ isModalOpen, setModalStatus, site }: Props) {
           setDeleteModalStatus(false)
         }}
         title={'Remove Site'}
-        description={'Are you sure want to remove the site from time tracking?'}
+        description={
+          'Removing the site will stop tracking for the site. All the existing activity logs for the site will be deleted permanently. Are you sure want to remove the site from time tracking?'
+        }
         deleteButtonText="Remove site"
       />
     </div>

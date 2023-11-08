@@ -4,6 +4,7 @@ import packageInfo from '@package-info'
 // reducers
 import remindoroReducer from '@app/Store/Slices/Remindoros/'
 import settingsReducer from '@app/Store/Slices/Settings/'
+import accountReducer from '@app/Store/Slices/Account/'
 
 const { version } = packageInfo
 
@@ -11,6 +12,7 @@ const { version } = packageInfo
 const reducer = {
   remindoros: remindoroReducer,
   settings: settingsReducer,
+  account: accountReducer,
   // we are starting to store the current app version starting 1.x
   // fow now mainly, we are using this to prevent initial migration
   // if already migrated (version number means it is 1.x, and migration is done)

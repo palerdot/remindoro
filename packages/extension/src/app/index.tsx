@@ -50,6 +50,9 @@ const defaultState: RootState = {
     liveNoteEnabled: false,
     notificationsEnabled: true,
   },
+  account: {
+    extension_id: 'NO-EXTENSION-ID-GENERATED',
+  },
   version: '0.0.0',
 }
 

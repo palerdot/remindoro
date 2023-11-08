@@ -50,7 +50,6 @@ type StorePayload<T> = PayloadAction<{
   value: T
 }>
 
-// TODO: maybe init here with default remindoro 'Take a walk'
 const initialState: Array<Remindoro> = []
 
 export const remindoroSlice = createSlice({

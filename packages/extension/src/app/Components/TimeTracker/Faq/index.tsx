@@ -131,6 +131,12 @@ const FAQS: Array<{
   },
   {
     question:
+      'I view sites like youtube.com in Picture-In-Picture mode or in the background. Will this work properly for streaming sites?',
+    answer:
+      'Yes. There is a setting that allows to mark a site as streaming/multimedia mode. When enabled, a tab is considered active even if it is background when you are browsing other sites. This is helpful if you watch in Picture-In-Picture mode. Please note, this is an experimental feature because of non standard browser implementations.',
+  },
+  {
+    question:
       'I have specific feature requests I would like to have like blocking web pages if exceeds configured time. Is it possible?',
     answer:
       'Yes. Please sign up for private beta to or email at arun@remindoro.app with your requirements. All the private beta feedback is currently being incorporated.',
