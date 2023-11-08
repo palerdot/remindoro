@@ -59,6 +59,7 @@ function TimeTracker() {
 
   const [isModalOpen, setModalStatus] = useState(false)
   const time_tracked_sites = useTable(TIME_TRACKED_SITES_TABLE)
+  const allow_site_tracking = isEmpty(time_tracked_sites)
 
   return (
     <div>
@@ -78,7 +79,31 @@ function TimeTracker() {
           <Faq showIcon={true} text={'FAQ'} />
         </div>
         <div className="content">
-          {isEmpty(time_tracked_sites) ? (
+          {values(time_tracked_sites).map(x => {
+            const row: TrackedSite = x as TrackedSite
+            return (
+              <CardHolder
+                key={row.site}
+                onClick={() => {
+                  const url = Screens.TimeTrackerStats.replace(
+                    ':site',
+                    row.site
+                  )
+                  history.push(url)
+                }}
+              >
+                <div
+                  style={{
+                    padding: '8px',
+                  }}
+                >
+                  <SiteGist {...row} />
+                  <Subtitle>{`Click to view summary for ${row.site}`}</Subtitle>
+                </div>
+              </CardHolder>
+            )
+          })}
+          {allow_site_tracking && (
             <div
               style={{
                 display: 'flex',
@@ -92,33 +117,6 @@ function TimeTracker() {
                 }}
               />
             </div>
-          ) : (
-            values(time_tracked_sites).map(x => {
-              const row: TrackedSite = x as TrackedSite
-              return (
-                <CardHolder
-                  key={row.site}
-                  onClick={() => {
-                    const url = Screens.TimeTrackerStats.replace(
-                      ':site',
-                      row.site
-                    )
-                    history.push(url)
-                  }}
-                >
-                  <div
-                    style={{
-                      padding: '8px',
-                    }}
-                  >
-                    <SiteGist {...row} />
-                    <Subtitle>
-                      {`Click to view summary for ${row.site}`}
-                    </Subtitle>
-                  </div>
-                </CardHolder>
-              )
-            })
           )}
 
           <div
@@ -143,17 +141,23 @@ function TimeTracker() {
           </div>
         </div>
       </Holder>
-      <AddSiteFab onClick={() => {}} />
+      <AddSiteFab
+        onClick={() => {
+          if (allow_site_tracking) {
+            setModalStatus(true)
+          }
+        }}
+      />
       <AddSiteModal
         isOpen={isModalOpen}
         closeModal={() => setModalStatus(false)}
         title={
-          isEmpty(time_tracked_sites)
+          allow_site_tracking
             ? 'Add site for time tracking'
             : 'Private Beta Feature'
         }
       >
-        {isEmpty(time_tracked_sites) ? (
+        {allow_site_tracking ? (
           <AddSite
             onSuccess={host => {
               // close the modal
@@ -166,7 +170,9 @@ function TimeTracker() {
             }}
           />
         ) : (
-          <div>{'porumai ... feature in private beta'}</div>
+          <div>
+            {'Tracking more than one site is currently in private beta.'}
+          </div>
         )}
       </AddSiteModal>
     </div>
