@@ -6,7 +6,7 @@
 # Build steps:
 #  - `pnpm build:firefox`. 
 # 
-#  This yarn task will build the final archive from source. The location of final archive is `release/firefox`. The zip file is the final file uploaded to add-on store. Rest of the files are the contents of the zip file.
+#  This pnpm task will build the final archive from source. The location of final archive is `release/firefox`. The zip file is the final file uploaded to add-on store. Rest of the files are the contents of the zip file.
 # 
 #  Environment Info:
 #   - node `v16.x`
