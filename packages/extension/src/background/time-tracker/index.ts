@@ -54,7 +54,9 @@ function init_tab_updated() {
         title: changeInfo.title,
         isClosed: false,
       }
-      updateWebSession(tab_info, {})
+      updateWebSession(tab_info, {
+        mode: 'URL_CHANGE',
+      })
     }
   }
 

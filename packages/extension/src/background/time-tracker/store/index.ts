@@ -195,7 +195,7 @@ export async function handleActivatedTab({
       // NOTE: we may not have an url if the switched tab is not tracked; this is ok
       // we will just update active tab url to empty and just end the session for previous tracked url (if applicable)
       // we are passing previous tab id to see if it has background activity
-      await updateWebSession(tab_info, { previousTabId })
+      await updateWebSession(tab_info, { previousTabId, mode: 'TAB_ACTIVATED' })
     }
   } catch (e) {
     console.error(e)
@@ -222,12 +222,13 @@ export async function handleClosedTab({
 
 type UpdateOptions = {
   previousTabId?: number
+  mode: 'TAB_ACTIVATED' | 'URL_CHANGE'
 }
 
 // Main function that tracks web session - start session/end session
 export async function updateWebSession(
   tab_info: TabInfo,
-  { previousTabId }: UpdateOptions
+  { previousTabId, mode }: UpdateOptions
 ) {
   const current_active_url = tab_info.url
   // get store data
@@ -240,7 +241,7 @@ export async function updateWebSession(
   // IMPORTANT: we are comparing existing active data with incoming tab data, and stop unnecessary updates
   // onUpdated event streams info like title change. checking and preventing unnecessary updates
   if (
-    current_active_url === previous_active_tab_id &&
+    current_active_url === previous_active_tab_url &&
     tab_info.tabId === Number(previous_active_tab_id) &&
     tab_info.windowId === previous_active_window_id
   ) {
@@ -248,9 +249,20 @@ export async function updateWebSession(
     return
   }
 
-  // CASE 0: update active tab url, active tab id, active window id
-  store.setValue(ACTIVE_TAB_URL, current_active_url)
-  store.setValue(ACTIVE_TAB_ID, tab_info.tabId)
+  // IMPORTANT: update active tab id only from tab activation event and not change url events (which might come from background tabs)
+  if (mode === 'TAB_ACTIVATED') {
+    store.setValue(ACTIVE_TAB_ID, tab_info.tabId)
+  }
+
+  // we are getting url change events from background tab of streaming sites (youtube.com/watch?v=2 -> youtube.com/watch?v=1)
+  const isBackgroundURLChange =
+    mode === 'URL_CHANGE' && tab_info.tabId !== previous_active_tab_id
+
+  // update active tab url only if comes from the active tab
+  if (!isBackgroundURLChange) {
+    store.setValue(ACTIVE_TAB_URL, current_active_url)
+  }
+
   if (tab_info.windowId) {
     store.setValue(ACTIVE_WINDOW_ID, tab_info.windowId)
   }
@@ -287,7 +299,11 @@ export async function updateWebSession(
 
       // end the session only if it not a background session and if the url change is not from same background site
       // for foreground/normal session background condition will fail and session will be ended as expected
-      if (!isBackgroundSession && !isSameBackgroundSiteTab) {
+      if (
+        !isBackgroundSession &&
+        !isSameBackgroundSiteTab &&
+        !isBackgroundURLChange
+      ) {
         endActiveSession(store, previous_active_tab_url)
       }
     }
@@ -308,7 +324,7 @@ export async function updateWebSession(
         isActiveBackgroundTab(store, backgroundTabId)
 
       // start a new session only if this tab is not already has background activity
-      if (!isBackgroundSession) {
+      if (!isBackgroundSession && !isBackgroundURLChange) {
         startActiveSession(store, {
           url: current_active_url,
           title: tab_info.title,
