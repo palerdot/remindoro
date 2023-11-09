@@ -290,11 +290,12 @@ export async function updateWebSession(
       const previous_tab_site = siteFromURL(previous_active_tab_url)
       const current_tab_site = siteFromURL(current_active_url)
       const isSameBackgroundSiteTab =
-        // this implies there is no previous tab id and the update event is coming from changeInfo.url event
-        !previousTabId &&
+        // this implies there is no previous tab id and the update event is coming from changeInfo.url event for a background tab of streaming site
+        mode === 'URL_CHANGE' &&
+        has_background_activity &&
         // checking if change url event belongs to the same site
         previous_tab_site !== '' &&
-        current_tab_site != '' &&
+        current_tab_site !== '' &&
         previous_tab_site === current_tab_site
 
       // end the session only if it not a background session and if the url change is not from same background site
