@@ -195,7 +195,7 @@ export async function handleActivatedTab({
       // NOTE: we may not have an url if the switched tab is not tracked; this is ok
       // we will just update active tab url to empty and just end the session for previous tracked url (if applicable)
       // we are passing previous tab id to see if it has background activity
-      await updateWebSession(tab_info, previousTabId)
+      await updateWebSession(tab_info, { previousTabId })
     }
   } catch (e) {
     console.error(e)
@@ -219,10 +219,15 @@ export async function handleClosedTab({
 // ------------------------------------------------------------------------------
 
 // START: WEB SESSION
+
+type UpdateOptions = {
+  previousTabId?: number
+}
+
 // Main function that tracks web session - start session/end session
 export async function updateWebSession(
   tab_info: TabInfo,
-  previousTabId?: number
+  { previousTabId }: UpdateOptions
 ) {
   const current_active_url = tab_info.url
   // get store data
