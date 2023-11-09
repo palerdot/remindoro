@@ -10,7 +10,6 @@ import {
   prune_offline_web_sessions,
   clean_stale_active_sessions,
   update_heart_beat_for_active_session,
-  clean_background_sessions,
   WebSession,
 } from '@background/time-tracker/web-session'
 
@@ -20,7 +19,6 @@ export const STORE_KEY = 'time_tracker_store'
 export const ACTIVE_TAB_URL = 'active_tab_url'
 export const ACTIVE_TAB_ID = 'active_tab_id'
 export const ACTIVE_WINDOW_ID = 'active_window_id'
-export const BROWSER_BOOT_TIMESTAMP = 'browser_boot_timestamp'
 // TABLES
 export const TIME_TRACKED_SITES_TABLE = 'time_tracked_sites'
 export const WEB_SESSIONS_TABLE = 'web_sessions'
@@ -78,7 +76,7 @@ export async function saveAndExit(persistor: Persister) {
 }
 
 // get time tracked sites from store content
-function trackedSitesFromStoreContent(
+export function trackedSitesFromStoreContent(
   content: StoreContent
 ): Array<TrackedSite> {
   const [tablesData] = content
@@ -345,25 +343,6 @@ export async function updateWebSession(
 // ------------------------------------------------------------------------------
 
 // START: Alarm handler
-
-// when the browser starts for the first time init the time tracker store with the following
-// 1 - set BROWSER_BOOT_TIMESTAMP
-// 2 - clean stale background sessions and mark them as completed
-export async function initTimeTrackerStore() {
-  const { store, persistor } = await getStore()
-  // set browser boot timestamp
-  const browser_boot_timestamp = new Date().getTime()
-  store.setValue(BROWSER_BOOT_TIMESTAMP, browser_boot_timestamp)
-
-  try {
-    clean_background_sessions(store)
-  } catch (e) {
-    console.log('error booting time tracker store ', e)
-  }
-
-  // clean up references
-  await saveAndExit(persistor)
-}
 
 export async function timeTrackerSyncHandler() {}
 
