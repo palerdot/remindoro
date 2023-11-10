@@ -4,7 +4,12 @@ import type { RootState } from '@app/Store/'
 
 import packageInfo from '@package-info'
 import { ALARM_KEY, STORAGE_KEY, ContextMenuKeys } from '@app/Constants'
-import { migrate_v0_data_to_v1, getTodoCount, setBadgeText } from './utils/'
+import {
+  migrate_v0_data_to_v1,
+  getTodoCount,
+  setBadgeText,
+  WHATS_NEW,
+} from './utils/'
 import { notify, Notification } from './utils/notification'
 import { handle_context_menu } from './utils/context-menu'
 import {
@@ -16,11 +21,14 @@ import {
 
 const { version } = packageInfo
 
-export const WHATS_NEW = ['Browsing Time Tracker ⏲️', 'Todo Notes ✅']
-export const WHATS_UP = [
-  'Streaming sites time tracking',
-  'Private Beta with sync support',
-]
+/*
+ * IMPORTANT: NO EXPORTS FROM THIS PAGE to @app
+ *
+ * exporting stuffs from this page to the app just executes the whole file when app is opened
+ * which results is rerunning the init events which is not desirable!!!
+ *
+ * for now, remember not to export anything from this file
+ */
 
 /*
  * ref: https://github.com/mozilla/webextension-polyfill
