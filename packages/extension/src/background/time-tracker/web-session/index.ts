@@ -8,9 +8,10 @@ import {
   ACTIVE_TAB_ID,
   ACTIVE_TAB_URL,
   ACTIVE_WINDOW_ID,
-  BROWSER_BOOT_TIMESTAMP,
   siteIdFromHost,
   isURLbelongsToSite,
+  urlTrackingStatus,
+  trackedSitesFromStoreContent,
 } from '@background/time-tracker/store'
 
 const KEY_LAST_HEARTBEAT_CHECK = 'last_heartbeat_check'
@@ -196,47 +197,6 @@ export function isActiveBackgroundTab(store: Store, tabId: number): boolean {
 
 // START: Alarm handlers
 
-// remove all stale background sessions that has 'has_background_activity' enabled
-// this is done when the browser starts, and if they are present, most likely user has quit the browser earlier
-export function clean_background_sessions(store: Store) {
-  const browser_boot_timestamp = store.getValue(BROWSER_BOOT_TIMESTAMP)
-
-  const CLEAN_BACKGROUND_SESSIONS_QUERY = 'clean_background_sessions'
-  const queries = createQueries(store)
-
-  queries.setQueryDefinition(
-    CLEAN_BACKGROUND_SESSIONS_QUERY,
-    WEB_SESSIONS_TABLE,
-    ({ select, where }) => {
-      select('session_id')
-      // active sessions
-      where('has_ended', false)
-      // which is marked as background activity
-      where(KEY_HAS_BACKGROUND_ACTIVITY, true)
-      // and it should have started after browser boot time
-      where(getCell => {
-        const started_at = getCell('started_at')
-
-        if (started_at && browser_boot_timestamp) {
-          return started_at >= browser_boot_timestamp
-        }
-
-        return false
-      })
-    }
-  )
-
-  queries.forEachResultRow(CLEAN_BACKGROUND_SESSIONS_QUERY, rowId => {
-    const info = store.getRow(WEB_SESSIONS_TABLE, rowId)
-    // update row with last_heartbeat_check as ended_at and mark it as ended
-    const ended_at = info[KEY_LAST_HEARTBEAT_CHECK]
-    store.setPartialRow(WEB_SESSIONS_TABLE, rowId, {
-      has_ended: true,
-      ended_at,
-    })
-  })
-}
-
 export function prune_offline_web_sessions(store: Store) {
   // For offline web sessions: we are deleting web sessions that are older than 5 hours
   // extension events are considreed offline if there are no connected account
@@ -284,11 +244,10 @@ export function prune_offline_web_sessions(store: Store) {
 export function clean_stale_active_sessions(store: Store) {
   // stale active sessions may result when the user quits the browser or computer crashes
   // new tabs result in new sessions; open active tabs have heartbeat updated.
-  // for web sessions with heart beat older than threshold (e.g. 3 minutes) mark it as ended with threshold time
+  // for web sessions with heart beat older than threshold (e.g. 3.14 minutes) mark it as ended with threshold time
 
   const SECONDS = 1 * 1000 // millisecond
   const MINUTES = 60 * SECONDS
-  // 3.14 minutes
   const THRESHOLD = 3.14 * MINUTES
 
   const STALE_ACTIVE_SESSIONS_QUERY = 'stale_active_sessions_query'
@@ -332,14 +291,13 @@ export function clean_stale_active_sessions(store: Store) {
 // 1 - update heart beat
 // 2 - update focus events for active session
 
-// update heart beat only for the sessions whose start time >= BROWSER_BOOT_TIMESTAMP
+// for foreground update heart beat; for background check if tab is valid and update heartbeat
 export async function update_heart_beat_for_active_session(store: Store) {
   // preliminary check: Get the window details for current active window id along with all the tabs
   // and check if active tab id is present with active tab url
   const active_tab_url = store.getValue(ACTIVE_TAB_URL)
   const active_tab_id = store.getValue(ACTIVE_TAB_ID)
   const active_window_id = store.getValue(ACTIVE_WINDOW_ID)
-  const browser_boot_timestamp = store.getValue(BROWSER_BOOT_TIMESTAMP)
 
   let windowInfo = undefined
 
@@ -362,16 +320,6 @@ export async function update_heart_beat_for_active_session(store: Store) {
       select('session_id')
       // should be an active session that has not ended
       where('has_ended', false)
-      // and it should have started after browser boot time
-      where(getCell => {
-        const started_at = getCell('started_at')
-
-        if (started_at && browser_boot_timestamp) {
-          return started_at >= browser_boot_timestamp
-        }
-
-        return false
-      })
       where(getCell => {
         // return foreground session or background session
         const isForegroundSession =
@@ -386,10 +334,17 @@ export async function update_heart_beat_for_active_session(store: Store) {
     }
   )
 
+  const active_session_row_ids = queries.getResultRowIds(
+    CURRENT_ACTIVE_SESSION_QUERY
+  )
+
   // update heartbeat for ALL sessions matching the condition (background sessions, foreground sessions etc)
-  queries.forEachResultRow(CURRENT_ACTIVE_SESSION_QUERY, rowId => {
+  for await (const rowId of active_session_row_ids) {
     // get session details from store for updating
-    const session_details = store.getRow(WEB_SESSIONS_TABLE, rowId)
+    const session_details = store.getRow(
+      WEB_SESSIONS_TABLE,
+      rowId
+    ) as WebSession
     const latest_focus_events = update_focus_events(
       session_details['focus_events'] as string,
       !!is_window_focused
@@ -400,9 +355,36 @@ export async function update_heart_beat_for_active_session(store: Store) {
       [KEY_LAST_HEARTBEAT_CHECK]: new Date().getTime(),
     }
 
-    // update session with latest heartbeat and focus events
-    store.setPartialRow(WEB_SESSIONS_TABLE, rowId, session_payload)
-  })
+    const isBackgroundSession =
+      session_details[KEY_HAS_BACKGROUND_ACTIVITY] === true
+    if (!isBackgroundSession) {
+      // update session with latest heartbeat and focus events
+      store.setPartialRow(WEB_SESSIONS_TABLE, rowId, session_payload)
+    } else {
+      // for background session we will fetch the tab details and see if url has background activity
+      // this makes sure even if browser rebooted meanwhile, we are updating heartbeat only for valid background tabs
+      if (!session_details.tabId) {
+        return
+      }
+
+      try {
+        const tab = await browser.tabs.get(session_details.tabId)
+        const url = tab.url
+        if (!url) {
+          return
+        }
+
+        const storeContent = store.getContent()
+        const sites = trackedSitesFromStoreContent(storeContent)
+        const { has_background_activity } = urlTrackingStatus({ url, sites })
+
+        if (has_background_activity === true) {
+          // we have a valid active background session
+          store.setPartialRow(WEB_SESSIONS_TABLE, rowId, session_payload)
+        }
+      } catch (e) {}
+    }
+  }
 }
 
 // END: Alarm handlers

@@ -10,7 +10,6 @@ import {
   prune_offline_web_sessions,
   clean_stale_active_sessions,
   update_heart_beat_for_active_session,
-  clean_background_sessions,
   WebSession,
 } from '@background/time-tracker/web-session'
 
@@ -20,7 +19,6 @@ export const STORE_KEY = 'time_tracker_store'
 export const ACTIVE_TAB_URL = 'active_tab_url'
 export const ACTIVE_TAB_ID = 'active_tab_id'
 export const ACTIVE_WINDOW_ID = 'active_window_id'
-export const BROWSER_BOOT_TIMESTAMP = 'browser_boot_timestamp'
 // TABLES
 export const TIME_TRACKED_SITES_TABLE = 'time_tracked_sites'
 export const WEB_SESSIONS_TABLE = 'web_sessions'
@@ -78,7 +76,7 @@ export async function saveAndExit(persistor: Persister) {
 }
 
 // get time tracked sites from store content
-function trackedSitesFromStoreContent(
+export function trackedSitesFromStoreContent(
   content: StoreContent
 ): Array<TrackedSite> {
   const [tablesData] = content
@@ -195,7 +193,7 @@ export async function handleActivatedTab({
       // NOTE: we may not have an url if the switched tab is not tracked; this is ok
       // we will just update active tab url to empty and just end the session for previous tracked url (if applicable)
       // we are passing previous tab id to see if it has background activity
-      await updateWebSession(tab_info, previousTabId)
+      await updateWebSession(tab_info, { previousTabId, mode: 'TAB_ACTIVATED' })
     }
   } catch (e) {
     console.error(e)
@@ -219,10 +217,16 @@ export async function handleClosedTab({
 // ------------------------------------------------------------------------------
 
 // START: WEB SESSION
+
+type UpdateOptions = {
+  previousTabId?: number
+  mode: 'TAB_ACTIVATED' | 'URL_CHANGE'
+}
+
 // Main function that tracks web session - start session/end session
 export async function updateWebSession(
   tab_info: TabInfo,
-  previousTabId?: number
+  { previousTabId, mode }: UpdateOptions
 ) {
   const current_active_url = tab_info.url
   // get store data
@@ -235,7 +239,7 @@ export async function updateWebSession(
   // IMPORTANT: we are comparing existing active data with incoming tab data, and stop unnecessary updates
   // onUpdated event streams info like title change. checking and preventing unnecessary updates
   if (
-    current_active_url === previous_active_tab_id &&
+    current_active_url === previous_active_tab_url &&
     tab_info.tabId === Number(previous_active_tab_id) &&
     tab_info.windowId === previous_active_window_id
   ) {
@@ -243,9 +247,20 @@ export async function updateWebSession(
     return
   }
 
-  // CASE 0: update active tab url, active tab id, active window id
-  store.setValue(ACTIVE_TAB_URL, current_active_url)
-  store.setValue(ACTIVE_TAB_ID, tab_info.tabId)
+  // IMPORTANT: update active tab id only from tab activation event and not change url events (which might come from background tabs)
+  if (mode === 'TAB_ACTIVATED') {
+    store.setValue(ACTIVE_TAB_ID, tab_info.tabId)
+  }
+
+  // we are getting url change events from background tab of streaming sites (youtube.com/watch?v=2 -> youtube.com/watch?v=1)
+  const isBackgroundURLChange =
+    mode === 'URL_CHANGE' && tab_info.tabId !== previous_active_tab_id
+
+  // update active tab url only if comes from the active tab
+  if (!isBackgroundURLChange) {
+    store.setValue(ACTIVE_TAB_URL, current_active_url)
+  }
+
   if (tab_info.windowId) {
     store.setValue(ACTIVE_WINDOW_ID, tab_info.windowId)
   }
@@ -273,16 +288,21 @@ export async function updateWebSession(
       const previous_tab_site = siteFromURL(previous_active_tab_url)
       const current_tab_site = siteFromURL(current_active_url)
       const isSameBackgroundSiteTab =
-        // this implies there is no previous tab id and the update event is coming from changeInfo.url event
-        !previousTabId &&
+        // this implies there is no previous tab id and the update event is coming from changeInfo.url event for a background tab of streaming site
+        mode === 'URL_CHANGE' &&
+        has_background_activity &&
         // checking if change url event belongs to the same site
         previous_tab_site !== '' &&
-        current_tab_site != '' &&
+        current_tab_site !== '' &&
         previous_tab_site === current_tab_site
 
       // end the session only if it not a background session and if the url change is not from same background site
       // for foreground/normal session background condition will fail and session will be ended as expected
-      if (!isBackgroundSession && !isSameBackgroundSiteTab) {
+      if (
+        !isBackgroundSession &&
+        !isSameBackgroundSiteTab &&
+        !isBackgroundURLChange
+      ) {
         endActiveSession(store, previous_active_tab_url)
       }
     }
@@ -303,7 +323,11 @@ export async function updateWebSession(
         isActiveBackgroundTab(store, backgroundTabId)
 
       // start a new session only if this tab is not already has background activity
-      if (!isBackgroundSession) {
+      if (!isBackgroundSession && !isBackgroundURLChange) {
+        // IMPORTANT: We are going to start a new session for a tab; close all existing active sessions for this particular tab
+        // this is one of the safeguards against stale active sessions when browser quits/crashes unexpectedly
+        endActiveSessionsForTab(store, tab_info.tabId)
+
         startActiveSession(store, {
           url: current_active_url,
           title: tab_info.title,
@@ -323,25 +347,6 @@ export async function updateWebSession(
 // ------------------------------------------------------------------------------
 
 // START: Alarm handler
-
-// when the browser starts for the first time init the time tracker store with the following
-// 1 - set BROWSER_BOOT_TIMESTAMP
-// 2 - clean stale background sessions and mark them as completed
-export async function initTimeTrackerStore() {
-  const { store, persistor } = await getStore()
-  // set browser boot timestamp
-  const browser_boot_timestamp = new Date().getTime()
-  store.setValue(BROWSER_BOOT_TIMESTAMP, browser_boot_timestamp)
-
-  try {
-    clean_background_sessions(store)
-  } catch (e) {
-    console.log('error booting time tracker store ', e)
-  }
-
-  // clean up references
-  await saveAndExit(persistor)
-}
 
 export async function timeTrackerSyncHandler() {}
 

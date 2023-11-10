@@ -6,25 +6,15 @@
 {
     
     "version": "0.0.0", // version number will be replaced from package.json
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "remindoro",
     "description": "Browsing time tracker and reminders for your firefox browser.",
-    // "content_scripts": [
-    //   {
-    //     "matches": [
-    //       "<all_urls>"
-    //     ],
-    //     "js": [
-    //       "content.js"
-    //     ]
-    //   }
-    // ],
     "background": {
       "scripts": [
         "background.js"
       ]
     },
-    "browser_action": {
+    "action": {
       "default_icon": "img/remindoro-icon.png",
       "default_title": "Remindoro",
       "default_popup": "popup.html"
@@ -36,7 +26,9 @@
       // "clipboardWrite",
       "contextMenus",
       "notifications",
-      "storage",
+      "storage"
+    ],
+    "host_permissions": [
       // remindoro.app api permissions
       // ref: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/permissions
       "https://remindoro.app/*"
@@ -62,7 +54,7 @@
     "browser_specific_settings": {
       "gecko": {
         "id": "remindoro@palerdot.in",
-        "strict_min_version": "57.0"
+        "strict_min_version": "108.0"
       }
     }
   }

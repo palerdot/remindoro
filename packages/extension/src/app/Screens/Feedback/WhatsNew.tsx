@@ -9,7 +9,7 @@ import {
   Button,
 } from '@mui/material'
 
-import { WHATS_NEW, WHATS_UP } from 'background'
+import { WHATS_NEW, WHATS_UP } from '@background/utils/'
 
 const Holder = styled.div`
   cursor: pointer;

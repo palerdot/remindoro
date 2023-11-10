@@ -7,6 +7,12 @@ import { STORAGE_KEY } from '@app/Constants'
 import { loadFromStorage } from '@app/Util/BrowserStorage/'
 import { migrate_v0_data, OldStoreData } from '@app/Util/cleaners'
 
+export const WHATS_NEW = ['Browsing Time Tracker ⏲️', 'Todo Notes ✅']
+export const WHATS_UP = [
+  'Streaming sites time tracking',
+  'Private Beta with sync support',
+]
+
 function isNewData(oldData: OldStoreData | RootState): oldData is RootState {
   // if we have version field; then we are in 1.x version
   const version = get(oldData, 'version', undefined)
@@ -63,12 +69,7 @@ export const setBadgeText = (text: string) => {
       console.error('problem detecting browser action')
     },
   }
-  // chrome manifest v3 problems
-  const action = isFirefox
-    ? browser.browserAction
-    : isChrome
-    ? browser.action
-    : defaultAction
+  const action = browser.action || defaultAction
 
   action.setBadgeText({
     text,
