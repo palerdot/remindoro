@@ -244,11 +244,11 @@ export function prune_offline_web_sessions(store: Store) {
 export function clean_stale_active_sessions(store: Store) {
   // stale active sessions may result when the user quits the browser or computer crashes
   // new tabs result in new sessions; open active tabs have heartbeat updated.
-  // for web sessions with heart beat older than threshold (e.g. 1.5 minutes) mark it as ended with threshold time
+  // for web sessions with heart beat older than threshold (e.g. 3.14 minutes) mark it as ended with threshold time
 
   const SECONDS = 1 * 1000 // millisecond
   const MINUTES = 60 * SECONDS
-  const THRESHOLD = 1.515 * MINUTES
+  const THRESHOLD = 3.14 * MINUTES
 
   const STALE_ACTIVE_SESSIONS_QUERY = 'stale_active_sessions_query'
   const queries = createQueries(store)
@@ -334,8 +334,12 @@ export async function update_heart_beat_for_active_session(store: Store) {
     }
   )
 
+  const active_session_row_ids = queries.getResultRowIds(
+    CURRENT_ACTIVE_SESSION_QUERY
+  )
+
   // update heartbeat for ALL sessions matching the condition (background sessions, foreground sessions etc)
-  queries.forEachResultRow(CURRENT_ACTIVE_SESSION_QUERY, rowId => {
+  for await (const rowId of active_session_row_ids) {
     // get session details from store for updating
     const session_details = store.getRow(
       WEB_SESSIONS_TABLE,
@@ -362,7 +366,9 @@ export async function update_heart_beat_for_active_session(store: Store) {
       if (!session_details.tabId) {
         return
       }
-      browser.tabs.get(session_details.tabId).then(tab => {
+
+      try {
+        const tab = await browser.tabs.get(session_details.tabId)
         const url = tab.url
         if (!url) {
           return
@@ -376,9 +382,9 @@ export async function update_heart_beat_for_active_session(store: Store) {
           // we have a valid active background session
           store.setPartialRow(WEB_SESSIONS_TABLE, rowId, session_payload)
         }
-      })
+      } catch (e) {}
     }
-  })
+  }
 }
 
 // END: Alarm handlers
