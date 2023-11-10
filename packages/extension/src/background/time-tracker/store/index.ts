@@ -324,6 +324,10 @@ export async function updateWebSession(
 
       // start a new session only if this tab is not already has background activity
       if (!isBackgroundSession && !isBackgroundURLChange) {
+        // IMPORTANT: We are going to start a new session for a tab; close all existing active sessions for this particular tab
+        // this is one of the safeguards against stale active sessions when browser quits/crashes unexpectedly
+        endActiveSessionsForTab(store, tab_info.tabId)
+
         startActiveSession(store, {
           url: current_active_url,
           title: tab_info.title,
