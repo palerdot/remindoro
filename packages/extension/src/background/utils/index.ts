@@ -63,13 +63,7 @@ export const setBadgeText = (text: string) => {
       console.error('problem detecting browser action')
     },
   }
-  // ( firefox/chrome ) manifest v3 problems
   const action = browser.action || defaultAction
-  // const action = isFirefox
-  //   ? browser.browserAction
-  //   : isChrome
-  //   ? browser.action
-  //   : defaultAction
 
   action.setBadgeText({
     text,
