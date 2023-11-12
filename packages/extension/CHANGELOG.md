@@ -1,5 +1,10 @@
 ## Changelog
 
+### `1.6.2`
+
+- Better extension id generation flow
+- Show/Hide tab focus events
+
 ### `1.6.1`
 
 - Firefox manifest v3
