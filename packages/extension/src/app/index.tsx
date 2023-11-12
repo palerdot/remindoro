@@ -51,7 +51,7 @@ const defaultState: RootState = {
     notificationsEnabled: true,
   },
   account: {
-    extension_id: 'NO-EXTENSION-ID-GENERATED',
+    logged_in: false,
   },
   version: '0.0.0',
 }

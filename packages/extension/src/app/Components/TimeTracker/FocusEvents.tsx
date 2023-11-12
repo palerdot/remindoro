@@ -18,6 +18,13 @@ const Holder = styled.div`
   padding: 8px;
   font-size: 0.75rem;
 
+  & .button-link {
+    text-decoration: underline;
+    cursor: pointer;
+
+    font-size: 14px;
+  }
+
   & .title {
     font-weight: 600;
     margin-bottom: 4px;
@@ -42,6 +49,7 @@ const Holder = styled.div`
 `
 
 function FocusEvents({ stringified }: Props) {
+  const [showEvents, setEventsVisibility] = useState(false)
   const [events, setEvents] = useState<Array<FocusEvent>>([])
 
   useEffect(() => {
@@ -53,15 +61,38 @@ function FocusEvents({ stringified }: Props) {
     return null
   }
 
-  return (
-    <Holder>
-      <div className="title">{'Tab focus events'}</div>
-      {events.map((current, index, all) => {
-        const next = all[index + 1]
+  if (showEvents) {
+    return (
+      <Holder
+        onClick={() => {
+          setEventsVisibility(false)
+        }}
+      >
+        <div className="title">{'Tab focus events'}</div>
+        {events.map((current, index, all) => {
+          const next = all[index + 1]
 
-        return <Summary key={index} current={current} next={next} />
-      })}
-    </Holder>
+          return <Summary key={index} current={current} next={next} />
+        })}
+        <div className="button-link">{'Hide focus events'}</div>
+      </Holder>
+    )
+  }
+
+  return (
+    <div
+      className="button-link"
+      onClick={() => {
+        setEventsVisibility(true)
+      }}
+      style={{
+        textDecoration: 'underline',
+        fontSize: '14px',
+        cursor: 'pointer',
+      }}
+    >
+      {'Show focus events'}
+    </div>
   )
 }
 
