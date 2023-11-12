@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import styled from '@emotion/styled'
-import { Stack, TextField, Button, Paper } from '@mui/material'
-import { Badge as BadgeIcon } from '@mui/icons-material'
+import { Paper } from '@mui/material'
 
 import type { RootState } from '@app/Store/'
 
+import Login from './Login'
 import packageInfo from '@package-info'
 const { version } = packageInfo
 
@@ -53,7 +53,6 @@ function Account() {
   const extension_id = useSelector(
     (state: RootState) => state.account.extension_id
   )
-  const [error, setError] = useState('')
 
   return (
     <div
@@ -64,67 +63,8 @@ function Account() {
       }}
     >
       <Paper elevation={2}>
-        <Holder>
-          <Stack
-            direction={'column'}
-            spacing={1}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <Stack
-              direction={'row'}
-              spacing={1}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '8px',
-              }}
-            >
-              <div
-                style={{
-                  fontWeight: '600',
-                }}
-              >
-                {'Account'}
-              </div>
-              <div
-                style={{
-                  fontWeight: '500',
-                }}
-              >
-                {'- Not registered for private beta.'}
-              </div>
-            </Stack>
-            <TextField
-              sx={{
-                width: '100%',
-              }}
-              error={error.length > 0}
-              id="private-beta-email"
-              label={error.length > 0 ? error : 'Registered extension key'}
-              defaultValue={''}
-              helperText={
-                error.length > 0
-                  ? error
-                  : 'e.g. your-private-beta-extension-key'
-              }
-              onChange={_e => {
-                setError('')
-              }}
-            />
-            <Button
-              variant="contained"
-              startIcon={<BadgeIcon fontSize="medium" />}
-              onClick={() => {
-                setError('Invalid extension key.')
-              }}
-            >
-              {'Login'}
-            </Button>
-          </Stack>
+        <Holder className="my-2">
+          <Login />
           <div className="help-info">
             {`Features like detailed statistics, tracking more than one site are in private beta. Please reach out arun@remindoro.app or sign up in the time tracker screen if you would like to part of private beta.`}
           </div>
