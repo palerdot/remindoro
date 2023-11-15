@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill'
 import { createStore, createCustomPersister, Store, Persister } from 'tinybase'
-import { isString, isEmpty, values, takeRight } from '@lodash'
+import { isNumber, isString, isEmpty, values, takeRight } from '@lodash'
 
 import {
   startActiveSession,
@@ -213,6 +213,16 @@ export async function handleClosedTab({
   await saveAndExit(persistor)
 }
 
+// helper function to get active tab details
+async function getActiveTabDetails(): Promise<browser.Tabs.Tab | undefined> {
+  try {
+    const tabs = await browser.tabs.query({ active: true })
+    return tabs[0]
+  } catch (_e) {
+    return undefined
+  }
+}
+
 // END: Tab events
 // ------------------------------------------------------------------------------
 
@@ -247,17 +257,17 @@ export async function updateWebSession(
     return
   }
 
-  // IMPORTANT: update active tab id only from tab activation event and not change url events (which might come from background tabs)
-  if (mode === 'TAB_ACTIVATED') {
-    store.setValue(ACTIVE_TAB_ID, tab_info.tabId)
-  }
+  // find out active tab details from the browser api
+  const activeTabDetails = await getActiveTabDetails()
+  const isActiveTab =
+    activeTabDetails !== undefined && activeTabDetails.id === tab_info.tabId
 
   // we are getting url change events from background tab of streaming sites (youtube.com/watch?v=2 -> youtube.com/watch?v=1)
-  const isBackgroundURLChange =
-    mode === 'URL_CHANGE' && tab_info.tabId !== previous_active_tab_id
+  const isBackgroundURLChange = !isActiveTab
 
   // update active tab url only if comes from the active tab
-  if (!isBackgroundURLChange) {
+  if (isActiveTab) {
+    store.setValue(ACTIVE_TAB_ID, tab_info.tabId)
     store.setValue(ACTIVE_TAB_URL, current_active_url)
   }
 
@@ -277,10 +287,14 @@ export async function updateWebSession(
 
     if (isURLTracked) {
       // CASE 1A - if previous tab id present, check if it has background activity. This case is coming from tab activated which passes previous tab
-      const backgroundTabId = previousTabId
+      // for chrome: tab_activated is not triggered always, only url change. so we are taking previous active tab id in that case
+      const backgroundTabId =
+        mode === 'TAB_ACTIVATED' && previousTabId !== undefined
+          ? previousTabId
+          : previous_active_tab_id
       const isBackgroundSession =
         has_background_activity &&
-        backgroundTabId &&
+        isNumber(backgroundTabId) &&
         isActiveBackgroundTab(store, backgroundTabId)
 
       // CASE 1B: changeInfo.url event will not have previous tab id, but it might come from same site with background tracking
