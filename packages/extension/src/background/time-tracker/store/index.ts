@@ -260,9 +260,7 @@ export async function updateWebSession(
   // find out active tab details from the browser api
   const activeTabDetails = await getActiveTabDetails()
   const isActiveTab =
-    activeTabDetails !== undefined &&
-    activeTabDetails.id === tab_info.tabId &&
-    activeTabDetails.url === tab_info.url
+    activeTabDetails !== undefined && activeTabDetails.id === tab_info.tabId
 
   // we are getting url change events from background tab of streaming sites (youtube.com/watch?v=2 -> youtube.com/watch?v=1)
   const isBackgroundURLChange = !isActiveTab
