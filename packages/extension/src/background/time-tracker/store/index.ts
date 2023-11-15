@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill'
 import { createStore, createCustomPersister, Store, Persister } from 'tinybase'
-import { isString, isEmpty, values, takeRight } from '@lodash'
+import { isNumber, isString, isEmpty, values, takeRight } from '@lodash'
 
 import {
   startActiveSession,
@@ -289,10 +289,12 @@ export async function updateWebSession(
 
     if (isURLTracked) {
       // CASE 1A - if previous tab id present, check if it has background activity. This case is coming from tab activated which passes previous tab
-      const backgroundTabId = previousTabId
+      // for chrome: tab_activated is not triggered always, only url change. so we are taking previous active tab id in that case
+      const backgroundTabId =
+        mode === 'TAB_ACTIVATED' ? previousTabId : previous_active_tab_id
       const isBackgroundSession =
         has_background_activity &&
-        backgroundTabId &&
+        isNumber(backgroundTabId) &&
         isActiveBackgroundTab(store, backgroundTabId)
 
       // CASE 1B: changeInfo.url event will not have previous tab id, but it might come from same site with background tracking
