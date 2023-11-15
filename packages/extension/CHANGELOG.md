@@ -1,5 +1,9 @@
 ## Changelog
 
+### `1.6.3`
+
+- Fixes for active tab detection
+
 ### `1.6.2`
 
 - Better extension id generation flow
