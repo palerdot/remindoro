@@ -291,7 +291,9 @@ export async function updateWebSession(
       // CASE 1A - if previous tab id present, check if it has background activity. This case is coming from tab activated which passes previous tab
       // for chrome: tab_activated is not triggered always, only url change. so we are taking previous active tab id in that case
       const backgroundTabId =
-        mode === 'TAB_ACTIVATED' ? previousTabId : previous_active_tab_id
+        mode === 'TAB_ACTIVATED' && previousTabId !== undefined
+          ? previousTabId
+          : previous_active_tab_id
       const isBackgroundSession =
         has_background_activity &&
         isNumber(backgroundTabId) &&
