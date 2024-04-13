@@ -11,8 +11,10 @@
     "description": "Browsing time tracker and reminders for your firefox browser.",
     "background": {
       "scripts": [
-        "background.js"
-      ]
+        // "background.js"
+        "./background/index.js"
+      ],
+      "type": "module"
     },
     "action": {
       "default_icon": "img/remindoro-icon.png",

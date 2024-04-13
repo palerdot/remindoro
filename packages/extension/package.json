@@ -21,6 +21,7 @@
     "firefox-launch": "node scripts/dev.js --browser=firefox",
     "chrome-build": "node scripts/build.js --browser=chrome",
     "firefox-build": "node scripts/build.js --browser=firefox",
+    "bun:dev-build": "bun run scripts/bun/dev.ts --browser=firefox",
     "show:linked": "ls -l node_modules | grep ^l"
   },
   "keywords": [
@@ -43,6 +44,7 @@
     "@nuxt/friendly-errors-webpack-plugin": "^2.5.1",
     "@polymer/paper-button": "^3.0.1",
     "@svgr/webpack": "2.4.1",
+    "@types/bun": "^1.0.12",
     "@types/copy-webpack-plugin": "^8.0.1",
     "@types/lodash-es": "^4.17.4",
     "@types/node": "^20.2.5",
@@ -72,7 +74,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-watch": "^7.0.0",
     "eslint-webpack-plugin": "^4.0.1",
-    "execa": "^1.0.0",
+    "execa": "^8.0.1",
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^8.0.0",
     "fs-extra": "7.0.0",
@@ -83,7 +85,7 @@
     "identity-obj-proxy": "3.0.0",
     "loader-utils": "^2.0.0",
     "mini-css-extract-plugin": "^2.1.0",
-    "ora": "^3.0.0",
+    "ora": "^8.0.1",
     "postcss": "^8.3.5",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-loader": "^6.1.1",
@@ -109,7 +111,7 @@
     "webpack-cli": "^5.0.2",
     "webpack-dev-server": "^4.13.3",
     "webpack-manifest-plugin": "^5.0.0",
-    "yargs": "^12.0.5",
+    "yargs": "^17.7.2",
     "zip-a-folder": "^1.1.0"
   },
   "dependencies": {

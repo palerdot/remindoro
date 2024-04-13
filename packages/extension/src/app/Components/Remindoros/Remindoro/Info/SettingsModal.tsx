@@ -58,7 +58,7 @@ const Holder = muiStyled('div')(({ theme }) => ({
 const ActionBar = styled.div`
   display: flex;
   justify-content: space-between;
-  border-top: ${props => `thin solid ${props.theme.border}`};
+  border-top: ${(props: any) => `thin solid ${props.theme.border}`};
 
   margin-top: auto;
   padding: 16px 24px;
