@@ -120,6 +120,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.12.3",
+    "@mui/utils": "^5.15.14",
     "@mui/x-date-pickers": "^6.3.0",
     "@reduxjs/toolkit": "^1.6.1",
     "dayjs": "^1.11.7",
