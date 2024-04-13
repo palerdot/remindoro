@@ -3,7 +3,7 @@ import { isEmpty } from '@lodash'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import Button from '@mui/material/Button'
-import SendIcon from '@mui/icons-material/Send'
+import { Send as SendIcon } from '@mui/icons-material/'
 
 import { Screens } from '@app/Util/Enums'
 import { postData } from '@app/Util/config'
