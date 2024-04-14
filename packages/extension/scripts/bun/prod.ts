@@ -1,12 +1,12 @@
 process.env.NODE_ENV = 'production'
 
 import chalk from 'chalk'
-import { isString, head, last } from 'lodash-es'
+import { isString, takeRight, last } from 'lodash-es'
 import fs from 'node:fs/promises'
 import { statSync, createWriteStream } from 'fs'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import { zip } from 'zip-a-folder'
+import prettyBytes from 'pretty-bytes'
 import { execa } from 'execa'
 
 import { build } from './utils'
@@ -41,16 +41,19 @@ function start() {
       })
     })
     .then(outputs => {
-      // const results: BuildArtifact[] = outputs as BuildArtifact[]
-      // for (const r of results) {
-      //   try {
-      //     const response = statSync(r.path)
-      //     const file_name = last(r.path.split('/'))
-      //     console.log(`${file_name} ==> ${response.size}`)
-      //   } catch (e) {
-      //     console.error(e)
-      //   }
-      // }
+      const results: BuildArtifact[] = outputs as BuildArtifact[]
+      for (const r of results) {
+        try {
+          const response = statSync(r.path)
+          // const file_name = last(r.path.split('/'))
+          const file_name = takeRight(r.path.split('/'), 2).join('/')
+          console.log(`${file_name} ==> ${prettyBytes(response.size)}`)
+        } catch (e) {
+          console.error(e)
+        }
+      }
+
+      return Promise.resolve()
     })
     .then(() => {
       const npm_version = process.env.npm_package_version
