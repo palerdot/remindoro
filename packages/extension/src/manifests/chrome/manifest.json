@@ -13,7 +13,8 @@
         "128": "img/remindoro-icon.png"
     },
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "background/index.js",
+        "type": "module"
     },
     "permissions": [
         "alarms",

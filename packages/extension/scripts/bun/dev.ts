@@ -88,5 +88,15 @@ function run_local_extension() {
       .catch(err => {
         console.error(err)
       })
+  } else if (browser === 'chrome') {
+    console.log('porumai ... opening chrome extension')
+    execa('node', ['scripts/chrome-launch.js'])
+      .then(result => {
+        console.log(result.stdout)
+        console.log('porumai ... build finished ? all fine?')
+      })
+      .catch(err => {
+        console.error(err)
+      })
   }
 }
