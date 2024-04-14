@@ -2,7 +2,7 @@ process.env.NODE_ENV = 'development'
 
 import { watch } from 'fs'
 import fs from 'node:fs/promises'
-import { head, last } from 'lodash'
+import { head, last, isString } from 'lodash'
 import yargs from 'yargs'
 import { execa } from 'execa'
 import { hideBin } from 'yargs/helpers'
@@ -11,6 +11,12 @@ import 'colors'
 
 const argv = yargs(hideBin(process.argv)).parseSync()
 const browser = argv.browser
+const is_valid_browser =
+  isString(browser) && ['chrome', 'firefox'].includes(browser)
+if (!is_valid_browser) {
+  console.log('porumai ... not a valid browser ', browser)
+  process.exit(1)
+}
 
 const watcher = watch('./src/', { recursive: true }, (event, filename) => {
   const allowed_folders = ['app', 'background']
@@ -45,16 +51,16 @@ function start() {
       console.log(`porumai ... ${OUT_DIR} deleted `.yellow)
       return build()
     })
-    .then(browser => {
-      run_local_extension(browser as string)
+    .then(outputs => {
+      run_local_extension()
     })
 }
 
 function build() {
   return Bun.build({
-    entrypoints: ['./src/init.tsx', './src/background/index.js'],
+    entrypoints: ['./src/app/remindoro.tsx', './src/background/index.js'],
     outdir: `./${OUT_DIR}`,
-    // splitting: true,
+    splitting: true,
     // naming: '[dir]/[name].[ext]',
     naming: {
       // default values
@@ -89,15 +95,15 @@ function build() {
       copy_image_files()
       write_html_file(styles)
       write_manifest_file(browser)
-      console.log('porumai ... bun buld finished ?'.blue)
-      return new Promise(resolve => resolve(browser))
+      console.log('porumai ... bun build finished ?'.blue)
+      return new Promise(resolve => resolve(result.outputs))
     })
     .catch(error => {
       console.error('porumai ... bun build error'.red)
     })
 }
 
-function run_local_extension(browser: string) {
+function run_local_extension() {
   if (browser === 'firefox') {
     console.log('porumai ... opening firefox extension')
 
@@ -139,7 +145,7 @@ function write_html_file(styles: Array<string>) {
 <body>
   <!-- Porumai: This is our Popup/App shell -->
   <div id="remindoro-app"></div>
-  <script type="module" src="./init.js"></script>
+  <script type="module" src="./app/remindoro.js"></script>
 </body>`
 
   Bun.write(`./${OUT_DIR}/popup.html`, template)
