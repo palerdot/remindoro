@@ -1,5 +1,6 @@
 process.env.NODE_ENV = 'development'
 
+import chalk from 'chalk'
 import { watch } from 'fs'
 import fs from 'node:fs/promises'
 import { head, last, isString } from 'lodash'
@@ -95,7 +96,7 @@ function build() {
       copy_image_files()
       write_html_file(styles)
       write_manifest_file(browser)
-      console.log('porumai ... bun build finished ?'.blue)
+      console.log(chalk.cyan('porumai ... bun build finished ?'))
       return new Promise(resolve => resolve(result.outputs))
     })
     .catch(error => {
