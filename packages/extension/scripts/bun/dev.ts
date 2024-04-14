@@ -10,6 +10,8 @@ import { hideBin } from 'yargs/helpers'
 import stripJsonComments from 'strip-json-comments'
 import 'colors'
 
+import { get_config } from './config'
+
 const argv = yargs(hideBin(process.argv)).parseSync()
 const browser = argv.browser
 const is_valid_browser =
@@ -58,6 +60,8 @@ function start() {
 }
 
 function build() {
+  const config = get_config(browser as string)
+
   return Bun.build({
     entrypoints: ['./src/app/remindoro.tsx', './src/background/index.js'],
     outdir: `./${OUT_DIR}`,
@@ -70,7 +74,7 @@ function build() {
       asset: '[name].[ext]',
     },
     define: {
-      'process.env.BUN_RATE_URL': 'https://jublime.com',
+      'process.env.BUN_RATE_URL': config.rate_url,
     },
   })
     .then(result => {
