@@ -4,10 +4,6 @@
   "description": "Better Reminders in browser",
   "scripts": {
     "test": "vitest",
-    "start:chrome": "pnpm run chrome-launch",
-    "start:firefox": "pnpm run firefox-launch",
-    "start:views": "node scripts/start.js",
-    "dev": "node scripts/dev.js",
     "compress": "node scripts/compress",
     "compress-keygen": "crx keygen",
     "clean": "rimraf build/ dev-server/ release/ dist/ extension/ *.zip *.crx",
@@ -15,8 +11,10 @@
     "lint": "prettier -l **/src/**/*.{js,jsx,ts,tsx}",
     "lint:fix": "prettier --write **/src/**/*.{js,jsx,ts,tsx}",
     "typecheck": "node_modules/typescript/bin/tsc --noEmit",
-    "bun:dev-build": "bun run scripts/bun/dev.ts --browser=firefox",
+    "start:firefox": "bun run scripts/bun/dev.ts --browser=firefox",
+    "start:chrome": "bun run scripts/bun/dev.ts --browser=chrome",
     "build:firefox": "bun run scripts/bun/prod.ts --browser=firefox",
+    "build:chrome": "bun run scripts/bun/prod.ts --browser=chrome",
     "show:linked": "ls -l node_modules | grep ^l"
   },
   "keywords": [
@@ -73,6 +71,7 @@
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^8.0.0",
     "fs-extra": "7.0.0",
+    "gzip-size": "^7.0.0",
     "happy-dom": "^2.47.0",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.2",
