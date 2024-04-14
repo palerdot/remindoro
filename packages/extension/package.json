@@ -8,8 +8,6 @@
     "start:firefox": "pnpm run firefox-launch",
     "start:views": "node scripts/start.js",
     "dev": "node scripts/dev.js",
-    "build:chrome": "pnpm run chrome-build",
-    "build:firefox": "pnpm run firefox-build",
     "compress": "node scripts/compress",
     "compress-keygen": "crx keygen",
     "clean": "rimraf build/ dev-server/ release/ dist/ extension/ *.zip *.crx",
@@ -17,11 +15,8 @@
     "lint": "prettier -l **/src/**/*.{js,jsx,ts,tsx}",
     "lint:fix": "prettier --write **/src/**/*.{js,jsx,ts,tsx}",
     "typecheck": "node_modules/typescript/bin/tsc --noEmit",
-    "chrome-launch": "node scripts/dev.js --browser=chrome",
-    "firefox-launch": "node scripts/dev.js --browser=firefox",
-    "chrome-build": "node scripts/build.js --browser=chrome",
-    "firefox-build": "node scripts/build.js --browser=firefox",
     "bun:dev-build": "bun run scripts/bun/dev.ts --browser=firefox",
+    "build:firefox": "bun run scripts/bun/prod.ts --browser=firefox",
     "show:linked": "ls -l node_modules | grep ^l"
   },
   "keywords": [

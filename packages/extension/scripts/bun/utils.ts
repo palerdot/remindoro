@@ -28,6 +28,7 @@ export function build({ outDir, browser }: BuildArgs) {
     define: {
       'process.env.BUN_RATE_URL': config.rate_url,
     },
+    minify: process.env.NODE_ENV === 'production' ? true : false,
   })
     .then(result => {
       console.log(browser)
@@ -49,11 +50,15 @@ export function build({ outDir, browser }: BuildArgs) {
           }
         }
       })
-      copy_image_files({ browser, outDir })
-      write_html_file({ browser, outDir }, styles)
-      write_manifest_file({ browser, outDir })
-      console.log(chalk.cyan('porumai ... bun build finished ?'))
-      return new Promise(resolve => resolve(result.outputs))
+      return Promise.all([
+        write_html_file({ browser, outDir }, styles),
+
+        copy_image_files({ browser, outDir }),
+        write_manifest_file({ browser, outDir }),
+      ]).then(() => {
+        console.log(chalk.cyan('porumai ... bun build finished ?'))
+        return new Promise(resolve => resolve(result.outputs))
+      })
     })
     .catch(error => {
       return new Promise((resolve, reject) => {
@@ -84,12 +89,13 @@ function write_html_file({ outDir }: BuildArgs, styles: Array<string>) {
   <script type="module" src="./app/remindoro.js"></script>
 </body>`
 
-  Bun.write(`./${outDir}/popup.html`, template)
+  return Bun.write(`./${outDir}/popup.html`, template)
 }
 
 function write_manifest_file({ browser, outDir }: BuildArgs) {
   console.log(`porumai ... writing manifest for ${browser}`.blue)
-  fs.readFile(`./src/manifests/${browser}/manifest.json`, 'utf8')
+  return fs
+    .readFile(`./src/manifests/${browser}/manifest.json`, 'utf8')
     .then(data => {
       const manifest = JSON.parse(stripJsonComments(data))
       manifest.version = process.env.npm_package_version
@@ -101,7 +107,7 @@ function write_manifest_file({ browser, outDir }: BuildArgs) {
 }
 
 function copy_image_files({ outDir }: BuildArgs) {
-  fs.cp('./src/img', `./${outDir}/img`, { recursive: true }).then(() => {
+  return fs.cp('./src/img', `./${outDir}/img`, { recursive: true }).then(() => {
     console.log('porumai ... img file copied')
   })
 }
