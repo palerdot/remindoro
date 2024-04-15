@@ -30,6 +30,7 @@ export function build({ outDir, browser }: BuildArgs) {
       'process.env.BUN_RATE_URL': config.rate_url,
     },
     minify: process.env.NODE_ENV === 'production' ? true : false,
+    sourcemap: process.env.NODE_ENV === 'production' ? 'none' : 'external',
   })
     .then(result => {
       console.log(browser)
