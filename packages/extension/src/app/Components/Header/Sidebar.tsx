@@ -25,8 +25,8 @@ import { useTodoCount } from '@app/Store/Slices/Remindoros'
 
 import { Screens } from '@app/Routes/'
 
-const rateUrl =
-  process.env.REACT_APP_RATE_URL || 'https://palerdot.in/remindoro'
+// replaced by bun
+const rateUrl = process.env.BUN_RATE_URL || 'https://palerdot.in/remindoro'
 
 type Props = {
   isMenuOpen: boolean

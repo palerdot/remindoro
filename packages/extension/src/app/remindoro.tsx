@@ -2,8 +2,8 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { isEmpty } from 'lodash-es'
 
-import App from './'
-import { loadFromStorage } from './Util/BrowserStorage/'
+import App, {type InitialState} from './main'
+import { loadFromStorage } from './Util/BrowserStorage'
 
 /*
  * IMPORTANT: This file is intentionally lightweight/barebones
@@ -12,9 +12,9 @@ import { loadFromStorage } from './Util/BrowserStorage/'
  */
 
 const Remindoro = {
-  init: initialState => {
+  init: (initialState: InitialState) => {
     const container = document.getElementById('remindoro-app')
-    const root = createRoot(container)
+    const root = createRoot(container as HTMLElement)
     root.render(<App initialState={initialState} />)
   },
 }

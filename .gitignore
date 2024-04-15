@@ -1,6 +1,7 @@
 node_modules
 dist
 release
+out
 dev-server
 .vscode
 temp

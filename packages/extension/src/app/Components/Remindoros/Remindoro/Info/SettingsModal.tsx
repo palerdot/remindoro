@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { useDispatch } from 'react-redux'
 import { Drawer, Button } from '@mui/material'
-import DeleteIcon from '@mui/icons-material/Delete'
+import { Delete as DeleteIcon } from '@mui/icons-material/'
 import { useSnackbar } from 'notistack'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
@@ -58,7 +58,7 @@ const Holder = muiStyled('div')(({ theme }) => ({
 const ActionBar = styled.div`
   display: flex;
   justify-content: space-between;
-  border-top: ${props => `thin solid ${props.theme.border}`};
+  border-top: ${(props: any) => `thin solid ${props.theme.border}`};
 
   margin-top: auto;
   padding: 16px 24px;

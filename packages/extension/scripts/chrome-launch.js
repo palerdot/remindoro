@@ -6,7 +6,7 @@ const chromeLaunch = require('chrome-launch') // eslint-disable-line import/no-e
 require('colors')
 
 const url = 'https://youtube.com'
-const dev = path.resolve(__dirname, '..', 'dev-server')
+const dev = path.resolve(__dirname, '..', 'out')
 const args = [`--load-extension=${dev}`]
 
 chromeLaunch(url, { args })

@@ -37,7 +37,7 @@ const debouncedTodoBadgeUpdate = debounce((status: number) => {
   setBadgeText(text)
 }, 515)
 
-type InitialState = RootState | undefined
+export type InitialState = RootState | undefined
 
 type Props = {
   initialState: InitialState
