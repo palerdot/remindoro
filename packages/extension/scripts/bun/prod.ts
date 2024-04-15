@@ -10,7 +10,7 @@ import { hideBin } from 'yargs/helpers'
 import prettyBytes from 'pretty-bytes'
 import { execa } from 'execa'
 
-import { build } from './utils'
+import { build, type_check } from './utils'
 import { BuildArtifact } from 'bun'
 
 const argv = yargs(hideBin(process.argv)).parseSync()
@@ -25,15 +25,25 @@ if (!is_valid_browser) {
 const OUT_DIR = `release`
 const BUILD_DIR = `${OUT_DIR}/${browser}`
 
-start()
+prod_build()
+
+function prod_build() {
+  type_check()
+    .then(() => {
+      return start()
+    })
+    .catch(err => {
+      console.log(chalk.red('porumai ... prod build failed'))
+    })
+}
 
 function start() {
   if (!is_valid_browser) {
     process.exit(1)
-    return
   }
 
-  fs.rm(`./${OUT_DIR}`, { force: true })
+  return fs
+    .rm(`./${OUT_DIR}`, { force: true })
     .then(() => {
       console.log(`porumai ... ${OUT_DIR} deleted `.yellow)
       return build({
@@ -78,14 +88,17 @@ function start() {
       ])
         .then(result => {
           console.log(result.stdout)
-          console.log('porumai ... zipped? all fine?')
         })
         .catch(err => {
           console.error(err)
         })
     })
     .then(() => {
-      console.log(chalk.cyan('porumai ... prod build finished ?'))
+      console.log(
+        chalk.cyan(
+          `porumai ... remindoro-${browser}-v${process.env.npm_package_version} prod build finished`
+        )
+      )
     })
     .catch(err => {
       console.error('porumai ... build error', err)

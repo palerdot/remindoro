@@ -2,6 +2,7 @@ import fs from 'node:fs/promises'
 import chalk from 'chalk'
 import { last } from 'lodash-es'
 import stripJsonComments from 'strip-json-comments'
+import { execa } from 'execa'
 import 'colors'
 
 import { get_config } from './config'
@@ -110,4 +111,17 @@ function copy_image_files({ outDir }: BuildArgs) {
   return fs.cp('./src/img', `./${outDir}/img`, { recursive: true }).then(() => {
     console.log('porumai ... img file copied')
   })
+}
+
+export function type_check() {
+  console.log(chalk.yellow('porumai ... starting type check'))
+  return execa('pnpm', ['typecheck'])
+    .then(() => {
+      console.log(chalk.green('porumai ... typecheck success'))
+    })
+    .catch(err => {
+      console.log(chalk.red('porumai ... typecheck failed'))
+      console.log(err.message)
+      return Promise.reject(err)
+    })
 }
