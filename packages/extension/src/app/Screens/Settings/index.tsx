@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import Notifications from './Notifications'
 import Theme from './Theme'
 import LiveNote from './LiveNote'
+import HomeScreenSetting from './HomeScreen'
 
 const Wrapper = styled.div`
   & .page-heading {
@@ -45,6 +46,7 @@ function Settings() {
       <Notifications />
       <Theme />
       <LiveNote />
+      <HomeScreenSetting />
     </Wrapper>
   )
 }

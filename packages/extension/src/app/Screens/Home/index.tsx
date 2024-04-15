@@ -1,32 +1,25 @@
 import React from 'react'
-import styled from '@emotion/styled'
+import { useSelector } from 'react-redux'
 
-import TimeTrackerGist from '@app/Screens/TimeTracker/DashboardGist'
-import { DashboardGist as RemindorosGist } from '@app/Screens/Remindoros'
+import type { RootState } from '@app/Store/'
 
-const Holder = styled.div`
-  padding-bottom: 34px;
-
-  & .title-holder {
-    padding: 16px;
-    margin-bottom: 8px;
-
-    & .title {
-      font-size: 1.25rem;
-    }
-  }
-`
+import { HomeScreenSetting } from '@app/Store/Slices/Settings'
+import RemindorosScreen from '@app/Screens/Remindoros'
+import DashboardScreen from '@app/Screens/Dashboard'
 
 function Home() {
-  return (
-    <Holder>
-      <div className="title-holder">
-        <div className="title">{'Dashboard'}</div>
-      </div>
+  const homeScreen = useSelector(
+    (state: RootState) => state.settings.homeScreen
+  )
 
-      <TimeTrackerGist />
-      <RemindorosGist />
-    </Holder>
+  return (
+    <div>
+      {homeScreen === HomeScreenSetting.Reminders ? (
+        <RemindorosScreen />
+      ) : (
+        <DashboardScreen />
+      )}
+    </div>
   )
 }
 
