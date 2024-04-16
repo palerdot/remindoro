@@ -11,6 +11,7 @@ import App from './App'
 import { getStore } from '@app/Store/'
 import { syncToStorage } from '@app/Util/BrowserStorage/'
 import { Theme } from './Util/colors'
+import { HomeScreenSetting } from './Store/Slices/Settings'
 
 /*
  * AppStore - App + Store !!!
@@ -49,9 +50,13 @@ const defaultState: RootState = {
     theme: Theme.Classic,
     liveNoteEnabled: false,
     notificationsEnabled: true,
+    homeScreen: HomeScreenSetting.Reminders,
   },
   account: {
     logged_in: false,
+  },
+  temp: {
+    changelogHistories: [],
   },
   version: '0.0.0',
 }
