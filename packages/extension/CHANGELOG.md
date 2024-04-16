@@ -1,5 +1,10 @@
 ## Changelog
 
+### `1.7.1`
+
+- Bun bundler
+- Home screen configuration
+
 ### `1.6.3`
 
 - Fixes for active tab detection
