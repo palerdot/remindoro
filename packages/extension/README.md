@@ -9,8 +9,8 @@
 # Remindoro
 
 Remindoro is a browser extension (Chrome/Firefox) that helps you do the following
-- Track time spent on browsing websites (e.g. social media sites)
 - set one-time/repeat reminders in your browser.
+- Track time spent on browsing websites (e.g. social media sites)
 
 [![Build Status](https://travis-ci.org/palerdot/remindoro.svg?branch=master)](https://travis-ci.org/palerdot/remindoro)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)

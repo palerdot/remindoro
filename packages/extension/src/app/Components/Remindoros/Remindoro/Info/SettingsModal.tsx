@@ -14,6 +14,7 @@ import { deleteRemindoro } from '@app/Store/Slices/Remindoros'
 import ConfirmDeleteModal from './ConfirmDeleteModal'
 import Reminder from './Reminder/'
 import MarkTodo from './MarkTodo'
+import { EmailReminderModalButton } from '@app/Screens/Feedback/Changelog/EmailNotification'
 
 const PREFIX = 'SettingsModal'
 
@@ -27,9 +28,14 @@ const Root = styled.div``
 const Holder = muiStyled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  height: '314px',
+  height: '375px',
   background: theme.colors.background,
   color: theme.colors.textColor,
+
+  [`& .email-reminder-section`]: {
+    margin: 'auto',
+    textAlign: 'center',
+  },
 
   [`& .${classes.deleteButton}`]: {
     margin: theme.spacing(0),
@@ -91,6 +97,9 @@ function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
         }}
       >
         <Holder>
+          <div className="email-reminder-section">
+            <EmailReminderModalButton />
+          </div>
           <Reminder id={remindoro.id} reminder={remindoro.reminder} />
           <MarkTodo id={remindoro.id} isTodo={remindoro.isTodo} />
           <ActionBar>

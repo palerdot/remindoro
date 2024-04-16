@@ -1,5 +1,7 @@
-import React, { useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useSnackbar } from 'notistack'
+import { Button, Dialog, DialogContent, DialogTitle } from '@mui/material'
+import { ContactMail } from '@mui/icons-material'
 
 import PrivateBetaEmail from '../PrivateBeta'
 
@@ -30,3 +32,39 @@ function EmailNotification() {
 }
 
 export default EmailNotification
+
+export function EmailReminderModalButton() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <Button
+        onClick={() => {
+          setOpen(true)
+        }}
+      >
+        <ContactMail />
+        <span
+          style={{
+            padding: '4px',
+          }}
+        >
+          {'Get Email Reminders'}
+        </span>
+      </Button>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        fullWidth={true}
+        maxWidth={'xl'}
+        scroll={'paper'}
+      >
+        <DialogTitle>{`Email Reminders - Private Beta`}</DialogTitle>
+        <DialogContent dividers={true}>
+          <EmailNotification />
+        </DialogContent>
+        <Button onClick={() => setOpen(false)}>{'Close'}</Button>
+      </Dialog>
+    </>
+  )
+}
