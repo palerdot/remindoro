@@ -113,20 +113,6 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
             </ListItemButton>
           </Link>
 
-          {/* Time Tracker Menu */}
-          <Link
-            to={Screens.TimeTracker}
-            exact
-            activeClassName={'selected-screen'}
-          >
-            <ListItemButton>
-              <ListItemIcon className={'listIcon'}>
-                {<PendingActionsIcon />}
-              </ListItemIcon>
-              <ListItemText primary={'Time Tracker'} />
-            </ListItemButton>
-          </Link>
-
           {/* Remindoros Menu */}
           <Link
             to={Screens.Remindoros}
@@ -167,6 +153,20 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
                 {<SettingsIcon />}
               </ListItemIcon>
               <ListItemText primary={'Settings'} />
+            </ListItemButton>
+          </Link>
+
+          {/* Time Tracker Menu */}
+          <Link
+            to={Screens.TimeTracker}
+            exact
+            activeClassName={'selected-screen'}
+          >
+            <ListItemButton>
+              <ListItemIcon className={'listIcon'}>
+                {<PendingActionsIcon />}
+              </ListItemIcon>
+              <ListItemText primary={'Time Tracker'} />
             </ListItemButton>
           </Link>
         </List>

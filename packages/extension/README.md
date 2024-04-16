@@ -2,7 +2,7 @@
     <img src="./src/app/../img/remindoro-icon.png" alt="Remindoro" width="64" height="64" />
 </p>
 
-<p align="center">Browsing Time Tracker and better reminders for your browser.</p>
+<p align="center">Reminders in your browser and everywhere.</p>
 
 <br/>
 
