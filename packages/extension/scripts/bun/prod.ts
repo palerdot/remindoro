@@ -43,7 +43,7 @@ function start() {
   }
 
   return fs
-    .rm(`./${OUT_DIR}`, { force: true })
+    .rmdir(`./${OUT_DIR}`)
     .then(() => {
       console.log(`porumai ... ${OUT_DIR} deleted `.yellow)
       return build({
