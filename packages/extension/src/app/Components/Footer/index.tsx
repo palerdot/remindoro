@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 
 import ToggleNotifications from '@app/Components/Settings/ToggleNotifications'
 import MigrateChromeData from '@app/Components/ChromeError/FooterItem'
+import WhatsNew from './WhatsNew'
 
 const Holder = styled.div`
   display: flex;
@@ -32,6 +33,7 @@ function Footer() {
     <Holder>
       <div className={'icon-holder'}>
         <ToggleNotifications />
+        <WhatsNew />
       </div>
       <div className={'message-section'}>
         <MigrateChromeData />

@@ -2,6 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 
 import RichTextHelp from '@app/Components/LiveNote/Help/HelpInfo'
+import Content from '../Feedback/Changelog/Content'
 
 const Wrapper = styled.div`
   padding: 20px;
@@ -79,6 +80,8 @@ function Help() {
         {', please let me know via '}
         <strong className={'highlight'}>{'arun@remindoro.app'}</strong>
       </Disclaimer>
+      <h2>{"What's New"}</h2>
+      <Content />
       <h2>FAQ</h2>
       <Subtitle>{'This section covers some FAQs.'}</Subtitle>
       <div>

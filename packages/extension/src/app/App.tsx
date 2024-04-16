@@ -1,4 +1,4 @@
-import React, { createRef } from 'react'
+import React, { useState, useEffect, createRef } from 'react'
 import styled from '@emotion/styled'
 import { css, Global, ThemeProvider } from '@emotion/react'
 import {
@@ -22,6 +22,8 @@ import Routes from '@app/Routes/'
 import { useTheme } from '@app/Hooks/'
 import Header from '@app/Components/Header/'
 import Footer from '@app/Components/Footer/'
+import { useHasChangelogHistory } from './Store'
+import ChangelogModal from './Screens/Feedback/Changelog/Modal'
 
 // main app css
 import './css/index.css'
@@ -262,6 +264,8 @@ declare module '@mui/material/styles' {
 }
 
 function App() {
+  const has_changelog_history = useHasChangelogHistory()
+  const [showChangelog, setChangelogStatus] = useState(!has_changelog_history)
   const theme = useTheme()
   // mui v5 default theme
   const muiTheme = createTheme({
@@ -297,6 +301,10 @@ function App() {
     notistackRef?.current?.closeSnackbar(key)
   }
 
+  useEffect(() => {
+    setChangelogStatus(!has_changelog_history)
+  }, [has_changelog_history, setChangelogStatus])
+
   return (
     <StyledEngineProvider injectFirst>
       <MUIThemeProvider theme={muiTheme}>
@@ -324,6 +332,12 @@ function App() {
                   <Footer />
                 </Holder>
               </Router>
+              <ChangelogModal
+                isOpen={showChangelog}
+                closeModal={() => {
+                  setChangelogStatus(false)
+                }}
+              />
             </LocalizationProvider>
           </SnackbarProvider>
         </ThemeProvider>

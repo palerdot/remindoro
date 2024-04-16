@@ -3,7 +3,7 @@ import { isEmpty } from '@lodash'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import Button from '@mui/material/Button'
-import { Send as SendIcon } from '@mui/icons-material/'
+import { Send as SendIcon, InfoOutlined } from '@mui/icons-material/'
 
 import { Screens } from '@app/Util/Enums'
 import { postData } from '@app/Util/config'
@@ -14,6 +14,7 @@ function Feedback() {
   const history = useHistory()
   const { enqueueSnackbar } = useSnackbar()
 
+  const [whatsNewOpen, setWhatsNewStatus] = useState(false)
   const [inProgress, setProgress] = useState(false)
   const $textarea = useRef<HTMLTextAreaElement>(null)
 
@@ -106,7 +107,19 @@ function Feedback() {
           Send Feedback
         </Button>
       </div>
-      <WhatsNew />
+      <div>
+        <Button
+          variant="contained"
+          startIcon={<InfoOutlined />}
+          onClick={() => setWhatsNewStatus(true)}
+        >
+          {'Whats New'}
+        </Button>
+        <WhatsNew
+          isOpen={whatsNewOpen}
+          closeModal={() => setWhatsNewStatus(false)}
+        />
+      </div>
     </Holder>
   )
 }
