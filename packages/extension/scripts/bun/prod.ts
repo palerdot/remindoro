@@ -1,7 +1,8 @@
 process.env.NODE_ENV = 'production'
 
 import { statSync } from 'fs'
-import fs from 'node:fs/promises'
+// import fs from 'node:fs/promises'
+import fs from 'fs/promises'
 import chalk from 'chalk'
 import { isString, takeRight } from 'lodash-es'
 import { gzipSizeFromFileSync } from 'gzip-size'
@@ -43,7 +44,7 @@ function start() {
   }
 
   return fs
-    .rmdir(`./${OUT_DIR}`)
+    .rm(`./${OUT_DIR}`, { recursive: true, force: true })
     .then(() => {
       console.log(`porumai ... ${OUT_DIR} deleted `.yellow)
       return build({
