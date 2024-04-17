@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { IconButton } from '@mui/material'
 import { InfoOutlined } from '@mui/icons-material'
 
-import ChangelogModal from '@app/Screens/Feedback/Changelog/Modal'
+import WhatsNewModal from '@app/Screens/Feedback/WhatsNew'
 
 function WhatsNew() {
   const [open, setOpen] = useState(false)
@@ -19,7 +19,7 @@ function WhatsNew() {
       >
         <InfoOutlined />
       </IconButton>
-      <ChangelogModal isOpen={open} closeModal={() => setOpen(false)} />
+      <WhatsNewModal isOpen={open} closeModal={() => setOpen(false)} />
     </>
   )
 }

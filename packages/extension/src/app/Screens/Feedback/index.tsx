@@ -8,7 +8,7 @@ import { Send as SendIcon, InfoOutlined } from '@mui/icons-material/'
 import { Screens } from '@app/Util/Enums'
 import { postData } from '@app/Util/config'
 import { Holder, Header } from './Styles'
-import WhatsNew from './WhatsNew'
+import WhatsNewModal from './WhatsNew'
 
 function Feedback() {
   const history = useHistory()
@@ -115,7 +115,7 @@ function Feedback() {
         >
           {'Whats New'}
         </Button>
-        <WhatsNew
+        <WhatsNewModal
           isOpen={whatsNewOpen}
           closeModal={() => setWhatsNewStatus(false)}
         />

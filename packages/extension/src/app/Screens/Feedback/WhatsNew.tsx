@@ -8,7 +8,8 @@ import {
   Button,
 } from '@mui/material'
 
-import { WHATS_NEW, WHATS_UP } from '@background/utils/'
+// import { WHATS_NEW, WHATS_UP } from '@background/utils/'
+import Content from './Changelog/Content'
 
 // const Holder = styled.div`
 //   cursor: pointer;
@@ -26,7 +27,7 @@ type Props = {
   closeModal: () => void
 }
 
-function WhatsNew({ isOpen, closeModal }: Props) {
+function WhatsNewModal({ isOpen, closeModal }: Props) {
   return (
     <Dialog
       open={isOpen}
@@ -38,22 +39,7 @@ function WhatsNew({ isOpen, closeModal }: Props) {
       <DialogTitle>{`What's New and What's Up!`}</DialogTitle>
       <DialogContent dividers={true}>
         <DialogContentText></DialogContentText>
-        <div>
-          <div>{`What's New`}</div>
-          <ul>
-            {WHATS_NEW.map((x, index) => (
-              <li key={index}>{x}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <div>{`What's Coming Up`}</div>
-          <ul>
-            {WHATS_UP.map((x, index) => (
-              <li key={index}>{x}</li>
-            ))}
-          </ul>
-        </div>
+        <Content />
       </DialogContent>
       <DialogActions>
         <Button onClick={() => closeModal()}>{'Close'}</Button>
@@ -62,4 +48,4 @@ function WhatsNew({ isOpen, closeModal }: Props) {
   )
 }
 
-export default WhatsNew
+export default WhatsNewModal
