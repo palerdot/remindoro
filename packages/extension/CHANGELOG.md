@@ -1,5 +1,9 @@
 ## Changelog
 
+### `1.7.3`
+
+- Better whats new modal on info icon click
+
 ### `1.7.2`
 
 - compile time environment variables for development/production
