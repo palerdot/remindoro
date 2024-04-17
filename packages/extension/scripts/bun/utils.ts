@@ -5,7 +5,7 @@ import stripJsonComments from 'strip-json-comments'
 import { execa } from 'execa'
 import 'colors'
 
-import { get_config } from './config'
+import { get_browser_config, get_runtime_config } from './config'
 
 type BuildArgs = {
   outDir: string
@@ -13,7 +13,8 @@ type BuildArgs = {
 }
 
 export function build({ outDir, browser }: BuildArgs) {
-  const config = get_config(browser)
+  const browser_config = get_browser_config(browser)
+  const runtime_config = get_runtime_config()
 
   return Bun.build({
     entrypoints: ['./src/app/remindoro.tsx', './src/background/index.js'],
@@ -27,7 +28,8 @@ export function build({ outDir, browser }: BuildArgs) {
       asset: '[name].[ext]',
     },
     define: {
-      'process.env.BUN_RATE_URL': config.rate_url,
+      'process.env.BUN_RATE_URL': browser_config.rate_url,
+      'process.env.API_URL': runtime_config.API_URL,
     },
     minify: process.env.NODE_ENV === 'production' ? true : false,
     sourcemap: process.env.NODE_ENV === 'production' ? 'none' : 'external',
