@@ -1,5 +1,9 @@
 ## Changelog
 
+### `1.7.2`
+
+- compile time environment variables for development/production
+
 ### `1.7.1`
 
 - Bun bundler
