@@ -7,7 +7,7 @@
     "name": "remindoro",
     "version": "1.0.0",
     "manifest_version": 3,
-    "description": "Browsing Time Tracker and reminders for your chrome browser.",
+    "description": "Repeat/One-time and email Reminders in your browser",
     "icons": {
         "16": "img/remindoro-icon-16.png",
         "128": "img/remindoro-icon.png"

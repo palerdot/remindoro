@@ -8,7 +8,7 @@
     "version": "0.0.0", // version number will be replaced from package.json
     "manifest_version": 3,
     "name": "remindoro",
-    "description": "Browsing time tracker and reminders for your firefox browser.",
+    "description": "One-Time/Repeat and Email reminders in your browser",
     "background": {
       "scripts": [
         // "background.js"

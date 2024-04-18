@@ -1,5 +1,9 @@
 ## Changelog
 
+### `1.7.4`
+
+- Chrome Release
+
 ### `1.7.3`
 
 - Better whats new modal on info icon click
