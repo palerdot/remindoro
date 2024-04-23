@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { omit, cloneDeep } from 'lodash-es'
 
-import { Remindoro } from '../types/'
+import { Remindoro } from '../types/index.js'
 
 // helper function to deal with time
 const SECONDS = 1000 // in milliseconds
