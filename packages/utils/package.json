@@ -6,11 +6,12 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prepare": "pnpm run build",
-    "prepublishOnly": "pnpm test",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run test:once",
     "build": "tsc",
     "typecheck": "node_modules/typescript/bin/tsc --noEmit",
-    "test": "vitest"
+    "test": "vitest",
+    "test:once": "vitest run"
   },
   "keywords": [],
   "author": "palerdot",
