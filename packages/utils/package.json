@@ -6,7 +6,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "prepare": "pnpm run build",
+    "prepublishOnly": "pnpm test",
     "build": "tsc",
+    "typecheck": "node_modules/typescript/bin/tsc --noEmit",
     "test": "vitest"
   },
   "keywords": [],
@@ -16,8 +19,15 @@
     "dist/**/*"
   ],
   "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
+    "dayjs": "^1.11.10",
+    "lodash-es": "^4.17.21",
     "typescript": "^5.4.5",
     "vite": "^5.2.10",
     "vitest": "^1.5.0"
+  },
+  "peerDependencies": {
+    "dayjs": "^1.11.10",
+    "lodash-es": "^4.17.21"
   }
 }
