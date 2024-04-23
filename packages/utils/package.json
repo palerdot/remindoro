@@ -1,0 +1,19 @@
+{
+  "name": "@remindoro/utils",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "palerdot",
+  "license": "AGPL-3.0-only",
+  "files": ["dist/**/*"],
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}
