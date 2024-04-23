@@ -11,7 +11,7 @@
 #  Environment Info:
 #   - bun `v1.1.3`
 #   - node `v20.x`
-#   - npm `v10.x` / pnpm 8.x
+#   - npm `v10.x` / pnpm 9.x
 #   - OS `Mac OS 12.6.3`
 
 tar -cvzf ~/Desktop/remindoro-firefox-source.tar.gz package.json tsconfig.json pnpm-lock.yaml src/
