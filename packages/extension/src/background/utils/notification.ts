@@ -2,6 +2,7 @@ import browser from 'webextension-polyfill'
 import { v4 as uuid } from 'uuid'
 import { omit, isEmpty } from '@lodash'
 import dayjs from 'dayjs'
+import { notification_check } from 'remindoro-utils'
 
 import type { Remindoro, Reminder } from '@app/Store/Slices/Remindoros'
 
@@ -74,7 +75,14 @@ export class Notification {
    * - adds remindoros 'toNotify' (if it has to be notified)
    */
   scan = () => {
-    return this.remindoros.map(this.check)
+    // return this.remindoros.map(this.check)
+    const scanned = this.remindoros.map(notification_check)
+    const toNotify = scanned
+      .filter(r => r.toNotify !== undefined)
+      .map(r => r.toNotify) as Array<Remindoro>
+    this.toNotify = [...this.toNotify, ...toNotify]
+
+    return scanned.map(r => r.remindoro)
   }
 
   /*
