@@ -23,16 +23,16 @@ const classes = {
 }
 
 const StyledDialog = styled('div')(({ theme }) => ({
-  background: theme.colors.primaryDark,
-  color: theme.colors.textColor,
+  background: theme.palette.grey[900],
+  color: theme.palette.text.primary,
 
   '& .migrate-dialog-description p': {
-    color: theme.colors.textColor,
+    color: theme.palette.text.primary,
   },
 
   '& .migrate-dialog-description p.highlight': {
-    background: theme.colors.primaryLight,
-    color: theme.colors.textColor,
+    background: theme.palette.primary.main,
+    color: theme.palette.text.primary,
 
     padding: '8px',
   },
@@ -45,23 +45,21 @@ const StyledDialog = styled('div')(({ theme }) => ({
 
   [`& .${classes.migrateButton}`]: {
     margin: theme.spacing(0),
-    background: theme.colors.danger,
-    color: theme.colors.textColor,
+    background: theme.palette.error.main,
+    color: theme.palette.text.primary,
 
     '&:hover': {
-      background: theme.colors.danger,
-      color: theme.colors.textColor,
       opacity: 0.89,
     },
   },
 
   [`& .${classes.cancelButton}`]: {
     margin: theme.spacing(0),
-    background: theme.colors.backgroundLight,
-    color: theme.colors.textColor,
-    borderColor: theme.colors.border,
+    background: theme.palette.grey[900],
+    color: theme.palette.text.primary,
+    borderColor: theme.palette.grey[100],
     '&:hover': {
-      background: theme.colors.background,
+      background: theme.palette.grey[700],
     },
   },
 }))

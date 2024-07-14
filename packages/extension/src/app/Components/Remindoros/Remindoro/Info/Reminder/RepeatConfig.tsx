@@ -21,10 +21,10 @@ type Props = {
 
 const DurationSlider = styled.div`
   & .slider-text {
-    color: ${props => props.theme.textColor};
+    color: ${props => props.theme.palette.text.primary};
 
     &.disabled {
-      color: ${props => props.theme.primaryDark};
+      color: ${props => props.theme.palette.grey[900]};
     }
   }
 `
@@ -41,8 +41,9 @@ function RepeatConfig({
   const sliderInitialValue = duration || 45
   // storing it in a ref for slider uncontrolled component
   const sliderDefaultValue = useRef(sliderInitialValue)
-  const [localSliderValue, setLocalSliderValue] =
-    useState<number>(sliderInitialValue)
+  const [localSliderValue, setLocalSliderValue] = useState<number>(
+    sliderInitialValue
+  )
 
   return (
     <div className={'second-col'}>

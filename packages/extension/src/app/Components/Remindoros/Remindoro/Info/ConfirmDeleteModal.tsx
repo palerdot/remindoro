@@ -19,11 +19,11 @@ const classes = {
 }
 
 const StyledDialog = styled('div')(({ theme }) => ({
-  background: theme.colors.primaryDark,
-  color: theme.colors.textColor,
+  background: theme.palette.primary.main,
+  color: theme.palette.text.primary,
 
   '& .delete-dialog-description p': {
-    color: theme.colors.textColor,
+    color: theme.palette.text.primary,
   },
 
   '& .action-holder': {
@@ -34,23 +34,23 @@ const StyledDialog = styled('div')(({ theme }) => ({
 
   [`& .${classes.deleteButton}`]: {
     margin: theme.spacing(0),
-    background: theme.colors.danger,
-    color: theme.colors.highlightTextColor,
+    background: theme.palette.error.main,
+    color: theme.palette.text.primary,
 
     '&:hover': {
-      background: theme.colors.danger,
-      color: theme.colors.highlightTextColor,
+      background: theme.palette.error.main,
+      color: theme.palette.text.primary,
       opacity: 0.89,
     },
   },
 
   [`& .${classes.cancelButton}`]: {
     margin: theme.spacing(0),
-    background: theme.colors.backgroundLight,
-    color: theme.colors.textColor,
-    borderColor: theme.colors.border,
+    background: theme.palette.background.paper,
+    color: theme.palette.text.primary,
+    borderColor: theme.palette.grey.A100,
     '&:hover': {
-      background: theme.colors.background,
+      opacity: 0.89,
     },
   },
 }))

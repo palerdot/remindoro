@@ -94,8 +94,7 @@ function Activity({ site }: Props) {
             orientation="horizontal"
             flexItem
             sx={{
-              background: theme => theme.colors.primary,
-              // color: theme => theme.colors.primary,
+              background: theme => theme.palette.primary.main,
             }}
           />
         }

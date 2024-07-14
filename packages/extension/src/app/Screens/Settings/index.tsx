@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 
 export const Holder = styled.div`
   padding: 16px;
-  border-bottom: ${props => `thin solid ${props.theme.border}`};
+  border-bottom: ${props => `thin solid ${props.theme.palette.grey[400]}`};
 
   & .setting-wrapper {
     display: flex;
@@ -33,7 +33,7 @@ export const Holder = styled.div`
   }
 
   & .subtitle {
-    color: ${props => props.theme.highlight};
+    color: ${props => props.theme.palette.secondary.main};
     font-size: 0.95rem;
     font-style: italic;
   }

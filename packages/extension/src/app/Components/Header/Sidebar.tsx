@@ -34,7 +34,7 @@ type Props = {
 }
 
 const DrawerHolder = styled.div`
-  background: ${props => props.theme.background};
+  background: ${props => props.theme.palette.background.paper};
   color: white;
   width: 250px;
   height: 100%;
@@ -43,19 +43,24 @@ const DrawerHolder = styled.div`
 const Link = styled(NavLink)`
   display: flex;
   text-decoration: none;
-  color: ${props => props.theme.textColor};
+  color: ${props => props.theme.palette.primary.main};
   margin: 2px 0;
 
   &:hover {
-    background: ${props => props.theme.borderDark};
+    opacity: 0.8;
   }
 
   &.selected-screen {
-    background: ${props => props.theme.primaryDark};
+    background: ${props => props.theme.palette.primary.main};
+    color: ${props => props.theme.palette.primary.contrastText};
+
+    & .listIcon {
+      color: ${props => props.theme.palette.primary.contrastText};
+    }
   }
 
   & .listIcon {
-    color: ${props => props.theme.highlight};
+    color: ${props => props.theme.palette.primary.main};
   }
 `
 
@@ -70,15 +75,15 @@ const BottomMenu = styled.div`
 const RateLink = styled.a`
   display: flex;
   text-decoration: none;
-  color: ${props => props.theme.textColor};
+  color: ${props => props.theme.palette.text.primary};
   margin: 2px 0;
 
   &:hover {
-    background: ${props => props.theme.borderDark};
+    background: ${props => props.theme.palette.grey.A100};
   }
 
   & .listIcon {
-    color: ${props => props.theme.highlight};
+    color: ${props => props.theme.palette.secondary.main};
   }
 `
 
@@ -172,7 +177,7 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
         </List>
         <Divider
           sx={{
-            background: theme => theme.colors.primaryDark,
+            background: theme => theme.palette.divider,
           }}
         />
         <List>
@@ -211,7 +216,7 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
         </List>
         <Divider
           sx={{
-            background: theme => theme.colors.primaryDark,
+            background: theme => theme.palette.divider,
           }}
         />
         <BottomMenu>

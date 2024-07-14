@@ -27,28 +27,25 @@ const Holder = muiStyled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   height: '314px',
-  background: theme.colors.background,
-  color: theme.colors.textColor,
+  background: theme.palette.background.paper,
+  color: theme.palette.text.primary,
 
   [`& .${classes.deleteButton}`]: {
     margin: theme.spacing(0),
-    background: theme.colors.danger,
-    color: theme.colors.highlightTextColor,
+    background: theme.palette.error.main,
+    color: theme.palette.text.primary,
 
     '&:hover': {
-      background: theme.colors.danger,
-      color: theme.colors.highlightTextColor,
       opacity: 0.89,
     },
   },
 
   [`& .${classes.closeButton}`]: {
-    background: theme.colors.primaryDark,
-    color: theme.colors.textColor,
-    borderColor: theme.colors.border,
+    background: theme.palette.background.paper,
+    color: theme.palette.text.primary,
+    borderColor: theme.palette.grey.A100,
 
     '&:hover': {
-      // background: theme.colors.backgroundLight,
       opacity: 0.89,
     },
   },
@@ -57,7 +54,7 @@ const Holder = muiStyled('div')(({ theme }) => ({
 const ActionBar = styled.div`
   display: flex;
   justify-content: space-between;
-  border-top: ${props => `thin solid ${props.theme.border}`};
+  border-top: ${props => `thin solid ${props.theme.palette.grey.A100}`};
 
   padding: 16px 24px;
   padding-right: 20px;

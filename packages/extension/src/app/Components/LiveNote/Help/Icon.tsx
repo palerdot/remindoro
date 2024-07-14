@@ -20,7 +20,7 @@ function Icon() {
       <IconButton
         component="span"
         sx={{
-          color: theme => theme.colors.highlight,
+          color: theme => theme.palette.secondary.main,
           '&:hover': {
             opacity: 0.89,
           },

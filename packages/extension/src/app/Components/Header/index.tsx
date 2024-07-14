@@ -51,13 +51,13 @@ const IconButtonHolder = styled(IconButton)`
   padding: 4px !important;
   margin: 0 2px !important;
 
-  color: ${props => props.theme.textColor};
+  color: ${props => props.theme.palette.primary.main};
 
   &.highlight,
   &.highlight:hover,
   &.hightlight:focus {
-    background: ${props => props.theme.primaryLight};
-    color: ${props => props.theme.highlightTextColor};
+    background: ${props => props.theme.palette.primary.main};
+    color: ${props => props.theme.palette.primary.contrastText};
     opacity: 1;
   }
 

@@ -12,9 +12,9 @@ const Holder = styled.div`
   height: 30px;
   width: 175px;
 
-  border: ${props => `thin solid ${props.theme.primaryDark}`};
-  background: ${props => props.theme.background};
-  color: ${props => props.theme.textColor};
+  border: ${props => `thin solid ${props.theme.palette.grey[300]}`};
+  background: ${props => props.theme.palette.background.paper};
+  color: ${props => props.theme.palette.text.primary};
 
   & .time-holder {
     display: flex;
@@ -27,7 +27,7 @@ const Holder = styled.div`
       align-items: center;
 
       & svg {
-        fill: ${props => props.theme.highlight};
+        fill: ${props => props.theme.palette.secondary.main};
       }
 
       & .time-ago {
@@ -46,7 +46,7 @@ const Holder = styled.div`
       margin-left: auto;
 
       & svg {
-        fill: ${props => props.theme.success};
+        fill: ${props => props.theme.palette.primary.main};
       }
     }
   }

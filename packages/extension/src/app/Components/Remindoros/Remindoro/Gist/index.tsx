@@ -14,12 +14,12 @@ const Holder = styled.div`
   margin: 0 16px;
 
   cursor: pointer;
-  border: ${props => `thin solid ${props.theme.borderDark}`};
-  box-shadow: ${props => `0 1px 1px ${props.theme.border}`};
-  background: ${props => props.theme.borderDark};
+  border: ${props => `thin solid ${props.theme.palette.grey[300]}`};
+  box-shadow: ${props => `0 1px 1px ${props.theme.palette.grey.A200}`};
+  background: ${props => props.theme.palette.grey[50]};
 
   &:hover {
-    border: ${props => `thin solid ${props.theme.primaryLight}`};
+    border: ${props => `thin solid ${props.theme.palette.primary.main}`};
   }
 
   & .status-bar {
@@ -36,7 +36,7 @@ const Holder = styled.div`
     padding: 8px;
     font-size: 18px;
 
-    border-bottom: ${props => `thin solid ${props.theme.border}`};
+    border-bottom: ${props => `thin solid ${props.theme.palette.grey.A100}`};
   }
 
   & .note-holder {
@@ -60,9 +60,9 @@ function Card(remindoro: Remindoro) {
       }}
       raised={true}
       sx={{
-        background: theme => theme.colors.background,
+        background: theme => theme.palette.background.paper,
         marginBottom: theme => theme.spacing(3),
-        boxShadow: theme => `0 1px 3px ${theme.colors.border}`,
+        boxShadow: theme => `0 1px 3px ${theme.palette.grey.A100}`,
       }}
     >
       <Holder>

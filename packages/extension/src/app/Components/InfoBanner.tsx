@@ -9,9 +9,9 @@ const Disclaimer = styled.div`
   display: flex;
   align-items: center;
 
-  border: ${props => `thin solid ${props.theme.primaryDark}`};
-  background: ${props => props.theme.background};
-  color: ${props => props.theme.highlight};
+  border: ${props => `thin solid ${props.theme.palette.grey[300]}`};
+  background: ${props => props.theme.palette.background.default};
+  color: ${props => props.theme.palette.primary.main};
 
   padding: 16px;
 `
