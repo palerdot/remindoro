@@ -12,7 +12,7 @@ const Holder = styled.div`
   height: 30px;
   width: 175px;
 
-  border: ${props => `thin solid ${props.theme.palette.grey[300]}`};
+  border: ${props => `thin solid ${props.theme.palette.grey[600]}`};
   background: ${props => props.theme.palette.background.paper};
   color: ${props => props.theme.palette.text.primary};
 

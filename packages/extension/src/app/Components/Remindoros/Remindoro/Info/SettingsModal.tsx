@@ -52,7 +52,7 @@ const Holder = muiStyled('div')(({ theme }) => ({
   [`& .${classes.closeButton}`]: {
     background: theme.palette.background.paper,
     color: theme.palette.text.primary,
-    borderColor: theme.palette.grey.A100,
+    borderColor: theme.palette.grey['700'],
 
     '&:hover': {
       opacity: 0.89,
@@ -63,7 +63,7 @@ const Holder = muiStyled('div')(({ theme }) => ({
 const ActionBar = styled.div`
   display: flex;
   justify-content: space-between;
-  border-top: ${props => `thin solid ${props.theme.palette.grey.A100}`};
+  border-top: ${props => `thin solid ${props.theme.palette.grey['700']}`};
 
   margin-top: auto;
   padding: 16px 24px;
