@@ -14,12 +14,13 @@ const Holder = styled.div`
   margin: 0 16px;
 
   cursor: pointer;
-  border: ${props => `thin solid ${props.theme.palette.grey[300]}`};
+  border: ${props => `thin solid ${props.theme.palette.divider}`};
   box-shadow: ${props => `0 1px 1px ${props.theme.palette.grey.A200}`};
-  background: ${props => props.theme.palette.grey[50]};
+  background: ${props => props.theme.palette.background.default};
 
   &:hover {
     border: ${props => `thin solid ${props.theme.palette.primary.main}`};
+    background: ${props => props.theme.palette.background.paper};
   }
 
   & .status-bar {
@@ -36,7 +37,7 @@ const Holder = styled.div`
     padding: 8px;
     font-size: 18px;
 
-    border-bottom: ${props => `thin solid ${props.theme.palette.grey.A100}`};
+    border-bottom: ${props => `thin solid ${props.theme.palette.divider}`};
   }
 
   & .note-holder {

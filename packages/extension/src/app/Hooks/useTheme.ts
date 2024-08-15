@@ -12,3 +12,9 @@ function useTheme(): ThemeInterface {
 }
 
 export default useTheme
+
+export function useCurrentTheme(): Theme {
+  const theme = useSelector((state: RootState) => state.settings.theme)
+
+  return theme
+}

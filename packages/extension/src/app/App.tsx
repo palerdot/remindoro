@@ -28,7 +28,8 @@ import ChangelogModal from './Screens/Feedback/Changelog/Modal'
 
 // main app css
 import './css/index.css'
-import { ThemeInterface } from './Util/colors'
+import { getThemeMode, ThemeInterface } from './Util/colors'
+import { useCurrentTheme } from './Hooks/useTheme'
 
 // declare module '@mui/styles/defaultTheme' {
 //   interface DefaultTheme extends Theme {}
@@ -272,6 +273,7 @@ function App() {
   const has_changelog_history = useHasChangelogHistory()
   const [showChangelog, setChangelogStatus] = useState(!has_changelog_history)
   const theme = useTheme()
+  const currentTheme = useCurrentTheme()
   // mui v5 default theme
   const muiTheme = createTheme({
     // palette: {
@@ -298,17 +300,29 @@ function App() {
 
     // ref: https://zenoo.github.io/mui-theme-creator/
     palette: {
-      mode: 'light',
+      // mode: 'light',
+      mode: getThemeMode(currentTheme),
       primary: {
-        main: '#3f51b5',
+        // main: '#3f51b5',
+        main: theme.primary
       },
       secondary: {
-        main: '#f50057',
+        // main: '#f50057',
+        main: theme.highlight
       },
       background: {
-        default: '#f1f3f6',
-        paper: '#f1f3f6',
+        // default: '#f1f3f6',
+        // paper: '#f1f3f6',
+        default: theme.backgroundLight,
+        paper: theme.background
       },
+      divider: theme.border,
+      success: {
+        main: theme.success
+      },
+      error: {
+        main: theme.danger
+      }
     },
 
     colors: {

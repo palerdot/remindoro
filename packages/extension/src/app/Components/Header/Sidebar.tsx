@@ -75,15 +75,15 @@ const BottomMenu = styled.div`
 const RateLink = styled.a`
   display: flex;
   text-decoration: none;
-  color: ${props => props.theme.palette.text.primary};
+  color: ${props => props.theme.palette.primary.main};
   margin: 2px 0;
 
   &:hover {
-    background: ${props => props.theme.palette.grey.A100};
+    opacity: 0.89;
   }
 
   & .listIcon {
-    color: ${props => props.theme.palette.secondary.main};
+    color: ${props => props.theme.palette.primary.main};
   }
 `
 

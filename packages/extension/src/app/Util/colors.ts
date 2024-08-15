@@ -7,6 +7,23 @@ export enum Theme {
   Neon = 'Neon',
 }
 
+// get light or dark mode for theme
+export function getThemeMode(theme: Theme): 'light' | 'dark' {
+  switch (theme) {
+    case Theme.Day:
+      return 'light'
+
+    case Theme.Classic:
+      return 'dark'
+
+    case Theme.Neon:
+      return 'dark'
+
+    default:
+      return 'light'
+  }
+}
+
 export interface ThemeInterface {
   background: string
   backgroundLight: string
@@ -35,7 +52,7 @@ export const themes: Themes = {
   /* DAY THEME */
   [Theme.Day]: {
     background: '#F1F3F6',
-    backgroundLight: '#FFFFFF',
+    backgroundLight: '#f9fafb',
 
     border: '#D1D3D7',
     borderDark: '#eceef1',
@@ -80,7 +97,8 @@ export const themes: Themes = {
     greyOne: '#DEDEDE',
 
     contrastTextColor: '#000000',
-    success: 'lightgreen',
+    // success: 'lightgreen',
+    success: '#00CC00',
     danger: '#FF5050',
   },
 
@@ -103,7 +121,8 @@ export const themes: Themes = {
     greyOne: '#DEDEDE',
 
     contrastTextColor: '#000000',
-    success: 'lightgreen',
+    // success: 'lightgreen',
+    success: '#00CC00',
     danger: '#FF5050',
   },
 }
