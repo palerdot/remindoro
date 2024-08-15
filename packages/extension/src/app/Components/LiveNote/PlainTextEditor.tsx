@@ -11,15 +11,13 @@ type Props = {
 
 const Wrapper = styled.div`
   textarea {
-    color: ${props => props.theme.textColor};
-    // background: ${props => props.theme.background};
+    color: ${props => props.theme.palette.text.primary};
     background: inherit;
     border: none;
     resize: none;
 
     &:focus {
       outline: none !important;
-      // border: thin solid ${props => props.theme.primaryLight};
     }
 
     width: 100%;

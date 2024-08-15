@@ -14,9 +14,9 @@ export const SitePill = styled.div`
   padding: 4px 8px;
   border-radius: 5px;
 
-  border: ${props => `thin solid ${props.theme.borderDark}`};
-  background: ${props => props.theme.highlight};
-  color: ${props => props.theme.contrastTextColor};
+  border: ${props => `thin solid ${props.theme.palette.divider}`};
+  background: ${props => props.theme.palette.background.default};
+  color: ${props => props.theme.palette.text.primary};
 `
 
 interface Props extends TrackedSite {}

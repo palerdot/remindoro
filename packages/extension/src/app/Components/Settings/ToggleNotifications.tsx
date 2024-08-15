@@ -15,12 +15,12 @@ const IconHolder = styled.div`
     padding: 6px;
 
     &:hover {
-      background: ${props => props.theme.border};
+      background: ${props => props.theme.palette.divider};
     }
   }
 
   & .notifications-off {
-    color: ${props => props.theme.danger};
+    color: ${props => props.theme.palette.error.main};
 
     /* &:hover {
       border: thin solid lightgreen;
@@ -28,7 +28,7 @@ const IconHolder = styled.div`
   }
 
   & .notifications-on {
-    color: ${props => props.theme.success};
+    color: ${props => props.theme.palette.success.main};
 
     /* &:hover {
       border: thin solid red;

@@ -10,9 +10,9 @@ type Props = {
 }
 
 const Holder = styled.div`
-  border: ${props => `thin solid ${props.theme.border}`};
-  background: ${props => props.theme.border};
-  color: ${props => props.theme.textColor};
+  border: ${props => `thin solid ${props.theme.palette.divider}`};
+  background: ${props => props.theme.palette.background.paper};
+  color: ${props => props.theme.palette.text.primary};
 
   margin: 16px;
   padding: 8px;
@@ -31,7 +31,7 @@ const Holder = styled.div`
   }
 
   & .label {
-    color: ${props => props.theme.primaryLight};
+    color: ${props => props.theme.palette.primary.contrastText};
     font-style: italic;
   }
 

@@ -16,7 +16,7 @@ const Holder = styled.div`
   height: auto;
   padding: 16px 24px;
 
-  border-top: ${props => `thin solid ${props.theme.border}`};
+  border-top: ${props => `thin solid ${props.theme.palette.divider}`};
 `
 
 const Row = styled.div`
@@ -45,9 +45,9 @@ const HelpInfo = styled.div`
   padding: 8px;
   border-radius: 5px;
 
-  border: ${props => `thin solid ${props.theme.primaryDark}`};
-  background: ${props => props.theme.background};
-  color: ${props => props.theme.textColor};
+  border: ${props => `thin solid ${props.theme.palette.primary.contrastText}`};
+  background: ${props => props.theme.palette.background.paper};
+  color: ${props => props.theme.palette.text.primary};
 `
 
 const LABEL = 'Video/Streaming/Multimedia site mode'

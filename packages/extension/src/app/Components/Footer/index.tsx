@@ -11,8 +11,8 @@ const Holder = styled.div`
   justify-content: center;
   margin-top: auto;
 
-  border-top: ${props => `thin solid ${props.theme.border}`};
-  background: ${props => props.theme.borderDark};
+  border-top: ${props => `thin solid ${props.theme.palette.divider}`};
+  background: ${props => props.theme.palette.background.paper};
 
   & .message-section {
     display: flex;

@@ -10,12 +10,12 @@ const Holder = styled.div`
   display: flex;
   align-items: center;
   height: 30px;
-  background: ${props => props.theme.danger};
-  color: ${props => props.theme.textColor};
+  background: ${props => props.theme.palette.error.main};
+  color: ${props => props.theme.palette.error.contrastText};
 
   & .close-button {
     margin-left: auto;
-    color: ${props => props.theme.textColor};
+    color: ${props => props.theme.palette.text.primary};
 
     &:hover {
       opacity: 0.89;

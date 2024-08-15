@@ -28,7 +28,7 @@ export const EditorHolder = styled.div`
     }
 
     .toolbar button.toolbar-item {
-      color: ${props => props.theme.palette.primary.contrastText};
+      color: ${props => props.theme.palette.primary.main};
 
       border-radius: 1px;
       padding: 4px;
@@ -44,7 +44,9 @@ export const EditorHolder = styled.div`
     }
 
     .toolbar .block-controls {
-      & .text {
+      & .text,
+      .icon,
+      i {
         color: ${props => props.theme.palette.primary.contrastText};
       }
     }
@@ -56,6 +58,7 @@ export const EditorHolder = styled.div`
 
     .toolbar .toolbar-item:hover:not([disabled]) {
       background-color: ${props => props.theme.palette.primary.main};
+      color: ${props => props.theme.palette.primary.contrastText};
     }
 
     .toolbar i.chevron-down.inside {

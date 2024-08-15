@@ -5,7 +5,7 @@ const Holder = styled.div`
   & .shortcut {
     display: flex;
     padding: 8px;
-    border: ${props => `thin solid ${props.theme.borderDark}`};
+    border: ${props => `thin solid ${props.theme.palette.divider}`};
 
     .left {
       flex: 1;

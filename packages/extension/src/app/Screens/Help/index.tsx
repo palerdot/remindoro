@@ -11,7 +11,7 @@ const Wrapper = styled.div`
 const Faq = styled.div`
   margin-bottom: 16px;
   padding-bottom: 16px;
-  border-bottom: thin solid ${props => props.theme.borderDark};
+  border-bottom: thin solid ${props => props.theme.palette.divider};
 `
 
 const Question = styled.div`
@@ -27,15 +27,15 @@ const Answer = styled.div`
 const Subtitle = styled.div`
   font-size: 0.95rem;
   padding-bottom: 16px;
-  border-bottom: thin solid ${props => props.theme.borderDark};
+  border-bottom: thin solid ${props => props.theme.palette.divider};
 `
 
 const Disclaimer = styled.div`
   display: flex;
   align-items: center;
 
-  background: ${props => props.theme.highlight};
-  color: ${props => props.theme.highlightTextColor};
+  background: ${props => props.theme.palette.secondary.main};
+  color: ${props => props.theme.palette.secondary.contrastText};
 
   padding: 16px;
 `

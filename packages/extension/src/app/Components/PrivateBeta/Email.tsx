@@ -10,7 +10,7 @@ const Holder = styled.div`
   text-align: center;
 
   padding: 4px 16px;
-  background: ${props => props.theme.border};
+  background: ${props => props.theme.palette.background.paper};
 
   & .help-info {
     font-size: 0.89rem;
@@ -20,9 +20,9 @@ const Holder = styled.div`
     padding: 8px;
     border-radius: 5px;
 
-    border: ${props => `thin solid ${props.theme.primaryDark}`};
-    background: ${props => props.theme.background};
-    color: ${props => props.theme.textColor};
+    border: ${props => `thin solid ${props.theme.palette.divider}`};
+    background: ${props => props.theme.palette.background.paper};
+    color: ${props => props.theme.palette.text.primary};
 
     text-align: left;
   }

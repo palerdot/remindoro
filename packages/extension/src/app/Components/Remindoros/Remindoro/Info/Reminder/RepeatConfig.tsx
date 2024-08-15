@@ -24,7 +24,7 @@ const DurationSlider = styled.div`
     color: ${props => props.theme.palette.text.primary};
 
     &.disabled {
-      color: ${props => props.theme.palette.grey[900]};
+      color: ${props => props.theme.palette.grey[100]};
     }
   }
 `

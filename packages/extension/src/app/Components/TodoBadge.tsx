@@ -8,9 +8,9 @@ const Holder = styled.div`
   align-items: center;
   justify-content: center;
 
-  border: ${props => `thin solid ${props.theme.primaryDark}`};
-  background: ${props => props.theme.background};
-  color: ${props => props.theme.textColor};
+  border: ${props => `thin solid ${props.theme.palette.divider}`};
+  background: ${props => props.theme.palette.background.paper};
+  color: ${props => props.theme.palette.text.primary};
 
   font-size: 0.64rem;
   font-weight: 600;
@@ -25,7 +25,7 @@ const Holder = styled.div`
 
     & svg {
       font-size: 1.314rem;
-      fill: ${props => props.theme.highlight};
+      fill: ${props => props.theme.palette.secondary.main};
     }
   }
 

@@ -10,7 +10,7 @@ const MessageHolder = styled.div`
 
   & .recover-button {
     &:hover {
-      background: ${props => props.theme.highlight};
+      background: ${props => props.theme.palette.secondary.main};
       opacity: 0.89;
     }
   }
@@ -20,8 +20,8 @@ const Message = styled.div`
   display: flex;
   align-items: center;
 
-  background: ${props => props.theme.primaryLight};
-  color: ${props => props.theme.textColor};
+  background: ${props => props.theme.palette.background.paper};
+  color: ${props => props.theme.palette.text.primary};
 
   margin: 32px;
   padding: 16px;

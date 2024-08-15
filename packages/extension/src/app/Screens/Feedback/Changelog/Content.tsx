@@ -12,7 +12,7 @@ const Info = styled.div`
   font-size: 14px;
   font-style: italic;
 
-  color: ${props => props.theme.highlight};
+  color: ${props => props.theme.palette.secondary.main};
 `
 
 function Content() {

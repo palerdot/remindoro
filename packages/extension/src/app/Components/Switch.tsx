@@ -4,18 +4,18 @@ import { Switch as SwitchInput, Grid, Typography } from '@mui/material'
 
 const SwitchHolder = styled.div`
   & .switch-base {
-    color: ${props => props.theme.primaryDark};
+    color: ${props => props.theme.palette.divider};
   }
 
   & .track {
-    background: ${props => props.theme.background};
+    background: ${props => props.theme.palette.divider};
   }
 
   & .checked {
-    color: ${props => props.theme.highlight} !important;
+    color: ${props => props.theme.palette.secondary.main} !important;
 
     & + .track {
-      background: ${props => props.theme.primaryDark} !important;
+      background: ${props => props.theme.palette.primary.main} !important;
     }
   }
 `

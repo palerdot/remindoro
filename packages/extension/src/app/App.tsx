@@ -180,6 +180,10 @@ const GlobalStyle = ({ theme }: { theme: MUITheme}) => (
         & .MuiSlider-root {
           &.Mui-disabled {
             color: ${theme.palette.background.paper};
+
+            & .MuiSlider-rail, .MuiSlider-track {
+              color: ${theme.palette.divider};
+            }
           }
 
           & .MuiSlider-valueLabelOpen {

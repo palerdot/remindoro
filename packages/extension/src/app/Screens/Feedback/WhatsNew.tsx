@@ -11,17 +11,6 @@ import {
 // import { WHATS_NEW, WHATS_UP } from '@background/utils/'
 import Content from './Changelog/Content'
 
-// const Holder = styled.div`
-//   cursor: pointer;
-//   color: ${props => props.theme.highlight};
-//   text-decoration: underline;
-//   font-style: italic;
-
-//   &:hover {
-//     opacity: 0.89;
-//   }
-// `
-
 type Props = {
   isOpen: boolean
   closeModal: () => void

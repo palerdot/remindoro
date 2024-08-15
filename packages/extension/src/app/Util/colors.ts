@@ -1,3 +1,6 @@
+// ref: https://zenoo.github.io/mui-theme-creator/
+// ref: https://m2.material.io/inline-tools/color/
+
 export enum Theme {
   Day = 'Day',
   Classic = 'Classic',

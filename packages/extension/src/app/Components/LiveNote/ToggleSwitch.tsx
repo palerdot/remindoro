@@ -19,14 +19,14 @@ const DisabledText = styled.span`
   font-style: italic;
   font-size: 0.89rem;
 
-  color: ${props => props.theme.highlight};
+  color: ${props => props.theme.palette.secondary.main};
 `
 
 const EnabledText = styled.span`
   font-style: normal;
   font-size: 1rem;
 
-  color: ${props => props.theme.highlight};
+  color: ${props => props.theme.palette.secondary.main};
 `
 
 function ToggleSwitch({ checked }: Props) {
