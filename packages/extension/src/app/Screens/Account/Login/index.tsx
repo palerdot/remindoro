@@ -1,24 +1,77 @@
 import React, { useState, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { isNil } from '@lodash'
+import { isNil, isEmpty } from '@lodash'
 import { Stack, TextField, Button } from '@mui/material'
 import { Badge as BadgeIcon } from '@mui/icons-material'
+import { useSnackbar } from 'notistack'
 
 import type { RootState } from '@app/Store/'
 import { loginUser } from './helpers'
-import { STUB_EID, generateExtensionId } from '@app/Store/Slices/Account'
+import {
+  STUB_EID,
+  generateExtensionId,
+  setAccountInfo,
+} from '@app/Store/Slices/Account'
 
 type Props = {
   extensionId: string
 }
 
 function Login({ extensionId }: Props) {
+  const dispatch = useDispatch()
+  const { enqueueSnackbar } = useSnackbar()
   const [email, setEmail] = useState('')
   const [key, setKey] = useState('')
   const [error, setError] = useState<string | undefined>()
+  const [submitting, setSubmitting] = useState(false)
+
+  const showErrorMessage = useCallback(
+    (message: string) => {
+      enqueueSnackbar(message || 'Please try again', {
+        variant: 'error',
+      })
+      setError(message)
+    },
+    [enqueueSnackbar]
+  )
 
   // login the user, update last_server_sync_time, and if success set 'account.info', if not reset 'account.info'
-  const performLogin = useCallback(async () => {}, [email, key, extensionId])
+  const performLogin = useCallback(async () => {
+    if (isEmpty(email)) {
+      setError('Email cannot be empty')
+
+      return
+    }
+
+    if (isEmpty(key)) {
+      setError('Extension key cannot be empty')
+
+      return
+    }
+
+    setSubmitting(true)
+    const { success, error, data } = await loginUser({
+      email,
+      extension_id: extensionId,
+      extension_key: key,
+    })
+    setSubmitting(false)
+
+    // TODO: if rate limited show appropriate messages
+    // if error, show error message
+    if (success === false || !data) {
+      showErrorMessage(error || 'Error logging you. Please contact admin.')
+      return
+    }
+
+    // set account info from server
+    dispatch(
+      setAccountInfo({
+        info: data,
+      })
+    )
+    // TODO: show success message
+  }, [email, key, extensionId, showErrorMessage, dispatch])
 
   return (
     <Stack
@@ -61,8 +114,9 @@ function Login({ extensionId }: Props) {
             ? 'Email not registered for private beta'
             : 'Your registered private beta email'
         }
-        onChange={_e => {
-          setError('')
+        onChange={e => {
+          setEmail(e.target.value)
+          setError(undefined)
         }}
       />
       <TextField
@@ -74,7 +128,8 @@ function Login({ extensionId }: Props) {
         label={error || 'Registered extension key'}
         defaultValue={''}
         helperText={error || 'e.g. your-private-beta-extension-key'}
-        onChange={_e => {
+        onChange={e => {
+          setKey(e.target.value)
           setError(undefined)
         }}
       />
@@ -82,8 +137,9 @@ function Login({ extensionId }: Props) {
         variant="contained"
         startIcon={<BadgeIcon fontSize="medium" />}
         onClick={() => {
-          setError('Invalid extension key.')
+          performLogin()
         }}
+        disabled={submitting}
       >
         {'Login'}
       </Button>

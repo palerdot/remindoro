@@ -1,12 +1,12 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import styled from '@emotion/styled'
-import { Paper } from '@mui/material'
+import { Paper, Button } from '@mui/material'
 
 import type { RootState } from '@app/Store/'
-
 import Login from './Login'
 import packageInfo from '@package-info'
+import { logoutUser } from '@app/Store/Slices/Account'
 const { version } = packageInfo
 
 const BottomHolder = styled.div`
@@ -50,6 +50,7 @@ const Holder = styled.div`
 `
 
 function Account() {
+  const dispatch = useDispatch()
   const account = useSelector((state: RootState) => state.account)
   const { extension_id, info } = account
 
@@ -63,7 +64,23 @@ function Account() {
     >
       <Paper elevation={2}>
         <Holder className="my-2">
-          {info ? <div>{'porumai ... will show user info'}</div> : <Login />}
+          {info ? (
+            <div>
+              <div>
+                {`porumai ... will show user info - ${info.user.email}, ${info.extension.pairing.extension_key} ${info.extension.pairing.extension_id}`}
+              </div>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  dispatch(logoutUser())
+                }}
+              >
+                {'Logout'}
+              </Button>
+            </div>
+          ) : (
+            <Login />
+          )}
           <div className="help-info">
             {
               'Features like email reminders, folder syncing, tracking more than one site are in private beta. Please reach out arun@remindoro.app or sign up in the time tracker screen if you would like to part of private beta.'

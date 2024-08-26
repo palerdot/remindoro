@@ -7,15 +7,14 @@ export async function loginUser(payload: {
   extension_id: string
   extension_key: string
 }): Promise<ApiResponse<AccountInfo>> {
-  const response = await postData('/api_bext/pairing_details', payload)
+  const response = await postData('/api_bext/pairing_key_details', payload)
   // make an api call to 'API_URL/api_bext/pairing_details'
   // fetch the user details from the server
 
   if (!response.ok) {
-    const resp = await response.json()
     return {
       success: false,
-      error: `${resp}`,
+      error: 'Error logging you in.',
       status: response.status,
       statusText: response.statusText,
     }

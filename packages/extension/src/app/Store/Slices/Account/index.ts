@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid'
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
 export const STUB_EID = 'NO-EXTENSION-ID-GENERATED'
 
@@ -47,6 +47,7 @@ type KeyInfo = {
 
 // pairing details
 type PairingInfo = {
+  extension_key: string
   extension_id: string
   active: boolean
   status: string
@@ -67,9 +68,27 @@ export const accountSlice = createSlice({
       // generate a new extension id
       state.extension_id = getExtensionId()
     },
+
+    // set account info from server
+    setAccountInfo: (
+      state,
+      action: PayloadAction<{
+        info: AccountInfo
+      }>
+    ) => {
+      // update server sync state
+      state.last_server_sync_time = new Date().toISOString()
+      state.info = action.payload.info
+    },
+
+    // logout the user
+    logoutUser: state => {
+      state.info = undefined
+    },
   },
 })
 
-export const { generateExtensionId } = accountSlice.actions
+export const { generateExtensionId, setAccountInfo, logoutUser } =
+  accountSlice.actions
 
 export default accountSlice.reducer

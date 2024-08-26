@@ -75,7 +75,7 @@ function Feedback() {
             // disable button
             setProgress(true)
 
-            postData(`/public_api/send_feedback`, payload)
+            postData('/public_api/send_feedback', payload)
               .then(res => {
                 // decide if request is success
                 if (res.ok) {

@@ -221,13 +221,14 @@ const GlobalStyle = ({ theme }: { theme: MUITheme }) => (
           color: ${theme.palette.success.contrastText};
 
           & button {
-          color: ${theme.palette.success.contrastText};
+            color: ${theme.palette.success.contrastText};
           }
         }
 
         /* Error message styling */
         .notistack-MuiContent-error {
-          color: ${theme.palette.error.main};
+          background: ${theme.palette.error.main};
+          color: ${theme.palette.error.contrastText};
 
           & button {
             color: ${theme.palette.error.contrastText};
