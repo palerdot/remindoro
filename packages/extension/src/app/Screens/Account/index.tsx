@@ -50,9 +50,8 @@ const Holder = styled.div`
 `
 
 function Account() {
-  const extension_id = useSelector(
-    (state: RootState) => state.account.extension_id
-  )
+  const account = useSelector((state: RootState) => state.account)
+  const { extension_id, info } = account
 
   return (
     <div
@@ -64,7 +63,7 @@ function Account() {
     >
       <Paper elevation={2}>
         <Holder className="my-2">
-          <Login />
+          {info ? <div>{'porumai ... will show user info'}</div> : <Login />}
           <div className="help-info">
             {`Features like email reminders, folder syncing, tracking more than one site are in private beta. Please reach out arun@remindoro.app or sign up in the time tracker screen if you would like to part of private beta.`}
           </div>

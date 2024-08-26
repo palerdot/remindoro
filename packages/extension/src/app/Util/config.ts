@@ -1,3 +1,11 @@
+export type ApiResponse<T> = {
+  success: boolean
+  error?: string
+  data?: T
+  status?: number
+  statusText?: string
+}
+
 // helper function to post json data
 // ref: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#supplying_request_options
 export async function postData(path = '', data = {}) {

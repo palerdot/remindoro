@@ -5,20 +5,50 @@ export const STUB_EID = 'NO-EXTENSION-ID-GENERATED'
 
 export interface AccountState {
   extension_id?: string
-  logged_in: boolean
-  user?: UserInfo
+  // account details from server
+  info?: AccountInfo
+  // when was last synced with server
+  last_server_sync_time?: string
 }
 
-const initialState: AccountState = {
-  logged_in: false,
-}
+const initialState: AccountState = {}
 
 // account details
+export type AccountInfo = {
+  user: UserInfo
+  extension: ExtensionInfo
+}
+
+// user details
 type UserInfo = {
   id: number | string
   email: string
+  name: string | null
   payment_plan: string
   payment_plan_expiry_at?: string
+}
+
+// extension details
+type ExtensionInfo = {
+  key: KeyInfo
+  pairing: PairingInfo
+}
+
+// key details
+type KeyInfo = {
+  id: string | number
+  active: boolean
+  status: string
+  permissions: {}
+  activated_at: string | null
+  deactivated_at: string | null
+}
+
+// pairing details
+type PairingInfo = {
+  extension_id: string
+  active: boolean
+  status: string
 }
 
 export function getExtensionId() {

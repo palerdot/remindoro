@@ -1,15 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { isEmpty } from '@lodash'
+import { isNil } from '@lodash'
 import { Stack, TextField, Button } from '@mui/material'
 import { Badge as BadgeIcon } from '@mui/icons-material'
 
 import type { RootState } from '@app/Store/'
-
+import { loginUser } from './helpers'
 import { STUB_EID, generateExtensionId } from '@app/Store/Slices/Account'
 
-function Login() {
-  const [error, setError] = useState('')
+type Props = {
+  extensionId: string
+}
+
+function Login({ extensionId }: Props) {
+  const [email, setEmail] = useState('')
+  const [key, setKey] = useState('')
+  const [error, setError] = useState<string | undefined>()
+
+  // login the user, update last_server_sync_time, and if success set 'account.info', if not reset 'account.info'
+  const performLogin = useCallback(() => {}, [])
 
   return (
     <Stack
@@ -18,6 +27,7 @@ function Login() {
       sx={{
         display: 'flex',
         alignItems: 'center',
+        background: props => props.palette.background.paper,
       }}
     >
       <Stack
@@ -37,26 +47,17 @@ function Login() {
         >
           {'Account'}
         </div>
-        <div
-          style={{
-            fontWeight: '500',
-          }}
-        >
-          {'- Not registered for private beta.'}
-        </div>
       </Stack>
       <TextField
         sx={{
           width: '100%',
         }}
-        error={error.length > 0}
+        error={!!error}
         id="private-beta-email"
-        label={
-          error.length > 0 ? 'Email not registered' : 'Your private beta email'
-        }
+        label={error ? 'Email not registered' : 'Your private beta email'}
         defaultValue={''}
         helperText={
-          error.length > 0
+          error
             ? 'Email not registered for private beta'
             : 'Your registered private beta email'
         }
@@ -68,15 +69,13 @@ function Login() {
         sx={{
           width: '100%',
         }}
-        error={error.length > 0}
+        error={!!error}
         id="private-beta-eid"
-        label={error.length > 0 ? error : 'Registered extension key'}
+        label={error || 'Registered extension key'}
         defaultValue={''}
-        helperText={
-          error.length > 0 ? error : 'e.g. your-private-beta-extension-key'
-        }
+        helperText={error || 'e.g. your-private-beta-extension-key'}
         onChange={_e => {
-          setError('')
+          setError(undefined)
         }}
       />
       <Button
@@ -99,7 +98,7 @@ function Wrapper() {
     (state: RootState) => state.account.extension_id
   )
 
-  if (isEmpty(extension_id) || extension_id === STUB_EID) {
+  if (isNil(extension_id) || extension_id === STUB_EID) {
     return (
       <Button
         variant="contained"
@@ -113,7 +112,7 @@ function Wrapper() {
     )
   }
 
-  return <Login />
+  return <Login extensionId={extension_id} />
 }
 
 export default Wrapper
