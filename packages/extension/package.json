@@ -33,6 +33,7 @@
     "url": "https://github.com/palerdot/remindoro.git"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.8.3",
     "@types/bun": "^1.0.12",
     "@types/lodash-es": "^4.17.4",
     "@types/node": "^20.2.5",

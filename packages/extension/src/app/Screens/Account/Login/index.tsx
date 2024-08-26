@@ -18,7 +18,7 @@ function Login({ extensionId }: Props) {
   const [error, setError] = useState<string | undefined>()
 
   // login the user, update last_server_sync_time, and if success set 'account.info', if not reset 'account.info'
-  const performLogin = useCallback(() => {}, [])
+  const performLogin = useCallback(async () => {}, [email, key, extensionId])
 
   return (
     <Stack
