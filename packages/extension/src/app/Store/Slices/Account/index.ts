@@ -39,6 +39,7 @@ type KeyInfo = {
   id: string | number
   active: boolean
   status: string
+  // biome-ignore lint: for now let us keep this any object
   permissions: {}
   activated_at: string | null
   deactivated_at: string | null

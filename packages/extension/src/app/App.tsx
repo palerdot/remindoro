@@ -28,7 +28,7 @@ import ChangelogModal from './Screens/Feedback/Changelog/Modal'
 
 // main app css
 import './css/index.css'
-import { getThemeMode, ThemeInterface } from './Util/colors'
+import { getThemeMode, type ThemeInterface } from './Util/colors'
 import { useCurrentTheme } from './Hooks/useTheme'
 
 // declare module '@mui/styles/defaultTheme' {
@@ -54,7 +54,7 @@ const thresholds = [
 dayjs.extend(DayjsRelativeTime, { thresholds })
 
 // global style
-const GlobalStyle = ({ theme }: { theme: MUITheme}) => (
+const GlobalStyle = ({ theme }: { theme: MUITheme }) => (
   <Global
     styles={css`
       body {
@@ -304,25 +304,25 @@ function App() {
       mode: getThemeMode(currentTheme),
       primary: {
         // main: '#3f51b5',
-        main: theme.primary
+        main: theme.primary,
       },
       secondary: {
         // main: '#f50057',
-        main: theme.highlight
+        main: theme.highlight,
       },
       background: {
         // default: '#f1f3f6',
         // paper: '#f1f3f6',
         default: theme.backgroundLight,
-        paper: theme.background
+        paper: theme.background,
       },
       divider: theme.border,
       success: {
-        main: theme.success
+        main: theme.success,
       },
       error: {
-        main: theme.danger
-      }
+        main: theme.danger,
+      },
     },
 
     colors: {
@@ -338,7 +338,7 @@ function App() {
 
   useEffect(() => {
     setChangelogStatus(!has_changelog_history)
-  }, [has_changelog_history, setChangelogStatus])
+  }, [has_changelog_history])
 
   return (
     <StyledEngineProvider injectFirst>
