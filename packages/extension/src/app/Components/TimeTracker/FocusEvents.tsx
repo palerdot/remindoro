@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { isEmpty } from '@lodash'
 
-import { FocusEvent } from '@background/time-tracker/web-session'
+import type { FocusEvent } from '@background/time-tracker/web-session'
 import { formattedWebSessionDuration } from '@app/Util'
 
 type Props = {
@@ -55,7 +55,7 @@ function FocusEvents({ stringified }: Props) {
   useEffect(() => {
     const parsed = parse(stringified)
     setEvents(parsed)
-  }, [stringified, setEvents])
+  }, [stringified])
 
   if (isEmpty(events)) {
     return null
@@ -72,6 +72,7 @@ function FocusEvents({ stringified }: Props) {
         {events.map((current, index, all) => {
           const next = all[index + 1]
 
+          // biome-ignore lint: index is fine
           return <Summary key={index} current={current} next={next} />
         })}
         <div className="button-link">{'Hide focus events'}</div>

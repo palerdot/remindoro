@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   IconButton,
   Dialog,
@@ -38,7 +38,7 @@ function Icon() {
       >
         <DialogTitle>{'Rich Text Editor'}</DialogTitle>
         <DialogContent dividers={true}>
-          <DialogContentText></DialogContentText>
+          <DialogContentText />
           <HelpInfo />
           <Feedback />
         </DialogContent>

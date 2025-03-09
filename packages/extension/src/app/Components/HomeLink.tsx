@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
-import MuiLink, { LinkProps } from '@mui/material/Link'
+import MuiLink, { type LinkProps } from '@mui/material/Link'
 import { Home as HomeIcon } from '@mui/icons-material/'
 
 import { Screens } from '@app/Routes/'
@@ -13,7 +13,7 @@ interface LinkRouterProps extends LinkProps {
 }
 
 const LinkRouter = (props: LinkRouterProps) => (
-  <MuiLink {...props} component={Link as any} />
+  <MuiLink {...props} component={Link} />
 )
 
 function HomeLink() {

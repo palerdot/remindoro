@@ -1,5 +1,10 @@
 import browser from 'webextension-polyfill'
-import { createStore, createCustomPersister, Store, Persister } from 'tinybase'
+import {
+  createStore,
+  createCustomPersister,
+  type Store,
+  type Persister,
+} from 'tinybase'
 import { isNumber, isString, isEmpty, values, takeRight } from '@lodash'
 
 import {
@@ -10,7 +15,7 @@ import {
   prune_offline_web_sessions,
   clean_stale_active_sessions,
   update_heart_beat_for_active_session,
-  WebSession,
+  type WebSession,
 } from '@background/time-tracker/web-session'
 
 // indexed db key for storing time tracking related key/values and tables
@@ -147,11 +152,10 @@ export function urlTrackingStatus({
         // manually return true for youtue
         has_background_activity: siteInfo.has_background_activity,
       }
-    } else {
-      return {
-        isURLTracked: false,
-        has_background_activity: false,
-      }
+    }
+    return {
+      isURLTracked: false,
+      has_background_activity: false,
     }
   } catch (e) {
     return {
@@ -418,7 +422,7 @@ function getExtensionPersistor(store: Store, key: string) {
     // del persister listener
     _id => undefined,
     // on ignored error
-    (error: any) => {
+    (error: Error) => {
       console.log(
         'porumai ... tinybase custom extension persistor error ',
         error

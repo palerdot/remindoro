@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import type React from 'react'
+import { useState } from 'react'
 import { styled as muiStyled } from '@mui/material/styles'
 import { useHistory } from 'react-router-dom'
 import styled from '@emotion/styled'
@@ -32,7 +33,7 @@ const Holder = muiStyled('div')(({ theme }) => ({
   background: theme.palette.background.paper,
   color: theme.palette.text.primary,
 
-  [`& .email-reminder-section`]: {
+  '& .email-reminder-section': {
     margin: 'auto',
     textAlign: 'center',
   },

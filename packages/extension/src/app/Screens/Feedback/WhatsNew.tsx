@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Dialog,
   DialogTitle,
@@ -27,7 +26,7 @@ function WhatsNewModal({ isOpen, closeModal }: Props) {
     >
       <DialogTitle>{`What's New and What's Up!`}</DialogTitle>
       <DialogContent dividers={true}>
-        <DialogContentText></DialogContentText>
+        <DialogContentText />
         <Content />
       </DialogContent>
       <DialogActions>

@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from '@emotion/styled'
 
 import RichTextHelp from '@app/Components/LiveNote/Help/HelpInfo'
@@ -63,7 +62,8 @@ const FAQS = [
   },
   {
     question: 'What is the count/badge shown on top of extension icon?',
-    answer: `This is the count of notes marked as todo. You can mark a note as todo from the note settings screen. You can navigate to todo screen from the header or sidebar menu, where you can see all the notes marked as todo.`,
+    answer:
+      'This is the count of notes marked as todo. You can mark a note as todo from the note settings screen. You can navigate to todo screen from the header or sidebar menu, where you can see all the notes marked as todo.',
   },
   {
     question: 'What version of browsers are supported?',
@@ -86,6 +86,7 @@ function Help() {
       <Subtitle>{'This section covers some FAQs.'}</Subtitle>
       <div>
         {FAQS.map(({ question, answer }, index) => (
+          // biome-ignore lint: index is fine
           <Faq key={index}>
             <Question>{question}</Question>
             <Answer>{answer}</Answer>

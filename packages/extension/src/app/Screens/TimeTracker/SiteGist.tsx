@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { Stack } from '@mui/material'
 
-import { TrackedSite } from '@background/time-tracker/store'
+import type { TrackedSite } from '@background/time-tracker/store'
 import HostPermissionStatus from '@app/Components/TimeTracker/HostPermissionStatus'
 import Timeago from '@app/Components/Timeago'
 

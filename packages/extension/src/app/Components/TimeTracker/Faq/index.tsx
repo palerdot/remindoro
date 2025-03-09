@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   Box,
   IconButton,
@@ -68,6 +68,7 @@ function Faq({ showIcon, text }: Props) {
           <DialogContentText component={'div'}>
             <Stack direction={'column'} spacing={3}>
               {FAQS.map(({ question, answer }, index) => (
+                // biome-ignore lint: index is fine here
                 <Stack key={index} direction={'column'} spacing={1}>
                   <Box
                     sx={{

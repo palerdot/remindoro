@@ -276,7 +276,9 @@ export class Notification {
     }
 
     // show notification
-    this.toNotify.forEach(ro => notify(ro))
+    for (const ro of this.toNotify) {
+      notify(ro)
+    }
   }
 
   /*

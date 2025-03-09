@@ -1,11 +1,11 @@
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { Stack, TextField } from '@mui/material'
 import styled from '@emotion/styled'
 import { useStore } from 'tinybase/ui-react'
 
 import {
   TIME_TRACKED_SITES_TABLE,
-  TrackedSite,
+  type TrackedSite,
   siteIdFromHost,
 } from '@background/time-tracker/store'
 import { AddSiteButton } from '@app/Components/TimeTracker/AddSite/AddSiteFab'
@@ -35,9 +35,7 @@ function isValidHost(host: string): boolean {
   return host.split('.').length === 2
 }
 
-function isValidURL(
-  url: string
-): {
+function isValidURL(url: string): {
   isValid: boolean
   host: string
 } {
@@ -54,11 +52,10 @@ function isValidURL(
         isValid: true,
         host: url,
       }
-    } else {
-      return {
-        isValid: false,
-        host: '',
-      }
+    }
+    return {
+      isValid: false,
+      host: '',
     }
   }
 }
@@ -101,7 +98,7 @@ function AddSite({ onSuccess }: Props) {
     } catch (e) {
       setHost(host)
     }
-  }, [store, url, setError, setSaving, onSuccess])
+  }, [store, url, onSuccess])
 
   return (
     <div
@@ -134,7 +131,9 @@ function AddSite({ onSuccess }: Props) {
         />
         {isChrome && (
           <HelpInfo>
-            {`A chrome bug closes the extension popup window when you click on the permission popup dialog. Please enter the site again for time tracking to get around this chrome bug.`}
+            {
+              'A chrome bug closes the extension popup window when you click on the permission popup dialog. Please enter the site again for time tracking to get around this chrome bug.'
+            }
           </HelpInfo>
         )}
         <HelpInfo>

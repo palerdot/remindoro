@@ -125,7 +125,7 @@ function save_highlight({ title, url, highlight }: HighlightAction) {
           notify({
             id: 'new-highlight-saved',
             title: 'Text Saved',
-            note: `Highlighted text saved successfully`,
+            note: 'Highlighted text saved successfully',
           })
         },
         // not able to save the link

@@ -8,7 +8,7 @@ import { useSnackbar } from 'notistack'
 
 import {
   TIME_TRACKED_SITES_TABLE,
-  TrackedSite,
+  type TrackedSite,
 } from '@background/time-tracker/store'
 import AddSiteFab, {
   AddSiteButton,

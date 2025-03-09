@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill'
-import { createQueries, Store } from 'tinybase'
+import { createQueries, type Store } from 'tinybase'
 import { v4 as uuid } from 'uuid'
 import { head, last, isNumber, isArray, isString } from '@lodash'
 
@@ -346,7 +346,7 @@ export async function update_heart_beat_for_active_session(store: Store) {
       rowId
     ) as WebSession
     const latest_focus_events = update_focus_events(
-      session_details['focus_events'] as string,
+      session_details.focus_events as string,
       !!is_window_focused
     )
 

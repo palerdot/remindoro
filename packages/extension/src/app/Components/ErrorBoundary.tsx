@@ -1,4 +1,5 @@
-import React, { Component, ErrorInfo } from 'react'
+import type React from 'react'
+import { Component, type ErrorInfo } from 'react'
 import styled from '@emotion/styled'
 import { Button } from '@mui/material'
 import { AutoFixHigh } from '@mui/icons-material'

@@ -31,7 +31,7 @@ export function handleReminderChange(
 // handles after repeat => on/off
 // adds default repeat => every 45 minutes
 export function handleRepeatChange(
-  repeatOn: Boolean,
+  repeatOn: boolean,
   currentSchedule: Reminder
 ) {
   // handling an edge case which should not happen

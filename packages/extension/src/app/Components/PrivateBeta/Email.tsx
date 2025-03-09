@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import styled from '@emotion/styled'
 import { Stack, TextField, Button, Paper } from '@mui/material'
 import { SupervisorAccount } from '@mui/icons-material'
@@ -58,7 +58,7 @@ function Email({ onSuccess, onError }: Props) {
     }
 
     setSaving(true)
-    postData(`/public_api/send_feedback`, payload)
+    postData('/public_api/send_feedback', payload)
       .then(res => {
         // decide if request is success
         if (res.ok) {
@@ -84,7 +84,7 @@ function Email({ onSuccess, onError }: Props) {
         // enable button
         setSaving(false)
       })
-  }, [email, setEmail, setError, setSaving, onSuccess, onError])
+  }, [email, onSuccess, onError])
 
   return (
     <Paper elevation={2}>

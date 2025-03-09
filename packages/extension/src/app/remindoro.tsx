@@ -2,7 +2,7 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { isEmpty } from 'lodash-es'
 
-import App, {type InitialState} from './main'
+import App, { type InitialState } from './main'
 import { loadFromStorage } from './Util/BrowserStorage'
 
 /*

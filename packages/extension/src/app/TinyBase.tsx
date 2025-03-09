@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import type React from 'react'
+import { useState, useEffect } from 'react'
 import { Provider } from 'tinybase/ui-react'
-import { Store } from 'tinybase'
+import type { Store } from 'tinybase'
 import { Box, CircularProgress } from '@mui/material'
 
 import { getPersistedStore } from '@background/time-tracker/store'
@@ -42,7 +43,7 @@ function TinyBase({ children }: Props) {
         persistor.destroy()
       }
     })
-  }, [setStore])
+  }, [])
 
   if (!store) {
     return (

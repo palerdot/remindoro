@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles'
 
 const classes = {
-  fab: `fab`,
+  fab: 'fab',
 }
 
 export const FabHolder = styled('div')(({ theme }) => ({

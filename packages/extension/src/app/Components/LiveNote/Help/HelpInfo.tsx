@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from '@emotion/styled'
 
 const Holder = styled.div`
@@ -36,21 +35,23 @@ function HelpInfo() {
         {`Remindoro 1.x introduces an experimental Rich Text Editor. You can use icons at the top to create rich text items like bold text, italic text, ordered/unordered list items, checklist items etc. You can also use 'Markdown' like shortcuts while you type to convert normal text to rich text. Please note, text is formatted live in the editor.`}
       </p>
       <p>
-        {`Markdown shortcuts you can use for rich text formattings as you type.`}
+        {
+          'Markdown shortcuts you can use for rich text formattings as you type.'
+        }
       </p>
       {/* Bold */}
       <div className={'shortcut'}>
-        <div className={'left'}>{`Ctrl/Cmd + b`}</div>
+        <div className={'left'}>{'Ctrl/Cmd + b'}</div>
         <div className={'right'}>{'Bold'}</div>
       </div>
       {/* Italic */}
       <div className={'shortcut'}>
-        <div className={'left'}>{`Ctrl/Cmd + i`}</div>
+        <div className={'left'}>{'Ctrl/Cmd + i'}</div>
         <div className={'right'}>{'Italic'}</div>
       </div>
       {/* Underscore */}
       <div className={'shortcut'}>
-        <div className={'left'}>{`Ctrl/Cmd + u`}</div>
+        <div className={'left'}>{'Ctrl/Cmd + u'}</div>
         <div className={'right'}>{'Underline'}</div>
       </div>
       {/* Headings */}

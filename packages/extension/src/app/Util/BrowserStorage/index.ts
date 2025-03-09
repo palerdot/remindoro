@@ -81,7 +81,7 @@ function handle_browser_error() {
     message: '',
   }
 
-  if (browser_error == 'storage') {
+  if (browser_error === 'storage') {
     // storage error
     error.title = 'Browser Storage Limit maybe Exceeded'
     error.message = 'Please try deleting few reminders and try again.'

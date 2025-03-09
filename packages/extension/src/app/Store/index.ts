@@ -51,7 +51,7 @@ export function useHasChangelogHistory() {
     h => h.version === version && h.viewed_at !== undefined
   )
 
-  return has_history ? true : false
+  return has_history
 }
 
 export function useCurrentVersion() {

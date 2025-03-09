@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react'
 import styled from '@emotion/styled'
-import { Store } from 'tinybase'
+import type { Store } from 'tinybase'
 import { useStore, useRow } from 'tinybase/ui-react'
 
 import {
-  TrackedSite,
+  type TrackedSite,
   TIME_TRACKED_SITES_TABLE,
 } from '@background/time-tracker/store'
 import Switch from '@app/Components/Switch'

@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { Box, Stack } from '@mui/material'
 import { HourglassTop } from '@mui/icons-material'
 
-import { WebSession } from '@background/time-tracker/web-session'
+import type { WebSession } from '@background/time-tracker/web-session'
 import { formattedWebSessionDuration } from '@app/Util/'
 import FocusEvents from '@app/Components/TimeTracker/FocusEvents'
 

@@ -1,4 +1,3 @@
-import React from 'react'
 import { styled } from '@mui/material/styles'
 import {
   Button,
@@ -75,7 +74,7 @@ function ConfirmDelete({ isOpen, closeModal, onDelete }: Props) {
         <DialogTitle id="delete-dialog-title">{'Confirm Delete'}</DialogTitle>
         <DialogContent className={'delete-dialog-description'}>
           <DialogContentText id="alert-dialog-description">
-            {`Are you sure you want to delete this note?`}
+            {'Are you sure you want to delete this note?'}
           </DialogContentText>
         </DialogContent>
         <DialogActions className={'action-holder'}>

@@ -1,6 +1,6 @@
-import React, { Component, ErrorInfo } from 'react'
+import { Component, type ErrorInfo } from 'react'
 import styled from '@emotion/styled'
-import { DebouncedFunc } from '@lodash'
+import type { DebouncedFunc } from '@lodash'
 // ref: https://reactjs.org/docs/error-boundaries.html
 
 import PlainTextEditor from '@app/Components/LiveNote/PlainTextEditor'
@@ -61,6 +61,7 @@ class BackupEditor extends Component<Props, State> {
           <InfoText>
             {'Unexpected problem with rich text editor.'}
             <button
+              type="button"
               className={'fix-error'}
               onClick={() => {
                 this.fixError()

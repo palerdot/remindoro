@@ -41,9 +41,8 @@ function RepeatConfig({
   const sliderInitialValue = duration || 45
   // storing it in a ref for slider uncontrolled component
   const sliderDefaultValue = useRef(sliderInitialValue)
-  const [localSliderValue, setLocalSliderValue] = useState<number>(
-    sliderInitialValue
-  )
+  const [localSliderValue, setLocalSliderValue] =
+    useState<number>(sliderInitialValue)
 
   return (
     <div className={'second-col'}>

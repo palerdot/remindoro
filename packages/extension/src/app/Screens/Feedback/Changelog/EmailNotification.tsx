@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { useSnackbar } from 'notistack'
 import { Button, Dialog, DialogContent, DialogTitle } from '@mui/material'
 import { ContactMail } from '@mui/icons-material'
@@ -59,7 +59,7 @@ export function EmailReminderModalButton() {
         maxWidth={'xl'}
         scroll={'paper'}
       >
-        <DialogTitle>{`Email Reminders - Private Beta`}</DialogTitle>
+        <DialogTitle>{'Email Reminders - Private Beta'}</DialogTitle>
         <DialogContent dividers={true}>
           <EmailNotification />
         </DialogContent>

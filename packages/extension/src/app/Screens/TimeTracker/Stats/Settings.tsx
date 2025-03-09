@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react'
+import type React from 'react'
+import { useState, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { styled as muiStyled } from '@mui/material/styles'
 import styled from '@emotion/styled'
 import { Drawer, Button } from '@mui/material'
 import { Delete as DeleteIcon } from '@mui/icons-material'
-import { createQueries, Store } from 'tinybase'
+import { createQueries, type Store } from 'tinybase'
 import { useStore } from 'tinybase/ui-react'
 import { useSnackbar } from 'notistack'
 

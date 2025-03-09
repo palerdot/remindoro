@@ -1,11 +1,11 @@
-import React from 'react'
+import type React from 'react'
 import {
   MobileDateTimePicker as DateTimePicker,
-  MobileDateTimePickerProps,
+  type MobileDateTimePickerProps,
 } from '@mui/x-date-pickers/MobileDateTimePicker'
 import { InputAdornment, IconButton, TextField } from '@mui/material'
 import { AddAlarm } from '@mui/icons-material'
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs, { type Dayjs } from 'dayjs'
 
 import { classNames } from '@app/Constants'
 

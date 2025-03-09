@@ -1,6 +1,9 @@
 import dayjs from 'dayjs'
 
-import { RemindoroType, RepeatDuration } from '@app/Store/Slices/Remindoros'
+import {
+  RemindoroType,
+  type RepeatDuration,
+} from '@app/Store/Slices/Remindoros'
 import { Notification, find_future_jump } from './notification'
 
 // ref: https://jestjs.io/docs/expect#expectextendmatchers
@@ -21,12 +24,11 @@ expect.extend({
           `expected ${received} not to be within range ${floor} - ${ceiling}`,
         pass: true,
       }
-    } else {
-      return {
-        message: () =>
-          `expected ${received} to be within range ${floor} - ${ceiling}`,
-        pass: false,
-      }
+    }
+    return {
+      message: () =>
+        `expected ${received} to be within range ${floor} - ${ceiling}`,
+      pass: false,
     }
   },
 })

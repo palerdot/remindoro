@@ -32,11 +32,12 @@ function Stats({ site }: { site: string }) {
 }
 
 function Checker() {
-  const pathInfo = useParams<
-    Maybe<{
-      site: string
-    }>
-  >()
+  const pathInfo =
+    useParams<
+      Maybe<{
+        site: string
+      }>
+    >()
 
   if (!pathInfo?.site) {
     // IMPORTANT: This edge case should never happen

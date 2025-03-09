@@ -71,7 +71,7 @@ const AppStore = ({ initialState }: Props) => {
 
   const store = getStore(preLoadedState)
   // saving previous state (to compare before updating)
-  let previousState = useRef(initialState)
+  const previousState = useRef(initialState)
 
   const unsubscribeStore = store.subscribe(() => {
     const currentState = store.getState()

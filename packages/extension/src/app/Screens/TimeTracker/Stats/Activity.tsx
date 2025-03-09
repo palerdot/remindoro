@@ -1,18 +1,18 @@
 import React, { useMemo } from 'react'
 import { Stack, Divider } from '@mui/material'
-import { createQueries, Store } from 'tinybase'
+import { createQueries, type Store } from 'tinybase'
 import { useStore, useRow } from 'tinybase/ui-react'
 import styled from '@emotion/styled'
 
 import {
-  TrackedSite,
+  type TrackedSite,
   TIME_TRACKED_SITES_TABLE,
   WEB_SESSIONS_TABLE,
 } from '@background/time-tracker/store'
 import SiteGist from '@app/Screens/TimeTracker/SiteGist'
 import WebSessionStat from './WebSession'
 import Faq from '@app/Components/TimeTracker/Faq'
-import { WebSession as WebSessionType } from '@background/time-tracker/web-session'
+import type { WebSession as WebSessionType } from '@background/time-tracker/web-session'
 
 const QUERY_WEB_SESSIONS_FOR_SITE = 'query-web-sessions-for-site'
 

@@ -5,7 +5,7 @@ import type { RootState } from '@app/Store/'
 
 import { STORAGE_KEY } from '@app/Constants'
 import { loadFromStorage } from '@app/Util/BrowserStorage/'
-import { migrate_v0_data, OldStoreData } from '@app/Util/cleaners'
+import { migrate_v0_data, type OldStoreData } from '@app/Util/cleaners'
 
 export const WHATS_NEW = ['Email Reminders ⏲️', 'Todo Notes ✅']
 export const WHATS_UP = ['Email Reminders', 'Private Beta with sync support']

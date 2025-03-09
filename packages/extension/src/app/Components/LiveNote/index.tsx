@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { debounce, isEqual, DebouncedFunc } from '@lodash'
+import { debounce, isEqual, type DebouncedFunc } from '@lodash'
 import { useSelector, useDispatch } from 'react-redux'
 import Slite, { Editor } from 'react-slite'
 

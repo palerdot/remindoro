@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import browser from 'webextension-polyfill'
 import { Stack, Paper } from '@mui/material'
 import { SdCard as SdCardIcon } from '@mui/icons-material'
@@ -29,7 +29,7 @@ function SpaceUsage() {
       .then((bytes: number) => {
         setSpace(round((bytes / TOTAL_SPACE) * 100))
       })
-  }, [setSpace])
+  }, [])
 
   if (!space) {
     return null
