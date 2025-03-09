@@ -17,6 +17,7 @@ export const EditorHolder = styled.div`
 
       & .editor-input {
         color: ${props => props.theme.palette.text.primary};
+        caret-color: ${props => props.theme.palette.text.primary};
       }
     }
 
