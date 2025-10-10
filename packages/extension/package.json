@@ -53,7 +53,7 @@
     "eslint-watch": "^7.0.0",
     "execa": "^8.0.1",
     "gzip-size": "^7.0.0",
-    "happy-dom": "^2.47.0",
+    "happy-dom": "^20.0.0",
     "ora": "^8.0.1",
     "prettier": "^2.1.2",
     "pretty-bytes": "^6.1.1",
