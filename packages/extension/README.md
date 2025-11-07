@@ -32,6 +32,14 @@ More information about the extension can be found at the [Remindoro website](htt
 
 ---
 
+### Development
+
+Some pointers on setting up the dev environment
+- `pnpm` is the package manager
+- `bun` runtime is used to execute the script files. A bun global installation (1.x or higher) is needed to
+  setup the local dev environment.
+
+
 ### License
 
 [Business Source License](./LICENSE)
