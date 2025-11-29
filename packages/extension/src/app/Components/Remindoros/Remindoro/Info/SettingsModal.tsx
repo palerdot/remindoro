@@ -1,7 +1,7 @@
 import type React from 'react'
 import { useState } from 'react'
 import { styled as muiStyled } from '@mui/material/styles'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { useDispatch } from 'react-redux'
 import { Drawer, Button } from '@mui/material'
@@ -80,7 +80,7 @@ type Props = {
 
 function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
   const dispatch = useDispatch()
-  const history = useHistory()
+  const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
 
   // confirm modal status
@@ -136,7 +136,7 @@ function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
           // close the modal
           setDeleteModalStatus(false)
           // go to home page
-          history.push(Screens.Home)
+          navigate(Screens.Home)
           // dispatch action to delete remindoro
           dispatch(deleteRemindoro(remindoro.id))
           // show success toast

@@ -111,7 +111,10 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
       >
         <List>
           {/* Home Menu */}
-          <Link to={Screens.Home} exact activeClassName={'selected-screen'}>
+          <Link
+            to={Screens.Home}
+            className={isActive => (isActive ? 'selected-screen' : '')}
+          >
             <ListItemButton>
               <ListItemIcon className={'listIcon'}>{<HomeIcon />}</ListItemIcon>
               <ListItemText primary={'Home'} />
@@ -121,8 +124,7 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
           {/* Remindoros Menu */}
           <Link
             to={Screens.Remindoros}
-            exact
-            activeClassName={'selected-screen'}
+            className={isActive => (isActive ? 'selected-screen' : '')}
           >
             <ListItemButton>
               <ListItemIcon className={'listIcon'}>
@@ -133,15 +135,17 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
           </Link>
 
           {/* Todo Menu */}
-          <Link to={Screens.Todo} exact activeClassName={'selected-screen'}>
+          <Link
+            to={Screens.Todo}
+            className={isActive => (isActive ? 'selected-screen' : '')}
+          >
             <TodoMenu />
           </Link>
 
           {/* Scheduled Menu */}
           <Link
             to={Screens.Scheduled}
-            exact
-            activeClassName={'selected-screen'}
+            className={isActive => (isActive ? 'selected-screen' : '')}
           >
             <ListItemButton>
               <ListItemIcon className={'listIcon'}>
@@ -152,7 +156,10 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
           </Link>
 
           {/* Settings Menu */}
-          <Link to={Screens.Settings} exact activeClassName={'selected-screen'}>
+          <Link
+            to={Screens.Settings}
+            className={isActive => (isActive ? 'selected-screen' : '')}
+          >
             <ListItemButton>
               <ListItemIcon className={'listIcon'}>
                 {<SettingsIcon />}
@@ -164,8 +171,7 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
           {/* Time Tracker Menu */}
           <Link
             to={Screens.TimeTracker}
-            exact
-            activeClassName={'selected-screen'}
+            className={isActive => (isActive ? 'selected-screen' : '')}
           >
             <ListItemButton>
               <ListItemIcon className={'listIcon'}>
@@ -182,7 +188,10 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
         />
         <List>
           {/* Help Menu */}
-          <Link to={Screens.Help} exact activeClassName={'selected-screen'}>
+          <Link
+            to={Screens.Help}
+            className={isActive => (isActive ? 'selected-screen' : '')}
+          >
             <ListItemButton>
               <ListItemIcon className={'listIcon'}>{<HelpIcon />}</ListItemIcon>
               <ListItemText primary={'Help'} />
@@ -190,7 +199,10 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
           </Link>
 
           {/* Feedback Menu */}
-          <Link to={Screens.Feedback} exact activeClassName={'selected-screen'}>
+          <Link
+            to={Screens.Feedback}
+            className={isActive => (isActive ? 'selected-screen' : '')}
+          >
             <ListItemButton>
               <ListItemIcon className={'listIcon'}>
                 {<MessageIcon />}
@@ -224,8 +236,7 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
           <List>
             <Link
               to={Screens.Account}
-              exact
-              activeClassName={'selected-screen'}
+              className={isActive => (isActive ? 'selected-screen' : '')}
             >
               <ListItemButton>
                 <ListItemIcon className={'listIcon'}>

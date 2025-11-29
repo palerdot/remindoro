@@ -1,6 +1,6 @@
-import React, { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { isEmpty } from '@lodash'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import Button from '@mui/material/Button'
 import { Send as SendIcon, InfoOutlined } from '@mui/icons-material/'
@@ -11,7 +11,7 @@ import { Holder, Header } from './Styles'
 import WhatsNewModal from './WhatsNew'
 
 function Feedback() {
-  const history = useHistory()
+  const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
 
   const [whatsNewOpen, setWhatsNewStatus] = useState(false)
@@ -24,9 +24,9 @@ function Feedback() {
         variant: 'success',
       })
       // move to home screen
-      history.push(Screens.Home)
+      navigate(Screens.Home)
     },
-    [history, enqueueSnackbar]
+    [navigate, enqueueSnackbar]
   )
 
   const showErrorMessage = useCallback(

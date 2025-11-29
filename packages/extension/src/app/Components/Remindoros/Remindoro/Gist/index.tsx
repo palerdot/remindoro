@@ -1,6 +1,5 @@
-import React from 'react'
 import styled from '@emotion/styled'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Card as MCard } from '@mui/material'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
@@ -49,7 +48,7 @@ const Holder = styled.div`
 `
 
 function Card(remindoro: Remindoro) {
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const { id, title, note, reminder, isTodo } = remindoro
   const url = getRemindoroUrl(id)
@@ -57,7 +56,7 @@ function Card(remindoro: Remindoro) {
   return (
     <MCard
       onClick={() => {
-        history.push(url)
+        navigate(url)
       }}
       raised={true}
       sx={{

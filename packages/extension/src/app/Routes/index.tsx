@@ -1,5 +1,4 @@
-import React from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import styled from '@emotion/styled'
 
 import Home from '@app/Screens/Home/'
@@ -75,18 +74,16 @@ const Holder = styled.div`
   /* padding: 0 12px; */
 `
 
-function Routes() {
+function AppRoutes() {
   return (
     <Holder>
-      <Switch>
+      <Routes>
         {PATHS.map(({ path, Screen }) => (
-          <Route exact key={path} path={path}>
-            <Screen />
-          </Route>
+          <Route key={path} path={path} element={<Screen />} />
         ))}
-      </Switch>
+      </Routes>
     </Holder>
   )
 }
 
-export default Routes
+export default AppRoutes

@@ -1,5 +1,6 @@
 import { useState, useEffect, createRef } from 'react'
 import styled from '@emotion/styled'
+import { MemoryRouter } from 'react-router-dom'
 import { css, Global, ThemeProvider } from '@emotion/react'
 import {
   StyledEngineProvider,
@@ -7,7 +8,6 @@ import {
   createTheme,
   type Theme as MUITheme,
 } from '@mui/material/styles'
-import { MemoryRouter as Router } from 'react-router-dom'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { Button, CssBaseline } from '@mui/material'
@@ -363,7 +363,7 @@ function App() {
             )}
           >
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <Router>
+              <MemoryRouter>
                 <Holder>
                   <CssBaseline />
                   <Header />
@@ -372,13 +372,13 @@ function App() {
                   </Container>
                   <Footer />
                 </Holder>
-              </Router>
-              <ChangelogModal
-                isOpen={showChangelog}
-                closeModal={() => {
-                  setChangelogStatus(false)
-                }}
-              />
+                <ChangelogModal
+                  isOpen={showChangelog}
+                  closeModal={() => {
+                    setChangelogStatus(false)
+                  }}
+                />
+              </MemoryRouter>
             </LocalizationProvider>
           </SnackbarProvider>
         </ThemeProvider>

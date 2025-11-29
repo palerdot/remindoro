@@ -1,6 +1,6 @@
 import type React from 'react'
 import { useState, useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { styled as muiStyled } from '@mui/material/styles'
 import styled from '@emotion/styled'
 import { Drawer, Button } from '@mui/material'
@@ -73,7 +73,7 @@ const QUERY_ALL_SITE_SESSIONS = 'query_all_site_sessions'
 
 function Settings({ isModalOpen, setModalStatus, site }: Props) {
   const store: Store = useStore() as Store
-  const history = useHistory()
+  const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
   // confirm modal status
   const [isDeleteModalOpen, setDeleteModalStatus] = useState(false)
@@ -153,7 +153,7 @@ function Settings({ isModalOpen, setModalStatus, site }: Props) {
           // close the modal
           setModalStatus(false)
           // navigate to main time tracker screen
-          history.push(Screens.TimeTracker)
+          navigate(Screens.TimeTracker)
           // show a toast
           enqueueSnackbar({
             message: `${site} removed`,
