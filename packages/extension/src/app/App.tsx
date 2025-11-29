@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef } from 'react'
+import { useState, useEffect, createRef } from 'react'
 import styled from '@emotion/styled'
 import { css, Global, ThemeProvider } from '@emotion/react'
 import {
@@ -84,12 +84,12 @@ const GlobalStyle = ({ theme }: { theme: MUITheme }) => (
 
         /* Slite editor dropdown styles */
         .${SLITE_DROPDOWN_CLASS} {
-          background-color: ${theme.palette.grey[100]};
+          background-color: ${theme.palette.background.paper};
           color: ${theme.palette.text.primary};
         }
 
         .${SLITE_DROPDOWN_CLASS} .item {
-          background-color: ${theme.palette.grey[100]};
+          background-color: ${theme.palette.background.paper};
           color: ${theme.palette.text.primary};
         }
 
