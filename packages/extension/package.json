@@ -81,7 +81,7 @@
     "@mui/icons-material": "6.5.0",
     "@mui/material": "6.5.0",
     "@mui/utils": "6.4.9",
-    "@mui/x-date-pickers": "6.3.0",
+    "@mui/x-date-pickers": "7.29.4",
     "@reduxjs/toolkit": "^2.2.3",
     "dayjs": "^1.11.7",
     "lodash-es": "^4.17.21",
