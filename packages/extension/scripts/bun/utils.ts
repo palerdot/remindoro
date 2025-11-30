@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import chalk from 'chalk'
-import { last } from 'lodash-es'
+import { last, uniq } from 'lodash-es'
 import stripJsonComments from 'strip-json-comments'
 import { execa } from 'execa'
 import 'colors'
@@ -31,6 +31,7 @@ export function build({ outDir, browser }: BuildArgs) {
       'process.env.BUN_RATE_URL': browser_config.rate_url,
       'process.env.API_URL': runtime_config.API_URL,
     },
+    // biome-ignore lint/complexity/noUselessTernary: it is ok
     minify: process.env.NODE_ENV === 'production' ? true : false,
     sourcemap: process.env.NODE_ENV === 'production' ? 'none' : 'external',
   })
@@ -38,6 +39,7 @@ export function build({ outDir, browser }: BuildArgs) {
       console.log(browser)
       // const chunks: Array<string> = []
       const styles: Array<string> = []
+      // biome-ignore lint/complexity/noForEach: it is ok
       result.outputs.forEach(value => {
         // const is_chunk = value.loader === 'js' && value.kind === 'chunk'
         const is_css =
@@ -71,8 +73,12 @@ export function build({ outDir, browser }: BuildArgs) {
     })
 }
 
-function write_html_file({ outDir }: BuildArgs, styles: Array<string>) {
+function write_html_file({ outDir }: BuildArgs, build_styles: Array<string>) {
+  const default_styles = ['index.css']
+  const styles = uniq([...default_styles, ...build_styles])
+
   console.log('porumai ... writing popup.html'.blue)
+  console.log(styles)
   // const chunks_markup = chunks.map(
   //   chunk => `<script src="./${chunk}" type="module"></script>`
   // )

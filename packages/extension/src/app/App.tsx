@@ -26,8 +26,6 @@ import Footer from '@app/Components/Footer/'
 import { useHasChangelogHistory } from './Store'
 import ChangelogModal from './Screens/Feedback/Changelog/Modal'
 
-// main app css
-import './css/index.css'
 import { getThemeMode, type ThemeInterface } from './Util/colors'
 import { useCurrentTheme } from './Hooks/useTheme'
 
