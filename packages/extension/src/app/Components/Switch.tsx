@@ -1,6 +1,6 @@
-import React from 'react'
 import styled from '@emotion/styled'
-import { Switch as SwitchInput, Grid, Typography } from '@mui/material'
+import { Switch as SwitchInput, Typography } from '@mui/material'
+import Grid from '@mui/material/Grid2'
 
 const SwitchHolder = styled.div`
   & .switch-base {
@@ -29,13 +29,13 @@ type Props = {
   setChecked: (status: boolean) => void
 }
 
-const defaultProps = {
-  onText: 'On',
-  offText: 'Off',
-  ariaLabel: 'Switch',
-}
-
-function Switch({ checked, setChecked, onText, offText, ariaLabel }: Props) {
+function Switch({
+  checked,
+  setChecked,
+  onText = 'On',
+  offText = 'Off',
+  ariaLabel,
+}: Props) {
   return (
     <Typography component="div">
       <Grid
@@ -47,8 +47,8 @@ function Switch({ checked, setChecked, onText, offText, ariaLabel }: Props) {
           cursor: 'pointer',
         }}
       >
-        <Grid item>{offText}</Grid>
-        <Grid item>
+        <Grid size="grow">{offText}</Grid>
+        <Grid>
           <SwitchHolder>
             <SwitchInput
               classes={{
@@ -67,12 +67,10 @@ function Switch({ checked, setChecked, onText, offText, ariaLabel }: Props) {
             />
           </SwitchHolder>
         </Grid>
-        <Grid item>{onText}</Grid>
+        <Grid size="grow">{onText}</Grid>
       </Grid>
     </Typography>
   )
 }
-
-Switch.defaultProps = defaultProps
 
 export default Switch
