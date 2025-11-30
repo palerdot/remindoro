@@ -3,7 +3,9 @@ import { isEmpty } from '@lodash'
 import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import Button from '@mui/material/Button'
-import { Send as SendIcon, InfoOutlined } from '@mui/icons-material/'
+
+import SendIcon from '@mui/icons-material/Send'
+import InfoOutlined from '@mui/icons-material/InfoOutlined'
 
 import { Screens } from '@app/Util/Enums'
 import { postData } from '@app/Util/config'

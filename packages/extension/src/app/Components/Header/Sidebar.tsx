@@ -9,20 +9,19 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material'
-import {
-  Home as HomeIcon,
-  Notes as NotesIcon,
-  PendingActions as PendingActionsIcon,
-  IndeterminateCheckBox as TodoIcon,
-  Event as EventIcon,
-  Settings as SettingsIcon,
-  Help as HelpIcon,
-  Star as StarIcon,
-  Comment as MessageIcon,
-  ManageAccounts as AccountIcon,
-} from '@mui/icons-material/'
-import { useTodoCount } from '@app/Store/Slices/Remindoros'
 
+import HomeIcon from '@mui/icons-material/Home'
+import NotesIcon from '@mui/icons-material/Notes'
+import PendingActionsIcon from '@mui/icons-material/PendingActions'
+import TodoIcon from '@mui/icons-material/IndeterminateCheckBox'
+import EventIcon from '@mui/icons-material/Event'
+import SettingsIcon from '@mui/icons-material/Settings'
+import HelpIcon from '@mui/icons-material/Help'
+import StarIcon from '@mui/icons-material/Star'
+import MessageIcon from '@mui/icons-material/Comment'
+import AccountIcon from '@mui/icons-material/ManageAccounts'
+
+import { useTodoCount } from '@app/Store/Slices/Remindoros'
 import { Screens } from '@app/Routes/'
 
 // replaced by bun

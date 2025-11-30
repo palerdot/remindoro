@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { useDispatch } from 'react-redux'
 import { Drawer, Button } from '@mui/material'
-import { Delete as DeleteIcon } from '@mui/icons-material/'
 import { useSnackbar } from 'notistack'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 

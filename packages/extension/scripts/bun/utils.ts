@@ -74,7 +74,7 @@ export function build({ outDir, browser }: BuildArgs) {
 }
 
 function write_html_file({ outDir }: BuildArgs, build_styles: Array<string>) {
-  const default_styles = ['index.css']
+  const default_styles = ['/app/remindoro.css'] // imported in App.tsx
   const styles = uniq([...default_styles, ...build_styles])
 
   console.log('porumai ... writing popup.html'.blue)
