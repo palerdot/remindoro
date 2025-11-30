@@ -41,7 +41,13 @@ function SpaceUsage() {
         padding: '16px',
       }}
     >
-      <Stack flexDirection={'row'} alignItems={'center'} spacing={1}>
+      <Stack
+        spacing={1}
+        sx={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
         <SdCardIcon fontSize="medium" />
         <div
           style={{

@@ -41,10 +41,12 @@ function Switch({
       <Grid
         component="label"
         container
-        alignItems="center"
         spacing={1}
         style={{
           cursor: 'pointer',
+        }}
+        sx={{
+          alignItems: 'center',
         }}
       >
         <Grid size="grow">{offText}</Grid>
