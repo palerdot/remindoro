@@ -36,6 +36,7 @@ const MyPickersTextField = forwardRef(
       <PickersTextField
         ref={ref}
         {...params}
+        onClick={() => pickerContext.setOpen(prev => !prev)}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
