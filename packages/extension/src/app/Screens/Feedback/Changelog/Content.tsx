@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from '@emotion/styled'
 import { ContactMail } from '@mui/icons-material'
 import Box from '@mui/material/Box'
@@ -20,19 +19,22 @@ function Content() {
     <Box component={'div'}>
       <Stack spacing={2}>
         <div>
+          <strong>
+            {'IMPORTANT: Time Tracking will be removed in upcoming version.'}
+          </strong>
           {
-            'Reminders will be shown in the home screen by default. This can be changed in the settings screen.'
+            'Time tracking feature will be removed because of browser constraints and limitations.'
+          }
+        </div>
+        <div>
+          {
+            'Email Reminders is now in private beta. If you are interested in this feature, please reach out below.'
           }
         </div>
         <Stack direction={'row'}>
           <ContactMail fontSize="medium" color="primary" />
           <Info>{'Sent reminder at 11AM to "myfamily@gmail.com"'}</Info>
         </Stack>
-        <div>
-          {
-            'Email Reminders is now in private beta. If you are interested in this feature, please reach out below.'
-          }
-        </div>
         <EmailNotification />
       </Stack>
     </Box>

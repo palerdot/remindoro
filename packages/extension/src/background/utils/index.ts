@@ -7,8 +7,11 @@ import { STORAGE_KEY } from '@app/Constants'
 import { loadFromStorage } from '@app/Util/BrowserStorage/'
 import { migrate_v0_data, type OldStoreData } from '@app/Util/cleaners'
 
-export const WHATS_NEW = ['Email Reminders ⏲️', 'Todo Notes ✅']
-export const WHATS_UP = ['Email Reminders', 'Private Beta with sync support']
+export const WHATS_NEW = ['Email Reminders ⏲', 'Todo Notes ✅']
+export const WHATS_UP = [
+  'Email Reminders',
+  'Time Tracker to be removed in next version.',
+]
 
 function isNewData(oldData: OldStoreData | RootState): oldData is RootState {
   // if we have version field; then we are in 1.x version
@@ -17,6 +20,7 @@ function isNewData(oldData: OldStoreData | RootState): oldData is RootState {
   return version !== undefined
 }
 
+// TODO: to be removed for v2 (only v1 migration is supported from now on)
 export function migrate_v0_data_to_v1() {
   loadFromStorage({
     onSuccess: (oldData: OldStoreData | RootState) => {
