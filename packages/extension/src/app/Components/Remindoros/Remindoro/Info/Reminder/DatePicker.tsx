@@ -10,13 +10,13 @@ import {
   type PickersTextFieldProps,
 } from '@mui/x-date-pickers/PickersTextField'
 import { AddAlarm } from '@mui/icons-material'
-import dayjs, { type Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 import { usePickerContext } from '@mui/x-date-pickers/hooks'
 
 import { classNames } from '@app/Constants'
 import { TimeClock } from '@mui/x-date-pickers/TimeClock'
 
-type PickerProps = MobileDateTimePickerProps<Dayjs>
+type PickerProps = MobileDateTimePickerProps<boolean>
 
 interface Props {
   disabled: PickerProps['disabled']
@@ -27,7 +27,7 @@ interface Props {
 }
 
 // ref: https://mui.com/x/react-date-pickers/custom-field/#using-a-custom-input
-const MyPickersTextField = forwardRef(
+const CustomDatePickersTextField = forwardRef(
   (params: PickersTextFieldProps, ref: React.Ref<HTMLDivElement>) => {
     const pickerContext = usePickerContext()
 
@@ -66,34 +66,7 @@ function DatePicker(props: Props) {
         minutes: params => <TimeClock {...params} />,
       }}
       slots={{
-        textField: MyPickersTextField,
-
-        // textField: params => (
-        //   <TextField
-        //     {...params}
-        //     InputProps={{
-        //       endAdornment: (
-        //         <InputAdornment position="end">
-        //           {!props.disabled && (
-        //             <IconButton
-        //               onClick={event => {
-        //                 if (params.inputProps?.onClick) {
-        //                   params.inputProps?.onClick(
-        //                     event as React.MouseEvent<HTMLInputElement>
-        //                   )
-        //                 }
-        //               }}
-        //             >
-        //               <AddAlarm />
-        //             </IconButton>
-        //           )}
-        //         </InputAdornment>
-        //       ),
-        //     }}
-        //     fullWidth
-        //     className={`${classNames.datepickerInput}`}
-        //   />
-        // ),
+        textField: CustomDatePickersTextField,
       }}
       ampm={true}
       ampmInClock={true}
