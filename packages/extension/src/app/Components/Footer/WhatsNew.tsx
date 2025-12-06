@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { IconButton } from '@mui/material'
 import { InfoOutlined } from '@mui/icons-material'
 

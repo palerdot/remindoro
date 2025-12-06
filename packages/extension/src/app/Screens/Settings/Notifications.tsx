@@ -1,4 +1,3 @@
-import React from 'react'
 import { useSelector } from 'react-redux'
 
 import type { RootState } from '@app/Store/'
@@ -25,6 +24,7 @@ function Notifications() {
         <div className={'heading'}>{'Notifications:'}</div>
         <div className={'setting'}>
           <Switch
+            ariaLabel={'Notifications Toggle'}
             onText={'On'}
             offText={'Off'}
             checked={isEnabled}

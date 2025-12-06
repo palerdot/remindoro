@@ -4,6 +4,8 @@ import {
   createCustomPersister,
   type Store,
   type Persister,
+  type Tables,
+  type Values,
 } from 'tinybase'
 import { isNumber, isString, isEmpty, values, takeRight } from '@lodash'
 
@@ -406,7 +408,7 @@ function getExtensionPersistor(store: Store, key: string) {
           return undefined
         }
 
-        return content
+        return content as [Tables, Values]
       })
     },
     // setPersisted

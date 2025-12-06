@@ -46,6 +46,7 @@ function ToggleSwitch({ checked }: Props) {
         <DisabledText>{'Enable Rich Text formatting (beta)'}</DisabledText>
       )}
       <Switch
+        ariaLabel={'Toggle Switch'}
         onText={''}
         offText={''}
         checked={value}

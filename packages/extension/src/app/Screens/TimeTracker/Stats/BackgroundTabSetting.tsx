@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import styled from '@emotion/styled'
 import type { Store } from 'tinybase'
 import { useStore, useRow } from 'tinybase/ui-react'
@@ -77,6 +77,8 @@ function BackgroundTabSetting({ site }: Props) {
       <Row>
         <div className={'first-col'}>
           <Switch
+            onText={'On'}
+            offText={'Off'}
             checked={!!siteInfo.has_background_activity}
             setChecked={status => {
               updateStatus(status)

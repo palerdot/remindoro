@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from '@emotion/styled'
 import { useSelector } from 'react-redux'
 import { IconButton } from '@mui/material'

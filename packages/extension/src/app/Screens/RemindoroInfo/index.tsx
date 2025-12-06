@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from '@emotion/styled'
 import { Link, useParams } from 'react-router-dom'
 
@@ -9,15 +8,8 @@ const Holder = styled.div`
   height: 100%;
 `
 
-type Maybe<T> = T | undefined
-
 function RemindoroInfo() {
-  const pathInfo =
-    useParams<
-      Maybe<{
-        id: string
-      }>
-    >()
+  const pathInfo = useParams()
 
   if (!pathInfo?.id) {
     // IMPORTANT: This edge case should never happen

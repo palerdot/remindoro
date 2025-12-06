@@ -48,7 +48,7 @@ export function loadFromStorage({ onSuccess, onError }: Callback) {
   return browser.storage.local
     .get(STORAGE_KEY)
     .then(browserState => {
-      onSuccess(browserState[STORAGE_KEY])
+      onSuccess(browserState[STORAGE_KEY] as RootState)
     })
     .catch(() => {
       onError()

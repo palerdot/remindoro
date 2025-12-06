@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useRef } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { debounce, isEqual, isUndefined, merge } from '@lodash'
 import { Provider } from 'react-redux'
 
@@ -52,9 +52,7 @@ const defaultState: RootState = {
     notificationsEnabled: true,
     homeScreen: HomeScreenSetting.Reminders,
   },
-  account: {
-    logged_in: false,
-  },
+  account: {},
   temp: {
     changelogHistories: [],
   },

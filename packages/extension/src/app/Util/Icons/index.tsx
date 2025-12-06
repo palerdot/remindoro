@@ -1,5 +1,3 @@
-import React from 'react'
-
 // ref: https://styled-icons.dev/
 export const LooksOne = () => (
   <svg

@@ -1,4 +1,3 @@
-import React from 'react'
 import { isEqual } from '@lodash'
 import { TextField, type TextFieldProps } from '@mui/material'
 import { styled } from '@mui/material/styles'

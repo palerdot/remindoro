@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { Stack, Divider } from '@mui/material'
 import { createQueries, type Store } from 'tinybase'
 import { useStore, useRow } from 'tinybase/ui-react'

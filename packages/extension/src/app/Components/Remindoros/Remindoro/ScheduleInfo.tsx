@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from '@emotion/styled'
 import { Repeat as RepeatIcon, Alarm as AlarmIcon } from '@mui/icons-material'
 

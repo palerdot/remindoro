@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import dayjs from 'dayjs'
@@ -129,6 +129,8 @@ function Reminder({ id, reminder }: Props) {
         {/* Turn on/off reminder */}
         <div className={'first-col'}>
           <Switch
+            onText={'On'}
+            offText={'Off'}
             checked={isScheduled}
             setChecked={scheduleOn => {
               // schedule turned on/off
@@ -168,6 +170,8 @@ function Reminder({ id, reminder }: Props) {
         {/* Turn on/off Repeat */}
         <div className={'first-col'}>
           <Switch
+            onText={'On'}
+            offText={'Off'}
             checked={isRepeat}
             setChecked={repeatOn => {
               // repeat turned on/off

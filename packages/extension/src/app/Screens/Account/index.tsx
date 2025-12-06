@@ -1,4 +1,3 @@
-import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from '@emotion/styled'
 import { Paper, Button } from '@mui/material'

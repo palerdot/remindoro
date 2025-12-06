@@ -6,8 +6,6 @@ import Activity from './Activity'
 import EditFab from '@app/Components/EditFab'
 import SettingsModal from './Settings'
 
-type Maybe<T> = T | undefined
-
 function Stats({ site }: { site: string }) {
   // settings modal status
   const [isSettingsModalOpen, setSettingsModalStatus] = useState(false)

@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from '@emotion/styled'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
@@ -52,6 +51,8 @@ function MarkTodo({ id, isTodo }: Props) {
       <Row>
         <div className={'first-col'}>
           <Switch
+            onText={'On'}
+            offText={'Off'}
             checked={!!value}
             setChecked={status => {
               setValue(status)
