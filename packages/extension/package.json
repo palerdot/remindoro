@@ -11,7 +11,7 @@
     "test": "vitest",
     "compress": "node scripts/compress",
     "compress-keygen": "crx keygen",
-    "clean": "rimraf build/ dev-server/ release/ dist/ extension/ *.zip *.crx",
+    "clean": "rimraf out/ build/ dev-server/ release/ dist/ extension/ *.zip *.crx",
     "lint": "biome check",
     "lint:fix": "biome check --write",
     "typecheck": "node_modules/typescript/bin/tsc --noEmit",
