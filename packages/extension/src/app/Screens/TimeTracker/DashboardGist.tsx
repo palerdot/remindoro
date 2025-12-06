@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useTable } from 'tinybase/ui-react'
 import { Stack } from '@mui/material'
 import { PendingActions as PendingActionsIcon } from '@mui/icons-material'
@@ -39,9 +39,9 @@ export const Holder = styled.div`
     padding: 8px;
     border-radius: 5px;
 
-    border: ${props => `thin solid ${props.theme.primaryDark}`};
-    background: ${props => props.theme.background};
-    color: ${props => props.theme.textColor};
+    border: ${props => `thin solid ${props.theme.palette.divider}`};
+    background: ${props => props.theme.palette.background.paper};
+    color: ${props => props.theme.palette.text.primary};
   }
 
   & .content {
@@ -61,13 +61,13 @@ export const Holder = styled.div`
 `
 
 function Gist() {
-  const history = useHistory()
+  const navigate = useNavigate()
   const tracked_sites = useTable(TIME_TRACKED_SITES_TABLE)
 
   return (
     <CardHolder
       onClick={() => {
-        history.push(Screens.TimeTracker)
+        navigate(Screens.TimeTracker)
       }}
     >
       <Holder>

@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react'
-import { debounce, isEqual, DebouncedFunc } from '@lodash'
+import { useMemo } from 'react'
+import { debounce, isEqual, type DebouncedFunc } from '@lodash'
 import { useSelector, useDispatch } from 'react-redux'
 import Slite, { Editor } from 'react-slite'
 
@@ -10,6 +10,7 @@ import ActionBar from './ActionBar'
 import BackupEditor from './BackupEditor'
 import PlainTextEditor from '@app/Components/LiveNote/PlainTextEditor'
 import { EditorHolder } from './helpers'
+import { setLiveNoteStatus } from '@app/Store/Slices/Settings'
 
 type Props = {
   id: string
@@ -63,7 +64,7 @@ const NoteWrapper = ({ id, note, readOnly, lazyUpdate }: WrapperProps) => {
   })
 
   return (
-    <BackupEditor id={id} readOnly={readOnly} note={note} onChange={lazyUpdate}>
+    <>
       {!readOnly && !liveNoteEnabled && <ActionBar liveNoteEnabled={false} />}
       {liveNoteEnabled ? (
         <LiveNote id={id} note={note} readOnly={readOnly} />
@@ -75,7 +76,7 @@ const NoteWrapper = ({ id, note, readOnly, lazyUpdate }: WrapperProps) => {
           onChange={lazyUpdate}
         />
       )}
-    </BackupEditor>
+    </>
   )
 }
 
@@ -93,9 +94,22 @@ const ResilientLiveNote = ({ id, readOnly, note }: Props) => {
       }, 314),
     [id, dispatch]
   )
+  const turnOffLive = () =>
+    dispatch(
+      setLiveNoteStatus({
+        id: 'dummy-id',
+        value: false,
+      })
+    )
 
   return (
-    <BackupEditor id={id} readOnly={readOnly} note={note} onChange={lazyUpdate}>
+    <BackupEditor
+      id={id}
+      readOnly={readOnly}
+      note={note}
+      onChange={lazyUpdate}
+      turnOffLive={turnOffLive}
+    >
       <NoteWrapper
         id={id}
         readOnly={readOnly}

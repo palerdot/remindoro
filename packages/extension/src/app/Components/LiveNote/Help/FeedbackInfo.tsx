@@ -5,12 +5,12 @@ function Feedback() {
   return (
     <Paper
       sx={{
-        background: theme => theme.colors.highlight,
-        color: theme => theme.colors.highlightTextColor,
+        background: theme => theme.palette.primary.main,
+        color: theme => theme.palette.text.primary,
         padding: theme => theme.spacing(2),
 
         '& .highlight': {
-          color: theme => theme.colors.highlightTextColor,
+          color: theme => theme.palette.secondary.main,
           fontWeight: '700',
         },
       }}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { PendingActions as PendingActionsIcon } from '@mui/icons-material'
 import { useTable } from 'tinybase/ui-react'
 import { isEmpty, values } from '@lodash'
@@ -8,7 +8,7 @@ import { useSnackbar } from 'notistack'
 
 import {
   TIME_TRACKED_SITES_TABLE,
-  TrackedSite,
+  type TrackedSite,
 } from '@background/time-tracker/store'
 import AddSiteFab, {
   AddSiteButton,
@@ -54,7 +54,7 @@ const Subtitle = styled.div`
 `
 
 function TimeTracker() {
-  const history = useHistory()
+  const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
 
   const [isModalOpen, setModalStatus] = useState(false)
@@ -89,7 +89,7 @@ function TimeTracker() {
                     ':site',
                     row.site
                   )
-                  history.push(url)
+                  navigate(url)
                 }}
               >
                 <div

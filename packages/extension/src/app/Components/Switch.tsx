@@ -1,21 +1,21 @@
-import React from 'react'
 import styled from '@emotion/styled'
-import { Switch as SwitchInput, Grid, Typography } from '@mui/material'
+import { Switch as SwitchInput, Typography } from '@mui/material'
+import Grid from '@mui/material/Grid'
 
 const SwitchHolder = styled.div`
   & .switch-base {
-    color: ${props => props.theme.primaryDark};
+    color: ${props => props.theme.palette.divider};
   }
 
   & .track {
-    background: ${props => props.theme.background};
+    background: ${props => props.theme.palette.divider};
   }
 
   & .checked {
-    color: ${props => props.theme.highlight} !important;
+    color: ${props => props.theme.palette.secondary.main} !important;
 
     & + .track {
-      background: ${props => props.theme.primaryDark} !important;
+      background: ${props => props.theme.palette.primary.main} !important;
     }
   }
 `
@@ -29,26 +29,28 @@ type Props = {
   setChecked: (status: boolean) => void
 }
 
-const defaultProps = {
-  onText: 'On',
-  offText: 'Off',
-  ariaLabel: 'Switch',
-}
-
-function Switch({ checked, setChecked, onText, offText, ariaLabel }: Props) {
+function Switch({
+  checked,
+  setChecked,
+  onText = 'On',
+  offText = 'Off',
+  ariaLabel,
+}: Props) {
   return (
     <Typography component="div">
       <Grid
         component="label"
         container
-        alignItems="center"
         spacing={1}
         style={{
           cursor: 'pointer',
         }}
+        sx={{
+          alignItems: 'center',
+        }}
       >
-        <Grid item>{offText}</Grid>
-        <Grid item>
+        <Grid size="grow">{offText}</Grid>
+        <Grid>
           <SwitchHolder>
             <SwitchInput
               classes={{
@@ -67,12 +69,10 @@ function Switch({ checked, setChecked, onText, offText, ariaLabel }: Props) {
             />
           </SwitchHolder>
         </Grid>
-        <Grid item>{onText}</Grid>
+        <Grid size="grow">{onText}</Grid>
       </Grid>
     </Typography>
   )
 }
-
-Switch.defaultProps = defaultProps
 
 export default Switch

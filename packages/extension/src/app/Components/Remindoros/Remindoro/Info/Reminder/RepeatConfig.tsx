@@ -21,10 +21,10 @@ type Props = {
 
 const DurationSlider = styled.div`
   & .slider-text {
-    color: ${props => props.theme.textColor};
+    color: ${props => props.theme.palette.text.primary};
 
     &.disabled {
-      color: ${props => props.theme.primaryDark};
+      color: ${props => props.theme.palette.grey[100]};
     }
   }
 `

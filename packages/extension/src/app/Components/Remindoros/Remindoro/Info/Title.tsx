@@ -1,6 +1,6 @@
 import React from 'react'
 import { isEqual } from '@lodash'
-import { TextField, TextFieldProps } from '@mui/material'
+import { TextField, type TextFieldProps } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 import { updateTitle } from '@app/Store/Slices/Remindoros'

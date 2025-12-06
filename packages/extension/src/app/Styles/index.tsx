@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles'
 
 const classes = {
-  fab: `fab`,
+  fab: 'fab',
 }
 
 export const FabHolder = styled('div')(({ theme }) => ({
@@ -11,11 +11,13 @@ export const FabHolder = styled('div')(({ theme }) => ({
     right: theme.spacing(0.5),
 
     margin: theme.spacing(1),
-    background: theme.colors.primaryLight,
-    color: 'white',
+    background: theme.palette.secondary.main,
+    color: theme.palette.secondary.contrastText,
 
     '&:hover': {
-      background: theme.colors.highlight,
+      background: theme.palette.secondary.main,
+      color: theme.palette.secondary.contrastText,
+      opacity: 0.6,
     },
   },
 }))

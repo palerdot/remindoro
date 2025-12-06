@@ -1,6 +1,5 @@
-import React from 'react'
 import styled from '@emotion/styled'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Card as MCard } from '@mui/material'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
@@ -14,12 +13,13 @@ const Holder = styled.div`
   margin: 0 16px;
 
   cursor: pointer;
-  border: ${props => `thin solid ${props.theme.borderDark}`};
-  box-shadow: ${props => `0 1px 1px ${props.theme.border}`};
-  background: ${props => props.theme.borderDark};
+  border: ${props => `thin solid ${props.theme.palette.divider}`};
+  box-shadow: ${props => `0 1px 1px ${props.theme.palette.grey.A200}`};
+  background: ${props => props.theme.palette.background.default};
 
   &:hover {
-    border: ${props => `thin solid ${props.theme.primaryLight}`};
+    border: ${props => `thin solid ${props.theme.palette.primary.main}`};
+    background: ${props => props.theme.palette.background.paper};
   }
 
   & .status-bar {
@@ -36,7 +36,7 @@ const Holder = styled.div`
     padding: 8px;
     font-size: 18px;
 
-    border-bottom: ${props => `thin solid ${props.theme.border}`};
+    border-bottom: ${props => `thin solid ${props.theme.palette.divider}`};
   }
 
   & .note-holder {
@@ -48,7 +48,7 @@ const Holder = styled.div`
 `
 
 function Card(remindoro: Remindoro) {
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const { id, title, note, reminder, isTodo } = remindoro
   const url = getRemindoroUrl(id)
@@ -56,13 +56,13 @@ function Card(remindoro: Remindoro) {
   return (
     <MCard
       onClick={() => {
-        history.push(url)
+        navigate(url)
       }}
       raised={true}
       sx={{
-        background: theme => theme.colors.background,
+        background: theme => theme.palette.background.paper,
         marginBottom: theme => theme.spacing(3),
-        boxShadow: theme => `0 1px 3px ${theme.colors.border}`,
+        boxShadow: theme => `0 1px 3px ${theme.palette.grey.A100}`,
       }}
     >
       <Holder>

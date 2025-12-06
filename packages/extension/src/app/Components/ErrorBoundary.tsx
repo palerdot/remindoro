@@ -1,4 +1,5 @@
-import React, { Component, ErrorInfo } from 'react'
+import type React from 'react'
+import { Component, type ErrorInfo } from 'react'
 import styled from '@emotion/styled'
 import { Button } from '@mui/material'
 import { AutoFixHigh } from '@mui/icons-material'
@@ -10,7 +11,7 @@ const MessageHolder = styled.div`
 
   & .recover-button {
     &:hover {
-      background: ${props => props.theme.highlight};
+      background: ${props => props.theme.palette.secondary.main};
       opacity: 0.89;
     }
   }
@@ -20,8 +21,8 @@ const Message = styled.div`
   display: flex;
   align-items: center;
 
-  background: ${props => props.theme.primaryLight};
-  color: ${props => props.theme.textColor};
+  background: ${props => props.theme.palette.background.paper};
+  color: ${props => props.theme.palette.text.primary};
 
   margin: 32px;
   padding: 16px;

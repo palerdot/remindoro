@@ -1,6 +1,5 @@
-import React from 'react'
 import styled from '@emotion/styled'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { orderBy } from '@lodash'
 import { Notes as NotesIcon } from '@mui/icons-material'
@@ -60,7 +59,7 @@ const DashboardHolder = styled.div`
 `
 
 export function DashboardGist() {
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const remindoros = useSelector((state: RootState) => state.remindoros)
   const todos = remindoros.filter(r => r.isTodo === true)
@@ -68,7 +67,7 @@ export function DashboardGist() {
   return (
     <CardHolder
       onClick={() => {
-        history.push(Screens.Remindoros)
+        navigate(Screens.Remindoros)
       }}
     >
       <DashboardHolder>

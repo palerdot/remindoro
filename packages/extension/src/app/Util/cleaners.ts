@@ -3,9 +3,9 @@ import dayjs from 'dayjs'
 
 import type { RootState } from '@app/Store/'
 import {
-  Remindoro,
+  type Remindoro,
   RemindoroType,
-  Reminder as ReminderType,
+  type Reminder as ReminderType,
 } from '@app/Store/Slices/Remindoros/'
 
 /*
@@ -73,7 +73,8 @@ export interface OldRemindoro {
   }
 }
 
-export function clean_v0_data(remindoro: OldRemindoro): Remindoro {
+export function clean_v0_data(remindoroParam: OldRemindoro): Remindoro {
+  let remindoro = remindoroParam
   // case 1: remove empty reminder
   const EMPTY_REMINDER = {
     time: false,
@@ -182,7 +183,7 @@ export function migrate_v0_data(
  * we will strip the html (while transforming <br> => \n)
  */
 function strip_html(html: string) {
-  let doc = new DOMParser().parseFromString(html, 'text/html')
+  const doc = new DOMParser().parseFromString(html, 'text/html')
   return doc.body.textContent || ''
 }
 

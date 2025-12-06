@@ -15,7 +15,7 @@ function Edit({ onClick }: Props) {
         in={true}
         timeout={314}
         style={{
-          transitionDelay: `314ms`,
+          transitionDelay: '314ms',
         }}
         unmountOnExit
       >

@@ -1,7 +1,27 @@
+// ref: https://zenoo.github.io/mui-theme-creator/
+// ref: https://m2.material.io/inline-tools/color/
+
 export enum Theme {
   Day = 'Day',
   Classic = 'Classic',
   Neon = 'Neon',
+}
+
+// get light or dark mode for theme
+export function getThemeMode(theme: Theme): 'light' | 'dark' {
+  switch (theme) {
+    case Theme.Day:
+      return 'light'
+
+    case Theme.Classic:
+      return 'dark'
+
+    case Theme.Neon:
+      return 'dark'
+
+    default:
+      return 'light'
+  }
 }
 
 export interface ThemeInterface {
@@ -32,7 +52,7 @@ export const themes: Themes = {
   /* DAY THEME */
   [Theme.Day]: {
     background: '#F1F3F6',
-    backgroundLight: '#FFFFFF',
+    backgroundLight: '#f9fafb',
 
     border: '#D1D3D7',
     borderDark: '#eceef1',
@@ -43,7 +63,8 @@ export const themes: Themes = {
     primaryDark: '#b8b9fa',
     primaryLight: '#4e52f2',
 
-    highlight: '#5155f2',
+    // highlight: '#5155f2',
+    highlight: '#FF0080',
     highlightTextColor: '#FFFFFF',
     textColor: '#0C152E',
     contrastTextColor: '#FFFFFF',
@@ -64,12 +85,15 @@ export const themes: Themes = {
     backgroundLight: '#1F333C',
     // backgroundLight: '#546e7a',
     border: '#314651', // middle of backgroundLight/primary
-    primary: '#4A5F69',
+    // primary: '#4A5F69',
+    primary: '#14d9ff',
     primaryDark: '#546e7a',
     // primaryLight: '#00ceea',
     primaryLight: '#00b0ff',
     // highlight: '#18ffff',
-    highlight: '#14d9ff',
+    // highlight: '#14d9ff',
+    // highlight: '#5155f2',
+    highlight: '#FF0080',
     highlightTextColor: '#FFFFFF',
     textColor: '#ffffff',
 
@@ -77,7 +101,8 @@ export const themes: Themes = {
     greyOne: '#DEDEDE',
 
     contrastTextColor: '#000000',
-    success: 'lightgreen',
+    // success: 'lightgreen',
+    success: '#00CC00',
     danger: '#FF5050',
   },
 
@@ -89,10 +114,12 @@ export const themes: Themes = {
     borderDark: '#360e4e', // middle of background/backgroundLight
     backgroundLight: '#400a60',
     border: '#641190', // middle of backgroundLight/primary
-    primary: '#8117b8',
+    // primary: '#8117b8',
+    primary: '#c55ffc',
     primaryDark: '#5F0098',
     primaryLight: '#A33EDA',
-    highlight: '#c55ffc',
+    // highlight: '#5155f2',
+    highlight: '#FF0080',
     highlightTextColor: '#FFFFFF',
     textColor: '#ffffff',
 
@@ -100,7 +127,8 @@ export const themes: Themes = {
     greyOne: '#DEDEDE',
 
     contrastTextColor: '#000000',
-    success: 'lightgreen',
+    // success: 'lightgreen',
+    success: '#00CC00',
     danger: '#FF5050',
   },
 }

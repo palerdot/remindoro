@@ -3,14 +3,14 @@ import styled from '@emotion/styled'
 import { Box, Stack } from '@mui/material'
 import { HourglassTop } from '@mui/icons-material'
 
-import { WebSession } from '@background/time-tracker/web-session'
+import type { WebSession } from '@background/time-tracker/web-session'
 import { formattedWebSessionDuration } from '@app/Util/'
 import FocusEvents from '@app/Components/TimeTracker/FocusEvents'
 
 interface Props extends WebSession {}
 
 const Ahref = styled.a`
-  color: ${props => props.theme.highlight};
+  color: ${props => props.theme.palette.secondary.main};
 
   &:hover {
     opacity: 0.89;
@@ -18,7 +18,7 @@ const Ahref = styled.a`
 `
 
 const Label = styled.div`
-  color: ${props => props.theme.primaryLight};
+  color: ${props => props.theme.palette.primary.main};
   font-size: 0.89;
   font-style: italic;
 `
@@ -34,7 +34,7 @@ function WebSessionStat(stat: Props) {
       <Stack direction={'column'} spacing={0.5}>
         <Box
           sx={{
-            color: theme => theme.colors.textColor,
+            color: theme => theme.palette.text.primary,
           }}
         >
           <Ahref href={stat.url} target="_blank">

@@ -9,14 +9,15 @@ export const Holder = styled.div`
 
     padding: 8px;
 
-    background-color: ${props => props.theme.background};
-    border: ${props => `thin solid ${props.theme.primaryDark}`};
-    color: ${props => props.theme.textColor};
+    background-color: ${props => props.theme.palette.background.default};
+    border: ${props => `thin solid ${props.theme.palette.divider}`};
+    color: ${props => props.theme.palette.text.primary};
 
     /* ref: https://stackoverflow.com/questions/16156594/how-to-change-border-color-of-textarea-on-focus */
     &:focus {
       outline: none;
-      border: ${props => `thin solid ${props.theme.primaryLight}`};
+      border: ${props =>
+        `thin solid ${props.theme.palette.primary.contrastText}`};
     }
   }
 
@@ -25,8 +26,8 @@ export const Holder = styled.div`
     margin-top: 8px;
 
     & button {
-      background-color: ${props => props.theme.primaryLight};
-      color: ${props => props.theme.highlightTextColor};
+      background-color: ${props => props.theme.palette.background.paper};
+      color: ${props => props.theme.palette.secondary.main};
       margin-left: auto;
     }
   }

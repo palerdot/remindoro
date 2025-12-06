@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   IconButton,
   Dialog,
@@ -20,7 +20,7 @@ function Icon() {
       <IconButton
         component="span"
         sx={{
-          color: theme => theme.colors.highlight,
+          color: theme => theme.palette.secondary.main,
           '&:hover': {
             opacity: 0.89,
           },
@@ -38,7 +38,7 @@ function Icon() {
       >
         <DialogTitle>{'Rich Text Editor'}</DialogTitle>
         <DialogContent dividers={true}>
-          <DialogContentText></DialogContentText>
+          <DialogContentText />
           <HelpInfo />
           <Feedback />
         </DialogContent>

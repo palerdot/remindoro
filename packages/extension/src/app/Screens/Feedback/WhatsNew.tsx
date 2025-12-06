@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Dialog,
   DialogTitle,
@@ -10,17 +9,6 @@ import {
 
 // import { WHATS_NEW, WHATS_UP } from '@background/utils/'
 import Content from './Changelog/Content'
-
-// const Holder = styled.div`
-//   cursor: pointer;
-//   color: ${props => props.theme.highlight};
-//   text-decoration: underline;
-//   font-style: italic;
-
-//   &:hover {
-//     opacity: 0.89;
-//   }
-// `
 
 type Props = {
   isOpen: boolean
@@ -38,7 +26,7 @@ function WhatsNewModal({ isOpen, closeModal }: Props) {
     >
       <DialogTitle>{`What's New and What's Up!`}</DialogTitle>
       <DialogContent dividers={true}>
-        <DialogContentText></DialogContentText>
+        <DialogContentText />
         <Content />
       </DialogContent>
       <DialogActions>

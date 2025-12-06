@@ -12,11 +12,12 @@ const Holder = styled.div`
 type Maybe<T> = T | undefined
 
 function RemindoroInfo() {
-  const pathInfo = useParams<
-    Maybe<{
-      id: string
-    }>
-  >()
+  const pathInfo =
+    useParams<
+      Maybe<{
+        id: string
+      }>
+    >()
 
   if (!pathInfo?.id) {
     // IMPORTANT: This edge case should never happen

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import '@polymer/paper-button/paper-button.js';
+import React, { Component } from 'react'
+import '@polymer/paper-button/paper-button.js'
 
-import './Options.css';
+import './Options.css'
 
 class Options extends Component {
   render() {
@@ -17,11 +17,13 @@ class Options extends Component {
             Learn React
           </a>
           <h1>Options</h1>
-          <paper-button toggles raised class="green">toggles</paper-button>
+          <paper-button toggles raised class="green">
+            toggles
+          </paper-button>
         </header>
       </div>
-    );
+    )
   }
 }
 
-export default Options;
+export default Options

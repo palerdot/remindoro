@@ -1,12 +1,13 @@
-import React, { useState, useEffect, createRef } from 'react'
+import { useState, useEffect, createRef } from 'react'
 import styled from '@emotion/styled'
+import { MemoryRouter } from 'react-router-dom'
 import { css, Global, ThemeProvider } from '@emotion/react'
 import {
   StyledEngineProvider,
   ThemeProvider as MUIThemeProvider,
   createTheme,
+  type Theme as MUITheme,
 } from '@mui/material/styles'
-import { MemoryRouter as Router } from 'react-router-dom'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { Button, CssBaseline } from '@mui/material'
@@ -25,9 +26,9 @@ import Footer from '@app/Components/Footer/'
 import { useHasChangelogHistory } from './Store'
 import ChangelogModal from './Screens/Feedback/Changelog/Modal'
 
-// main app css
 import './css/index.css'
-import { ThemeInterface } from './Util/colors'
+import { getThemeMode, type ThemeInterface } from './Util/colors'
+import { useCurrentTheme } from './Hooks/useTheme'
 
 // declare module '@mui/styles/defaultTheme' {
 //   interface DefaultTheme extends Theme {}
@@ -52,12 +53,12 @@ const thresholds = [
 dayjs.extend(DayjsRelativeTime, { thresholds })
 
 // global style
-const GlobalStyle = ({ theme }: { theme: ThemeInterface }) => (
+const GlobalStyle = ({ theme }: { theme: MUITheme }) => (
   <Global
     styles={css`
       body {
-        background: ${theme.background} !important;
-        color: ${theme.textColor} !important;
+        background: ${theme.palette.background.default} !important;
+        color: ${theme.palette.text.primary} !important;
 
         /* Scroll bar customisations */
         & ::-webkit-scrollbar {
@@ -74,31 +75,31 @@ const GlobalStyle = ({ theme }: { theme: ThemeInterface }) => (
         }
 
         & :hover::-webkit-scrollbar {
-          background: ${theme.primaryDark};
+          background: ${theme.palette.primary.main};
         }
         & :hover::-webkit-scrollbar-thumb {
-          background: ${theme.primaryLight};
+          background: ${theme.palette.grey[500]};
         }
 
         /* Slite editor dropdown styles */
         .${SLITE_DROPDOWN_CLASS} {
-          background-color: ${theme.primary};
-          color: ${theme.textColor};
+          background-color: ${theme.palette.background.paper};
+          color: ${theme.palette.text.primary};
         }
 
         .${SLITE_DROPDOWN_CLASS} .item {
-          background-color: ${theme.primary};
-          color: ${theme.textColor};
+          background-color: ${theme.palette.background.paper};
+          color: ${theme.palette.text.primary};
         }
 
         .${SLITE_DROPDOWN_CLASS} .item:hover {
-          background-color: ${theme.primaryLight};
-          color: ${theme.textColor};
+          background-color: ${theme.palette.primary.main};
+          color: ${theme.palette.primary.contrastText};
         }
 
         /* select form down icon tweak */
         .select-form .MuiSvgIcon-root {
-          color: ${theme.textColor};
+          color: ${theme.palette.text.primary};
         }
 
         /* 
@@ -126,18 +127,18 @@ const GlobalStyle = ({ theme }: { theme: ThemeInterface }) => (
         .MuiPickersLayout-root {
           & .MuiIconButton-edgeStart,
           .MuiIconButton-edgeEnd {
-            color: ${theme.primary};
+            color: ${theme.palette.primary.main};
           }
 
           & .MuiIconButton-sizeSmall {
-            color: ${theme.primary};
+            color: ${theme.palette.primary.main};
           }
         }
 
         /* Color of AM/PM button */
         & .MuiClock-amButton,
         .MuiClock-pmButton {
-          color: ${theme.textColor};
+          color: ${theme.palette.text.primary};
         }
 
         /*  
@@ -145,7 +146,7 @@ const GlobalStyle = ({ theme }: { theme: ThemeInterface }) => (
           */
         & .MuiOutlinedInput-root:not(.Mui-disabled) {
           &:hover .MuiOutlinedInput-notchedOutline {
-            border-color: ${theme.highlight};
+            border-color: ${theme.palette.secondary.main};
           }
         }
 
@@ -153,10 +154,10 @@ const GlobalStyle = ({ theme }: { theme: ThemeInterface }) => (
         * Select box customization
         */
         & .MuiSelect-root:not(.Mui-disabled) {
-          border: thin solid ${theme.primaryDark};
+          border: thin solid ${theme.palette.primary.main};
 
           & .MuiSelect-icon {
-            color: ${theme.highlight};
+            color: ${theme.palette.secondary.main};
           }
         }
 
@@ -165,10 +166,10 @@ const GlobalStyle = ({ theme }: { theme: ThemeInterface }) => (
         */
         & .MuiPopover-root {
           & .MuiPopover-paper {
-            border: thin solid ${theme.primaryDark};
+          border: thin solid ${theme.palette.primary.main};
 
             & ul.MuiMenu-list li:hover {
-              background: ${theme.primaryDark};
+              background: ${theme.palette.primary.main};
             }
           }
         }
@@ -178,30 +179,34 @@ const GlobalStyle = ({ theme }: { theme: ThemeInterface }) => (
         */
         & .MuiSlider-root {
           &.Mui-disabled {
-            color: ${theme.backgroundLight};
+            color: ${theme.palette.background.paper};
+
+            & .MuiSlider-rail, .MuiSlider-track {
+              color: ${theme.palette.divider};
+            }
           }
 
           & .MuiSlider-valueLabelOpen {
-            background: ${theme.primaryLight};
+            background: ${theme.palette.primary.main};
             font-weight: 800;
           }
         }
 
         & .${classNames.datepickerInput} {
           & label {
-            color: ${theme.highlight};
+            color: ${theme.palette.secondary.main};
           }
 
           & label.Mui-disabled {
-            color: ${theme.primaryDark};
+            color: ${theme.palette.primary.main};
           }
 
           & input {
-            color: ${theme.textColor};
+            color: ${theme.palette.text.primary};
           }
 
           & .MuiInputAdornment-root .MuiIconButton-root {
-            color: ${theme.highlight};
+            color: ${theme.palette.secondary.main};
           }
         }
 
@@ -211,20 +216,21 @@ const GlobalStyle = ({ theme }: { theme: ThemeInterface }) => (
 
         /* success message styling */
         .notistack-MuiContent-success {
-          background: ${theme.success};
-          color: ${theme.contrastTextColor};
+          background: ${theme.palette.success.main};
+          color: ${theme.palette.success.contrastText};
 
           & button {
-            color: ${theme.contrastTextColor};
+            color: ${theme.palette.success.contrastText};
           }
         }
 
         /* Error message styling */
         .notistack-MuiContent-error {
-          color: ${theme.highlightTextColor};
+          background: ${theme.palette.error.main};
+          color: ${theme.palette.error.contrastText};
 
           & button {
-            color: ${theme.highlightTextColor};
+            color: ${theme.palette.error.contrastText};
           }
         }
       }
@@ -240,7 +246,7 @@ const Holder = styled.div`
   width: 100%;
   height: 100%;
 
-  background: ${props => props.theme.background};
+  background: ${props => props.theme.palette.background.paper};
 `
 
 const Container = styled.div`
@@ -267,29 +273,58 @@ function App() {
   const has_changelog_history = useHasChangelogHistory()
   const [showChangelog, setChangelogStatus] = useState(!has_changelog_history)
   const theme = useTheme()
+  const currentTheme = useCurrentTheme()
   // mui v5 default theme
   const muiTheme = createTheme({
+    // palette: {
+    //   primary: {
+    //     main: theme.highlight,
+    //     // light: theme.highlight,
+    //     // dark: theme.highlight,
+    //   },
+    //   info: {
+    //     main: theme.highlight,
+    //     // light: theme.highlight,
+    //     // dark: theme.highlight,
+    //   },
+    //   background: {
+    //     default: theme.backgroundLight,
+    //     paper: theme.background,
+    //   },
+    //   text: {
+    //     primary: theme.textColor,
+    //     secondary: theme.highlight,
+    //     disabled: theme.primaryDark,
+    //   },
+    // },
+
+    // ref: https://zenoo.github.io/mui-theme-creator/
     palette: {
+      // mode: 'light',
+      mode: getThemeMode(currentTheme),
       primary: {
-        main: theme.highlight,
-        // light: theme.highlight,
-        // dark: theme.highlight,
+        // main: '#3f51b5',
+        main: theme.primary,
       },
-      info: {
+      secondary: {
+        // main: '#f50057',
         main: theme.highlight,
-        // light: theme.highlight,
-        // dark: theme.highlight,
       },
       background: {
+        // default: '#f1f3f6',
+        // paper: '#f1f3f6',
         default: theme.backgroundLight,
         paper: theme.background,
       },
-      text: {
-        primary: theme.textColor,
-        secondary: theme.highlight,
-        disabled: theme.primaryDark,
+      divider: theme.border,
+      success: {
+        main: theme.success,
+      },
+      error: {
+        main: theme.danger,
       },
     },
+
     colors: {
       ...theme,
     },
@@ -303,13 +338,18 @@ function App() {
 
   useEffect(() => {
     setChangelogStatus(!has_changelog_history)
-  }, [has_changelog_history, setChangelogStatus])
+  }, [has_changelog_history])
 
   return (
     <StyledEngineProvider injectFirst>
       <MUIThemeProvider theme={muiTheme}>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle theme={theme} />
+        <ThemeProvider
+          theme={{
+            colors: theme,
+            palette: muiTheme.palette,
+          }}
+        >
+          <GlobalStyle theme={muiTheme} />
           <SnackbarProvider
             ref={notistackRef}
             anchorOrigin={{
@@ -322,7 +362,7 @@ function App() {
             )}
           >
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <Router>
+              <MemoryRouter>
                 <Holder>
                   <CssBaseline />
                   <Header />
@@ -331,13 +371,13 @@ function App() {
                   </Container>
                   <Footer />
                 </Holder>
-              </Router>
-              <ChangelogModal
-                isOpen={showChangelog}
-                closeModal={() => {
-                  setChangelogStatus(false)
-                }}
-              />
+                <ChangelogModal
+                  isOpen={showChangelog}
+                  closeModal={() => {
+                    setChangelogStatus(false)
+                  }}
+                />
+              </MemoryRouter>
             </LocalizationProvider>
           </SnackbarProvider>
         </ThemeProvider>

@@ -1,13 +1,13 @@
 /* fallback */
 @font-face {
-  font-family: 'Material Icons';
+  font-family: "Material Icons";
   font-style: normal;
   font-weight: 400;
-  src: url(./fonts/material-fonts.woff2) format('woff2');
+  src: url(./fonts/material-fonts.woff2) format("woff2");
 }
 
 .material-icons {
-  font-family: 'Material Icons';
+  font-family: "Material Icons", sans-serif;
   font-weight: normal;
   font-style: normal;
   font-size: 24px;
@@ -18,8 +18,8 @@
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
-  -moz-font-feature-settings: 'liga';
-  font-feature-settings: 'liga';
+  -moz-font-feature-settings: "liga";
+  font-feature-settings: "liga";
   -moz-osx-font-smoothing: grayscale;
 }
 
@@ -39,10 +39,10 @@ body {
   height: 600px;
   /* overflow: hidden; */
   font-size: 16px;
-  background: #F1F3F6;
-  color: #0C152E;
+  background: #f1f3f6;
+  color: #0c152e;
 
-  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
 
 body ::-webkit-scrollbar {

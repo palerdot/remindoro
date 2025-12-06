@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import type React from 'react'
+import { useState } from 'react'
 import { styled as muiStyled } from '@mui/material/styles'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { useDispatch } from 'react-redux'
 import { Drawer, Button } from '@mui/material'
-import { Delete as DeleteIcon } from '@mui/icons-material/'
 import { useSnackbar } from 'notistack'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
@@ -29,33 +30,32 @@ const Holder = muiStyled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   height: '375px',
-  background: theme.colors.background,
-  color: theme.colors.textColor,
+  background: theme.palette.background.paper,
+  color: theme.palette.text.primary,
 
-  [`& .email-reminder-section`]: {
+  '& .email-reminder-section': {
     margin: 'auto',
     textAlign: 'center',
   },
 
   [`& .${classes.deleteButton}`]: {
     margin: theme.spacing(0),
-    background: theme.colors.danger,
-    color: theme.colors.highlightTextColor,
+    background: theme.palette.error.main,
+    color: theme.palette.text.primary,
 
     '&:hover': {
-      background: theme.colors.danger,
-      color: theme.colors.highlightTextColor,
+      background: theme.palette.error.main,
+      color: theme.palette.text.primary,
       opacity: 0.89,
     },
   },
 
   [`& .${classes.closeButton}`]: {
-    background: theme.colors.primaryDark,
-    color: theme.colors.textColor,
-    borderColor: theme.colors.border,
+    background: theme.palette.background.paper,
+    color: theme.palette.text.primary,
+    borderColor: theme.palette.grey['700'],
 
     '&:hover': {
-      // background: theme.colors.backgroundLight,
       opacity: 0.89,
     },
   },
@@ -64,7 +64,7 @@ const Holder = muiStyled('div')(({ theme }) => ({
 const ActionBar = styled.div`
   display: flex;
   justify-content: space-between;
-  border-top: ${(props: any) => `thin solid ${props.theme.border}`};
+  border-top: ${props => `thin solid ${props.theme.palette.grey['700']}`};
 
   margin-top: auto;
   padding: 16px 24px;
@@ -80,7 +80,7 @@ type Props = {
 
 function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
   const dispatch = useDispatch()
-  const history = useHistory()
+  const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
 
   // confirm modal status
@@ -136,7 +136,7 @@ function SettingsModal({ isModalOpen, setModalStatus, remindoro }: Props) {
           // close the modal
           setDeleteModalStatus(false)
           // go to home page
-          history.push(Screens.Home)
+          navigate(Screens.Home)
           // dispatch action to delete remindoro
           dispatch(deleteRemindoro(remindoro.id))
           // show success toast

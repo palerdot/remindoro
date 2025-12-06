@@ -6,7 +6,7 @@ import {
   handleClosedTab,
   timeTrackerAlarmHandler,
   timeTrackerSyncHandler,
-  TabInfo,
+  type TabInfo,
 } from '@background/time-tracker/store'
 
 export const TIME_TRACKER_SYNC_ALARM = 'TIME_TRACKER_SYNC_ALARM'

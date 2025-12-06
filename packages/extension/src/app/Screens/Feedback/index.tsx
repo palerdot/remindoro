@@ -1,9 +1,11 @@
-import React, { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { isEmpty } from '@lodash'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import Button from '@mui/material/Button'
-import { Send as SendIcon, InfoOutlined } from '@mui/icons-material/'
+
+import SendIcon from '@mui/icons-material/Send'
+import InfoOutlined from '@mui/icons-material/InfoOutlined'
 
 import { Screens } from '@app/Util/Enums'
 import { postData } from '@app/Util/config'
@@ -11,7 +13,7 @@ import { Holder, Header } from './Styles'
 import WhatsNewModal from './WhatsNew'
 
 function Feedback() {
-  const history = useHistory()
+  const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
 
   const [whatsNewOpen, setWhatsNewStatus] = useState(false)
@@ -24,9 +26,9 @@ function Feedback() {
         variant: 'success',
       })
       // move to home screen
-      history.push(Screens.Home)
+      navigate(Screens.Home)
     },
-    [history, enqueueSnackbar]
+    [navigate, enqueueSnackbar]
   )
 
   const showErrorMessage = useCallback(
@@ -75,7 +77,7 @@ function Feedback() {
             // disable button
             setProgress(true)
 
-            postData(`/public_api/send_feedback`, payload)
+            postData('/public_api/send_feedback', payload)
               .then(res => {
                 // decide if request is success
                 if (res.ok) {

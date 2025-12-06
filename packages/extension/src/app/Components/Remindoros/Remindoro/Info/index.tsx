@@ -20,12 +20,13 @@ const Holder = styled.div`
   height: 100%;
   overflow-y: hidden;
 
-  background: ${props => props.theme.borderDark};
+  background: ${props => props.theme.palette.background.paper};
 
   & .title-holder {
     height: 48px;
 
-    border-bottom: ${props => `thin solid ${props.theme.primaryDark}`};
+    border-bottom: ${props =>
+      `thin solid ${props.theme.palette.primary.contrastText}`};
 
     & .MuiInputBase-formControl {
       height: 48px;
@@ -40,7 +41,7 @@ const Holder = styled.div`
       font-size: 18px;
 
       border: none;
-      color: ${props => props.theme.textColor};
+      color: ${props => props.theme.palette.text.primary};
 
       &:focus {
         border: none;
@@ -49,7 +50,7 @@ const Holder = styled.div`
   }
 
   & .note-holder {
-    background: ${props => props.theme.background};
+    background: ${props => props.theme.palette.background.paper};
     padding: 0 8px;
 
     & .editor {

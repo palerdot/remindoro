@@ -1,4 +1,3 @@
-import React from 'react'
 import { styled } from '@mui/material/styles'
 import { Fab, Zoom, Button } from '@mui/material/'
 import { MoreTime } from '@mui/icons-material'
@@ -24,7 +23,7 @@ function AddSiteFab({ onClick }: Props) {
         in={true}
         timeout={314}
         style={{
-          transitionDelay: `314ms`,
+          transitionDelay: '314ms',
         }}
         unmountOnExit
       >

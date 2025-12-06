@@ -19,7 +19,7 @@ const Holder = styled.div`
   height: 100%;
   padding: 16px 24px;
 
-  border-top: ${props => `thin solid ${props.theme.border}`};
+  border-top: ${props => `thin solid ${props.theme.palette.divider}`};
 `
 
 const Row = styled.div`

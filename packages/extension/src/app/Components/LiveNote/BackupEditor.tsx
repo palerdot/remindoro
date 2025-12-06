@@ -1,6 +1,6 @@
-import React, { Component, ErrorInfo } from 'react'
+import { Component, type ErrorInfo } from 'react'
 import styled from '@emotion/styled'
-import { DebouncedFunc } from '@lodash'
+import type { DebouncedFunc } from '@lodash'
 // ref: https://reactjs.org/docs/error-boundaries.html
 
 import PlainTextEditor from '@app/Components/LiveNote/PlainTextEditor'
@@ -11,6 +11,7 @@ type Props = {
   readOnly?: boolean
   children: React.ReactNode
   onChange: DebouncedFunc<(updatedNote: string) => void>
+  turnOffLive: () => void
 }
 
 type State = {
@@ -52,7 +53,7 @@ class BackupEditor extends Component<Props, State> {
   componentDidCatch(_error: Error, _info: ErrorInfo) {}
 
   render() {
-    const { id, note, readOnly, onChange } = this.props
+    const { id, note, readOnly, onChange, turnOffLive } = this.props
 
     if (this.state.hasError) {
       // You can render any custom fallback UI
@@ -61,9 +62,11 @@ class BackupEditor extends Component<Props, State> {
           <InfoText>
             {'Unexpected problem with rich text editor.'}
             <button
+              type="button"
               className={'fix-error'}
               onClick={() => {
                 this.fixError()
+                turnOffLive()
               }}
             >
               {'Click here to rectify.'}

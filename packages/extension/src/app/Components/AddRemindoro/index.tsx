@@ -1,5 +1,4 @@
-import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { v4 as uuid } from 'uuid'
 import { Fab, Zoom } from '@mui/material/'
@@ -21,7 +20,7 @@ function AddRemindoro() {
         in={true}
         timeout={314}
         style={{
-          transitionDelay: `314ms`,
+          transitionDelay: '314ms',
         }}
         unmountOnExit
       >
@@ -45,13 +44,13 @@ export default AddRemindoro
 // helper hook to add new remindoro
 export function useAddRemindoro() {
   const dispatch = useDispatch()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const addRemindoro = () => {
     const id = uuid()
     const url = getRemindoroUrl(id)
     // first redirect to info page
-    history.push(url)
+    navigate(url)
     // now add to our store
     dispatch(addNewRemindoro(id))
   }

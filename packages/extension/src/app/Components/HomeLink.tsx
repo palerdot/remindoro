@@ -1,11 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
-import MuiLink, { LinkProps } from '@mui/material/Link'
+import MuiLink, { type LinkProps } from '@mui/material/Link'
 import { Home as HomeIcon } from '@mui/icons-material/'
 
 import { Screens } from '@app/Routes/'
-import { useTheme } from '@app/Hooks/'
 
 // ref: https://next.material-ui.com/components/breadcrumbs/
 interface LinkRouterProps extends LinkProps {
@@ -14,19 +13,20 @@ interface LinkRouterProps extends LinkProps {
 }
 
 const LinkRouter = (props: LinkRouterProps) => (
-  <MuiLink {...props} component={Link as any} />
+  <MuiLink {...props} component={Link} />
 )
 
 function HomeLink() {
-  const theme = useTheme()
-
   return (
     <Breadcrumbs className={'nav-crumb'} aria-label="breadcrumb">
       <LinkRouter
         underline="hover"
-        sx={{ display: 'flex', alignItems: 'center' }}
+        sx={props => ({
+          display: 'flex',
+          alignItems: 'center',
+          color: props.palette.secondary.main,
+        })}
         // color="inherit"
-        color={theme.highlight}
         to={Screens.Home}
       >
         <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />

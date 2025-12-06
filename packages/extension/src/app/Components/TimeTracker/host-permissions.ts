@@ -6,7 +6,7 @@ export async function requestPermissions(host: string): Promise<boolean> {
   // chrome needs 'tabs' permission explicitly to get the tab details like url
   // ref: https://developer.chrome.com/docs/extensions/reference/tabs/#perms
 
-  const permissions: Array<any> = isChrome ? ['tabs'] : []
+  const permissions: Array<never> = (isChrome ? ['tabs'] : []) as Array<never>
 
   const permissionsToRequest = {
     permissions,

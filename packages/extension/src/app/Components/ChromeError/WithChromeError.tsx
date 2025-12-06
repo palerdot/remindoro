@@ -1,11 +1,11 @@
-import React from 'react'
+import type React from 'react'
 import { get, some, isNumber, isBoolean } from '@lodash'
 import { useSelector } from 'react-redux'
 
 import type { RootState } from '@app/Store/'
 
-import { OldRemindoro } from '@app/Util/cleaners'
-import { Remindoro } from '@app/Store/Slices/Remindoros/'
+import type { OldRemindoro } from '@app/Util/cleaners'
+import type { Remindoro } from '@app/Store/Slices/Remindoros/'
 
 // HOC that renders the children component if chrome migration is not done
 type Props = {
@@ -23,7 +23,7 @@ export function isOldRemindoro(
   return isBadRepeat || isBadTime
 }
 
-function isDataCorrupt(data: Array<{}>): boolean {
+function isDataCorrupt(data: Array<unknown>): boolean {
   // we have one main check
   // check 1: reminder.is_repeat is a boolean
   // check 2: reminder.time should be a number

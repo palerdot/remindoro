@@ -1,4 +1,4 @@
-import React from 'react'
+import type React from 'react'
 import styled from '@emotion/styled'
 import { NavLink } from 'react-router-dom'
 import {
@@ -9,20 +9,19 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material'
-import {
-  Home as HomeIcon,
-  Notes as NotesIcon,
-  PendingActions as PendingActionsIcon,
-  IndeterminateCheckBox as TodoIcon,
-  Event as EventIcon,
-  Settings as SettingsIcon,
-  Help as HelpIcon,
-  Star as StarIcon,
-  Comment as MessageIcon,
-  ManageAccounts as AccountIcon,
-} from '@mui/icons-material/'
-import { useTodoCount } from '@app/Store/Slices/Remindoros'
 
+import HomeIcon from '@mui/icons-material/Home'
+import NotesIcon from '@mui/icons-material/Notes'
+import PendingActionsIcon from '@mui/icons-material/PendingActions'
+import TodoIcon from '@mui/icons-material/IndeterminateCheckBox'
+import EventIcon from '@mui/icons-material/Event'
+import SettingsIcon from '@mui/icons-material/Settings'
+import HelpIcon from '@mui/icons-material/Help'
+import StarIcon from '@mui/icons-material/Star'
+import MessageIcon from '@mui/icons-material/Comment'
+import AccountIcon from '@mui/icons-material/ManageAccounts'
+
+import { useTodoCount } from '@app/Store/Slices/Remindoros'
 import { Screens } from '@app/Routes/'
 
 // replaced by bun
@@ -34,7 +33,7 @@ type Props = {
 }
 
 const DrawerHolder = styled.div`
-  background: ${props => props.theme.background};
+  background: ${props => props.theme.palette.background.paper};
   color: white;
   width: 250px;
   height: 100%;
@@ -43,19 +42,24 @@ const DrawerHolder = styled.div`
 const Link = styled(NavLink)`
   display: flex;
   text-decoration: none;
-  color: ${props => props.theme.textColor};
+  color: ${props => props.theme.palette.primary.main};
   margin: 2px 0;
 
   &:hover {
-    background: ${props => props.theme.borderDark};
+    opacity: 0.8;
   }
 
   &.selected-screen {
-    background: ${props => props.theme.primaryDark};
+    background: ${props => props.theme.palette.primary.main};
+    color: ${props => props.theme.palette.primary.contrastText};
+
+    & .listIcon {
+      color: ${props => props.theme.palette.primary.contrastText};
+    }
   }
 
   & .listIcon {
-    color: ${props => props.theme.highlight};
+    color: ${props => props.theme.palette.primary.main};
   }
 `
 
@@ -70,15 +74,15 @@ const BottomMenu = styled.div`
 const RateLink = styled.a`
   display: flex;
   text-decoration: none;
-  color: ${props => props.theme.textColor};
+  color: ${props => props.theme.palette.primary.main};
   margin: 2px 0;
 
   &:hover {
-    background: ${props => props.theme.borderDark};
+    opacity: 0.89;
   }
 
   & .listIcon {
-    color: ${props => props.theme.highlight};
+    color: ${props => props.theme.palette.primary.main};
   }
 `
 
@@ -106,7 +110,10 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
       >
         <List>
           {/* Home Menu */}
-          <Link to={Screens.Home} exact activeClassName={'selected-screen'}>
+          <Link
+            to={Screens.Home}
+            className={isActive => (isActive ? 'selected-screen' : '')}
+          >
             <ListItemButton>
               <ListItemIcon className={'listIcon'}>{<HomeIcon />}</ListItemIcon>
               <ListItemText primary={'Home'} />
@@ -116,8 +123,7 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
           {/* Remindoros Menu */}
           <Link
             to={Screens.Remindoros}
-            exact
-            activeClassName={'selected-screen'}
+            className={isActive => (isActive ? 'selected-screen' : '')}
           >
             <ListItemButton>
               <ListItemIcon className={'listIcon'}>
@@ -128,15 +134,17 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
           </Link>
 
           {/* Todo Menu */}
-          <Link to={Screens.Todo} exact activeClassName={'selected-screen'}>
+          <Link
+            to={Screens.Todo}
+            className={isActive => (isActive ? 'selected-screen' : '')}
+          >
             <TodoMenu />
           </Link>
 
           {/* Scheduled Menu */}
           <Link
             to={Screens.Scheduled}
-            exact
-            activeClassName={'selected-screen'}
+            className={isActive => (isActive ? 'selected-screen' : '')}
           >
             <ListItemButton>
               <ListItemIcon className={'listIcon'}>
@@ -147,7 +155,10 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
           </Link>
 
           {/* Settings Menu */}
-          <Link to={Screens.Settings} exact activeClassName={'selected-screen'}>
+          <Link
+            to={Screens.Settings}
+            className={isActive => (isActive ? 'selected-screen' : '')}
+          >
             <ListItemButton>
               <ListItemIcon className={'listIcon'}>
                 {<SettingsIcon />}
@@ -159,8 +170,7 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
           {/* Time Tracker Menu */}
           <Link
             to={Screens.TimeTracker}
-            exact
-            activeClassName={'selected-screen'}
+            className={isActive => (isActive ? 'selected-screen' : '')}
           >
             <ListItemButton>
               <ListItemIcon className={'listIcon'}>
@@ -172,12 +182,15 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
         </List>
         <Divider
           sx={{
-            background: theme => theme.colors.primaryDark,
+            background: theme => theme.palette.divider,
           }}
         />
         <List>
           {/* Help Menu */}
-          <Link to={Screens.Help} exact activeClassName={'selected-screen'}>
+          <Link
+            to={Screens.Help}
+            className={isActive => (isActive ? 'selected-screen' : '')}
+          >
             <ListItemButton>
               <ListItemIcon className={'listIcon'}>{<HelpIcon />}</ListItemIcon>
               <ListItemText primary={'Help'} />
@@ -185,7 +198,10 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
           </Link>
 
           {/* Feedback Menu */}
-          <Link to={Screens.Feedback} exact activeClassName={'selected-screen'}>
+          <Link
+            to={Screens.Feedback}
+            className={isActive => (isActive ? 'selected-screen' : '')}
+          >
             <ListItemButton>
               <ListItemIcon className={'listIcon'}>
                 {<MessageIcon />}
@@ -211,7 +227,7 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
         </List>
         <Divider
           sx={{
-            background: theme => theme.colors.primaryDark,
+            background: theme => theme.palette.divider,
           }}
         />
         <BottomMenu>
@@ -219,8 +235,7 @@ function Sidebar({ isMenuOpen, setMenuStatus }: Props) {
           <List>
             <Link
               to={Screens.Account}
-              exact
-              activeClassName={'selected-screen'}
+              className={isActive => (isActive ? 'selected-screen' : '')}
             >
               <ListItemButton>
                 <ListItemIcon className={'listIcon'}>

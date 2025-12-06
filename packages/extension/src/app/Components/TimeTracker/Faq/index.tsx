@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   Box,
   IconButton,
@@ -32,7 +32,7 @@ function Faq({ showIcon, text }: Props) {
           <IconButton
             component="span"
             sx={{
-              color: theme => theme.colors.highlight,
+              color: theme => theme.palette.secondary.main,
               '&:hover': {
                 opacity: 0.89,
               },
@@ -44,7 +44,7 @@ function Faq({ showIcon, text }: Props) {
         )}
         <Box
           sx={{
-            color: theme => theme.colors.highlight,
+            color: theme => theme.palette.secondary.main,
             textDecoration: 'underline',
             cursor: 'pointer',
             '&:hover': {
@@ -68,17 +68,18 @@ function Faq({ showIcon, text }: Props) {
           <DialogContentText component={'div'}>
             <Stack direction={'column'} spacing={3}>
               {FAQS.map(({ question, answer }, index) => (
+                // biome-ignore lint: index is fine here
                 <Stack key={index} direction={'column'} spacing={1}>
                   <Box
                     sx={{
-                      color: theme => theme.colors.highlight,
+                      color: theme => theme.palette.secondary.main,
                     }}
                   >
                     {question}
                   </Box>
                   <Box
                     sx={{
-                      color: theme => theme.colors.textColor,
+                      color: theme => theme.palette.secondary.main,
                     }}
                   >
                     {answer}

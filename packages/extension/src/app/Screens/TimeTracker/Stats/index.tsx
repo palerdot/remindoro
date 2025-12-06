@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import { Screens } from '@app/Routes/'
@@ -32,11 +32,7 @@ function Stats({ site }: { site: string }) {
 }
 
 function Checker() {
-  const pathInfo = useParams<
-    Maybe<{
-      site: string
-    }>
-  >()
+  const pathInfo = useParams()
 
   if (!pathInfo?.site) {
     // IMPORTANT: This edge case should never happen

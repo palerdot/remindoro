@@ -1,5 +1,5 @@
 import { isNil, isEqual, cloneDeep } from '@lodash'
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
 import { v4 as uuid } from 'uuid'
 import dayjs from 'dayjs'

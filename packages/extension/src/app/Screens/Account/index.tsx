@@ -1,12 +1,12 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import styled from '@emotion/styled'
-import { Paper } from '@mui/material'
+import { Paper, Button } from '@mui/material'
 
 import type { RootState } from '@app/Store/'
-
 import Login from './Login'
 import packageInfo from '@package-info'
+import { logoutUser } from '@app/Store/Slices/Account'
 const { version } = packageInfo
 
 const BottomHolder = styled.div`
@@ -19,14 +19,14 @@ const BottomHolder = styled.div`
   font-style: italic;
   font-size: 0.75rem;
 
-  color: ${props => props.theme.highlight};
+  color: ${props => props.theme.palette.secondary.main};
 `
 
 const Holder = styled.div`
   text-align: center;
 
   padding: 4px 16px;
-  background: ${props => props.theme.border};
+  background: ${props => props.theme.palette.background.paper};
 
   & .help-info {
     font-size: 0.89rem;
@@ -36,9 +36,9 @@ const Holder = styled.div`
     padding: 8px;
     border-radius: 5px;
 
-    border: ${props => `thin solid ${props.theme.primaryDark}`};
-    background: ${props => props.theme.background};
-    color: ${props => props.theme.textColor};
+    border: ${props => `thin solid ${props.theme.palette.divider}`};
+    background: ${props => props.theme.palette.background.paper};
+    color: ${props => props.theme.palette.text.primary};
 
     text-align: left;
   }
@@ -50,9 +50,9 @@ const Holder = styled.div`
 `
 
 function Account() {
-  const extension_id = useSelector(
-    (state: RootState) => state.account.extension_id
-  )
+  const dispatch = useDispatch()
+  const account = useSelector((state: RootState) => state.account)
+  const { extension_id, info } = account
 
   return (
     <div
@@ -64,9 +64,27 @@ function Account() {
     >
       <Paper elevation={2}>
         <Holder className="my-2">
-          <Login />
+          {info ? (
+            <div>
+              <div>
+                {`porumai ... will show user info - ${info.user.email}, ${info.extension.pairing.extension_key} ${info.extension.pairing.extension_id}`}
+              </div>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  dispatch(logoutUser())
+                }}
+              >
+                {'Logout'}
+              </Button>
+            </div>
+          ) : (
+            <Login />
+          )}
           <div className="help-info">
-            {`Features like email reminders, folder syncing, tracking more than one site are in private beta. Please reach out arun@remindoro.app or sign up in the time tracker screen if you would like to part of private beta.`}
+            {
+              'Features like email reminders, folder syncing, tracking more than one site are in private beta. Please reach out arun@remindoro.app or sign up in the time tracker screen if you would like to part of private beta.'
+            }
           </div>
         </Holder>
       </Paper>

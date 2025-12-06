@@ -1,6 +1,5 @@
-import React from 'react'
 import styled from '@emotion/styled'
-import { DebouncedFunc } from '@lodash'
+import type { DebouncedFunc } from '@lodash'
 
 type Props = {
   id: string
@@ -11,15 +10,13 @@ type Props = {
 
 const Wrapper = styled.div`
   textarea {
-    color: ${props => props.theme.textColor};
-    // background: ${props => props.theme.background};
+    color: ${props => props.theme.palette.text.primary};
     background: inherit;
     border: none;
     resize: none;
 
     &:focus {
       outline: none !important;
-      // border: thin solid ${props => props.theme.primaryLight};
     }
 
     width: 100%;
@@ -34,13 +31,12 @@ function PlainTextEditor({ readOnly, note, onChange }: Props) {
   return (
     <Wrapper>
       <textarea
-        autoFocus={true}
         disabled={readOnly}
         defaultValue={note || ''}
         onChange={e => {
           onChange(e.target.value)
         }}
-      ></textarea>
+      />
     </Wrapper>
   )
 }

@@ -1,17 +1,14 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import { Link, useLocation } from 'react-router-dom'
 import { IconButton } from '@mui/material'
-import {
-  Close as CloseIcon,
-  Menu as MenuIcon,
-  Home as HomeIcon,
-  Notes as NotesIcon,
-  PendingActions as PendingActionsIcon,
-  // IndeterminateCheckBox as TodoIcon,
-  // Event as EventIcon,
-} from '@mui/icons-material/'
+
+import CloseIcon from '@mui/icons-material/Close'
+import MenuIcon from '@mui/icons-material/Menu'
+import HomeIcon from '@mui/icons-material/Home'
+import NotesIcon from '@mui/icons-material/Notes'
+import PendingActionsIcon from '@mui/icons-material/PendingActions'
 
 import { Screens } from '@app/Routes/'
 import Sidebar from './Sidebar'
@@ -51,13 +48,13 @@ const IconButtonHolder = styled(IconButton)`
   padding: 4px !important;
   margin: 0 2px !important;
 
-  color: ${props => props.theme.textColor};
+  color: ${props => props.theme.palette.primary.main};
 
   &.highlight,
   &.highlight:hover,
   &.hightlight:focus {
-    background: ${props => props.theme.primaryLight};
-    color: ${props => props.theme.highlightTextColor};
+    background: ${props => props.theme.palette.primary.main};
+    color: ${props => props.theme.palette.primary.contrastText};
     opacity: 1;
   }
 

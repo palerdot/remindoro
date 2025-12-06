@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import browser from 'webextension-polyfill'
 import { Chip } from '@mui/material'
 import { HourglassBottom, Done, ErrorOutline } from '@mui/icons-material'
@@ -28,7 +28,7 @@ function HostPermissionStatus({ host }: Props) {
       .catch(() => {
         setStatus('NOT_GRANTED')
       })
-  }, [host, setStatus])
+  }, [host])
 
   const grantPermission = useCallback(() => {
     setStatus('CHECKING')
@@ -39,7 +39,7 @@ function HostPermissionStatus({ host }: Props) {
       .catch(() => {
         setStatus('NOT_GRANTED')
       })
-  }, [host, setStatus])
+  }, [host])
 
   if (status === 'GRANTED') {
     return (
