@@ -1,5 +1,9 @@
 ## Changelog
 
+### `1.8.0` - New Theme changes/Package upgrades
+
+- https://github.com/palerdot/remindoro/pull/101. All packages upgraded to latest version.
+
 ### `1.7.4`
 
 - Chrome Release
