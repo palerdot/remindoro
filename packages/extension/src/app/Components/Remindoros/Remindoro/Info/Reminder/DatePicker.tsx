@@ -63,7 +63,24 @@ function DatePicker(props: Props) {
       {...props}
       viewRenderers={{
         hours: params => <TimeClock {...params} />,
-        minutes: params => <TimeClock {...params} />,
+        minutes: params => {
+          return (
+            <TimeClock
+              {...params}
+              onChange={(v, state, view) => {
+                params.onChange(v, state, view)
+                // update time picker minutes when we flip through the minutes dial
+                if (props.onChange) {
+                  // ref: https://github.com/mui/mui-x/commit/840fad5e3dc10123d8fc2ed908607da8bd51781c
+                  props.onChange(v, {
+                    validationError: null,
+                    source: 'view',
+                  })
+                }
+              }}
+            />
+          )
+        },
       }}
       slots={{
         textField: CustomDatePickersTextField,
