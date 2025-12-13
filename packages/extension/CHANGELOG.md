@@ -1,5 +1,9 @@
 ## Changelog
 
+### `1.8.1`
+
+- Update time when minute dial in Time clock changes.
+
 ### `1.8.0` - New Theme changes/Package upgrades
 
 - https://github.com/palerdot/remindoro/pull/101. All packages upgraded to latest version.
