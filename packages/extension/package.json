@@ -54,7 +54,7 @@
     "execa": "^8.0.1",
     "gzip-size": "^7.0.0",
     "happy-dom": "^2.47.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "ora": "^8.0.1",
     "pretty-bytes": "^6.1.1",
     "prop-types": "^15.6.2",
