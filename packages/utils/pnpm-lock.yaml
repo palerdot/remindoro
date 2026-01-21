@@ -16,7 +16,7 @@ importers:
         version: 1.11.10
       lodash-es:
         specifier: ^4.17.21
-        version: 4.17.21
+        version: 4.17.23
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
@@ -377,8 +377,8 @@ packages:
     resolution: {integrity: sha512-ok6z3qlYyCDS4ZEU27HaU6x/xZa9Whf8jD4ptH5UZTQYZVYeb9bnZ3ojVhiJNLiXK1Hfc0GNbLXcmZ5plLDDBg==}
     engines: {node: '>=14'}
 
-  lodash-es@4.17.21:
-    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+  lodash-es@4.17.23:
+    resolution: {integrity: sha512-kVI48u3PZr38HdYz98UmfPnXl2DXrpdctLrFLCd3kOx1xUkOmpFPx7gCWWM5MPkL/fD8zb+Ph0QzjGFs4+hHWg==}
 
   loupe@2.3.7:
     resolution: {integrity: sha512-zSMINGVYkdpYSOBmLi0D1Uo7JU9nVdQKrHxC8eYlV+9YKK9WePqAlL7lSlorG/U2Fw1w0hTBmaa/jrQ3UbPHtA==}
@@ -849,7 +849,7 @@ snapshots:
       mlly: 1.6.1
       pkg-types: 1.1.0
 
-  lodash-es@4.17.21: {}
+  lodash-es@4.17.23: {}
 
   loupe@2.3.7:
     dependencies:
